@@ -1,0 +1,3 @@
+import SwiftFFmpeg
+
+printVersion()
