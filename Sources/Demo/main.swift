@@ -1,7 +1,13 @@
 import Foundation
 import SwiftFFmpeg
 
-func main(input: String) throws {
+func main() throws {
+    if CommandLine.argc < 2 {
+        print("Usage: \(CommandLine.arguments[0]) <input file>")
+        return
+    }
+    let input = CommandLine.arguments[1]
+    
     let fmtCtx = AVFormatContext()
     try fmtCtx.openInput(input)
     try fmtCtx.findStreamInfo()
@@ -66,7 +72,7 @@ func main(input: String) throws {
 }
 
 do {
-    try main(input: "/Users/sun/AV/MR.TAXI.mp4")
+    try main()
 } catch {
     print(error)
 }
