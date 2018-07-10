@@ -79,18 +79,6 @@ public final class AVCodecContext {
         return avcodec_is_open(ctxPtr) > 0
     }
 
-    /// Sets an option on the `AVCodecContext`.
-    ///
-    /// - Parameters:
-    ///   - value: The value to set.
-    ///   - key: the name of the field to set
-    ///   - searchFlags: flags passed to av_opt_find2.
-    ////    I.e. if AV_OPT_SEARCH_CHILDREN is passed here, then the option may be set on a child of obj.
-    /// - Throws: AVError
-    public func setOption(_ value: String, forKey key: String, searchFlags: Int32 = 0) throws {
-        try throwIfFail(av_opt_set(ctx.priv_data, key, value, searchFlags))
-    }
-
     /// Fill the codec context based on the values from the supplied codec parameters.
     ///
     /// - Parameter params: parameters
@@ -271,5 +259,12 @@ extension AVCodecContext {
     public var channelLayout: UInt64 {
         get { return ctx.channel_layout }
         set { ctxPtr.pointee.channel_layout = newValue }
+    }
+}
+
+extension AVCodecContext: AVOptionProtocol {
+
+    public var objPtr: UnsafeMutableRawPointer {
+        return ctx.priv_data
     }
 }

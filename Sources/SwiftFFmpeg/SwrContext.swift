@@ -53,30 +53,6 @@ public final class SwrContext {
         return swr_is_initialized(ctx) > 0
     }
 
-    /// Sets an option on the `AVCodecContext`.
-    ///
-    /// - Parameters:
-    ///   - value: The value to set.
-    ///   - key: the name of the field to set
-    ///   - searchFlags: flags passed to av_opt_find2.
-    ////    I.e. if AV_OPT_SEARCH_CHILDREN is passed here, then the option may be set on a child of obj.
-    /// - Throws: AVError
-    public func setOption(_ value: String, forKey key: String, searchFlags: Int32 = 0) throws {
-        try throwIfFail(av_opt_set(UnsafeMutableRawPointer(ctx), key, value, searchFlags))
-    }
-
-    public func setOption(_ value: Int, forKey key: String, searchFlags: Int32 = 0) throws {
-        try throwIfFail(av_opt_set_int(UnsafeMutableRawPointer(ctx), key, Int64(value), searchFlags))
-    }
-
-    public func setOption(_ value: Int32, forKey key: String, searchFlags: Int32 = 0) throws {
-        try setOption(Int(value), forKey: key, searchFlags: searchFlags)
-    }
-
-    public func setOption(_ value: AVSampleFormat, forKey key: String, searchFlags: Int32 = 0) throws {
-        try throwIfFail(av_opt_set_sample_fmt(UnsafeMutableRawPointer(ctx), key, value, searchFlags))
-    }
-
     /// Initialize context after user parameters have been set.
     ///
     /// - Throws: AVError
@@ -123,5 +99,12 @@ public final class SwrContext {
         ptr.initialize(to: ctx)
         swr_free(ptr)
         ptr.deallocate()
+    }
+}
+
+extension SwrContext: AVOptionProtocol {
+
+    public var objPtr: UnsafeMutableRawPointer {
+        return UnsafeMutableRawPointer(ctx)
     }
 }
