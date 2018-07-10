@@ -154,7 +154,7 @@ public struct AVOutputFormat: CustomStringConvertible {
 internal typealias CAVFormatContext = CFFmpeg.AVFormatContext
 
 /// Format I/O context.
-public class AVFormatContext {
+public final class AVFormatContext {
     internal let ctxPtr: UnsafeMutablePointer<CAVFormatContext>
     internal var ctx: CAVFormatContext { return ctxPtr.pointee }
 
