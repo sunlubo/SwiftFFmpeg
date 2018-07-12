@@ -164,7 +164,7 @@ extension AVOptionProtocol {
     }
     
     /// av_opt_set_int
-    public func set<T: SignedInteger>(_ value: T, forKey key: String, searchFlags: AVOptionSearchFlag = .children) throws {
+    public func set<T: FixedWidthInteger>(_ value: T, forKey key: String, searchFlags: AVOptionSearchFlag = .children) throws {
         try throwIfFail(av_opt_set_int(objPtr, key, Int64(value), searchFlags.rawValue))
     }
     
