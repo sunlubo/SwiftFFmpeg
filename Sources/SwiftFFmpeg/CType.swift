@@ -188,6 +188,13 @@ extension AVPixelFormat {
     public static let BGR555BE = AV_PIX_FMT_BGR555BE
     /// packed BGR 5:5:5, 16bpp, (msb)1X 5B 5G 5R(lsb), little-endian, X=unused/undefined
     public static let BGR555LE = AV_PIX_FMT_BGR555LE
+
+    public var name: String {
+        if let strBytes = av_get_pix_fmt_name(self) {
+            return String(cString: strBytes)
+        }
+        return "unknown"
+    }
 }
 
 // MARK: - AVSampleFormat
