@@ -11,7 +11,7 @@ import CFFmpeg
 
 internal typealias CAVInputFormat = CFFmpeg.AVInputFormat
 
-public struct AVInputFormat: CustomStringConvertible {
+public struct AVInputFormat {
     internal let fmtPtr: UnsafeMutablePointer<CAVInputFormat>
     internal var fmt: CAVInputFormat { return fmtPtr.pointee }
 
@@ -39,9 +39,8 @@ public struct AVInputFormat: CustomStringConvertible {
         return String(cString: fmt.long_name)
     }
 
-    /// If extensions are defined, then no probe is done.
-    ///
-    /// You should usually not use extension format guessing because it is not reliable enough.
+    /// If extensions are defined, then no probe is done. You should usually not use extension format guessing because
+    /// it is not reliable enough.
     public var extensions: String? {
         if let strBytes = fmt.extensions {
             return String(cString: strBytes)
@@ -59,10 +58,6 @@ public struct AVInputFormat: CustomStringConvertible {
         return nil
     }
 
-    public var description: String {
-        return longName
-    }
-
     /// Get all registered demuxers.
     public static var all: [AVInputFormat] {
         var list = [AVInputFormat]()
@@ -78,7 +73,7 @@ public struct AVInputFormat: CustomStringConvertible {
 
 internal typealias CAVOutputFormat = CFFmpeg.AVOutputFormat
 
-public struct AVOutputFormat: CustomStringConvertible {
+public struct AVOutputFormat {
     internal let fmtPtr: UnsafeMutablePointer<CAVOutputFormat>
     internal var fmt: CAVOutputFormat { return fmtPtr.pointee }
 
@@ -96,9 +91,8 @@ public struct AVOutputFormat: CustomStringConvertible {
         return String(cString: fmt.long_name)
     }
 
-    /// If extensions are defined, then no probe is done.
-    ///
-    /// You should usually not use extension format guessing because it is not reliable enough.
+    /// If extensions are defined, then no probe is done. You should usually not use extension format guessing because
+    /// it is not reliable enough.
     public var extensions: String? {
         if let strBytes = fmt.extensions {
             return String(cString: strBytes)
@@ -131,13 +125,10 @@ public struct AVOutputFormat: CustomStringConvertible {
         return fmt.subtitle_codec
     }
 
+    /// - SeeAlso: `AVFmtFlag`
     public var flags: Int32 {
         get { return fmt.flags }
         set { fmtPtr.pointee.flags = newValue }
-    }
-
-    public var description: String {
-        return longName
     }
 
     /// Get all registered muxers.
@@ -283,13 +274,9 @@ public final class AVFormatContext {
     ///
     /// - Parameter url: URL of the stream to open.
     public func openInput(_ url: String) throws {
-        let ps = UnsafeMutablePointer<UnsafeMutablePointer<CAVFormatContext>?>.allocate(capacity: 1)
-        ps.initialize(to: ctxPtr)
-        defer { ps.deallocate() }
-
-        try throwIfFail(avformat_open_input(ps, url, nil, nil))
-
-        self.isOpened = true
+        var ps: UnsafeMutablePointer<CAVFormatContext>? = ctxPtr
+        try throwIfFail(avformat_open_input(&ps, url, nil, nil))
+        isOpened = true
     }
 
     /// Read packets of a media file to get stream information.
@@ -318,15 +305,20 @@ public final class AVFormatContext {
     /// Add a new stream to a media file.
     ///
     /// - Parameter codec: If non-nil, the AVCodecContext corresponding to the new stream will be initialized to use this codec.
-    /// - Returns: newly created stream or nil on error.
+    ///   This is needed for e.g. codec-specific defaults to be set, so codec should be provided if it is known.
+    /// - Returns: newly created stream or `nil` on error.
     public func addStream(codec: AVCodec?) -> AVStream? {
-        guard let streamPtr = avformat_new_stream(ctxPtr, codec?.codecPtr) else {
-            return nil
+        if let streamPtr = avformat_new_stream(ctxPtr, codec?.codecPtr) {
+            return AVStream(streamPtr: streamPtr)
         }
-        return AVStream(streamPtr: streamPtr)
+        return nil
     }
 
     /// Return the next frame of a stream.
+    ///
+    /// This function returns what is stored in the file, and does not validate that what is there are valid frames
+    /// for the decoder. It will split what is stored in the file into frames and return one for each call. It will
+    /// not omit invalid data between valid frames so as to give the decoder the maximum information possible for decoding.
     ///
     /// - Parameter packet: packet
     /// - Throws: AVError
@@ -366,7 +358,7 @@ public final class AVFormatContext {
 
     /// Write the stream trailer to an output media file and free the file private data.
     ///
-    /// May only be called after a successful call to avformat_write_header.
+    /// May only be called after a successful call to `writeHeader(options:)`.
     ///
     /// - Throws: AVError
     public func writeTrailer() throws {
@@ -389,10 +381,10 @@ public final class AVFormatContext {
         try throwIfFail(av_interleaved_write_frame(ctxPtr, pkt?.packetPtr))
     }
 
-    /// Print detailed information about the input or output format, such as duration, bitrate,
-    /// streams, container, programs, metadata, side data, codec and time base.
+    /// Print detailed information about the input or output format, such as duration, bitrate, streams, container,
+    /// programs, metadata, side data, codec and time base.
     ///
-    /// - Parameters isOutput: Select whether the specified context is an input(0) or output(1)
+    /// - Parameters isOutput: Select whether the specified context is an input(0) or output(1).
     public func dumpFormat(isOutput: Bool) {
         av_dump_format(ctxPtr, 0, url, isOutput ? 1 : 0)
     }
@@ -404,10 +396,8 @@ public final class AVFormatContext {
         }
 
         if isOpened {
-            let ps = UnsafeMutablePointer<UnsafeMutablePointer<CAVFormatContext>?>.allocate(capacity: 1)
-            ps.initialize(to: ctxPtr)
-            avformat_close_input(ps)
-            ps.deallocate()
+            var ps: UnsafeMutablePointer<CAVFormatContext>? = ctxPtr
+            avformat_close_input(&ps)
         } else {
             avformat_free_context(ctxPtr)
         }

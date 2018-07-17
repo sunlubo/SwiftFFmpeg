@@ -62,7 +62,7 @@ public final class SwrContext {
 
     /// Gets the delay the next input sample will experience relative to the next output sample.
     ///
-    /// - Parameter base: timebase in which the returned delay will be
+    /// - Parameter timebase: timebase in which the returned delay will be
     ///   - if it's set to 1 the returned delay is in seconds
     ///   - if it's set to 1000 the returned delay is in milliseconds
     ///   - if it's set to the input sample rate then the returned delay is in input samples
@@ -70,8 +70,8 @@ public final class SwrContext {
     ///   - if it's the least common multiple of in_sample_rate and
     ///     out_sample_rate then an exact rounding-free delay will be eturned
     /// - Returns: the delay in 1 / base units.
-    public func getDelay(_ base: Int64) -> Int64 {
-        return swr_get_delay(ctx, base)
+    public func getDelay(_ timebase: Int64) -> Int64 {
+        return swr_get_delay(ctx, timebase)
     }
 
     /// Convert audio.
@@ -84,21 +84,21 @@ public final class SwrContext {
     /// - Returns: number of samples output per channel, negative value on error
     /// - Throws: AVError
     public func convert(
-        out: UnsafeMutablePointer<UnsafeMutablePointer<UInt8>?>,
+        out: UnsafeMutablePointer<UInt8>?,
         outCount: Int32,
-        input: UnsafeMutablePointer<UnsafePointer<UInt8>?>?,
+        input: UnsafePointer<UInt8>?,
         inCount: Int32
     ) throws -> Int {
-        let ret = swr_convert(ctx, out, outCount, input, inCount)
+        var out = out
+        var input = input
+        let ret = swr_convert(ctx, &out, outCount, &input, inCount)
         try throwIfFail(ret)
         return Int(ret)
     }
 
     deinit {
-        let ptr = UnsafeMutablePointer<OpaquePointer?>.allocate(capacity: 1)
-        ptr.initialize(to: ctx)
-        swr_free(ptr)
-        ptr.deallocate()
+        var ptr: OpaquePointer? = ctx
+        swr_free(&ptr)
     }
 }
 

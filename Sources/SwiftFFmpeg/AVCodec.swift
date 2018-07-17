@@ -48,12 +48,13 @@ extension AVCodecID {
     public static let APE = AV_CODEC_ID_APE
     public static let MP1 = AV_CODEC_ID_MP1
 
-    public var codecName: String {
+    /// The codec's name.
+    public var name: String {
         return String(cString: avcodec_get_name(self))
     }
 
-    /// Get the type of the given codec.
-    public var codecType: AVMediaType {
+    /// The codec's media type.
+    public var mediaType: AVMediaType {
         return avcodec_get_type(self)
     }
 }
@@ -112,35 +113,34 @@ public struct AVCodec {
         self.codecPtr = codecPtr
     }
 
-    /// Name of the codec implementation.
-    ///
-    /// The name is globally unique among encoders and among decoders
-    /// (but an encoder and a decoder can share the same name).
+    /// The codec's name.
     public var name: String {
         return String(cString: codec.name)
     }
 
-    /// Descriptive name for the codec, meant to be more human readable than name.
+    /// The codec's descriptive name, meant to be more human readable than name.
     public var longName: String {
         return String(cString: codec.long_name)
     }
 
-    public var type: AVMediaType {
+    /// The codec's media type.
+    public var mediaType: AVMediaType {
         return codec.type
     }
 
+    /// The codec's id.
     public var id: AVCodecID {
         return codec.id
     }
 
     /// Codec capabilities.
     ///
-    /// see `AVCodecCap`.
+    /// - SeeAlso: `AVCodecCap`
     public var capabilities: Int32 {
         return codec.capabilities
     }
 
-    /// Supported framerates.
+    /// Returns an array of the framerates supported by the codec.
     public var supportedFramerates: [AVRational] {
         var list = [AVRational]()
         var ptr = codec.supported_framerates
@@ -151,7 +151,7 @@ public struct AVCodec {
         return list
     }
 
-    /// Supported pixel formats.
+    /// Returns an array of the pixel formats supported by the codec.
     public var pixFmts: [AVPixelFormat] {
         var list = [AVPixelFormat]()
         var ptr = codec.pix_fmts
@@ -162,7 +162,7 @@ public struct AVCodec {
         return list
     }
 
-    /// Supported audio samplerates.
+    /// Returns an array of the audio samplerates supported by the codec.
     public var supportedSamplerates: [Int32] {
         var list = [Int32]()
         var ptr = codec.supported_samplerates
@@ -173,7 +173,7 @@ public struct AVCodec {
         return list
     }
 
-    /// Supported sample formats.
+    /// Returns an array of the sample formats supported by the codec.
     public var sampleFmts: [AVSampleFormat] {
         var list = [AVSampleFormat]()
         var ptr = codec.sample_fmts
@@ -184,7 +184,7 @@ public struct AVCodec {
         return list
     }
 
-    /// Support channel layouts.
+    /// Returns an array of the channel layouts supported by the codec.
     public var channelLayouts: [UInt64] {
         var list = [UInt64]()
         var ptr = codec.channel_layouts
@@ -195,10 +195,12 @@ public struct AVCodec {
         return list
     }
 
+    /// Returns a Boolean value indicating whether the codec is decoder.
     public var isDecoder: Bool {
         return av_codec_is_decoder(codecPtr) != 0
     }
 
+    /// Returns a Boolean value indicating whether the codec is encoder.
     public var isEncoder: Bool {
         return av_codec_is_encoder(codecPtr) != 0
     }

@@ -87,9 +87,7 @@ public final class AVPacket {
     }
 
     deinit {
-        let ptr = UnsafeMutablePointer<UnsafeMutablePointer<CAVPacket>?>.allocate(capacity: 1)
-        ptr.initialize(to: packetPtr)
-        av_packet_free(ptr)
-        ptr.deallocate()
+        var ptr: UnsafeMutablePointer<CAVPacket>? = packetPtr
+        av_packet_free(&ptr)
     }
 }

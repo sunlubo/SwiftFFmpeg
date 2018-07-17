@@ -14,7 +14,7 @@ public final class AVFrame {
     internal let framePtr: UnsafeMutablePointer<CAVFrame>
     internal var frame: CAVFrame { return framePtr.pointee }
 
-    /// Allocate an `AVFrame` and set its fields to default values.
+    /// Creates an `AVFrame` and set its fields to default values.
     public init?() {
         guard let framePtr = av_frame_alloc() else {
             return nil
@@ -30,7 +30,8 @@ public final class AVFrame {
         ]
     }
 
-    /// For video, size in bytes of each picture line. For audio, size in bytes of each plane.
+    /// For video, size in bytes of each picture line.
+    /// For audio, size in bytes of each plane.
     public var lineSize: [Int] {
         return [
             Int(frame.linesize.0), Int(frame.linesize.1), Int(frame.linesize.2), Int(frame.linesize.3),
@@ -38,7 +39,7 @@ public final class AVFrame {
         ]
     }
 
-    /// format of the frame, -1 if unknown or unset
+    /// Format of the frame, -1 if unknown or unset.
     ///
     /// Values correspond to AVPixelFormat for video frames, AVSampleFormat for audio.
     public var format: Int32 {
@@ -62,8 +63,7 @@ public final class AVFrame {
         return Int(frame.display_picture_number)
     }
 
-    /// Size of the corresponding packet containing the compressed frame.
-    /// It is set to a negative value if unknown.
+    /// Size of the corresponding packet containing the compressed frame. It is set to a negative value if unknown.
     public var pktSize: Int {
         return Int(frame.pkt_size)
     }
@@ -75,12 +75,12 @@ public final class AVFrame {
 
     /// Allocate new buffer(s) for audio or video data.
     ///
-    /// - Parameter align: Required buffer size alignment.
+    /// - Parameter alignment: Required buffer size alignment.
     ///   - If equal to 0, alignment will be chosen automatically for the current CPU.
     ///   - It is highly recommended to pass 0 here unless you know what you are doing.
     /// - Throws: AVError
-    public func allocBuffer(align: Int32) throws {
-        try throwIfFail(av_frame_get_buffer(framePtr, align))
+    public func allocBuffer(alignment: Int32 = 0) throws {
+        try throwIfFail(av_frame_get_buffer(framePtr, alignment))
     }
 
     /// Ensure that the frame data is writable, avoiding data copy if possible.
@@ -93,10 +93,8 @@ public final class AVFrame {
     }
 
     deinit {
-        let ptr = UnsafeMutablePointer<UnsafeMutablePointer<CAVFrame>?>.allocate(capacity: 1)
-        ptr.initialize(to: framePtr)
-        av_frame_free(ptr)
-        ptr.deallocate()
+        var ptr: UnsafeMutablePointer<CAVFrame>? = framePtr
+        av_frame_free(&ptr)
     }
 }
 
