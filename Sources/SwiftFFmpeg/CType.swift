@@ -25,6 +25,7 @@ public let AV_ERROR_MAX_STRING_SIZE = Int(CFFmpeg.AV_ERROR_MAX_STRING_SIZE)
 public typealias AVRational = CFFmpeg.AVRational
 
 extension AVRational {
+    /// {0,0}
     public static let zero = AVRational(num: 0, den: 0)
 }
 
@@ -442,4 +443,31 @@ public func av_ts2timestr(_ ts: Int64, _ tb: AVRational) -> String {
 
     var tb = tb
     return String(cString: av_ts_make_time_string(buf, ts, &tb))
+}
+
+/// Allocate a data pointers array, samples buffer for nb_samples samples, and fill data pointers and linesize accordingly.
+///
+/// This is the same as av_samples_alloc(), but also allocates the data pointers array.
+public let av_samples_alloc_array_and_samples = CFFmpeg.av_samples_alloc_array_and_samples
+/// Allocate a samples buffer for nb_samples samples, and fill data pointers and linesize accordingly.
+/// The allocated samples buffer can be freed by using av_freep(&audio_data[0]) Allocated data will be initialized to silence.
+public let av_samples_alloc = CFFmpeg.av_samples_alloc
+/// Get the required buffer size for the given audio parameters.
+public let av_samples_get_buffer_size = CFFmpeg.av_samples_get_buffer_size
+/// Free a memory block which has been allocated with a function of av_malloc() or av_realloc() family,
+/// and set the pointer pointing to it to `NULL`.
+public let av_freep = CFFmpeg.av_freep
+
+public struct SWSFlag {
+    public static let fastBilinear = CFFmpeg.SWS_FAST_BILINEAR
+    public static let bilinear = CFFmpeg.SWS_BILINEAR
+    public static let bicubic = CFFmpeg.SWS_BICUBIC
+    public static let x = CFFmpeg.SWS_X
+    public static let point = CFFmpeg.SWS_POINT
+    public static let area = CFFmpeg.SWS_AREA
+    public static let bicublin = CFFmpeg.SWS_BICUBLIN
+    public static let gauss = CFFmpeg.SWS_GAUSS
+    public static let sinc = CFFmpeg.SWS_SINC
+    public static let lanczos = CFFmpeg.SWS_LANCZOS
+    public static let spLine = CFFmpeg.SWS_SPLINE
 }
