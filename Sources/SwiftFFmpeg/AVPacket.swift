@@ -18,9 +18,9 @@ public final class AVPacket {
     internal var packet: CAVPacket { return packetPtr.pointee }
 
     /// Allocate an `AVPacket` and set its fields to default values.
-    public init?() {
+    public init() {
         guard let packetPtr = av_packet_alloc() else {
-            return nil
+            fatalError("av_packet_alloc")
         }
         self.packetPtr = packetPtr
     }

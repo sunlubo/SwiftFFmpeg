@@ -160,10 +160,10 @@ public final class AVFormatContext {
     ///
     /// - Parameters:
     ///   - url: URL of the stream to open.
-    ///   - fmt: If non-nil, this parameter forces a specific input format. Otherwise the format is autodetected.
+    ///   - format: If non-nil, this parameter forces a specific input format. Otherwise the format is autodetected.
     ///   - options: A dictionary filled with `AVFormatContext` and demuxer-private options.
     /// - Throws: AVError
-    public init(url: String, fmt: AVInputFormat?, options: [String: String]? = nil) throws {
+    public init(url: String, format: AVInputFormat? = nil, options: [String: String]? = nil) throws {
         var pm: OpaquePointer?
         defer { av_dict_free(&pm) }
         if let options = options {
@@ -173,7 +173,7 @@ public final class AVFormatContext {
         }
 
         var ctxPtr: UnsafeMutablePointer<CAVFormatContext>?
-        try throwIfFail(avformat_open_input(&ctxPtr, url, fmt?.fmtPtr, &pm))
+        try throwIfFail(avformat_open_input(&ctxPtr, url, format?.fmtPtr, &pm))
         self.ctxPtr = ctxPtr!
         self.isOpened = true
 
@@ -183,19 +183,19 @@ public final class AVFormatContext {
     /// Allocate an `AVFormatContext` for an output format.
     ///
     /// - Parameters:
-    ///   - fmt: format to use for allocating the context, if nil format_name and filename are used instead
-    ///   - formatName: the name of output format to use for allocating the context, if nil filename is used instead
-    ///   - filename: the name of the filename to use for allocating the context, may be nil
+    ///   - format: format to use for allocating the context, if `nil` formatName and filename are used instead
+    ///   - formatName: the name of output format to use for allocating the context, if `nil` filename is used instead
+    ///   - filename: the name of the filename to use for allocating the context, may be `nil`
     /// - Throws: AVError
-    public init(fmt: AVOutputFormat?, formatName: String?, filename: String?) throws {
+    public init(format: AVOutputFormat?, formatName: String? = nil, filename: String? = nil) throws {
         var ctxPtr: UnsafeMutablePointer<CAVFormatContext>?
-        try throwIfFail(avformat_alloc_output_context2(&ctxPtr, fmt?.fmtPtr, formatName, filename))
+        try throwIfFail(avformat_alloc_output_context2(&ctxPtr, format?.fmtPtr, formatName, filename))
         self.ctxPtr = ctxPtr!
     }
 
     /// Input or output URL.
     public var url: String? {
-        if let strBytes = ctxPtr.pointee.url {
+        if let strBytes = ctx.url {
             return String(cString: strBytes)
         }
         return nil
@@ -307,7 +307,7 @@ public final class AVFormatContext {
     /// - Parameter codec: If non-nil, the AVCodecContext corresponding to the new stream will be initialized to use this codec.
     ///   This is needed for e.g. codec-specific defaults to be set, so codec should be provided if it is known.
     /// - Returns: newly created stream or `nil` on error.
-    public func addStream(codec: AVCodec?) -> AVStream? {
+    public func addStream(codec: AVCodec? = nil) -> AVStream? {
         if let streamPtr = avformat_new_stream(ctxPtr, codec?.codecPtr) {
             return AVStream(streamPtr: streamPtr)
         }

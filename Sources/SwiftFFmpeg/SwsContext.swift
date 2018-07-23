@@ -67,6 +67,7 @@ public final class SwsContext {
     ///   - dst: the array containing the pointers to the planes of the destination image
     ///   - dstStride: the array containing the strides for each plane of the destination image
     /// - Returns: the height of the output slice
+    @discardableResult
     public func scale(
         srcSlice: UnsafePointer<UnsafePointer<UInt8>?>,
         srcStride: UnsafePointer<Int32>,

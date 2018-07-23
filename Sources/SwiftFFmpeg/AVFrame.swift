@@ -15,9 +15,9 @@ public final class AVFrame {
     internal var frame: CAVFrame { return framePtr.pointee }
 
     /// Creates an `AVFrame` and set its fields to default values.
-    public init?() {
+    public init() {
         guard let framePtr = av_frame_alloc() else {
-            return nil
+            fatalError("av_frame_alloc")
         }
         self.framePtr = framePtr
     }
