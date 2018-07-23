@@ -191,8 +191,8 @@ extension AVFrame {
         set { framePtr.pointee.nb_samples = newValue }
     }
 
-    /// Number of audio channels, only used for audio.
-    public var channels: Int32 {
+    /// Number of audio channels.
+    public var channelCount: Int32 {
         get { return frame.channels }
         set { framePtr.pointee.channels = newValue }
     }
