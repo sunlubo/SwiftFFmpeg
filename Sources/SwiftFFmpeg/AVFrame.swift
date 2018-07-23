@@ -24,19 +24,45 @@ public final class AVFrame {
 
     /// Pointer to the picture/channel planes.
     public var data: [UnsafeMutablePointer<UInt8>?] {
-        return [
-            frame.data.0, frame.data.1, frame.data.2, frame.data.3,
-            frame.data.4, frame.data.5, frame.data.6, frame.data.7
-        ]
+        get {
+            return [
+                frame.data.0, frame.data.1, frame.data.2, frame.data.3,
+                frame.data.4, frame.data.5, frame.data.6, frame.data.7
+            ]
+        }
+        set {
+            var list = newValue
+            while list.count < AV_NUM_DATA_POINTERS {
+                list.append(nil)
+            }
+            framePtr.pointee.data = (
+                list[0], list[1], list[2], list[3],
+                list[4], list[5], list[6], list[7]
+            )
+        }
     }
 
     /// For video, size in bytes of each picture line.
+    ///
     /// For audio, size in bytes of each plane.
-    public var lineSize: [Int] {
-        return [
-            Int(frame.linesize.0), Int(frame.linesize.1), Int(frame.linesize.2), Int(frame.linesize.3),
-            Int(frame.linesize.4), Int(frame.linesize.5), Int(frame.linesize.6), Int(frame.linesize.7)
-        ]
+    public var linesize: [Int] {
+        get {
+            let value = [
+                frame.linesize.0, frame.linesize.1, frame.linesize.2, frame.linesize.3,
+                frame.linesize.4, frame.linesize.5, frame.linesize.6, frame.linesize.7
+            ]
+            return value.map({ Int($0) })
+        }
+        set {
+            var list = newValue.map({ Int32($0) })
+            while list.count < AV_NUM_DATA_POINTERS {
+                list.append(0)
+            }
+            framePtr.pointee.linesize = (
+                list[0], list[1], list[2], list[3],
+                list[4], list[5], list[6], list[7]
+            )
+        }
     }
 
     /// Format of the frame, -1 if unknown or unset.
