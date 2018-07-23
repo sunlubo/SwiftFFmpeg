@@ -27,7 +27,7 @@ public final class AVCodecContext {
     }
 
     /// The codec's media type.
-    public var codecType: AVMediaType {
+    public var mediaType: AVMediaType {
         return ctx.codec_type
     }
 

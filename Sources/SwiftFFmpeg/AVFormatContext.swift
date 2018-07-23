@@ -243,15 +243,15 @@ public final class AVFormatContext {
     }
 
     public var videoStream: AVStream? {
-        return streams.first { $0.codecType == .video }
+        return streams.first { $0.mediaType == .video }
     }
 
     public var audioStream: AVStream? {
-        return streams.first { $0.codecType == .audio }
+        return streams.first { $0.mediaType == .audio }
     }
 
     public var subtitleStream: AVStream? {
-        return streams.first { $0.codecType == .subtitle }
+        return streams.first { $0.mediaType == .subtitle }
     }
 
     /// Duration of the stream, in `AV_TIME_BASE` fractional seconds.
@@ -296,7 +296,7 @@ public final class AVFormatContext {
     }
 
     public func streamIndex(for mediaType: AVMediaType) -> Int? {
-        if let index = streams.index(where: { $0.codecpar.codecType == mediaType }) {
+        if let index = streams.index(where: { $0.codecpar.mediaType == mediaType }) {
             return index
         }
         return nil

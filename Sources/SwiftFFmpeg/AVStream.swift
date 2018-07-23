@@ -19,7 +19,7 @@ public final class AVCodecParameters {
     }
     
     /// General type of the encoded data.
-    public var codecType: AVMediaType {
+    public var mediaType: AVMediaType {
         return parameters.codec_type
     }
     
@@ -152,8 +152,8 @@ public struct AVStream {
         return AVCodecParameters(parametersPtr: stream.codecpar)
     }
     
-    public var codecType: AVMediaType {
-        return codecpar.codecType
+    public var mediaType: AVMediaType {
+        return codecpar.mediaType
     }
     
     public var metadata: [String: String] {
