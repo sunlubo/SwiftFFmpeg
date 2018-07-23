@@ -114,6 +114,12 @@ extension AVFrame {
         set { framePtr.pointee.height = Int32(newValue) }
     }
 
+    /// Pixel format.
+    public var pixFmt: AVPixelFormat {
+        get { return AVPixelFormat(frame.format) }
+        set { framePtr.pointee.format = newValue.rawValue }
+    }
+
     /// Returns whether this frame is key frame.
     public var isKeyFrame: Bool {
         return frame.key_frame == 1
@@ -145,6 +151,12 @@ extension AVFrame {
     public var channelLayout: UInt64 {
         get { return frame.channel_layout }
         set { framePtr.pointee.channel_layout = newValue }
+    }
+
+    /// Sample format.
+    public var sampleFmt: AVSampleFormat {
+        get { return AVSampleFormat(frame.format) }
+        set { framePtr.pointee.format = newValue.rawValue }
     }
 
     /// Number of audio samples (per channel) described by this frame.
