@@ -240,39 +240,6 @@ extension UInt64 {
     }
 }
 
-// MARK: - AVIOFlag
-
-/// URL open modes
-///
-/// The flags argument to avio_open must be one of the following
-/// constants, optionally ORed with other flags.
-public struct AVIOFlag {
-    /// read-only
-    public static let read = AVIO_FLAG_READ
-    /// write-only
-    public static let write = AVIO_FLAG_WRITE
-    /// read-write pseudo flag
-    public static let readWrite = AVIO_FLAG_READ_WRITE
-    /// Use non-blocking mode.
-    ///
-    /// If this flag is set, operations on the context will return
-    /// AVERROR(EAGAIN) if they can not be performed immediately.
-    /// If this flag is not set, operations on the context will never return
-    /// AVERROR(EAGAIN).
-    /// Note that this flag does not affect the opening/connecting of the
-    /// context. Connecting a protocol will always block if necessary (e.g. on
-    /// network protocols) but never hang (e.g. on busy devices).
-    /// Warning: non-blocking protocols is work-in-progress; this flag may be
-    /// silently ignored.
-    public static let nonBlock = AVIO_FLAG_NONBLOCK
-    /// Use direct mode.
-    ///
-    /// avio_read and avio_write should if possible be satisfied directly
-    /// instead of going through a buffer, and avio_seek will always
-    /// call the underlying seek function directly.
-    public static let direct = AVIO_FLAG_DIRECT
-}
-
 // MARK: - AVRounding
 
 /// Rounding methods.
