@@ -10,6 +10,7 @@ import CFFmpeg
 public typealias AVCodecID = CFFmpeg.AVCodecID
 
 extension AVCodecID {
+    public static let NONE = AV_CODEC_ID_NONE
 
     // MARK: - Video Codecs
 
@@ -37,6 +38,52 @@ extension AVCodecID {
     public static let APNG = AV_CODEC_ID_APNG
     public static let AV1 = AV_CODEC_ID_AV1
     public static let SVG = AV_CODEC_ID_SVG
+
+    // MARK: - various PCM "codecs"
+
+    /// A dummy id pointing at the start of audio codecs
+    public static let FIRST_AUDIO = AV_CODEC_ID_FIRST_AUDIO
+    public static let PCM_S16LE = AV_CODEC_ID_PCM_S16LE
+    public static let PCM_S16BE = AV_CODEC_ID_PCM_S16BE
+    public static let PCM_U16LE = AV_CODEC_ID_PCM_U16LE
+    public static let PCM_U16BE = AV_CODEC_ID_PCM_U16BE
+    public static let PCM_S8 = AV_CODEC_ID_PCM_S8
+    public static let PCM_U8 = AV_CODEC_ID_PCM_U8
+    public static let PCM_MULAW = AV_CODEC_ID_PCM_MULAW
+    public static let PCM_ALAW = AV_CODEC_ID_PCM_ALAW
+    public static let PCM_S32LE = AV_CODEC_ID_PCM_S32LE
+    public static let PCM_S32BE = AV_CODEC_ID_PCM_S32BE
+    public static let PCM_U32LE = AV_CODEC_ID_PCM_U32LE
+    public static let PCM_U32BE = AV_CODEC_ID_PCM_U32BE
+    public static let PCM_S24LE = AV_CODEC_ID_PCM_S24LE
+    public static let PCM_S24BE = AV_CODEC_ID_PCM_S24BE
+    public static let PCM_U24LE = AV_CODEC_ID_PCM_U24LE
+    public static let PCM_U24BE = AV_CODEC_ID_PCM_U24BE
+    public static let PCM_S24DAUD = AV_CODEC_ID_PCM_S24DAUD
+    public static let PCM_ZORK = AV_CODEC_ID_PCM_ZORK
+    public static let PCM_S16LE_PLANAR = AV_CODEC_ID_PCM_S16LE_PLANAR
+    public static let PCM_DVD = AV_CODEC_ID_PCM_DVD
+    public static let PCM_F32BE = AV_CODEC_ID_PCM_F32BE
+    public static let PCM_F32LE = AV_CODEC_ID_PCM_F32LE
+    public static let PCM_F64BE = AV_CODEC_ID_PCM_F64BE
+    public static let PCM_F64LE = AV_CODEC_ID_PCM_F64LE
+    public static let PCM_BLURAY = AV_CODEC_ID_PCM_BLURAY
+    public static let PCM_LXF = AV_CODEC_ID_PCM_LXF
+    public static let S302M = AV_CODEC_ID_S302M
+    public static let PCM_S8_PLANAR = AV_CODEC_ID_PCM_S8_PLANAR
+    public static let PCM_S24LE_PLANAR = AV_CODEC_ID_PCM_S24LE_PLANAR
+    public static let PCM_S32LE_PLANAR = AV_CODEC_ID_PCM_S32LE_PLANAR
+    public static let PCM_S16BE_PLANAR = AV_CODEC_ID_PCM_S16BE_PLANAR
+
+    public static let PCM_S64LE = AV_CODEC_ID_PCM_S64LE
+    public static let PCM_S64BE = AV_CODEC_ID_PCM_S64BE
+    public static let PCM_F16LE = AV_CODEC_ID_PCM_F16LE
+    public static let PCM_F24LE = AV_CODEC_ID_PCM_F24LE
+
+    // MARK: - AMR
+
+    public static let AMR_NB = AV_CODEC_ID_AMR_NB
+    public static let AMR_WB = AV_CODEC_ID_AMR_WB
 
     // MARK: - Audio Codecs
 
