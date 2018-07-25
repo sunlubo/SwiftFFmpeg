@@ -461,15 +461,15 @@ public let av_samples_get_buffer_size = CFFmpeg.av_samples_get_buffer_size
 public let av_freep = CFFmpeg.av_freep
 
 public struct SWSFlag {
-    public static let fastBilinear = CFFmpeg.SWS_FAST_BILINEAR
-    public static let bilinear = CFFmpeg.SWS_BILINEAR
-    public static let bicubic = CFFmpeg.SWS_BICUBIC
-    public static let x = CFFmpeg.SWS_X
-    public static let point = CFFmpeg.SWS_POINT
-    public static let area = CFFmpeg.SWS_AREA
-    public static let bicublin = CFFmpeg.SWS_BICUBLIN
-    public static let gauss = CFFmpeg.SWS_GAUSS
-    public static let sinc = CFFmpeg.SWS_SINC
-    public static let lanczos = CFFmpeg.SWS_LANCZOS
-    public static let spLine = CFFmpeg.SWS_SPLINE
+    public static let fastBilinear = SWS_FAST_BILINEAR
+    public static let bilinear = SWS_BILINEAR
+    public static let bicubic = SWS_BICUBIC
+    public static let x = SWS_X
+    public static let point = SWS_POINT
+    public static let area = SWS_AREA
+    public static let bicublin = SWS_BICUBLIN
+    public static let gauss = SWS_GAUSS
+    public static let sinc = SWS_SINC
+    public static let lanczos = SWS_LANCZOS
+    public static let spLine = SWS_SPLINE
 }
