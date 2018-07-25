@@ -173,7 +173,7 @@ public struct AVCodec {
     }
 
     /// Returns an array of the audio samplerates supported by the codec.
-    public var supportedSamplerates: [Int32] {
+    public var supportedSampleRates: [Int32] {
         var list = [Int32]()
         var ptr = codec.supported_samplerates
         while let p = ptr, p.pointee != 0 {

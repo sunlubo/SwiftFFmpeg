@@ -166,6 +166,14 @@ public struct AVStream {
         return dict
     }
     
+    /// Average framerate.
+    ///
+    /// - demuxing: May be set by libavformat when creating the stream or in avformat_find_stream_info().
+    /// - muxing: May be set by the caller before avformat_write_header().
+    public var averageFramerate: AVRational {
+        return stream.avg_frame_rate
+    }
+    
     /// Fill the parameters struct based on the values from the supplied codec context.
     ///
     /// - Parameter codecCtx: AVCodecContext
