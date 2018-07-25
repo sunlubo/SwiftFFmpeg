@@ -107,10 +107,3 @@ public final class SwsContext {
         sws_freeContext(ctx)
     }
 }
-
-extension SwsContext: AVOptionProtocol {
-    
-    public var objPtr: UnsafeMutableRawPointer {
-        return UnsafeMutableRawPointer(ctx)
-    }
-}

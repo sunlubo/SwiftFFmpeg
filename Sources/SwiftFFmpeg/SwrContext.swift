@@ -101,10 +101,3 @@ public final class SwrContext {
         swr_free(&ptr)
     }
 }
-
-extension SwrContext: AVOptionProtocol {
-
-    public var objPtr: UnsafeMutableRawPointer {
-        return UnsafeMutableRawPointer(ctx)
-    }
-}

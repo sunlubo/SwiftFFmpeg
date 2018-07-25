@@ -98,7 +98,10 @@ public struct AVOption: CustomStringConvertible {
     
     /// short English help text
     public var help: String {
-        return String(cString: option.help)
+        if let strBytes = option.help {
+            return String(cString: strBytes)
+        }
+        return ""
     }
     
     public var type: AVOptionType {
@@ -114,7 +117,10 @@ public struct AVOption: CustomStringConvertible {
         case .bool:
             return option.default_val.i64 != 0 ? "true" : "false"
         case .string:
-            return String(cString: option.default_val.str)
+            if let strBytes = option.default_val.str {
+                return String(cString: strBytes)
+            }
+            return ""
         case .rational:
             return String(describing: option.default_val.q)
         default:
@@ -295,5 +301,46 @@ extension AVOptionProtocol {
             prev = option
         }
         return list
+    }
+}
+
+extension AVFormatContext: AVOptionProtocol {
+    
+    public var objPtr: UnsafeMutableRawPointer {
+        let ptr = UnsafeMutablePointer<UnsafePointer<CAVClass>>.allocate(capacity: 1)
+        ptr.initialize(to: avClass.clazzPtr)
+        defer { ptr.deallocate() }
+        return UnsafeMutableRawPointer(ptr)
+    }
+}
+
+extension AVCodecContext: AVOptionProtocol {
+    
+    public var objPtr: UnsafeMutableRawPointer {
+        return ctx.priv_data
+    }
+}
+
+extension AVCodec: AVOptionProtocol {
+    
+    public var objPtr: UnsafeMutableRawPointer {
+        let ptr = UnsafeMutablePointer<UnsafePointer<CAVClass>>.allocate(capacity: 1)
+        ptr.initialize(to: codec.priv_class)
+        defer { ptr.deallocate() }
+        return UnsafeMutableRawPointer(ptr)
+    }
+}
+
+extension SwsContext: AVOptionProtocol {
+    
+    public var objPtr: UnsafeMutableRawPointer {
+        return UnsafeMutableRawPointer(ctx)
+    }
+}
+
+extension SwrContext: AVOptionProtocol {
+    
+    public var objPtr: UnsafeMutableRawPointer {
+        return UnsafeMutableRawPointer(ctx)
     }
 }

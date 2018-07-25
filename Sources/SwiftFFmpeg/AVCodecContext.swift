@@ -329,10 +329,3 @@ extension AVCodecContext {
         set { ctxPtr.pointee.channel_layout = newValue }
     }
 }
-
-extension AVCodecContext: AVOptionProtocol {
-
-    public var objPtr: UnsafeMutableRawPointer {
-        return ctx.priv_data
-    }
-}
