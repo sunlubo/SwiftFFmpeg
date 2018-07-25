@@ -50,8 +50,8 @@ func main() throws {
     try codecCtx.setParameters(stream.codecpar)
     try codecCtx.openCodec()
     
-    let pkt = AVPacket()!
-    let frame = AVFrame()!
+    let pkt = AVPacket()
+    let frame = AVFrame()
     
     var num = 50
     while let _ = try? fmtCtx.readFrame(into: pkt) {
