@@ -267,14 +267,14 @@ extension AVOptionProtocol {
     
     /// av_opt_get_pixel_fmt
     public func pixelFmt(forKey key: String, searchFlags: AVOptionSearchFlag = .children) throws -> AVPixelFormat {
-        var outVal = AVPixelFormat.none
+        var outVal = AVPixelFormat.NONE
         try throwIfFail(av_opt_get_pixel_fmt(objPtr, key, searchFlags.rawValue, &outVal))
         return outVal
     }
     
     /// av_opt_get_sample_fmt
     public func sampleFmt(forKey key: String, searchFlags: AVOptionSearchFlag = .children) throws -> AVSampleFormat {
-        var outVal = AVSampleFormat.none
+        var outVal = AVSampleFormat.NONE
         try throwIfFail(av_opt_get_sample_fmt(objPtr, key, searchFlags.rawValue, &outVal))
         return outVal
     }

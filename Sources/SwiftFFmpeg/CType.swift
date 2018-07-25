@@ -39,7 +39,7 @@ extension AVRational: Equatable {
 
 // MARK: - AVMediaType
 
-public typealias CAVMediaType = CFFmpeg.AVMediaType
+public typealias AVMediaType = CFFmpeg.AVMediaType
 
 /// Media Type
 extension AVMediaType: CustomStringConvertible {
@@ -68,7 +68,7 @@ public typealias AVPixelFormat = CFFmpeg.AVPixelFormat
 
 /// Pixel format.
 extension AVPixelFormat {
-    public static let none = AV_PIX_FMT_NONE
+    public static let NONE = AV_PIX_FMT_NONE
     /// planar YUV 4:2:0, 12bpp, (1 Cr & Cb sample per 2x2 Y samples)
     public static let YUV420P = AV_PIX_FMT_YUV420P
     /// packed YUV 4:2:2, 16bpp, Y0 Cb Y1 Cr
@@ -177,7 +177,7 @@ public typealias AVSampleFormat = CFFmpeg.AVSampleFormat
 /// Audio sample formats
 extension AVSampleFormat {
     /// unsigned 8 bits
-    public static let none = AV_SAMPLE_FMT_NONE
+    public static let NONE = AV_SAMPLE_FMT_NONE
     /// unsigned 8 bits
     public static let U8 = AV_SAMPLE_FMT_U8
     /// signed 16 bits

@@ -14,7 +14,7 @@ public typealias AVPictureType = CFFmpeg.AVPictureType
 /// AVPicture types, pixel formats and basic image planes manipulation.
 extension AVPictureType: CustomStringConvertible {
     /// Undefined
-    public static let none = AV_PICTURE_TYPE_NONE
+    public static let NONE = AV_PICTURE_TYPE_NONE
     /// Intra
     public static let I = AV_PICTURE_TYPE_I
     /// Predicted
