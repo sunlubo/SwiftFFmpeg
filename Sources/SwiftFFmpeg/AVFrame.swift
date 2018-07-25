@@ -7,6 +7,38 @@
 
 import CFFmpeg
 
+// MARK: - AVPictureType
+
+public typealias AVPictureType = CFFmpeg.AVPictureType
+
+/// AVPicture types, pixel formats and basic image planes manipulation.
+extension AVPictureType: CustomStringConvertible {
+    /// Undefined
+    public static let none = AV_PICTURE_TYPE_NONE
+    /// Intra
+    public static let I = AV_PICTURE_TYPE_I
+    /// Predicted
+    public static let P = AV_PICTURE_TYPE_P
+    /// Bi-dir predicted
+    public static let B = AV_PICTURE_TYPE_B
+    /// S(GMC)-VOP MPEG-4
+    public static let S = AV_PICTURE_TYPE_S
+    /// Switching Intra
+    public static let SI = AV_PICTURE_TYPE_SI
+    /// Switching Predicted
+    public static let SP = AV_PICTURE_TYPE_SP
+    /// BI type
+    public static let BI = AV_PICTURE_TYPE_BI
+
+    public var description: String {
+        let char = av_get_picture_type_char(self)
+        let scalar = Unicode.Scalar(Int(char))!
+        return String(Character(scalar))
+    }
+}
+
+// MARK: - AVFrame
+
 internal typealias CAVFrame = CFFmpeg.AVFrame
 
 /// This structure describes decoded (raw) audio or video data.
@@ -241,6 +273,9 @@ extension AVFrame {
     }
 
     /// Number of audio channels.
+    ///
+    /// - encoding: Unused.
+    /// - decoding: Read by user.
     public var channelCount: Int32 {
         get { return frame.channels }
         set { framePtr.pointee.channels = newValue }

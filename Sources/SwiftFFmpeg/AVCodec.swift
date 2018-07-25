@@ -59,6 +59,16 @@ extension AVCodecID {
     }
 }
 
+// MARK: - AVCodecCap
+
+/// codec capabilities
+public struct AVCodecCap {
+    /// Audio encoder supports receiving a different number of samples in each call.
+    public static let variableFrameSize = AV_CODEC_CAP_VARIABLE_FRAME_SIZE
+}
+
+// MARK: - AVCodec
+
 internal typealias CAVCodec = CFFmpeg.AVCodec
 
 public struct AVCodec {

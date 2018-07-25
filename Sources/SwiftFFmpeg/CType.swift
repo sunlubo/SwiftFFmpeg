@@ -62,36 +62,6 @@ extension AVMediaType: CustomStringConvertible {
     }
 }
 
-// MARK: - AVPictureType
-
-public typealias AVPictureType = CFFmpeg.AVPictureType
-
-/// AVPicture types, pixel formats and basic image planes manipulation.
-extension AVPictureType: CustomStringConvertible {
-    /// Undefined
-    public static let none = AV_PICTURE_TYPE_NONE
-    /// Intra
-    public static let I = AV_PICTURE_TYPE_I
-    /// Predicted
-    public static let P = AV_PICTURE_TYPE_P
-    /// Bi-dir predicted
-    public static let B = AV_PICTURE_TYPE_B
-    /// S(GMC)-VOP MPEG-4
-    public static let S = AV_PICTURE_TYPE_S
-    /// Switching Intra
-    public static let SI = AV_PICTURE_TYPE_SI
-    /// Switching Predicted
-    public static let SP = AV_PICTURE_TYPE_SP
-    /// BI type
-    public static let BI = AV_PICTURE_TYPE_BI
-
-    public var description: String {
-        let char = av_get_picture_type_char(self)
-        let scalar = Unicode.Scalar(Int(char))!
-        return String(Character(scalar))
-    }
-}
-
 // MARK: - AVPixelFormat
 
 public typealias AVPixelFormat = CFFmpeg.AVPixelFormat
@@ -270,57 +240,6 @@ extension UInt64 {
     }
 }
 
-// MARK: - AVFmtFlag
-
-public enum AVFmtFlag {
-    /// Demuxer will use avio_open, no opened file should be provided by the caller.
-    public static let noFile = AVFMT_NOFILE
-    /// Needs '%d' in filename.
-    public static let needNumber = AVFMT_NEEDNUMBER
-    /// Show format stream IDs numbers.
-    public static let showIDs = AVFMT_SHOW_IDS
-    /// Format wants global header.
-    public static let globalHeader = AVFMT_GLOBALHEADER
-    /// Format does not need / have any timestamps.
-    public static let noTimestamps = AVFMT_NOTIMESTAMPS
-    /// Use generic index building code.
-    public static let genericIndex = AVFMT_GENERIC_INDEX
-    /// Format allows timestamp discontinuities. Note, muxers always require valid (monotone) timestamps
-    public static let tsDiscont = AVFMT_TS_DISCONT
-    /// Format allows variable fps.
-    public static let variableFPS = AVFMT_VARIABLE_FPS
-    /// Format does not need width/height
-    public static let noDimensions = AVFMT_NODIMENSIONS
-    /// Format does not require any streams
-    public static let noStreams = AVFMT_NOSTREAMS
-    /// Format does not allow to fall back on binary search via read_timestamp
-    public static let noBinSearch = AVFMT_NOBINSEARCH
-    /// Format does not allow to fall back on generic search
-    public static let noGenSearch = AVFMT_NOGENSEARCH
-    /// Format does not allow seeking by bytes
-    public static let noByteSeek = AVFMT_NO_BYTE_SEEK
-    /// Format allows flushing. If not set, the muxer will not receive a NULL packet in the write_packet function.
-    public static let allowFlush = AVFMT_ALLOW_FLUSH
-    /// Format does not require strictly increasing timestamps, but they must still be monotonic
-    public static let tsNonstrict = AVFMT_TS_NONSTRICT
-    /// Format allows muxing negative timestamps. If not set the timestamp will be shifted in av_write_frame and
-    /// av_interleaved_write_frame so they start from 0.
-    /// The user or muxer can override this through AVFormatContext.avoid_negative_ts
-    public static let tsNegative = AVFMT_TS_NEGATIVE
-    /// Seeking is based on PTS
-    public static let seekToPTS = AVFMT_SEEK_TO_PTS
-}
-
-// MARK: - AVCodecFlag
-
-/// encoding support
-///
-/// These flags can be passed in AVCodecContext.flags before initialization.
-public struct AVCodecFlag {
-    /// Place global headers in extradata instead of every keyframe.
-    public static let globalHeader = AV_CODEC_FLAG_GLOBAL_HEADER
-}
-
 // MARK: - AVIOFlag
 
 /// URL open modes
@@ -352,14 +271,6 @@ public struct AVIOFlag {
     /// instead of going through a buffer, and avio_seek will always
     /// call the underlying seek function directly.
     public static let direct = AVIO_FLAG_DIRECT
-}
-
-// MARK: - AVCodecCap
-
-/// codec capabilities
-public struct AVCodecCap {
-    /// Audio encoder supports receiving a different number of samples in each call.
-    public static let variableFrameSize = AV_CODEC_CAP_VARIABLE_FRAME_SIZE
 }
 
 // MARK: - AVRounding
@@ -459,17 +370,3 @@ public let av_samples_get_buffer_size = CFFmpeg.av_samples_get_buffer_size
 /// Free a memory block which has been allocated with a function of av_malloc() or av_realloc() family,
 /// and set the pointer pointing to it to `NULL`.
 public let av_freep = CFFmpeg.av_freep
-
-public struct SWSFlag {
-    public static let fastBilinear = SWS_FAST_BILINEAR
-    public static let bilinear = SWS_BILINEAR
-    public static let bicubic = SWS_BICUBIC
-    public static let x = SWS_X
-    public static let point = SWS_POINT
-    public static let area = SWS_AREA
-    public static let bicublin = SWS_BICUBLIN
-    public static let gauss = SWS_GAUSS
-    public static let sinc = SWS_SINC
-    public static let lanczos = SWS_LANCZOS
-    public static let spLine = SWS_SPLINE
-}

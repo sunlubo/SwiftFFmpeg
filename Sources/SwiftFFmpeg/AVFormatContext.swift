@@ -7,6 +7,47 @@
 
 import CFFmpeg
 
+// MARK: - AVFmtFlag
+
+public enum AVFmtFlag {
+    /// Demuxer will use avio_open, no opened file should be provided by the caller.
+    public static let noFile = AVFMT_NOFILE
+    /// Needs '%d' in filename.
+    public static let needNumber = AVFMT_NEEDNUMBER
+    /// Show format stream IDs numbers.
+    public static let showIDs = AVFMT_SHOW_IDS
+    /// Format wants global header.
+    public static let globalHeader = AVFMT_GLOBALHEADER
+    /// Format does not need / have any timestamps.
+    public static let noTimestamps = AVFMT_NOTIMESTAMPS
+    /// Use generic index building code.
+    public static let genericIndex = AVFMT_GENERIC_INDEX
+    /// Format allows timestamp discontinuities. Note, muxers always require valid (monotone) timestamps
+    public static let tsDiscont = AVFMT_TS_DISCONT
+    /// Format allows variable fps.
+    public static let variableFPS = AVFMT_VARIABLE_FPS
+    /// Format does not need width/height
+    public static let noDimensions = AVFMT_NODIMENSIONS
+    /// Format does not require any streams
+    public static let noStreams = AVFMT_NOSTREAMS
+    /// Format does not allow to fall back on binary search via read_timestamp
+    public static let noBinSearch = AVFMT_NOBINSEARCH
+    /// Format does not allow to fall back on generic search
+    public static let noGenSearch = AVFMT_NOGENSEARCH
+    /// Format does not allow seeking by bytes
+    public static let noByteSeek = AVFMT_NO_BYTE_SEEK
+    /// Format allows flushing. If not set, the muxer will not receive a NULL packet in the write_packet function.
+    public static let allowFlush = AVFMT_ALLOW_FLUSH
+    /// Format does not require strictly increasing timestamps, but they must still be monotonic
+    public static let tsNonstrict = AVFMT_TS_NONSTRICT
+    /// Format allows muxing negative timestamps. If not set the timestamp will be shifted in av_write_frame and
+    /// av_interleaved_write_frame so they start from 0.
+    /// The user or muxer can override this through AVFormatContext.avoid_negative_ts
+    public static let tsNegative = AVFMT_TS_NEGATIVE
+    /// Seeking is based on PTS
+    public static let seekToPTS = AVFMT_SEEK_TO_PTS
+}
+
 // MARK: - Input Format
 
 internal typealias CAVInputFormat = CFFmpeg.AVInputFormat

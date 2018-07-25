@@ -7,6 +7,18 @@
 
 import CFFmpeg
 
+// MARK: - AVCodecFlag
+
+/// encoding support
+///
+/// These flags can be passed in AVCodecContext.flags before initialization.
+public struct AVCodecFlag {
+    /// Place global headers in extradata instead of every keyframe.
+    public static let globalHeader = AV_CODEC_FLAG_GLOBAL_HEADER
+}
+
+// MARK: - AVCodecContext
+
 internal typealias CAVCodecContext = CFFmpeg.AVCodecContext
 
 public final class AVCodecContext {
