@@ -32,7 +32,7 @@ public final class AVCodecParserContext {
     ///   - dts: input decoding timestamp.
     ///   - pos: input byte position in stream.
     /// - Returns: The number of bytes of the input bitstream used.
-    public func parse(data: UnsafePointer<UInt8>, size: Int, packet: AVPacket, pts: Int64 = AV_NOPTS_VALUE, dts: Int64 = AV_NOPTS_VALUE, pos: Int64 = 0) -> Int {
+    public func parse(data: UnsafePointer<UInt8>, size: Int, packet: AVPacket, pts: Int64 = .noPTS, dts: Int64 = .noPTS, pos: Int64 = 0) -> Int {
         var poutbuf: UnsafeMutablePointer<UInt8>?
         var poutbufSize: Int32 = 0
         let ret = av_parser_parse2(ctxPtr, codecCtx.ctxPtr, &poutbuf, &poutbufSize, data, Int32(size), pts, dts, pos)

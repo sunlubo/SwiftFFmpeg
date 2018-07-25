@@ -123,7 +123,7 @@ public struct AVStream {
     ///   the desired timebase. In avformat_write_header(), the muxer will overwrite this field with the timebase
     ///   that will actually be used for the timestamps written into the file (which may or may not be related to
     ///   the user-provided one, depending on the format).
-    public var timeBase: AVRational {
+    public var timebase: AVRational {
         get { return stream.time_base }
         set { streamPtr.pointee.time_base = newValue }
     }

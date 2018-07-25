@@ -14,11 +14,11 @@ internal typealias CAVInputFormat = CFFmpeg.AVInputFormat
 public struct AVInputFormat {
     internal let fmtPtr: UnsafeMutablePointer<CAVInputFormat>
     internal var fmt: CAVInputFormat { return fmtPtr.pointee }
-
+    
     internal init(fmtPtr: UnsafeMutablePointer<CAVInputFormat>) {
         self.fmtPtr = fmtPtr
     }
-
+    
     /// Find `AVInputFormat` based on the short name of the input format.
     ///
     /// - Parameter name: name of the input format
@@ -28,17 +28,17 @@ public struct AVInputFormat {
         }
         self.init(fmtPtr: fmtPtr)
     }
-
+    
     /// A comma separated list of short names for the format.
     public var name: String {
         return String(cString: fmt.name)
     }
-
+    
     /// Descriptive name for the format, meant to be more human-readable than name.
     public var longName: String {
         return String(cString: fmt.long_name)
     }
-
+    
     /// If extensions are defined, then no probe is done. You should usually not use extension format guessing because
     /// it is not reliable enough.
     public var extensions: String? {
@@ -47,7 +47,7 @@ public struct AVInputFormat {
         }
         return nil
     }
-
+    
     /// Comma-separated list of mime types.
     ///
     /// It is used check for matching mime types while probing.
@@ -57,7 +57,7 @@ public struct AVInputFormat {
         }
         return nil
     }
-
+    
     /// Get all registered demuxers.
     public static var all: [AVInputFormat] {
         var list = [AVInputFormat]()
@@ -76,21 +76,21 @@ internal typealias CAVOutputFormat = CFFmpeg.AVOutputFormat
 public struct AVOutputFormat {
     internal let fmtPtr: UnsafeMutablePointer<CAVOutputFormat>
     internal var fmt: CAVOutputFormat { return fmtPtr.pointee }
-
+    
     internal init(fmtPtr: UnsafeMutablePointer<CAVOutputFormat>) {
         self.fmtPtr = fmtPtr
     }
-
+    
     /// A comma separated list of short names for the format.
     public var name: String {
         return String(cString: fmt.name)
     }
-
+    
     /// Descriptive name for the format, meant to be more human-readable than name.
     public var longName: String {
         return String(cString: fmt.long_name)
     }
-
+    
     /// If extensions are defined, then no probe is done. You should usually not use extension format guessing because
     /// it is not reliable enough.
     public var extensions: String? {
@@ -99,7 +99,7 @@ public struct AVOutputFormat {
         }
         return nil
     }
-
+    
     /// Comma-separated list of mime types.
     ///
     /// It is used check for matching mime types while probing.
@@ -109,28 +109,28 @@ public struct AVOutputFormat {
         }
         return nil
     }
-
+    
     /// default audio codec
     public var audioCodec: AVCodecID {
         return fmt.audio_codec
     }
-
+    
     /// default video codec
     public var videoCodec: AVCodecID {
         return fmt.video_codec
     }
-
+    
     /// default subtitle codec
     public var subtitleCodec: AVCodecID {
         return fmt.subtitle_codec
     }
-
+    
     /// - SeeAlso: `AVFmtFlag`
     public var flags: Int32 {
         get { return fmt.flags }
         set { fmtPtr.pointee.flags = newValue }
     }
-
+    
     /// Get all registered muxers.
     public static var all: [AVOutputFormat] {
         var list = [AVOutputFormat]()
@@ -148,14 +148,14 @@ internal typealias CAVFormatContext = CFFmpeg.AVFormatContext
 public final class AVFormatContext {
     internal let ctxPtr: UnsafeMutablePointer<CAVFormatContext>
     internal var ctx: CAVFormatContext { return ctxPtr.pointee }
-
+    
     private var isOpened = false
-
+    
     /// Allocate an `AVFormatContext`.
     public init() {
         self.ctxPtr = avformat_alloc_context()
     }
-
+    
     /// Open an input stream and read the header. The codecs are not opened.
     ///
     /// - Parameters:
@@ -171,15 +171,15 @@ public final class AVFormatContext {
                 av_dict_set(&pm, k, v, 0)
             }
         }
-
+        
         var ctxPtr: UnsafeMutablePointer<CAVFormatContext>?
         try throwIfFail(avformat_open_input(&ctxPtr, url, format?.fmtPtr, &pm))
         self.ctxPtr = ctxPtr!
         self.isOpened = true
-
+        
         dumpUnrecognizedOptions(pm)
     }
-
+    
     /// Allocate an `AVFormatContext` for an output format.
     ///
     /// - Parameters:
@@ -192,7 +192,7 @@ public final class AVFormatContext {
         try throwIfFail(avformat_alloc_output_context2(&ctxPtr, format?.fmtPtr, formatName, filename))
         self.ctxPtr = ctxPtr!
     }
-
+    
     /// Input or output URL.
     public var url: String? {
         if let strBytes = ctx.url {
@@ -200,7 +200,7 @@ public final class AVFormatContext {
         }
         return nil
     }
-
+    
     /// The input container format.
     public var iformat: AVInputFormat? {
         get {
@@ -213,7 +213,7 @@ public final class AVFormatContext {
             ctxPtr.pointee.iformat = newValue?.fmtPtr
         }
     }
-
+    
     /// The output container format.
     public var oformat: AVOutputFormat? {
         get {
@@ -226,12 +226,12 @@ public final class AVFormatContext {
             ctxPtr.pointee.oformat = newValue?.fmtPtr
         }
     }
-
+    
     /// Number of streams.
     public var streamCount: Int {
         return Int(ctx.nb_streams)
     }
-
+    
     /// A list of all streams in the file.
     public var streams: [AVStream] {
         var list = [AVStream]()
@@ -241,24 +241,24 @@ public final class AVFormatContext {
         }
         return list
     }
-
+    
     public var videoStream: AVStream? {
         return streams.first { $0.mediaType == .video }
     }
-
+    
     public var audioStream: AVStream? {
         return streams.first { $0.mediaType == .audio }
     }
-
+    
     public var subtitleStream: AVStream? {
         return streams.first { $0.mediaType == .subtitle }
     }
-
+    
     /// Duration of the stream, in `AV_TIME_BASE` fractional seconds.
     public var duration: Int64 {
         return ctxPtr.pointee.duration
     }
-
+    
     /// Metadata that applies to the whole file.
     public var metadata: [String: String] {
         var dict = [String: String]()
@@ -269,7 +269,7 @@ public final class AVFormatContext {
         }
         return dict
     }
-
+    
     /// Open an input stream and read the header.
     ///
     /// - Parameter url: URL of the stream to open.
@@ -278,12 +278,12 @@ public final class AVFormatContext {
         try throwIfFail(avformat_open_input(&ps, url, nil, nil))
         isOpened = true
     }
-
+    
     /// Read packets of a media file to get stream information.
     public func findStreamInfo() throws {
         try throwIfFail(avformat_find_stream_info(ctxPtr, nil))
     }
-
+    
     /// Find the "best" stream in the file.
     ///
     /// - Parameter type: stream type: video, audio, subtitles, etc.
@@ -294,14 +294,14 @@ public final class AVFormatContext {
         try throwIfFail(ret)
         return Int(ret)
     }
-
+    
     public func streamIndex(for mediaType: AVMediaType) -> Int? {
         if let index = streams.index(where: { $0.codecpar.mediaType == mediaType }) {
             return index
         }
         return nil
     }
-
+    
     /// Add a new stream to a media file.
     ///
     /// - Parameter codec: If non-nil, the AVCodecContext corresponding to the new stream will be initialized to use this codec.
@@ -313,7 +313,7 @@ public final class AVFormatContext {
         }
         return nil
     }
-
+    
     /// Return the next frame of a stream.
     ///
     /// This function returns what is stored in the file, and does not validate that what is there are valid frames
@@ -325,7 +325,7 @@ public final class AVFormatContext {
     public func readFrame(into packet: AVPacket) throws {
         try throwIfFail(av_read_frame(ctxPtr, packet.packetPtr))
     }
-
+    
     /// Create and initialize a AVIOContext for accessing the resource indicated by url.
     ///
     /// - Parameters:
@@ -337,7 +337,7 @@ public final class AVFormatContext {
         try throwIfFail(avio_open(&pb, url, mode))
         ctxPtr.pointee.pb = pb
     }
-
+    
     /// Allocate the stream private data and write the stream header to an output media file.
     ///
     /// - Parameter options: An AVDictionary filled with AVFormatContext and muxer-private options.
@@ -350,12 +350,12 @@ public final class AVFormatContext {
                 av_dict_set(&pm, k, v, 0)
             }
         }
-
+        
         try throwIfFail(avformat_write_header(ctxPtr, &pm))
-
+        
         dumpUnrecognizedOptions(pm)
     }
-
+    
     /// Write the stream trailer to an output media file and free the file private data.
     ///
     /// May only be called after a successful call to `writeHeader(options:)`.
@@ -364,7 +364,7 @@ public final class AVFormatContext {
     public func writeTrailer() throws {
         try throwIfFail(av_write_trailer(ctxPtr))
     }
-
+    
     /// Write a packet to an output media file.
     ///
     /// - Parameter pkt: The packet containing the data to be written.
@@ -372,7 +372,7 @@ public final class AVFormatContext {
     public func writeFrame(pkt: AVPacket?) throws {
         try throwIfFail(av_write_frame(ctxPtr, pkt?.packetPtr))
     }
-
+    
     /// Write a packet to an output media file ensuring correct interleaving.
     ///
     /// - Parameter pkt: The packet containing the data to be written.
@@ -380,7 +380,7 @@ public final class AVFormatContext {
     public func interleavedWriteFrame(pkt: AVPacket?) throws {
         try throwIfFail(av_interleaved_write_frame(ctxPtr, pkt?.packetPtr))
     }
-
+    
     /// Print detailed information about the input or output format, such as duration, bitrate, streams, container,
     /// programs, metadata, side data, codec and time base.
     ///
@@ -388,13 +388,13 @@ public final class AVFormatContext {
     public func dumpFormat(isOutput: Bool) {
         av_dump_format(ctxPtr, 0, url, isOutput ? 1 : 0)
     }
-
+    
     deinit {
         if let oformat = oformat, oformat.flags & AVFmtFlag.noFile == 0 {
             var pb = ctx.pb
             avio_closep(&pb)
         }
-
+        
         if isOpened {
             var ps: UnsafeMutablePointer<CAVFormatContext>? = ctxPtr
             avformat_close_input(&ps)

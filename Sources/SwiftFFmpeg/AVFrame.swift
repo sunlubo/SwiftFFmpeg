@@ -14,6 +14,8 @@ public final class AVFrame {
     internal let framePtr: UnsafeMutablePointer<CAVFrame>
     internal var frame: CAVFrame { return framePtr.pointee }
 
+    public var mediaType: AVMediaType = .unknown
+
     /// Creates an `AVFrame` and set its fields to default values.
     public init() {
         guard let framePtr = av_frame_alloc() else {
@@ -76,11 +78,11 @@ public final class AVFrame {
     /// For audio, size in bytes of each plane.
     public var linesize: [Int] {
         get {
-            let value = [
+            let list = [
                 frame.linesize.0, frame.linesize.1, frame.linesize.2, frame.linesize.3,
                 frame.linesize.4, frame.linesize.5, frame.linesize.6, frame.linesize.7
             ]
-            return value.map({ Int($0) })
+            return list.map({ Int($0) })
         }
         set {
             var list = newValue.map({ Int32($0) })
@@ -96,13 +98,13 @@ public final class AVFrame {
 
     /// Format of the frame, -1 if unknown or unset.
     ///
-    /// Values correspond to AVPixelFormat for video frames, AVSampleFormat for audio.
+    /// Values correspond to `AVPixelFormat` for video frames, `AVSampleFormat` for audio.
     public var format: Int32 {
         get { return frame.format }
         set { framePtr.pointee.format = newValue }
     }
 
-    /// Presentation timestamp in time_base units (time when frame should be shown to user).
+    /// Presentation timestamp in timebase units (time when frame should be shown to user).
     public var pts: Int64 {
         get { return frame.pts }
         set { framePtr.pointee.pts = newValue }
@@ -130,12 +132,30 @@ public final class AVFrame {
 
     /// Allocate new buffer(s) for audio or video data.
     ///
-    /// - Parameter alignment: Required buffer size alignment.
-    ///   - If equal to 0, alignment will be chosen automatically for the current CPU.
-    ///   - It is highly recommended to pass 0 here unless you know what you are doing.
+    /// The following fields must be set on frame before calling this function:
+    ///   - format (pixel format for video, sample format for audio)
+    ///   - width and height for video
+    ///   - sampleCount and channelLayout for audio
+    ///
+    /// This function will fill `AVFrame.data` and `AVFrame.buf` arrays and, if necessary, allocate and fill
+    /// `AVFrame.extended_data` and `AVFrame.extended_buf`. For planar formats, one buffer will be allocated for each plane.
+    ///
+    /// - Warning: If frame already has been allocated, calling this function will leak memory.
+    ///   In addition, undefined behavior can occur in certain cases.
+    ///
+    /// - Parameter alignment: Required buffer size alignment. If equal to 0, alignment will be chosen automatically
+    ///   for the current CPU. It is highly recommended to pass 0 here unless you know what you are doing.
     /// - Throws: AVError
     public func allocBuffer(alignment: Int32 = 0) throws {
         try throwIfFail(av_frame_get_buffer(framePtr, alignment))
+    }
+
+    /// Check if the frame data is writable.
+    ///
+    /// - Returns: True if the frame data is writable (which is true if and only if each of the underlying buffers has
+    ///   only one reference, namely the one stored in this frame).
+    public func isWritable() -> Bool {
+        return av_frame_is_writable(framePtr) > 0
     }
 
     /// Ensure that the frame data is writable, avoiding data copy if possible.

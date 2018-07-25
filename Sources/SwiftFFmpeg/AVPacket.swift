@@ -7,6 +7,23 @@
 
 import CFFmpeg
 
+public struct AVPacketFlag {
+    /// The packet contains a keyframe
+    public static let key = AV_PKT_FLAG_KEY
+    /// The packet content is corrupted
+    public static let corrupt = AV_PKT_FLAG_CORRUPT
+    /// Flag is used to discard packets which are required to maintain valid decoder state
+    /// but are not required for output and should be dropped after decoding.
+    public static let discard = AV_PKT_FLAG_DISCARD
+    /// The packet comes from a trusted source.
+    ///
+    /// Otherwise-unsafe constructs such as arbitrary pointers to data outside the packet may be followed.
+    public static let trusted = AV_PKT_FLAG_TRUSTED
+    /// Flag is used to indicate packets that contain frames that can be discarded by the decoder.
+    /// I.e. Non-reference frames.
+    public static let disposable = AV_PKT_FLAG_DISPOSABLE
+}
+
 internal typealias CAVPacket = CFFmpeg.AVPacket
 
 /// This structure stores compressed data.
@@ -32,16 +49,19 @@ public final class AVPacket {
         set { packetPtr.pointee.buf = newValue?.bufPtr }
     }
 
+    /// Presentation timestamp in `AVStream.timebase` units; the time at which
     /// the decompressed packet will be presented to the user.
-    /// Can be AV_NOPTS_VALUE if it is not stored in the file.
+    ///
+    /// Can be `Int64.noPTS` if it is not stored in the file.
     public var pts: Int64 {
         get { return packet.pts }
         set { packetPtr.pointee.pts = newValue }
     }
 
-    /// Decompression timestamp in AVStream->time_base units; the time at which
+    /// Decompression timestamp in `AVStream.timebase` units; the time at which
     /// the packet is decompressed.
-    /// Can be AV_NOPTS_VALUE if it is not stored in the file.
+    ///
+    /// Can be `Int64.noPTS` if it is not stored in the file.
     public var dts: Int64 {
         get { return packet.dts }
         set { packetPtr.pointee.dts = newValue }
@@ -62,14 +82,20 @@ public final class AVPacket {
         set { packetPtr.pointee.stream_index = Int32(newValue) }
     }
 
-    /// Duration of this packet in AVStream->time_base units, 0 if unknown.
-    /// Equals next_pts - this_pts in presentation order.
+    /// A combination of `AVPacketFlag` values.
+    public var flags: Int32 {
+        get { return packet.flags }
+        set { packetPtr.pointee.flags = newValue }
+    }
+
+    /// Duration of this packet in `AVStream.timebase` units, 0 if unknown.
+    /// Equals `next_pts - this_pts` in presentation order.
     public var duration: Int64 {
         get { return packet.duration }
         set { packetPtr.pointee.duration = newValue }
     }
 
-    /// byte position in stream, -1 if unknown
+    /// Byte position in stream, -1 if unknown.
     public var pos: Int64 {
         get { return packet.pos }
         set { packetPtr.pointee.pos = newValue }
@@ -83,12 +109,12 @@ public final class AVPacket {
     }
 
     /// Convert valid timing fields (timestamps / durations) in a packet from one timebase to another.
-    /// Timestamps with unknown values (AV_NOPTS_VALUE) will be ignored.
+    /// Timestamps with unknown values (`Int64.noPTS`) will be ignored.
     ///
     /// - Parameters:
-    ///   - src: source timebase, in which the timing fields in pkt are expressed
-    ///   - dst: destination timebase, to which the timing fields will be converted
-    public func rescaleTs(src: AVRational, dst: AVRational) {
+    ///   - src: source timebase, in which the timing fields in pkt are expressed.
+    ///   - dst: destination timebase, to which the timing fields will be converted.
+    public func rescaleTs(from src: AVRational, to dst: AVRational) {
         av_packet_rescale_ts(packetPtr, src, dst)
     }
 

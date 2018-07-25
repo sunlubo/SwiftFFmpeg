@@ -7,17 +7,19 @@
 
 import CFFmpeg
 
-/// Undefined timestamp value
-///
-/// Usually reported by demuxer that work on containers that do not provide
-/// either pts or dts.
-public let AV_NOPTS_VALUE = swift_AV_NOPTS_VALUE
-
 public let AV_INPUT_BUFFER_PADDING_SIZE = Int(CFFmpeg.AV_INPUT_BUFFER_PADDING_SIZE)
 
 public let AV_TS_MAX_STRING_SIZE = Int(CFFmpeg.AV_TS_MAX_STRING_SIZE)
 
 public let AV_ERROR_MAX_STRING_SIZE = Int(CFFmpeg.AV_ERROR_MAX_STRING_SIZE)
+
+extension Int64 {
+    /// Undefined timestamp value
+    ///
+    /// Usually reported by demuxer that work on containers that do not provide
+    /// either pts or dts.
+    public static let noPTS = swift_AV_NOPTS_VALUE
+}
 
 // MARK: - AVRational
 
