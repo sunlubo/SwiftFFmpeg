@@ -80,6 +80,14 @@ public struct AVInputFormat {
         return String(cString: fmt.long_name)
     }
     
+    /// Can use flags: `AVFmtFlag.noFile`, `AVFmtFlag.needNumber`, `AVFmtFlag.showIDs`, `AVFmtFlag.genericIndex`,
+    /// `AVFmtFlag.tsDiscont`, `AVFmtFlag.noBinSearch`, `AVFmtFlag.noGenSearch`, `AVFmtFlag.noByteSeek`,
+    /// `AVFmtFlag.seekToPTS`.
+    public var flags: Int32 {
+        get { return fmt.flags }
+        set { fmtPtr.pointee.flags = newValue }
+    }
+    
     /// If extensions are defined, then no probe is done. You should usually not use extension format guessing because
     /// it is not reliable enough.
     public var extensions: String? {
@@ -166,7 +174,9 @@ public struct AVOutputFormat {
         return fmt.subtitle_codec
     }
     
-    /// - SeeAlso: `AVFmtFlag`
+    /// Can use flags: `AVFmtFlag.noFile`, `AVFmtFlag.needNumber`, `AVFmtFlag.globalHeader`, `AVFmtFlag.noTimestamps`,
+    /// `AVFmtFlag.variableFPS`, `AVFmtFlag.noDimensions`, `AVFmtFlag.noStreams`, `AVFmtFlag.allowFlush`,
+    /// `AVFmtFlag.tsNonstrict`, `AVFmtFlag.tsNegative`.
     public var flags: Int32 {
         get { return fmt.flags }
         set { fmtPtr.pointee.flags = newValue }
