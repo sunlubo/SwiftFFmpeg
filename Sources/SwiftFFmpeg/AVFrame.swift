@@ -22,6 +22,35 @@ public final class AVFrame {
         self.framePtr = framePtr
     }
 
+    /// `AVBuffer` references backing the data for this frame.
+    ///
+    /// If all elements of this array are nil, then this frame is not reference counted.
+    /// This array must be filled contiguously -- if buf[i] is non-nil then buf[j] must also be non-nil for all j < i.
+    ///
+    /// There may be at most one `AVBuffer` per data plane, so for video this array always contains all the references.
+    /// For planar audio with more than `AV_NUM_DATA_POINTERS` channels, there may be more buffers than can fit in this array.
+    /// Then the extra `AVBufferRef` pointers are stored in the `extended_buf` array.
+    public var buf: [AVBuffer?] {
+        get {
+            let list = [
+                frame.buf.0, frame.buf.1, frame.buf.2, frame.buf.3,
+                frame.buf.4, frame.buf.5, frame.buf.6, frame.buf.7
+            ]
+            return list.map({ AVBuffer(bufPtr: $0) })
+        }
+        set {
+            var list = newValue
+            while list.count < AV_NUM_DATA_POINTERS {
+                list.append(nil)
+            }
+            var ptrs = list.map({ $0?.bufPtr })
+            framePtr.pointee.buf = (
+                ptrs[0], ptrs[1], ptrs[2], ptrs[3],
+                ptrs[4], ptrs[5], ptrs[6], ptrs[7]
+            )
+        }
+    }
+
     /// Pointer to the picture/channel planes.
     public var data: [UnsafeMutablePointer<UInt8>?] {
         get {

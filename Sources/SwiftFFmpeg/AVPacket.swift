@@ -25,7 +25,13 @@ public final class AVPacket {
         self.packetPtr = packetPtr
     }
 
-    /// Presentation timestamp in AVStream->time_base units; the time at which
+    /// A reference to the reference-counted buffer where the packet data is stored.
+    /// May be `nil`, then the packet data is not reference-counted.
+    public var buf: AVBuffer? {
+        get { return AVBuffer(bufPtr: packet.buf) }
+        set { packetPtr.pointee.buf = newValue?.bufPtr }
+    }
+
     /// the decompressed packet will be presented to the user.
     /// Can be AV_NOPTS_VALUE if it is not stored in the file.
     public var pts: Int64 {
