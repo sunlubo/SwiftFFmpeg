@@ -140,11 +140,11 @@ public final class AVCodecContext {
 
     /// Supply raw packet data as input to a decoder.
     ///
-    /// - Parameter packet: The input `AVPacket`. Usually, this will be a single video frame, or several complete audio frames.
-    ///   It can be `nil` (or an `AVPacket` with data set to `nil` and size set to 0); in this case, it is considered a
-    ///   flush packet, which signals the end of the stream. Sending the first flush packet will return success.
-    ///   Subsequent ones are unnecessary and will return `AVError.EOF`. If the decoder still has frames buffered,
-    ///   it will return them after sending a flush packet.
+    /// - Parameter packet: The input `AVPacket`. Usually, this will be a single video frame, or several complete
+    ///   audio frames. It can be `nil` (or an `AVPacket` with data set to `nil` and size set to 0); in this case,
+    ///   it is considered a flush packet, which signals the end of the stream. Sending the first flush packet will
+    ///   return success. Subsequent ones are unnecessary and will return `AVError.EOF`. If the decoder still has
+    ///   frames buffered, it will return them after sending a flush packet.
     /// - Throws: AVError
     public func sendPacket(_ packet: AVPacket?) throws {
         try throwIfFail(avcodec_send_packet(ctxPtr, packet?.packetPtr))
@@ -170,7 +170,8 @@ public final class AVCodecContext {
     ///   If the encoder still has packets buffered, it will return them after this call. Once flushing mode has been
     ///   entered, additional flush packets are ignored, and sending frames will return `AVError.EOF`.
     /// - Returns:
-    ///   - `AVError.EAGAIN`: input is not accepted in the current state - user must read output with `receivePacket(_:)`
+    ///   - `AVError.EAGAIN`: input is not accepted in the current state - user must read output with
+    ///     `receivePacket(_:)`.
     ///     (once all output is read, the packet should be resent, and the call will not fail with `AVError.EAGAIN`).
     ///   - `AVError.EOF`: the encoder has been flushed, and no new frames can be sent to it
     ///   - `AVError.EINVAL`: codec not opened, refcounted_frames not set, it is a decoder, or requires flush

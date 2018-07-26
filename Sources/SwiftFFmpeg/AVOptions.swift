@@ -34,7 +34,7 @@ extension AVOptionType: CustomStringConvertible {
     public static let color = AV_OPT_TYPE_COLOR
     public static let channelLayout = AV_OPT_TYPE_CHANNEL_LAYOUT
     public static let bool = AV_OPT_TYPE_BOOL
-    
+
     public var description: String {
         switch self {
         case .flags:
@@ -87,15 +87,15 @@ internal typealias CAVOption = CFFmpeg.AVOption
 
 public struct AVOption: CustomStringConvertible {
     internal let option: CAVOption
-    
+
     internal init(option: CAVOption) {
         self.option = option
     }
-    
+
     public var name: String {
         return String(cString: option.name)
     }
-    
+
     /// short English help text
     public var help: String {
         if let strBytes = option.help {
@@ -103,11 +103,11 @@ public struct AVOption: CustomStringConvertible {
         }
         return ""
     }
-    
+
     public var type: AVOptionType {
         return option.type
     }
-    
+
     public var defaultValue: Any {
         switch type {
         case .flags, .int, .int64, .uint64, .channelLayout:
@@ -127,7 +127,7 @@ public struct AVOption: CustomStringConvertible {
             return "unknown"
         }
     }
-    
+
     public var description: String {
         return """
         \(name):
@@ -155,7 +155,7 @@ public protocol AVOptionProtocol {
 }
 
 extension AVOptionProtocol {
-    
+
     /// Set the field of obj with the given name to value.
     ///
     /// av_opt_set
@@ -168,52 +168,62 @@ extension AVOptionProtocol {
     public func set(_ value: String, forKey key: String, searchFlags: AVOptionSearchFlag = .children) throws {
         try throwIfFail(av_opt_set(objPtr, key, value, searchFlags.rawValue))
     }
-    
+
     /// av_opt_set_int
-    public func set<T: FixedWidthInteger>(_ value: T, forKey key: String, searchFlags: AVOptionSearchFlag = .children) throws {
+    public func set<T: FixedWidthInteger>(
+        _ value: T, forKey key: String, searchFlags: AVOptionSearchFlag = .children
+    ) throws {
         try throwIfFail(av_opt_set_int(objPtr, key, Int64(value), searchFlags.rawValue))
     }
-    
+
     /// av_opt_set_double
     public func set(_ value: Double, forKey key: String, searchFlags: AVOptionSearchFlag = .children) throws {
         try throwIfFail(av_opt_set_double(objPtr, key, value, searchFlags.rawValue))
     }
-    
+
     /// av_opt_set_q
     public func set(_ value: AVRational, forKey key: String, searchFlags: AVOptionSearchFlag = .children) throws {
         try throwIfFail(av_opt_set_q(objPtr, key, value, searchFlags.rawValue))
     }
-    
+
     /// av_opt_set_bin
-    public func set(_ value: UnsafePointer<UInt8>, forKey key: String, searchFlags: AVOptionSearchFlag = .children) throws {
+    public func set(
+        _ value: UnsafePointer<UInt8>, forKey key: String, searchFlags: AVOptionSearchFlag = .children
+    ) throws {
         try throwIfFail(av_opt_set_bin(objPtr, key, value, 0, searchFlags.rawValue))
     }
-    
+
     /// av_opt_set_pixel_fmt
     public func set(_ value: AVPixelFormat, forKey key: String, searchFlags: AVOptionSearchFlag = .children) throws {
         try throwIfFail(av_opt_set_pixel_fmt(objPtr, key, value, searchFlags.rawValue))
     }
-    
+
     /// av_opt_set_sample_fmt
     public func set(_ value: AVSampleFormat, forKey key: String, searchFlags: AVOptionSearchFlag = .children) throws {
         try throwIfFail(av_opt_set_sample_fmt(objPtr, key, value, searchFlags.rawValue))
     }
-    
+
     /// av_opt_set_image_size
-    public func setImageSize(_ size: (width: Int, height: Int), forKey key: String, searchFlags: AVOptionSearchFlag = .children) throws {
+    public func setImageSize(
+        _ size: (width: Int, height: Int), forKey key: String, searchFlags: AVOptionSearchFlag = .children
+    ) throws {
         try throwIfFail(av_opt_set_image_size(objPtr, key, Int32(size.width), Int32(size.height), searchFlags.rawValue))
     }
-    
+
     /// av_opt_set_video_rate
-    public func setVideoRate(_ value: AVRational, forKey key: String, searchFlags: AVOptionSearchFlag = .children) throws {
+    public func setVideoRate(
+        _ value: AVRational, forKey key: String, searchFlags: AVOptionSearchFlag = .children
+    ) throws {
         try throwIfFail(av_opt_set_video_rate(objPtr, key, value, searchFlags.rawValue))
     }
-    
+
     /// av_opt_set_channel_layout
-    public func setChannelLayout(_ value: Int64, forKey key: String, searchFlags: AVOptionSearchFlag = .children) throws {
+    public func setChannelLayout(
+        _ value: Int64, forKey key: String, searchFlags: AVOptionSearchFlag = .children
+    ) throws {
         try throwIfFail(av_opt_set_channel_layout(objPtr, key, value, searchFlags.rawValue))
     }
-    
+
     /// Get a value of the option with the given name from an object.
     ///
     /// av_opt_get
@@ -228,35 +238,37 @@ extension AVOptionProtocol {
         try throwIfFail(av_opt_get(objPtr, key, searchFlags.rawValue, &outVal))
         return String(cString: outVal!)
     }
-    
+
     /// av_opt_get_int
     public func integer(forKey key: String, searchFlags: AVOptionSearchFlag = .children) throws -> Int64 {
         var outVal: Int64 = 0
         try throwIfFail(av_opt_get_int(objPtr, key, searchFlags.rawValue, &outVal))
         return outVal
     }
-    
+
     /// av_opt_get_double
     public func double(forKey key: String, searchFlags: AVOptionSearchFlag = .children) throws -> Double {
         var outVal: Double = 0
         try throwIfFail(av_opt_get_double(objPtr, key, searchFlags.rawValue, &outVal))
         return outVal
     }
-    
+
     /// av_opt_get_q
     public func rational(forKey key: String, searchFlags: AVOptionSearchFlag = .children) throws -> AVRational {
         var outVal = AVRational(num: 0, den: 0)
         try throwIfFail(av_opt_get_q(objPtr, key, searchFlags.rawValue, &outVal))
         return outVal
     }
-    
+
     /// av_opt_get
-    public func binary(forKey key: String, searchFlags: AVOptionSearchFlag = .children) throws -> UnsafeMutablePointer<UInt8> {
+    public func binary(
+        forKey key: String, searchFlags: AVOptionSearchFlag = .children
+    ) throws -> UnsafeMutablePointer<UInt8> {
         var outVal: UnsafeMutablePointer<UInt8>?
         try throwIfFail(av_opt_get(objPtr, key, searchFlags.rawValue, &outVal))
         return outVal!
     }
-    
+
     /// av_opt_get_image_size
     public func size(forKey key: String, searchFlags: AVOptionSearchFlag = .children) throws -> (Int, Int) {
         var wOutVal: Int32 = 0
@@ -264,35 +276,35 @@ extension AVOptionProtocol {
         try throwIfFail(av_opt_get_image_size(objPtr, key, searchFlags.rawValue, &wOutVal, &hOutVal))
         return (Int(wOutVal), Int(hOutVal))
     }
-    
+
     /// av_opt_get_pixel_fmt
     public func pixelFmt(forKey key: String, searchFlags: AVOptionSearchFlag = .children) throws -> AVPixelFormat {
         var outVal = AVPixelFormat.NONE
         try throwIfFail(av_opt_get_pixel_fmt(objPtr, key, searchFlags.rawValue, &outVal))
         return outVal
     }
-    
+
     /// av_opt_get_sample_fmt
     public func sampleFmt(forKey key: String, searchFlags: AVOptionSearchFlag = .children) throws -> AVSampleFormat {
         var outVal = AVSampleFormat.NONE
         try throwIfFail(av_opt_get_sample_fmt(objPtr, key, searchFlags.rawValue, &outVal))
         return outVal
     }
-    
+
     /// av_opt_get_video_rate
     public func videoRate(forKey key: String, searchFlags: AVOptionSearchFlag = .children) throws -> AVRational {
         var outVal = AVRational(num: 0, den: 0)
         try throwIfFail(av_opt_get_video_rate(objPtr, key, searchFlags.rawValue, &outVal))
         return outVal
     }
-    
+
     /// av_opt_get_channel_layout
     public func channelLayout(forKey key: String, searchFlags: AVOptionSearchFlag = .children) throws -> Int64 {
         var outVal: Int64 = 0
         try throwIfFail(av_opt_get_channel_layout(objPtr, key, searchFlags.rawValue, &outVal))
         return outVal
     }
-    
+
     public var all: [AVOption] {
         var list = [AVOption]()
         var prev: UnsafePointer<CAVOption>?
@@ -303,9 +315,10 @@ extension AVOptionProtocol {
         return list
     }
 }
+// MARK: - Extensions
 
 extension AVFormatContext: AVOptionProtocol {
-    
+
     public var objPtr: UnsafeMutableRawPointer {
         let ptr = UnsafeMutablePointer<UnsafePointer<CAVClass>>.allocate(capacity: 1)
         ptr.initialize(to: avClass.clazzPtr)
@@ -315,14 +328,14 @@ extension AVFormatContext: AVOptionProtocol {
 }
 
 extension AVCodecContext: AVOptionProtocol {
-    
+
     public var objPtr: UnsafeMutableRawPointer {
         return ctx.priv_data
     }
 }
 
 extension AVCodec: AVOptionProtocol {
-    
+
     public var objPtr: UnsafeMutableRawPointer {
         let ptr = UnsafeMutablePointer<UnsafePointer<CAVClass>>.allocate(capacity: 1)
         ptr.initialize(to: codec.priv_class)
@@ -332,14 +345,14 @@ extension AVCodec: AVOptionProtocol {
 }
 
 extension SwsContext: AVOptionProtocol {
-    
+
     public var objPtr: UnsafeMutableRawPointer {
         return UnsafeMutableRawPointer(ctx)
     }
 }
 
 extension SwrContext: AVOptionProtocol {
-    
+
     public var objPtr: UnsafeMutableRawPointer {
         return UnsafeMutableRawPointer(ctx)
     }

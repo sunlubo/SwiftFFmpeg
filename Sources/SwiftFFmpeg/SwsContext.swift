@@ -23,12 +23,12 @@ public struct SWSFlag {
 
 public final class SwsContext {
     internal let ctx: OpaquePointer
-    
+
     /// Allocate an empty `SwsContext`.
     public init() {
         ctx = sws_alloc_context()
     }
-    
+
     /// Allocate and return an `SwsContext`.
     ///
     /// - Parameters:
@@ -64,7 +64,6 @@ public final class SwsContext {
         }
         ctx = ptr
     }
-    
     /// Scale the image slice in srcSlice and put the resulting scaled slice in the image in dst.
     ///
     /// A slice is a sequence of consecutive rows in an image.
@@ -92,7 +91,7 @@ public final class SwsContext {
     ) -> Int32 {
         return sws_scale(ctx, srcSlice, srcStride, srcSliceY, srcSliceH, dst, dstStride)
     }
-    
+
     /// Returns a Boolean value indicating whether the pixel format is a supported input format.
     ///
     /// - Parameter pixFmt: pixel format
@@ -100,7 +99,7 @@ public final class SwsContext {
     public static func isSupportedInput(_ pixFmt: AVPixelFormat) -> Bool {
         return sws_isSupportedInput(pixFmt) > 0
     }
-    
+
     /// Returns a Boolean value indicating whether the pixel format is a supported output format.
     ///
     /// - Parameter pixFmt: pixel format
@@ -108,7 +107,7 @@ public final class SwsContext {
     public static func isSupportedOutput(_ pixFmt: AVPixelFormat) -> Bool {
         return sws_isSupportedOutput(pixFmt) > 0
     }
-    
+
     /// Returns a Boolean value indicating whether an endianness conversion is supported.
     ///
     /// - Parameter pixFmt: pixel format
@@ -116,7 +115,7 @@ public final class SwsContext {
     public static func isSupportedEndiannessConversion(_ pixFmt: AVPixelFormat) -> Bool {
         return sws_isSupportedEndiannessConversion(pixFmt) > 0
     }
-    
+
     deinit {
         sws_freeContext(ctx)
     }

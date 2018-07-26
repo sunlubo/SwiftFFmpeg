@@ -9,8 +9,7 @@ final class SwiftFFmpegTests: XCTestCase {
         XCTAssertEqual(SwiftFFmpeg().text, "Hello, World!")
     }
 
-
     static var allTests = [
-        ("testExample", testExample),
+        ("testExample", testExample)
     ]
 }

@@ -105,17 +105,20 @@ extension AVPixelFormat {
     public static let UYYVYY411 = AV_PIX_FMT_UYYVYY411
     /// packed RGB 3:3:2,  8bpp, (msb)2B 3G 3R(lsb)
     public static let BGR8 = AV_PIX_FMT_BGR8
-    /// packed RGB 1:2:1 bitstream,  4bpp, (msb)1B 2G 1R(lsb), a byte contains two pixels, the first pixel in the byte is the one composed by the 4 msb bits
+    /// packed RGB 1:2:1 bitstream,  4bpp, (msb)1B 2G 1R(lsb), a byte contains two pixels, the first pixel in the byte
+    /// is the one composed by the 4 msb bits
     public static let BGR4 = AV_PIX_FMT_BGR4
     /// packed RGB 1:2:1,  8bpp, (msb)1B 2G 1R(lsb)
     public static let BGR4_BYTE = AV_PIX_FMT_BGR4_BYTE
     /// packed RGB 3:3:2,  8bpp, (msb)2R 3G 3B(lsb)
     public static let RGB8 = AV_PIX_FMT_RGB8
-    /// packed RGB 1:2:1 bitstream,  4bpp, (msb)1R 2G 1B(lsb), a byte contains two pixels, the first pixel in the byte is the one composed by the 4 msb bits
+    /// packed RGB 1:2:1 bitstream,  4bpp, (msb)1R 2G 1B(lsb), a byte contains two pixels, the first pixel in the byte
+    /// is the one composed by the 4 msb bits
     public static let RGB4 = AV_PIX_FMT_RGB4
     /// packed RGB 1:2:1,  8bpp, (msb)1R 2G 1B(lsb)
     public static let RGB4_BYTE = AV_PIX_FMT_RGB4_BYTE
-    /// planar YUV 4:2:0, 12bpp, 1 plane for Y and 1 plane for the UV components, which are interleaved (first byte U and the following byte V)
+    /// planar YUV 4:2:0, 12bpp, 1 plane for Y and 1 plane for the UV components, which are interleaved
+    /// (first byte U and the following byte V)
     public static let NV12 = AV_PIX_FMT_NV12
     /// as above, but U and V bytes are swapped
     public static let NV21 = AV_PIX_FMT_NV21
@@ -325,12 +328,14 @@ public func av_ts2timestr(_ ts: Int64, _ tb: AVRational) -> String {
     return String(cString: av_ts_make_time_string(buf, ts, &tb))
 }
 
-/// Allocate a data pointers array, samples buffer for nb_samples samples, and fill data pointers and linesize accordingly.
+/// Allocate a data pointers array, samples buffer for nb_samples samples, and fill data pointers and linesize
+/// accordingly.
 ///
 /// This is the same as av_samples_alloc(), but also allocates the data pointers array.
 public let av_samples_alloc_array_and_samples = CFFmpeg.av_samples_alloc_array_and_samples
 /// Allocate a samples buffer for nb_samples samples, and fill data pointers and linesize accordingly.
-/// The allocated samples buffer can be freed by using av_freep(&audio_data[0]) Allocated data will be initialized to silence.
+/// The allocated samples buffer can be freed by using av_freep(&audio_data[0]) Allocated data will be initialized
+/// to silence.
 public let av_samples_alloc = CFFmpeg.av_samples_alloc
 /// Get the required buffer size for the given audio parameters.
 public let av_samples_get_buffer_size = CFFmpeg.av_samples_get_buffer_size

@@ -92,7 +92,8 @@ public final class AVClass {
         return String(cString: clazz.class_name)
     }
 
-    /// Category used for visualization (like color) This is only set if the category is equal for all objects using this class.
+    /// Category used for visualization (like color) This is only set if the category is equal for
+    /// all objects using this class.
     public var category: AVClassCategory {
         return clazz.category
     }

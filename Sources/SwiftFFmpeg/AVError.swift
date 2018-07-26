@@ -64,7 +64,8 @@ public struct AVError: Error, Equatable, CustomStringConvertible {
     public static let PROTOCOL_NOT_FOUND = AVError(code: swift_AVERROR_PROTOCOL_NOT_FOUND)
     /// Stream not found
     public static let STREAM_NOT_FOUND = AVError(code: swift_AVERROR_STREAM_NOT_FOUND)
-    /// This is semantically identical to AVERROR_BUG. It has been introduced in Libav after our AVERROR_BUG and with a modified value.
+    /// This is semantically identical to AVERROR_BUG. It has been introduced in Libav after our `AVERROR_BUG` and
+    /// with a modified value.
     public static let BUG2 = AVError(code: swift_AVERROR_BUG2)
     /// Unknown error, typically from an external library
     public static let UNKNOWN = AVError(code: swift_AVERROR_UNKNOWN)

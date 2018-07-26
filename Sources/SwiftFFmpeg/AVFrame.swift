@@ -58,12 +58,13 @@ public final class AVFrame {
 
     /// `AVBuffer` references backing the data for this frame.
     ///
-    /// If all elements of this array are nil, then this frame is not reference counted.
-    /// This array must be filled contiguously -- if buf[i] is non-nil then buf[j] must also be non-nil for all j < i.
+    /// If all elements of this array are `nil`, then this frame is not reference counted.
+    /// This array must be filled contiguously -- if `buf[i]` is non-nil then `buf[j]` must also be non-nil for all
+    /// `j < i`.
     ///
     /// There may be at most one `AVBuffer` per data plane, so for video this array always contains all the references.
-    /// For planar audio with more than `AV_NUM_DATA_POINTERS` channels, there may be more buffers than can fit in this array.
-    /// Then the extra `AVBufferRef` pointers are stored in the `extended_buf` array.
+    /// For planar audio with more than `AV_NUM_DATA_POINTERS` channels, there may be more buffers than can fit in this
+    /// array. Then the extra `AVBufferRef` pointers are stored in the `extended_buf` array.
     public var buf: [AVBuffer?] {
         get {
             let list = [
@@ -170,7 +171,8 @@ public final class AVFrame {
     ///   - sampleCount and channelLayout for audio
     ///
     /// This function will fill `AVFrame.data` and `AVFrame.buf` arrays and, if necessary, allocate and fill
-    /// `AVFrame.extended_data` and `AVFrame.extended_buf`. For planar formats, one buffer will be allocated for each plane.
+    /// `AVFrame.extended_data` and `AVFrame.extended_buf`. For planar formats, one buffer will be allocated for
+    ///  each plane.
     ///
     /// - Warning: If frame already has been allocated, calling this function will leak memory.
     ///   In addition, undefined behavior can occur in certain cases.
