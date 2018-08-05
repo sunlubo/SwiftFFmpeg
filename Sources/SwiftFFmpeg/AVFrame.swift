@@ -129,18 +129,16 @@ public final class AVFrame {
         }
     }
 
-    /// Format of the frame, -1 if unknown or unset.
-    ///
-    /// Values correspond to `AVPixelFormat` for video frames, `AVSampleFormat` for audio.
-    public var format: Int32 {
-        get { return frame.format }
-        set { framePtr.pointee.format = newValue }
-    }
-
     /// Presentation timestamp in timebase units (time when frame should be shown to user).
     public var pts: Int64 {
         get { return frame.pts }
         set { framePtr.pointee.pts = newValue }
+    }
+
+    /// DTS copied from the AVPacket that triggered returning this frame. (if frame threading isn't used)
+    /// This is also the Presentation time of this AVFrame calculated from only AVPacket.dts values without pts values.
+    public var dts: Int64 {
+        return frame.pkt_dts
     }
 
     /// Picture number in bitstream order.
@@ -211,6 +209,12 @@ public final class AVFrame {
 
 extension AVFrame {
 
+    /// Pixel format.
+    public var pixFmt: AVPixelFormat {
+        get { return AVPixelFormat(frame.format) }
+        set { framePtr.pointee.format = newValue.rawValue }
+    }
+
     /// picture width
     public var width: Int {
         get { return Int(frame.width) }
@@ -221,12 +225,6 @@ extension AVFrame {
     public var height: Int {
         get { return Int(frame.height) }
         set { framePtr.pointee.height = Int32(newValue) }
-    }
-
-    /// Pixel format.
-    public var pixFmt: AVPixelFormat {
-        get { return AVPixelFormat(frame.format) }
-        set { framePtr.pointee.format = newValue.rawValue }
     }
 
     /// Returns whether this frame is key frame.
@@ -250,36 +248,36 @@ extension AVFrame {
 
 extension AVFrame {
 
-    /// Sample rate of the audio data.
-    public var sampleRate: Int32 {
-        get { return frame.sample_rate }
-        set { framePtr.pointee.sample_rate = newValue }
-    }
-
-    /// Channel layout of the audio data.
-    public var channelLayout: UInt64 {
-        get { return frame.channel_layout }
-        set { framePtr.pointee.channel_layout = newValue }
-    }
-
     /// Sample format.
     public var sampleFmt: AVSampleFormat {
         get { return AVSampleFormat(frame.format) }
         set { framePtr.pointee.format = newValue.rawValue }
     }
 
+    /// Sample rate of the audio data.
+    public var sampleRate: Int {
+        get { return Int(frame.sample_rate) }
+        set { framePtr.pointee.sample_rate = Int32(newValue) }
+    }
+
+    /// Channel layout of the audio data.
+    public var channelLayout: AVChannelLayout {
+        get { return AVChannelLayout(rawValue: frame.channel_layout) }
+        set { framePtr.pointee.channel_layout = newValue.rawValue }
+    }
+
     /// Number of audio samples (per channel) described by this frame.
-    public var sampleCount: Int32 {
-        get { return frame.nb_samples }
-        set { framePtr.pointee.nb_samples = newValue }
+    public var sampleCount: Int {
+        get { return Int(frame.nb_samples) }
+        set { framePtr.pointee.nb_samples = Int32(newValue) }
     }
 
     /// Number of audio channels.
     ///
     /// - encoding: Unused.
     /// - decoding: Read by user.
-    public var channelCount: Int32 {
-        get { return frame.channels }
-        set { framePtr.pointee.channels = newValue }
+    public var channelCount: Int {
+        get { return Int(frame.channels) }
+        set { framePtr.pointee.channels = Int32(newValue) }
     }
 }

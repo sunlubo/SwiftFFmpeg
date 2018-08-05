@@ -38,45 +38,39 @@ extension AVOptionType: CustomStringConvertible {
     public var description: String {
         switch self {
         case .flags:
-            return "Flags"
-        case .int:
-            return "Int"
-        case .int64:
-            return "Int64"
-        case .double:
-            return "Double"
-        case .float:
-            return "Float"
+            return "flags"
+        case .int, .int64, .uint64:
+            return "integer"
+        case .double, .float:
+            return "float"
         case .string:
-            return "String"
+            return "string"
         case .rational:
-            return "AVRational"
+            return "rational number"
         case .binary:
-            return "Binary"
+            return "hexadecimal string"
         case .dict:
-            return "Dictionary"
-        case .uint64:
-            return "UInt64"
+            return "dictionary"
         case .const:
-            return "Const"
+            return "const"
         case .imageSize:
-            return "Image Size"
+            return "image size"
         case .pixelFmt:
-            return "Pixel Format"
+            return "pixel format"
         case .sampleFmt:
-            return "Sample Format"
+            return "sample format"
         case .videoRate:
-            return "Video Rate"
+            return "video rate"
         case .duration:
-            return "Durational"
+            return "duration"
         case .color:
-            return "Color"
+            return "color"
         case .channelLayout:
-            return "Channel Layout"
+            return "channel layout"
         case .bool:
-            return "Bool"
+            return "bool"
         default:
-            return "Unknown"
+            return "unknown"
         }
     }
 }
@@ -219,9 +213,9 @@ extension AVOptionProtocol {
 
     /// av_opt_set_channel_layout
     public func setChannelLayout(
-        _ value: Int64, forKey key: String, searchFlags: AVOptionSearchFlag = .children
+        _ value: AVChannelLayout, forKey key: String, searchFlags: AVOptionSearchFlag = .children
     ) throws {
-        try throwIfFail(av_opt_set_channel_layout(objPtr, key, value, searchFlags.rawValue))
+        try throwIfFail(av_opt_set_channel_layout(objPtr, key, Int64(value.rawValue), searchFlags.rawValue))
     }
 
     /// Get a value of the option with the given name from an object.

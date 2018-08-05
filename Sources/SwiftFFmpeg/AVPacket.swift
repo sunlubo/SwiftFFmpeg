@@ -7,22 +7,32 @@
 
 import CFFmpeg
 
-public struct AVPacketFlag {
+// MARK: - AVPacketFlag
+
+public struct AVPacketFlag: OptionSet {
+    public let rawValue: Int32
+
+    public init(rawValue: Int32) {
+        self.rawValue = rawValue
+    }
+
     /// The packet contains a keyframe
-    public static let key = AV_PKT_FLAG_KEY
+    public static let key = AVPacketFlag(rawValue: AV_PKT_FLAG_KEY)
     /// The packet content is corrupted
-    public static let corrupt = AV_PKT_FLAG_CORRUPT
+    public static let corrupt = AVPacketFlag(rawValue: AV_PKT_FLAG_CORRUPT)
     /// Flag is used to discard packets which are required to maintain valid decoder state
     /// but are not required for output and should be dropped after decoding.
-    public static let discard = AV_PKT_FLAG_DISCARD
+    public static let discard = AVPacketFlag(rawValue: AV_PKT_FLAG_DISCARD)
     /// The packet comes from a trusted source.
     ///
     /// Otherwise-unsafe constructs such as arbitrary pointers to data outside the packet may be followed.
-    public static let trusted = AV_PKT_FLAG_TRUSTED
+    public static let trusted = AVPacketFlag(rawValue: AV_PKT_FLAG_TRUSTED)
     /// Flag is used to indicate packets that contain frames that can be discarded by the decoder.
     /// I.e. Non-reference frames.
-    public static let disposable = AV_PKT_FLAG_DISPOSABLE
+    public static let disposable = AVPacketFlag(rawValue: AV_PKT_FLAG_DISPOSABLE)
 }
+
+// MARK: - AVPacket
 
 internal typealias CAVPacket = CFFmpeg.AVPacket
 
@@ -82,10 +92,9 @@ public final class AVPacket {
         set { packetPtr.pointee.stream_index = Int32(newValue) }
     }
 
-    /// A combination of `AVPacketFlag` values.
-    public var flags: Int32 {
-        get { return packet.flags }
-        set { packetPtr.pointee.flags = newValue }
+    public var flags: AVPacketFlag {
+        get { return AVPacketFlag(rawValue: packet.flags) }
+        set { packetPtr.pointee.flags = newValue.rawValue }
     }
 
     /// Duration of this packet in `AVStream.timebase` units, 0 if unknown.

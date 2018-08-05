@@ -7,6 +7,8 @@
 
 import CFFmpeg
 
+// MARK: - AVCodecID
+
 public typealias AVCodecID = CFFmpeg.AVCodecID
 
 extension AVCodecID {
@@ -109,9 +111,15 @@ extension AVCodecID {
 // MARK: - AVCodecCap
 
 /// codec capabilities
-public struct AVCodecCap {
+public struct AVCodecCap: OptionSet {
+    public let rawValue: Int32
+
+    public init(rawValue: Int32) {
+        self.rawValue = rawValue
+    }
+
     /// Audio encoder supports receiving a different number of samples in each call.
-    public static let variableFrameSize = AV_CODEC_CAP_VARIABLE_FRAME_SIZE
+    public static let variableFrameSize = AVCodecCap(rawValue: AV_CODEC_CAP_VARIABLE_FRAME_SIZE)
 }
 
 // MARK: - AVCodec
@@ -191,10 +199,8 @@ public struct AVCodec {
     }
 
     /// Codec capabilities.
-    ///
-    /// - SeeAlso: `AVCodecCap`
-    public var capabilities: Int32 {
-        return codec.capabilities
+    public var capabilities: AVCodecCap {
+        return AVCodecCap(rawValue: codec.capabilities)
     }
 
     /// Returns an array of the framerates supported by the codec.
@@ -220,11 +226,11 @@ public struct AVCodec {
     }
 
     /// Returns an array of the audio samplerates supported by the codec.
-    public var supportedSampleRates: [Int32] {
-        var list = [Int32]()
+    public var supportedSampleRates: [Int] {
+        var list = [Int]()
         var ptr = codec.supported_samplerates
         while let p = ptr, p.pointee != 0 {
-            list.append(p.pointee)
+            list.append(Int(p.pointee))
             ptr = p.advanced(by: 1)
         }
         return list
@@ -242,14 +248,19 @@ public struct AVCodec {
     }
 
     /// Returns an array of the channel layouts supported by the codec.
-    public var channelLayouts: [UInt64] {
-        var list = [UInt64]()
+    public var channelLayouts: [AVChannelLayout] {
+        var list = [AVChannelLayout]()
         var ptr = codec.channel_layouts
         while let p = ptr, p.pointee != 0 {
-            list.append(p.pointee)
+            list.append(AVChannelLayout(rawValue: p.pointee))
             ptr = p.advanced(by: 1)
         }
         return list
+    }
+
+    /// Maximum value for lowres supported by the decoder.
+    public var maxLowres: UInt8 {
+        return codec.max_lowres
     }
 
     /// Returns a Boolean value indicating whether the codec is decoder.

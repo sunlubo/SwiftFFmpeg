@@ -36,28 +36,32 @@ public final class AVCodecParameters {
         set { parametersPtr.pointee.codec_tag = newValue }
     }
 
-    /// - video: the pixel format, the value corresponds to AVPixelFormat.
-    /// - audio: the sample format, the value corresponds to AVSampleFormat.
-    public var format: Int32 {
-        return parameters.format
-    }
-
     /// The average bitrate of the encoded data (in bits per second).
-    public var bitRate: Int64 {
-        return parameters.bit_rate
+    public var bitRate: Int {
+        return Int(parameters.bit_rate)
+    }
+}
+
+// MARK: - Video
+
+extension AVCodecParameters {
+
+    /// Pixel format.
+    public var pixFmt: AVPixelFormat {
+        return AVPixelFormat(parameters.format)
     }
 
-    /// Video only. The width of the video frame in pixels.
+    /// The width of the video frame in pixels.
     public var width: Int {
         return Int(parameters.width)
     }
 
-    /// Video only. The height of the video frame in pixels.
+    /// The height of the video frame in pixels.
     public var height: Int {
         return Int(parameters.height)
     }
 
-    /// Video only. The aspect ratio (width / height) which a single pixel should have when displayed.
+    /// The aspect ratio (width / height) which a single pixel should have when displayed.
     ///
     /// When the aspect ratio is unknown / undefined, the numerator should be
     /// set to 0 (the denominator may have any value).
@@ -65,31 +69,41 @@ public final class AVCodecParameters {
         return parameters.sample_aspect_ratio
     }
 
-    /// Video only. Number of delayed frames.
-    public var videoDelay: Int32 {
-        return parameters.video_delay
+    /// Number of delayed frames.
+    public var videoDelay: Int {
+        return Int(parameters.video_delay)
+    }
+}
+
+// MARK: - Audio
+
+extension AVCodecParameters {
+
+    /// Sample format.
+    public var sampleFmt: AVSampleFormat {
+        return AVSampleFormat(parameters.format)
     }
 
-    /// Audio only. The channel layout bitmask. May be 0 if the channel layout is
+    /// The channel layout bitmask. May be 0 if the channel layout is
     /// unknown or unspecified, otherwise the number of bits set must be equal to
     /// the channels field.
-    public var channelLayout: UInt64 {
-        return parameters.channel_layout
+    public var channelLayout: AVChannelLayout {
+        return AVChannelLayout(rawValue: parameters.channel_layout)
     }
 
-    /// Audio only. The number of audio channels.
-    public var channels: Int {
+    /// The number of audio channels.
+    public var channelCount: Int {
         return Int(parameters.channels)
     }
 
-    /// Audio only. The number of audio samples per second.
-    public var sampleRate: Int32 {
-        return parameters.sample_rate
+    /// The number of audio samples per second.
+    public var sampleRate: Int {
+        return Int(parameters.sample_rate)
     }
 
-    /// Audio only. Audio frame size, if known. Required by some formats to be static.
-    public var frameSize: Int32 {
-        return parameters.frame_size
+    /// Audio frame size, if known. Required by some formats to be static.
+    public var frameSize: Int {
+        return Int(parameters.frame_size)
     }
 }
 
@@ -146,18 +160,14 @@ public struct AVStream {
         return Int(stream.nb_frames)
     }
 
+    /// Selects which packets can be discarded at will and do not need to be demuxed.
+    public var discard: AVDiscard {
+        return stream.discard
+    }
+
     /// sample aspect ratio (0 if unknown)
     public var sampleAspectRatio: AVRational {
         return stream.sample_aspect_ratio
-    }
-
-    /// Codec parameters associated with this stream.
-    public var codecpar: AVCodecParameters {
-        return AVCodecParameters(parametersPtr: stream.codecpar)
-    }
-
-    public var mediaType: AVMediaType {
-        return codecpar.mediaType
     }
 
     public var metadata: [String: String] {
@@ -176,6 +186,24 @@ public struct AVStream {
     /// - muxing: May be set by the caller before avformat_write_header().
     public var averageFramerate: AVRational {
         return stream.avg_frame_rate
+    }
+
+    /// Real base framerate of the stream.
+    /// This is the lowest framerate with which all timestamps can be represented accurately
+    /// (it is the least common multiple of all framerates in the stream). Note, this value is just a guess!
+    /// For example, if the time base is 1/90000 and all frames have either approximately 3600 or 1800 timer ticks,
+    /// then realFramerate will be 50/1.
+    public var realFramerate: AVRational {
+        return stream.r_frame_rate
+    }
+
+    /// Codec parameters associated with this stream.
+    public var codecpar: AVCodecParameters {
+        return AVCodecParameters(parametersPtr: stream.codecpar)
+    }
+
+    public var mediaType: AVMediaType {
+        return codecpar.mediaType
     }
 
     /// Fill the parameters struct based on the values from the supplied codec context.

@@ -7,19 +7,29 @@
 
 import CFFmpeg
 
-public struct SWSFlag {
-    public static let fastBilinear = SWS_FAST_BILINEAR
-    public static let bilinear = SWS_BILINEAR
-    public static let bicubic = SWS_BICUBIC
-    public static let x = SWS_X
-    public static let point = SWS_POINT
-    public static let area = SWS_AREA
-    public static let bicublin = SWS_BICUBLIN
-    public static let gauss = SWS_GAUSS
-    public static let sinc = SWS_SINC
-    public static let lanczos = SWS_LANCZOS
-    public static let spLine = SWS_SPLINE
+// MARK: - SWSFlag
+
+public struct SWSFlag: OptionSet {
+    public let rawValue: Int32
+
+    public init(rawValue: Int32) {
+        self.rawValue = rawValue
+    }
+
+    public static let fastBilinear = SWSFlag(rawValue: SWS_FAST_BILINEAR)
+    public static let bilinear = SWSFlag(rawValue: SWS_BILINEAR)
+    public static let bicubic = SWSFlag(rawValue: SWS_BICUBIC)
+    public static let x = SWSFlag(rawValue: SWS_X)
+    public static let point = SWSFlag(rawValue: SWS_POINT)
+    public static let area = SWSFlag(rawValue: SWS_AREA)
+    public static let bicublin = SWSFlag(rawValue: SWS_BICUBLIN)
+    public static let gauss = SWSFlag(rawValue: SWS_GAUSS)
+    public static let sinc = SWSFlag(rawValue: SWS_SINC)
+    public static let lanczos = SWSFlag(rawValue: SWS_LANCZOS)
+    public static let spLine = SWSFlag(rawValue: SWS_SPLINE)
 }
+
+// MARK: - SwsContext
 
 public final class SwsContext {
     internal let ctx: OpaquePointer
@@ -46,7 +56,7 @@ public final class SwsContext {
         dstW: Int,
         dstH: Int,
         dstFormat: AVPixelFormat,
-        flags: Int32
+        flags: SWSFlag
     ) {
         guard let ptr = sws_getContext(
             Int32(srcW),
@@ -55,7 +65,7 @@ public final class SwsContext {
             Int32(dstW),
             Int32(dstH),
             dstFormat,
-            flags,
+            flags.rawValue,
             nil,
             nil,
             nil
@@ -84,12 +94,12 @@ public final class SwsContext {
     public func scale(
         srcSlice: UnsafePointer<UnsafePointer<UInt8>?>,
         srcStride: UnsafePointer<Int32>,
-        srcSliceY: Int32,
-        srcSliceH: Int32,
+        srcSliceY: Int,
+        srcSliceH: Int,
         dst: UnsafePointer<UnsafeMutablePointer<UInt8>?>,
         dstStride: UnsafePointer<Int32>
     ) -> Int32 {
-        return sws_scale(ctx, srcSlice, srcStride, srcSliceY, srcSliceH, dst, dstStride)
+        return sws_scale(ctx, srcSlice, srcStride, Int32(srcSliceY), Int32(srcSliceH), dst, dstStride)
     }
 
     /// Returns a Boolean value indicating whether the pixel format is a supported input format.

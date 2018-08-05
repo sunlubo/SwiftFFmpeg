@@ -25,9 +25,9 @@ public final class AVImage {
         width: Int,
         height: Int,
         pixFmt: AVPixelFormat,
-        align: Int32 = 0
+        align: Int = 0
     ) -> Int32 {
-        return av_image_alloc(buf, linesizes, Int32(width), Int32(height), pixFmt, align)
+        return av_image_alloc(buf, linesizes, Int32(width), Int32(height), pixFmt, Int32(align))
     }
 
     public static func free(_ ptr: UnsafeMutableRawPointer) {

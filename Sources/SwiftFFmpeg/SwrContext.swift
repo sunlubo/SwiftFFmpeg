@@ -21,28 +21,28 @@ public final class SwrContext {
     /// Allocate SwrContext if needed and set/reset common parameters.
     ///
     /// - Parameters:
-    ///   - outChannelLayout: output channel layout (AV_CH_LAYOUT_*)
-    ///   - outSampleFmt: output sample format (AV_SAMPLE_FMT_*).
+    ///   - outChannelLayout: output channel layout
+    ///   - outSampleFmt: output sample format
     ///   - outSampleRate: output sample rate (frequency in Hz)
-    ///   - inChannelLayout: input channel layout (AV_CH_LAYOUT_*)
-    ///   - inSampleFmt: input sample format (AV_SAMPLE_FMT_*).
+    ///   - inChannelLayout: input channel layout
+    ///   - inSampleFmt: input sample format
     ///   - inSampleRate: input sample rate (frequency in Hz)
     public init(
-        outChannelLayout: Int64,
+        outChannelLayout: AVChannelLayout,
         outSampleFmt: AVSampleFormat,
-        outSampleRate: Int32,
-        inChannelLayout: Int64,
+        outSampleRate: Int,
+        inChannelLayout: AVChannelLayout,
         inSampleFmt: AVSampleFormat,
-        inSampleRate: Int32
+        inSampleRate: Int
     ) {
         ctx = swr_alloc_set_opts(
             nil,
-            outChannelLayout,
+            Int64(outChannelLayout.rawValue),
             outSampleFmt,
-            outSampleRate,
-            inChannelLayout,
+            Int32(outSampleRate),
+            Int64(inChannelLayout.rawValue),
             inSampleFmt,
-            inSampleRate,
+            Int32(inSampleRate),
             0,
             nil
         )
@@ -70,28 +70,28 @@ public final class SwrContext {
     ///   - if it's the least common multiple of in_sample_rate and
     ///     out_sample_rate then an exact rounding-free delay will be eturned
     /// - Returns: the delay in 1 / base units.
-    public func getDelay(_ timebase: Int64) -> Int64 {
-        return swr_get_delay(ctx, timebase)
+    public func getDelay(_ timebase: Int64) -> Int {
+        return Int(swr_get_delay(ctx, timebase))
     }
 
     /// Convert audio.
     ///
     /// - Parameters:
-    ///   - out: output buffers, only the first one need be set in case of packed audio
+    ///   - outBuf: output buffers, only the first one need be set in case of packed audio
     ///   - outCount: amount of space available for output in samples per channel
-    ///   - input: input buffers, only the first one need to be set in case of packed audio
+    ///   - inBuf: input buffers, only the first one need to be set in case of packed audio
     ///   - inCount: number of input samples available in one channel
     /// - Returns: number of samples output per channel, negative value on error
     /// - Throws: AVError
     public func convert(
-        out: UnsafeMutablePointer<UInt8>?,
-        outCount: Int32,
-        input: UnsafePointer<UInt8>?,
-        inCount: Int32
+        outBuf: [UnsafeMutablePointer<UInt8>?],
+        outCount: Int,
+        inBuf: [UnsafePointer<UInt8>?],
+        inCount: Int
     ) throws -> Int {
-        var out = out
-        var input = input
-        let ret = swr_convert(ctx, &out, outCount, &input, inCount)
+        var outBuf = outBuf
+        var inBuf = inBuf
+        let ret = swr_convert(ctx, &outBuf, Int32(outCount), &inBuf, Int32(inCount))
         try throwIfFail(ret)
         return Int(ret)
     }
