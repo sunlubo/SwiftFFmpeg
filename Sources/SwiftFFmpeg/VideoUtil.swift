@@ -70,7 +70,7 @@ extension AVPixelFormat: CustomStringConvertible {
     public static let NV12 = AV_PIX_FMT_NV12
     /// as above, but U and V bytes are swapped
     public static let NV21 = AV_PIX_FMT_NV21
-    
+
     /// packed ARGB 8:8:8:8, 32bpp, ARGBARGB...
     public static let ARGB = AV_PIX_FMT_ARGB
     /// packed RGBA 8:8:8:8, 32bpp, RGBARGBA...
@@ -79,7 +79,7 @@ extension AVPixelFormat: CustomStringConvertible {
     public static let ABGR = AV_PIX_FMT_ABGR
     /// packed BGRA 8:8:8:8, 32bpp, BGRABGRA...
     public static let BGRA = AV_PIX_FMT_BGRA
-    
+
     ///        Y        , 16bpp, big-endian
     public static let GRAY16BE = AV_PIX_FMT_GRAY16BE
     ///        Y        , 16bpp, little-endian
@@ -94,7 +94,7 @@ extension AVPixelFormat: CustomStringConvertible {
     public static let RGB48BE = AV_PIX_FMT_RGB48BE
     /// packed RGB 16:16:16, 48bpp, 16R, 16G, 16B, the 2-byte value for each R/G/B component is stored as little-endian
     public static let RGB48LE = AV_PIX_FMT_RGB48LE
-    
+
     /// packed RGB 5:6:5, 16bpp, (msb)   5R 6G 5B(lsb), big-endian
     public static let RGB565BE = AV_PIX_FMT_RGB565BE
     /// packed RGB 5:6:5, 16bpp, (msb)   5R 6G 5B(lsb), little-endian
@@ -103,7 +103,7 @@ extension AVPixelFormat: CustomStringConvertible {
     public static let RGB555BE = AV_PIX_FMT_RGB555BE
     /// packed RGB 5:5:5, 16bpp, (msb)1X 5R 5G 5B(lsb), little-endian, X=unused/undefined
     public static let RGB555LE = AV_PIX_FMT_RGB555LE
-    
+
     /// packed BGR 5:6:5, 16bpp, (msb)   5B 6G 5R(lsb), big-endian
     public static let BGR565BE = AV_PIX_FMT_BGR565BE
     /// packed BGR 5:6:5, 16bpp, (msb)   5B 6G 5R(lsb), little-endian
@@ -112,14 +112,14 @@ extension AVPixelFormat: CustomStringConvertible {
     public static let BGR555BE = AV_PIX_FMT_BGR555BE
     /// packed BGR 5:5:5, 16bpp, (msb)1X 5B 5G 5R(lsb), little-endian, X=unused/undefined
     public static let BGR555LE = AV_PIX_FMT_BGR555LE
-    
+
     public var name: String {
         if let strBytes = av_get_pix_fmt_name(self) {
             return String(cString: strBytes)
         }
         return "unknown"
     }
-    
+
     public var description: String {
         return name
     }
