@@ -7,36 +7,6 @@
 
 import CFFmpeg
 
-// MARK: - AVPictureType
-
-public typealias AVPictureType = CFFmpeg.AVPictureType
-
-/// AVPicture types, pixel formats and basic image planes manipulation.
-extension AVPictureType: CustomStringConvertible {
-    /// Undefined
-    public static let NONE = AV_PICTURE_TYPE_NONE
-    /// Intra
-    public static let I = AV_PICTURE_TYPE_I
-    /// Predicted
-    public static let P = AV_PICTURE_TYPE_P
-    /// Bi-dir predicted
-    public static let B = AV_PICTURE_TYPE_B
-    /// S(GMC)-VOP MPEG-4
-    public static let S = AV_PICTURE_TYPE_S
-    /// Switching Intra
-    public static let SI = AV_PICTURE_TYPE_SI
-    /// Switching Predicted
-    public static let SP = AV_PICTURE_TYPE_SP
-    /// BI type
-    public static let BI = AV_PICTURE_TYPE_BI
-
-    public var description: String {
-        let char = av_get_picture_type_char(self)
-        let scalar = Unicode.Scalar(Int(char))!
-        return String(Character(scalar))
-    }
-}
-
 // MARK: - AVFrame
 
 internal typealias CAVFrame = CFFmpeg.AVFrame
@@ -175,11 +145,11 @@ public final class AVFrame {
     /// - Warning: If frame already has been allocated, calling this function will leak memory.
     ///   In addition, undefined behavior can occur in certain cases.
     ///
-    /// - Parameter alignment: Required buffer size alignment. If equal to 0, alignment will be chosen automatically
+    /// - Parameter align: Required buffer size alignment. If equal to 0, alignment will be chosen automatically
     ///   for the current CPU. It is highly recommended to pass 0 here unless you know what you are doing.
     /// - Throws: AVError
-    public func allocBuffer(alignment: Int32 = 0) throws {
-        try throwIfFail(av_frame_get_buffer(framePtr, alignment))
+    public func allocBuffer(align: Int = 0) throws {
+        try throwIfFail(av_frame_get_buffer(framePtr, Int32(align)))
     }
 
     /// Check if the frame data is writable.

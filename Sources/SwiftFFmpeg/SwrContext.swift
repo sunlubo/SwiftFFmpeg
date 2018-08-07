@@ -21,28 +21,28 @@ public final class SwrContext {
     /// Allocate SwrContext if needed and set/reset common parameters.
     ///
     /// - Parameters:
-    ///   - outChannelLayout: output channel layout
-    ///   - outSampleFmt: output sample format
-    ///   - outSampleRate: output sample rate (frequency in Hz)
-    ///   - inChannelLayout: input channel layout
-    ///   - inSampleFmt: input sample format
-    ///   - inSampleRate: input sample rate (frequency in Hz)
+    ///   - srcChannelLayout: input channel layout
+    ///   - srcSampleFmt: input sample format
+    ///   - srcSampleRate: input sample rate (frequency in Hz)
+    ///   - dstChannelLayout: output channel layout
+    ///   - dstSampleFmt: output sample format
+    ///   - dstSampleRate: output sample rate (frequency in Hz)
     public init(
-        outChannelLayout: AVChannelLayout,
-        outSampleFmt: AVSampleFormat,
-        outSampleRate: Int,
-        inChannelLayout: AVChannelLayout,
-        inSampleFmt: AVSampleFormat,
-        inSampleRate: Int
+        srcChannelLayout: AVChannelLayout,
+        srcSampleFmt: AVSampleFormat,
+        srcSampleRate: Int,
+        dstChannelLayout: AVChannelLayout,
+        dstSampleFmt: AVSampleFormat,
+        dstSampleRate: Int
     ) {
         ctx = swr_alloc_set_opts(
             nil,
-            Int64(outChannelLayout.rawValue),
-            outSampleFmt,
-            Int32(outSampleRate),
-            Int64(inChannelLayout.rawValue),
-            inSampleFmt,
-            Int32(inSampleRate),
+            Int64(dstChannelLayout.rawValue),
+            dstSampleFmt,
+            Int32(dstSampleRate),
+            Int64(srcChannelLayout.rawValue),
+            srcSampleFmt,
+            Int32(srcSampleRate),
             0,
             nil
         )
@@ -77,22 +77,18 @@ public final class SwrContext {
     /// Convert audio.
     ///
     /// - Parameters:
-    ///   - outBuf: output buffers, only the first one need be set in case of packed audio
-    ///   - outCount: amount of space available for output in samples per channel
-    ///   - inBuf: input buffers, only the first one need to be set in case of packed audio
-    ///   - inCount: number of input samples available in one channel
+    ///   - src: input buffers, only the first one need to be set in case of packed audio
+    ///   - srcCount: number of input samples available in one channel
+    ///   - dst: output buffers, only the first one need be set in case of packed audio
+    ///   - dstCount: amount of space available for output in samples per channel
     /// - Returns: number of samples output per channel, negative value on error
-    /// - Throws: AVError
     public func convert(
-        outBuf: [UnsafeMutablePointer<UInt8>?],
-        outCount: Int,
-        inBuf: [UnsafePointer<UInt8>?],
-        inCount: Int
-    ) throws -> Int {
-        var outBuf = outBuf
-        var inBuf = inBuf
-        let ret = swr_convert(ctx, &outBuf, Int32(outCount), &inBuf, Int32(inCount))
-        try throwIfFail(ret)
+        src: UnsafeMutablePointer<UnsafePointer<UInt8>?>,
+        srcCount: Int,
+        dst: UnsafeMutablePointer<UnsafeMutablePointer<UInt8>?>,
+        dstCount: Int
+    ) -> Int {
+        let ret = swr_convert(ctx, dst, Int32(dstCount), src, Int32(srcCount))
         return Int(ret)
     }
 

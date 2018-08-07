@@ -82,7 +82,7 @@ public final class SwsContext {
     /// If slices are provided in non-sequential order the behavior of the function is undefined.
     ///
     /// - Parameters:
-    ///   - srcSlice: the array containing the pointers to the planes of the source slice
+    ///   - src: the array containing the pointers to the planes of the source slice
     ///   - srcStride: the array containing the strides for each plane of the source image
     ///   - srcSliceY: the position in the source image of the slice to process, that is the number
     ///     (counted starting from zero) in the image of the first row of the slice
@@ -92,14 +92,14 @@ public final class SwsContext {
     /// - Returns: the height of the output slice
     @discardableResult
     public func scale(
-        srcSlice: UnsafePointer<UnsafePointer<UInt8>?>,
+        src: UnsafePointer<UnsafePointer<UInt8>?>,
         srcStride: UnsafePointer<Int32>,
         srcSliceY: Int,
         srcSliceH: Int,
         dst: UnsafePointer<UnsafeMutablePointer<UInt8>?>,
         dstStride: UnsafePointer<Int32>
-    ) -> Int32 {
-        return sws_scale(ctx, srcSlice, srcStride, Int32(srcSliceY), Int32(srcSliceH), dst, dstStride)
+    ) -> Int {
+        return Int(sws_scale(ctx, src, srcStride, Int32(srcSliceY), Int32(srcSliceH), dst, dstStride))
     }
 
     /// Returns a Boolean value indicating whether the pixel format is a supported input format.

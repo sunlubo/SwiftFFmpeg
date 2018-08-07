@@ -75,26 +75,6 @@ extension AVSampleFormat: CustomStringConvertible {
     public var bytesPerSample: Int {
         return Int(av_get_bytes_per_sample(self))
     }
-
-    /// Get the required buffer size for the given audio parameters.
-    ///
-    /// - Parameters:
-    ///   - linesize: calculated linesize
-    ///   - channelCount: the number of channels
-    ///   - sampleCount: the number of samples in a single channel
-    ///   - align: buffer size alignment (0 = default, 1 = no alignment)
-    /// - Returns: required buffer size, or negative error code on failure
-    public func getBufferSize(
-        linesize: inout Int32,
-        channelCount: Int,
-        sampleCount: Int,
-        align: Int
-    ) -> Int {
-        var ptr = 0 as Int32
-        let size = av_samples_get_buffer_size(&ptr, Int32(channelCount), Int32(sampleCount), self, Int32(align))
-        linesize = ptr
-        return Int(size)
-    }
 }
 
 // MARK: - Audio Channel
@@ -198,10 +178,10 @@ public struct AVChannelLayout: Equatable, CustomStringConvertible {
 
     /// Get default channel layout for a given number of channels.
     ///
-    /// - Parameter channelCount: number of channels
+    /// - Parameter count: number of channels
     /// - Returns: AVChannelLayout
-    public static func defaultChannelLayout(_ channelCount: Int32) -> AVChannelLayout {
-        return AVChannelLayout(rawValue: UInt64(av_get_default_channel_layout(channelCount)))
+    public static func `default`(forChannelCount count: Int32) -> AVChannelLayout {
+        return AVChannelLayout(rawValue: UInt64(av_get_default_channel_layout(count)))
     }
 
     public static let CHL_NONE = AVChannelLayout(rawValue: 0)
@@ -238,17 +218,3 @@ public struct AVChannelLayout: Equatable, CustomStringConvertible {
     public static let CHL_HEXADECAGONAL = AVChannelLayout(rawValue: swift_AV_CH_LAYOUT_HEXADECAGONAL)
     public static let CHL_STEREO_DOWNMIX = AVChannelLayout(rawValue: swift_AV_CH_LAYOUT_STEREO_DOWNMIX)
 }
-
-/// Allocate a data pointers array, samples buffer for nb_samples samples, and fill data pointers and linesize
-/// accordingly.
-///
-/// This is the same as av_samples_alloc(), but also allocates the data pointers array.
-public let av_samples_alloc_array_and_samples = CFFmpeg.av_samples_alloc_array_and_samples
-
-/// Allocate a samples buffer for nb_samples samples, and fill data pointers and linesize accordingly.
-/// The allocated samples buffer can be freed by using av_freep(&audio_data[0]) Allocated data will be initialized
-/// to silence.
-public let av_samples_alloc = CFFmpeg.av_samples_alloc
-
-/// Get the required buffer size for the given audio parameters.
-public let av_samples_get_buffer_size = CFFmpeg.av_samples_get_buffer_size

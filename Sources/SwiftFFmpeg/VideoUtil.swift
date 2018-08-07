@@ -7,6 +7,36 @@
 
 import CFFmpeg
 
+// MARK: - AVPictureType
+
+public typealias AVPictureType = CFFmpeg.AVPictureType
+
+/// AVPicture types, pixel formats and basic image planes manipulation.
+extension AVPictureType: CustomStringConvertible {
+    /// Undefined
+    public static let NONE = AV_PICTURE_TYPE_NONE
+    /// Intra
+    public static let I = AV_PICTURE_TYPE_I
+    /// Predicted
+    public static let P = AV_PICTURE_TYPE_P
+    /// Bi-dir predicted
+    public static let B = AV_PICTURE_TYPE_B
+    /// S(GMC)-VOP MPEG-4
+    public static let S = AV_PICTURE_TYPE_S
+    /// Switching Intra
+    public static let SI = AV_PICTURE_TYPE_SI
+    /// Switching Predicted
+    public static let SP = AV_PICTURE_TYPE_SP
+    /// BI type
+    public static let BI = AV_PICTURE_TYPE_BI
+
+    public var description: String {
+        let char = av_get_picture_type_char(self)
+        let scalar = Unicode.Scalar(Int(char))!
+        return String(Character(scalar))
+    }
+}
+
 // MARK: - AVPixelFormat
 
 public typealias AVPixelFormat = CFFmpeg.AVPixelFormat
@@ -112,6 +142,49 @@ extension AVPixelFormat: CustomStringConvertible {
     public static let BGR555BE = AV_PIX_FMT_BGR555BE
     /// packed BGR 5:5:5, 16bpp, (msb)1X 5B 5G 5R(lsb), little-endian, X=unused/undefined
     public static let BGR555LE = AV_PIX_FMT_BGR555LE
+
+    /// planar YUV 4:2:0, 24bpp, (1 Cr & Cb sample per 2x2 Y samples), little-endian
+    public static let YUV420P16LE = AV_PIX_FMT_YUV420P16LE /// <
+    /// planar YUV 4:2:0, 24bpp, (1 Cr & Cb sample per 2x2 Y samples), big-endian
+    public static let YUV420P16BE = AV_PIX_FMT_YUV420P16BE ///
+    /// planar YUV 4:2:2, 32bpp, (1 Cr & Cb sample per 2x1 Y samples), little-endian
+    public static let YUV422P16LE = AV_PIX_FMT_YUV422P16LE ///
+    /// planar YUV 4:2:2, 32bpp, (1 Cr & Cb sample per 2x1 Y samples), big-endian
+    public static let YUV422P16BE = AV_PIX_FMT_YUV422P16BE ///
+    /// planar YUV 4:4:4, 48bpp, (1 Cr & Cb sample per 1x1 Y samples), little-endian
+    public static let YUV444P16LE = AV_PIX_FMT_YUV444P16LE ///
+    /// planar YUV 4:4:4, 48bpp, (1 Cr & Cb sample per 1x1 Y samples), big-endian
+    public static let YUV444P16BE = AV_PIX_FMT_YUV444P16BE
+    /// HW decoding through DXVA2, Picture.data[3] contains a LPDIRECT3DSURFACE9 pointer
+    public static let DXVA2_VLD = AV_PIX_FMT_DXVA2_VLD
+
+    /// packed RGB 4:4:4, 16bpp, (msb)4X 4R 4G 4B(lsb), little-endian, X=unused/undefined
+    public static let RGB444LE = AV_PIX_FMT_RGB444LE
+    /// packed RGB 4:4:4, 16bpp, (msb)4X 4R 4G 4B(lsb), big-endian,    X=unused/undefined
+    public static let RGB444BE = AV_PIX_FMT_RGB444BE
+    /// packed BGR 4:4:4, 16bpp, (msb)4X 4B 4G 4R(lsb), little-endian, X=unused/undefined
+    public static let BGR444LE = AV_PIX_FMT_BGR444LE
+    /// packed BGR 4:4:4, 16bpp, (msb)4X 4B 4G 4R(lsb), big-endian,    X=unused/undefined
+    public static let BGR444BE = AV_PIX_FMT_BGR444BE
+    /// 8 bits gray, 8 bits alpha
+    public static let YA8 = AV_PIX_FMT_YA8
+
+    /// alias for AV_PIX_FMT_YA8
+    public static let Y400A = AV_PIX_FMT_Y400A
+    /// alias for AV_PIX_FMT_YA8
+    public static let GRAY8A = AV_PIX_FMT_GRAY8A
+
+    /// packed RGB 16:16:16, 48bpp, 16B, 16G, 16R, the 2-byte value for each R/G/B component is stored as big-endian
+    public static let BGR48BE = AV_PIX_FMT_BGR48BE
+    /// packed RGB 16:16:16, 48bpp, 16B, 16G, 16R, the 2-byte value for each R/G/B component is stored as little-endian
+    public static let BGR48LE = AV_PIX_FMT_BGR48LE
+
+    /// hardware decoding through Videotoolbox
+    public static let VIDEOTOOLBOX = AV_PIX_FMT_VIDEOTOOLBOX
+
+    /// number of pixel formats, DO NOT USE THIS if you want to link with shared libav* because the number of formats
+    /// might differ between versions
+    public static let NB = AV_PIX_FMT_NB
 
     public var name: String {
         if let strBytes = av_get_pix_fmt_name(self) {
