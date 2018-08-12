@@ -9,10 +9,6 @@ let package = Package(
         .library(
             name: "SwiftFFmpeg",
             targets: ["SwiftFFmpeg"]
-        ),
-        .executable(
-            name: "Demo",
-            targets: ["Demo"]
         )
     ],
     dependencies: [
