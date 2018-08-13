@@ -12,11 +12,42 @@ import CFFmpeg
 internal typealias CAVFrame = CFFmpeg.AVFrame
 
 /// This structure describes decoded (raw) audio or video data.
+///
+/// AVFrame must be allocated using av_frame_alloc(). Note that this only
+/// allocates the AVFrame itself, the buffers for the data must be managed
+/// through other means (see below).
+/// AVFrame must be freed with av_frame_free().
+///
+/// AVFrame is typically allocated once and then reused multiple times to hold
+/// different data (e.g. a single AVFrame to hold frames received from a
+/// decoder). In such a case, av_frame_unref() will free any references held by
+/// the frame and reset it to its original clean state before it
+/// is reused again.
+///
+/// The data described by an AVFrame is usually reference counted through the
+/// AVBuffer API. The underlying buffer references are stored in AVFrame.buf /
+/// AVFrame.extended_buf. An AVFrame is considered to be reference counted if at
+/// least one reference is set, i.e. if AVFrame.buf[0] != NULL. In such a case,
+/// every single data plane must be contained in one of the buffers in
+/// AVFrame.buf or AVFrame.extended_buf.
+/// There may be a single buffer for all the data, or one separate buffer for
+/// each plane, or anything in between.
+///
+/// sizeof(AVFrame) is not a part of the public ABI, so new fields may be added
+/// to the end with a minor bump.
+///
+/// Fields can be accessed through AVOptions, the name string used, matches the
+/// C structure field name for fields accessible through AVOptions. The AVClass
+/// for AVFrame can be obtained from avcodec_get_frame_class()
 public final class AVFrame {
     internal let framePtr: UnsafeMutablePointer<CAVFrame>
     internal var frame: CAVFrame { return framePtr.pointee }
 
     public var mediaType: AVMediaType = .unknown
+
+    internal init(framePtr: UnsafeMutablePointer<CAVFrame>) {
+        self.framePtr = framePtr
+    }
 
     /// Creates an `AVFrame` and set its fields to default values.
     public init() {
@@ -121,14 +152,61 @@ public final class AVFrame {
         return Int(frame.display_picture_number)
     }
 
+    /// Metadata.
+    ///
+    /// - encoding: Set by user.
+    /// - decoding: Set by libavcodec.
+    public var metadata: [String: String] {
+        var dict = [String: String]()
+        var tag: UnsafeMutablePointer<AVDictionaryEntry>?
+        while let next = av_dict_get(frame.metadata, "", tag, AV_DICT_IGNORE_SUFFIX) {
+            dict[String(cString: next.pointee.key)] = String(cString: next.pointee.value)
+            tag = next
+        }
+        return dict
+    }
+
     /// Size of the corresponding packet containing the compressed frame. It is set to a negative value if unknown.
+    ///
+    /// - encoding: Unused.
+    /// - decoding: Set by libavcodec, read by user.
     public var pktSize: Int {
         return Int(frame.pkt_size)
+    }
+
+    /// Set up a new reference to the data described by the source frame.
+    ///
+    /// Copy frame properties from src to dst and create a new reference for each
+    /// AVBufferRef from src.
+    ///
+    /// If src is not reference counted, new buffers are allocated and the data is
+    /// copied.
+    ///
+    /// - Warning: dst MUST have been either unreferenced with av_frame_unref(dst),
+    ///           or newly allocated with av_frame_alloc() before calling this
+    ///           function, or undefined behavior will occur.
+    /// - Throws: AVError
+    public func ref() throws -> AVFrame {
+        let frame = AVFrame()
+        try throwIfFail(av_frame_ref(frame.framePtr, framePtr))
+        return frame
     }
 
     /// Unreference all the buffers referenced by frame and reset the frame fields.
     public func unref() {
         av_frame_unref(framePtr)
+    }
+
+    /// Create a new frame that references the same data as src.
+    ///
+    /// This is a shortcut for `av_frame_alloc() + av_frame_ref()`.
+    ///
+    /// - Returns: newly created AVFrame on success, NULL on error.
+    public func clone() -> AVFrame? {
+        if let ptr = av_frame_clone(framePtr) {
+            return AVFrame(framePtr: ptr)
+        }
+        return nil
     }
 
     /// Allocate new buffer(s) for audio or video data.

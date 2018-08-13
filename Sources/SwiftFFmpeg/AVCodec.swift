@@ -207,7 +207,8 @@ public struct AVCodec {
     public var supportedFramerates: [AVRational] {
         var list = [AVRational]()
         var ptr = codec.supported_framerates
-        while let p = ptr, p.pointee != .zero {
+        let zero = AVRational(num: 0, den: 0)
+        while let p = ptr, p.pointee != zero {
             list.append(p.pointee)
             ptr = p.advanced(by: 1)
         }

@@ -56,4 +56,17 @@ public final class AVBuffer {
         var ptr: UnsafeMutablePointer<CAVBuffer>? = bufPtr
         try throwIfFail(av_buffer_make_writable(&ptr))
     }
+
+    /// Create a new reference to an AVBuffer.
+    ///
+    /// - Returns: a new AVBufferRef referring to the same AVBuffer as buf or NULL on failure.
+    public func ref() -> AVBuffer? {
+        return AVBuffer(bufPtr: av_buffer_ref(bufPtr))
+    }
+
+    /// Free a given reference and automatically free the buffer if there are no more references to it.
+    public func unref() {
+        var buf: UnsafeMutablePointer<CAVBuffer>? = bufPtr
+        return av_buffer_unref(&buf)
+    }
 }

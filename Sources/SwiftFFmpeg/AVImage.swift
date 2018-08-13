@@ -35,6 +35,7 @@ public final class AVImage {
     ///   - ptr: the pointer to a buffer which will contain the image
     ///   - linesizes: the array containing the linesize for each plane, should be filled by `fillLinesizes`
     /// - Returns: the size in bytes required for the image buffer, a negative error code in case of failure
+    @discardableResult
     public static func fillPointers(
         _ data: UnsafeMutablePointer<UnsafeMutablePointer<UInt8>?>,
         pixFmt: AVPixelFormat,
@@ -48,6 +49,7 @@ public final class AVImage {
     /// Allocate an image with size w and h and pixel format pix_fmt, and fill pointers and linesizes accordingly.
     ///
     /// - Returns: the size in bytes required for the image buffer, a negative error code in case of failure
+    @discardableResult
     public static func alloc(
         data: UnsafeMutablePointer<UnsafeMutablePointer<UInt8>?>,
         linesizes: UnsafeMutablePointer<Int32>,
@@ -62,6 +64,19 @@ public final class AVImage {
 
     public static func free(_ ptr: UnsafeMutableRawPointer) {
         av_freep(ptr)
+    }
+
+    /// Copy image in src to dst.
+    public static func copy(
+        src: UnsafeMutablePointer<UnsafePointer<UInt8>?>,
+        srcLinesizes: UnsafePointer<Int32>,
+        dst: UnsafeMutablePointer<UnsafeMutablePointer<UInt8>?>,
+        dstLinesizes: UnsafeMutablePointer<Int32>,
+        pixFmt: AVPixelFormat,
+        width: Int,
+        height: Int
+    ) {
+        av_image_copy(dst, dstLinesizes, src, srcLinesizes, pixFmt, Int32(width), Int32(height))
     }
 
     /// Return the size in bytes of the amount of data required to store an image with the given parameters.

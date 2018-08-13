@@ -186,11 +186,30 @@ extension AVPixelFormat: CustomStringConvertible {
     /// might differ between versions
     public static let NB = AV_PIX_FMT_NB
 
+    /// Return the pixel format corresponding to name.
+    ///
+    /// If there is no pixel format with name name, then looks for a
+    /// pixel format with the name corresponding to the native endian
+    /// format of name.
+    /// For example in a little-endian system, first looks for "gray16",
+    /// then for "gray16le".
+    ///
+    /// Finally if no pixel format has been found, returns AV_PIX_FMT_NONE.
+    public init(name: String) {
+        self = av_get_pix_fmt(name)
+    }
+
     public var name: String {
         if let strBytes = av_get_pix_fmt_name(self) {
             return String(cString: strBytes)
         }
         return "unknown"
+    }
+
+    /// The number of planes in the pixel format.
+    public var planeCount: Int {
+        let count = Int(av_pix_fmt_count_planes(self))
+        return count >= 0 ? count : 0
     }
 
     public var description: String {

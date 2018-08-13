@@ -7,7 +7,28 @@
 
 import CFFmpeg
 
-// MARK: - AVCodecParameters
+// MARK: - AVDiscard
+
+public typealias AVDiscard = CFFmpeg.AVDiscard
+
+extension AVDiscard {
+    /// discard nothing
+    public static let none = AVDISCARD_NONE
+    /// discard useless packets like 0 size packets in avi
+    public static let `default` = AVDISCARD_DEFAULT
+    /// discard all non reference
+    public static let nonRef = AVDISCARD_NONREF
+    /// discard all bidirectional frames
+    public static let bidir = AVDISCARD_BIDIR
+    /// discard all non intra frames
+    public static let nonIntra = AVDISCARD_NONINTRA
+    /// discard all frames except keyframes
+    public static let nonKey = AVDISCARD_NONKEY
+    /// discard all
+    public static let all = AVDISCARD_ALL
+}
+
+// MARK: - Audio
 
 internal typealias CAVCodecParameters = CFFmpeg.AVCodecParameters
 
@@ -112,7 +133,7 @@ extension AVCodecParameters {
 internal typealias CAVStream = CFFmpeg.AVStream
 
 /// Stream structure.
-public struct AVStream {
+public final class AVStream {
     internal let streamPtr: UnsafeMutablePointer<CAVStream>
     internal var stream: CAVStream { return streamPtr.pointee }
 
@@ -162,7 +183,8 @@ public struct AVStream {
 
     /// Selects which packets can be discarded at will and do not need to be demuxed.
     public var discard: AVDiscard {
-        return stream.discard
+        get { return stream.discard }
+        set { streamPtr.pointee.discard = newValue }
     }
 
     /// sample aspect ratio (0 if unknown)

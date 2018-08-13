@@ -36,15 +36,41 @@ public struct AVPacketFlag: OptionSet {
 
 internal typealias CAVPacket = CFFmpeg.AVPacket
 
-/// This structure stores compressed data.
+/// This structure stores compressed data. It is typically exported by demuxers
+/// and then passed as input to decoders, or received as output from encoders and
+/// then passed to muxers.
 ///
-/// It is typically exported by demuxers and then passed as input to decoders,
-/// or received as output from encoders and then passed to muxers.
+/// For video, it should typically contain one compressed frame. For audio it may
+/// contain several compressed frames. Encoders are allowed to output empty
+/// packets, with no compressed data, containing only side data
+/// (e.g. to update some stream parameters at the end of encoding).
+///
+/// `AVPacket` is one of the few structs in FFmpeg, whose size is a part of public
+/// ABI. Thus it may be allocated on stack and no new fields can be added to it
+/// without libavcodec and libavformat major bump.
+///
+/// The semantics of data ownership depends on the buf field.
+/// If it is set, the packet data is dynamically allocated and is
+/// valid indefinitely until a call to av_packet_unref() reduces the
+/// reference count to 0.
+///
+/// If the buf field is not set av_packet_ref() would make a copy instead
+/// of increasing the reference count.
+///
+/// The side data is always allocated with av_malloc(), copied by
+/// av_packet_ref() and freed by av_packet_unref().
 public final class AVPacket {
     internal let packetPtr: UnsafeMutablePointer<CAVPacket>
     internal var packet: CAVPacket { return packetPtr.pointee }
 
-    /// Allocate an `AVPacket` and set its fields to default values.
+    internal init(packetPtr: UnsafeMutablePointer<CAVPacket>) {
+        self.packetPtr = packetPtr
+    }
+
+    /// Allocate an AVPacket and set its fields to default values.
+    ///
+    /// - Note: This only allocates the AVPacket itself, not the data buffers.
+    ///   Those must be allocated through other means such as av_new_packet.
     public init() {
         guard let packetPtr = av_packet_alloc() else {
             fatalError("av_packet_alloc")
@@ -110,11 +136,44 @@ public final class AVPacket {
         set { packetPtr.pointee.pos = newValue }
     }
 
+    /// Setup a new reference to the data described by a given packet.
+    ///
+    /// If src is reference-counted, setup dst as a new reference to the buffer in src.
+    /// Otherwise allocate a new buffer in dst and copy the data from src into it.
+    ///
+    /// All the other fields are copied from src.
+    ///
+    /// - Throws: AVerror
+    public func ref() throws -> AVPacket {
+        let pkt = AVPacket()
+        try throwIfFail(av_packet_ref(pkt.packetPtr, packetPtr))
+        return pkt
+    }
+
     /// Wipe the packet.
     ///
     /// Unreference the buffer referenced by the packet and reset the remaining packet fields to their default values.
     public func unref() {
         av_packet_unref(packetPtr)
+    }
+
+    /// Create a new packet that references the same data as src.
+    ///
+    /// This is a shortcut for `av_packet_alloc() + av_packet_ref()`.
+    ///
+    /// - Returns: newly created AVPacket on success, NULL on error.
+    public func clone() -> AVPacket? {
+        if let ptr = av_packet_clone(packetPtr) {
+            return AVPacket(packetPtr: ptr)
+        }
+        return nil
+    }
+
+    /// Create a writable reference for the data described by a given packet, avoiding data copy if possible.
+    ///
+    /// - Throws: AVError
+    public func makeWritable() throws {
+        try throwIfFail(av_packet_make_writable(packetPtr))
     }
 
     /// Convert valid timing fields (timestamps / durations) in a packet from one timebase to another.

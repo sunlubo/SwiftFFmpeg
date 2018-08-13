@@ -498,6 +498,52 @@ extension AVFormatContext {
     public func readFrame(into packet: AVPacket) throws {
         try throwIfFail(av_read_frame(ctxPtr, packet.packetPtr))
     }
+
+    /// Seek to the keyframe at timestamp.
+    /// 'timestamp' in 'stream_index'.
+    ///
+    /// - Parameters:
+    ///   - streamIndex: If stream_index is (-1), a default stream is selected, and timestamp is automatically
+    ///     converted from AV_TIME_BASE units to the stream specific time_base.
+    ///   - timestamp: Timestamp in AVStream.time_base units or, if no stream is specified, in AV_TIME_BASE units.
+    ///   - flags: flags which select direction and seeking mode
+    /// - Throws: AVError
+    public func seekFrame(streamIndex: Int, timestamp: Int64, flags: Int) throws {
+        try throwIfFail(av_seek_frame(ctxPtr, Int32(streamIndex), timestamp, Int32(flags)))
+    }
+
+    /// Discard all internally buffered data. This can be useful when dealing with
+    /// discontinuities in the byte stream. Generally works only with formats that
+    /// can resync. This includes headerless formats like MPEG-TS/TS but should also
+    /// work with NUT, Ogg and in a limited way AVI for example.
+    ///
+    /// The set of streams, the detected duration, stream parameters and codecs do
+    /// not change when calling this function. If you want a complete reset, it's
+    /// better to open a new AVFormatContext.
+    ///
+    /// This does not flush the AVIOContext (s->pb). If necessary, call
+    /// avio_flush(s->pb) before calling this function.
+    ///
+    /// - Throws: AVError
+    public func flush() throws {
+        try throwIfFail(avformat_flush(ctxPtr))
+    }
+
+    /// Start playing a network-based stream (e.g. RTSP stream) at the current position.
+    ///
+    /// - Throws: AVError
+    public func readPlay() throws {
+        try throwIfFail(av_read_play(ctxPtr))
+    }
+
+    /// Pause a network-based stream (e.g. RTSP stream).
+    ///
+    /// Use av_read_play() to resume it.
+    ///
+    /// - Throws: AVError
+    public func readPause() throws {
+        try throwIfFail(av_read_pause(ctxPtr))
+    }
 }
 
 // MARK: - Muxing
@@ -558,15 +604,6 @@ extension AVFormatContext {
         dumpUnrecognizedOptions(pm)
     }
 
-    /// Write the stream trailer to an output media file and free the file private data.
-    ///
-    /// May only be called after a successful call to `writeHeader(options:)`.
-    ///
-    /// - Throws: AVError
-    public func writeTrailer() throws {
-        try throwIfFail(av_write_trailer(ctxPtr))
-    }
-
     /// Write a packet to an output media file.
     ///
     /// - Parameter pkt: The packet containing the data to be written.
@@ -581,5 +618,14 @@ extension AVFormatContext {
     /// - Throws: AVError
     public func interleavedWriteFrame(pkt: AVPacket?) throws {
         try throwIfFail(av_interleaved_write_frame(ctxPtr, pkt?.packetPtr))
+    }
+
+    /// Write the stream trailer to an output media file and free the file private data.
+    ///
+    /// May only be called after a successful call to `writeHeader(options:)`.
+    ///
+    /// - Throws: AVError
+    public func writeTrailer() throws {
+        try throwIfFail(av_write_trailer(ctxPtr))
     }
 }
