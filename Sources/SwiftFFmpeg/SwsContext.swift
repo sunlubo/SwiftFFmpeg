@@ -50,30 +50,22 @@ public final class SwsContext {
     ///   - dstFormat: the destination image format
     ///   - flags: specify which algorithm and options to use for rescaling
     public init?(
-        srcW: Int,
-        srcH: Int,
-        srcFormat: AVPixelFormat,
-        dstW: Int,
-        dstH: Int,
-        dstFormat: AVPixelFormat,
+        srcW: Int, srcH: Int, srcFormat: AVPixelFormat,
+        dstW: Int, dstH: Int, dstFormat: AVPixelFormat,
         flags: SWSFlag
     ) {
         guard let ptr = sws_getContext(
-            Int32(srcW),
-            Int32(srcH),
-            srcFormat,
-            Int32(dstW),
-            Int32(dstH),
-            dstFormat,
+            Int32(srcW), Int32(srcH), srcFormat,
+            Int32(dstW), Int32(dstH), dstFormat,
             flags.rawValue,
-            nil,
-            nil,
+            nil, nil,
             nil
         ) else {
             return nil
         }
         ctx = ptr
     }
+
     /// Scale the image slice in srcSlice and put the resulting scaled slice in the image in dst.
     ///
     /// A slice is a sequence of consecutive rows in an image.

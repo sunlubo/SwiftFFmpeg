@@ -41,24 +41,17 @@ internal typealias CAVPacket = CFFmpeg.AVPacket
 /// then passed to muxers.
 ///
 /// For video, it should typically contain one compressed frame. For audio it may
-/// contain several compressed frames. Encoders are allowed to output empty
-/// packets, with no compressed data, containing only side data
-/// (e.g. to update some stream parameters at the end of encoding).
+/// contain several compressed frames. Encoders are allowed to output empty packets,
+/// with no compressed data, containing only side data (e.g. to update some stream
+/// parameters at the end of encoding).
 ///
-/// `AVPacket` is one of the few structs in FFmpeg, whose size is a part of public
-/// ABI. Thus it may be allocated on stack and no new fields can be added to it
-/// without libavcodec and libavformat major bump.
+/// The semantics of data ownership depends on the `buf` field.
+/// If it is set, the packet data is dynamically allocated and is valid indefinitely
+/// until a call to `unref` reduces the reference count to 0.
 ///
-/// The semantics of data ownership depends on the buf field.
-/// If it is set, the packet data is dynamically allocated and is
-/// valid indefinitely until a call to av_packet_unref() reduces the
-/// reference count to 0.
+/// If the `buf` field is not set `ref` would make a copy instead of increasing the reference count.
 ///
-/// If the buf field is not set av_packet_ref() would make a copy instead
-/// of increasing the reference count.
-///
-/// The side data is always allocated with av_malloc(), copied by
-/// av_packet_ref() and freed by av_packet_unref().
+/// The side data is always allocated with av_malloc(), copied by av_packet_ref() and freed by av_packet_unref().
 public final class AVPacket {
     internal let packetPtr: UnsafeMutablePointer<CAVPacket>
     internal var packet: CAVPacket { return packetPtr.pointee }
@@ -67,9 +60,9 @@ public final class AVPacket {
         self.packetPtr = packetPtr
     }
 
-    /// Allocate an AVPacket and set its fields to default values.
+    /// Allocate an `AVPacket` and set its fields to default values.
     ///
-    /// - Note: This only allocates the AVPacket itself, not the data buffers.
+    /// - Note: This only allocates the `AVPacket` itself, not the data buffers.
     ///   Those must be allocated through other means such as av_new_packet.
     public init() {
         guard let packetPtr = av_packet_alloc() else {
@@ -85,19 +78,18 @@ public final class AVPacket {
         set { packetPtr.pointee.buf = newValue?.bufPtr }
     }
 
-    /// Presentation timestamp in `AVStream.timebase` units; the time at which
-    /// the decompressed packet will be presented to the user.
+    /// Presentation timestamp in `AVStream.timebase` units; the time at which the decompressed packet
+    /// will be presented to the user.
     ///
-    /// Can be `Int64.noPTS` if it is not stored in the file.
+    /// Can be `noPTS` if it is not stored in the file.
     public var pts: Int64 {
         get { return packet.pts }
         set { packetPtr.pointee.pts = newValue }
     }
 
-    /// Decompression timestamp in `AVStream.timebase` units; the time at which
-    /// the packet is decompressed.
+    /// Decompression timestamp in `AVStream.timebase` units; the time at which the packet is decompressed.
     ///
-    /// Can be `Int64.noPTS` if it is not stored in the file.
+    /// Can be `noPTS` if it is not stored in the file.
     public var dts: Int64 {
         get { return packet.dts }
         set { packetPtr.pointee.dts = newValue }
@@ -144,10 +136,8 @@ public final class AVPacket {
     /// All the other fields are copied from src.
     ///
     /// - Throws: AVerror
-    public func ref() throws -> AVPacket {
-        let pkt = AVPacket()
-        try throwIfFail(av_packet_ref(pkt.packetPtr, packetPtr))
-        return pkt
+    public func ref(dst: AVPacket) throws {
+        try throwIfFail(av_packet_ref(dst.packetPtr, packetPtr))
     }
 
     /// Wipe the packet.
@@ -177,7 +167,7 @@ public final class AVPacket {
     }
 
     /// Convert valid timing fields (timestamps / durations) in a packet from one timebase to another.
-    /// Timestamps with unknown values (`Int64.noPTS`) will be ignored.
+    /// Timestamps with unknown values (`noPTS`) will be ignored.
     ///
     /// - Parameters:
     ///   - src: source timebase, in which the timing fields in pkt are expressed.

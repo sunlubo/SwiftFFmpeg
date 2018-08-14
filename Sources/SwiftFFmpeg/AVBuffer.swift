@@ -11,11 +11,19 @@ internal typealias CAVBuffer = CFFmpeg.AVBufferRef
 
 /// A reference to a data buffer.
 public final class AVBuffer {
-    internal let bufPtr: UnsafeMutablePointer<CAVBuffer>
-    internal var buf: CAVBuffer { return bufPtr.pointee }
+    internal var bufPtr: UnsafeMutablePointer<CAVBuffer>?
+    internal var buf: CAVBuffer {
+        precondition(bufPtr != nil, "buffer has been freed")
+        return bufPtr!.pointee
+    }
 
-    internal init?(bufPtr: UnsafeMutablePointer<CAVBuffer>?) {
-        guard let bufPtr = bufPtr else {
+    internal init(bufPtr: UnsafeMutablePointer<CAVBuffer>) {
+        self.bufPtr = bufPtr
+    }
+
+    /// Allocate an `AVBuffer` of the given size.
+    public init?(size: Int) {
+        guard let bufPtr = av_buffer_alloc(Int32(size)) else {
             return nil
         }
         self.bufPtr = bufPtr
@@ -23,8 +31,8 @@ public final class AVBuffer {
 
     /// The data buffer.
     ///
-    /// It is considered writable if and only if this is the only reference to the buffer, in which case
-    /// av_buffer_is_writable() returns 1.
+    /// It is considered writable if and only if this is the only reference to the underlying buffer, in which case
+    /// `isWritable` returns true.
     public var data: UnsafeMutablePointer<UInt8> {
         return buf.data
     }
@@ -35,15 +43,29 @@ public final class AVBuffer {
     }
 
     public var refCount: Int {
+        precondition(bufPtr != nil, "buffer has been freed")
         return Int(av_buffer_get_ref_count(bufPtr))
+    }
+
+    /// Reallocate a given buffer.
+    ///
+    /// - Parameter size: required new buffer size.
+    /// - Throws: AVError
+    ///
+    /// - Note: The buffer is actually reallocated with av_realloc() only if it was
+    /// initially allocated through av_buffer_realloc(NULL) and there is only one
+    /// reference to it (i.e. the one passed to this function). In all other cases
+    /// a new buffer is allocated and the data is copied.
+    public func realloc(size: Int) throws {
+        precondition(bufPtr != nil, "buffer has been freed")
+        try throwIfFail(av_buffer_realloc(&bufPtr, Int32(size)))
     }
 
     /// Check if the buffer is writable.
     ///
-    /// - Returns: True if the caller may write to the data referred to by buf (which is true if and only if
-    ///   buf is the only reference to the underlying AVBuffer). Return false otherwise.
-    ///   A positive answer is valid until av_buffer_ref() is called on buf.
+    /// - Returns: True if and only if this is the only reference to the underlying buffer.
     public func isWritable() -> Bool {
+        precondition(bufPtr != nil, "buffer has been freed")
         return av_buffer_is_writable(bufPtr) > 0
     }
 
@@ -53,20 +75,20 @@ public final class AVBuffer {
     ///
     /// - Throws: AVError
     public func makeWritable() throws {
-        var ptr: UnsafeMutablePointer<CAVBuffer>? = bufPtr
-        try throwIfFail(av_buffer_make_writable(&ptr))
+        precondition(bufPtr != nil, "buffer has been freed")
+        try throwIfFail(av_buffer_make_writable(&bufPtr))
     }
 
-    /// Create a new reference to an AVBuffer.
+    /// Create a new reference to an `AVBuffer`.
     ///
-    /// - Returns: a new AVBufferRef referring to the same AVBuffer as buf or NULL on failure.
+    /// - Returns: a new `AVBuffer` referring to the same underlying buffer or nil on failure.
     public func ref() -> AVBuffer? {
+        precondition(bufPtr != nil, "buffer has been freed")
         return AVBuffer(bufPtr: av_buffer_ref(bufPtr))
     }
 
     /// Free a given reference and automatically free the buffer if there are no more references to it.
     public func unref() {
-        var buf: UnsafeMutablePointer<CAVBuffer>? = bufPtr
-        return av_buffer_unref(&buf)
+        av_buffer_unref(&bufPtr)
     }
 }
