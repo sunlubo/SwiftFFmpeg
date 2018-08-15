@@ -26,79 +26,64 @@ dependencies: [
 import Foundation
 import SwiftFFmpeg
 
-func main() throws {
-    if CommandLine.argc < 2 {
-        print("Usage: \(CommandLine.arguments[0]) <input file>")
-        return
+if CommandLine.argc < 2 {
+    print("Usage: \(CommandLine.arguments[0]) <input file>")
+    exit(1)
+}
+let input = CommandLine.arguments[1]
+
+let fmtCtx = AVFormatContext()
+try fmtCtx.openInput(input)
+try fmtCtx.findStreamInfo()
+
+fmtCtx.dumpFormat(isOutput: false)
+
+guard let stream = fmtCtx.videoStream else {
+    fatalError("No video stream")
+}
+guard let codec = AVCodec.findDecoderById(stream.codecpar.codecId) else {
+    fatalError("Codec not found")
+}
+guard let codecCtx = AVCodecContext(codec: codec) else {
+    fatalError("Could not allocate video codec context.")
+}
+try codecCtx.setParameters(stream.codecpar)
+try codecCtx.openCodec()
+
+let pkt = AVPacket()
+let frame = AVFrame()
+
+while let _ = try? fmtCtx.readFrame(into: pkt) {
+    defer { pkt.unref() }
+
+    if pkt.streamIndex != stream.index {
+        continue
     }
-    let input = CommandLine.arguments[1]
-    
-    let fmtCtx = AVFormatContext()
-    try fmtCtx.openInput(input)
-    try fmtCtx.findStreamInfo()
-    
-    let stream = fmtCtx.videoStream!
-    let codecpar = stream.codecpar
-    guard let codec = AVCodec.findDecoderById(codecpar.codecId) else {
-        print("Codec not found")
-        return
-    }
-    guard let codecCtx = AVCodecContext(codec: codec) else {
-        print("Could not allocate video codec context.")
-        return
-    }
-    try codecCtx.setParameters(stream.codecpar)
-    try codecCtx.openCodec()
-    
-    let pkt = AVPacket()
-    let frame = AVFrame()
-    
-    var num = 50
-    while let _ = try? fmtCtx.readFrame(into: pkt) {
-        if pkt.streamIndex != stream.index {
-            pkt.unref()
-            continue
-        }
-        
+
+    try codecCtx.sendPacket(pkt)
+
+    while true {
         do {
-            try codecCtx.sendPacket(pkt)
-        } catch {
-            print("Error while sending a packet to the decoder: \(error)")
-            return
+            try codecCtx.receiveFrame(frame)
+        } catch let err as AVError where err == .EAGAIN || err == .EOF {
+            break
         }
-        
-        while true {
-            do {
-                try codecCtx.receiveFrame(frame)
-            } catch let err as AVError where err == .EAGAIN || err == .EOF {
-                break
-            } catch {
-                print("Error while receiving a frame from the decoder: \(error)")
-                return
-            }
-            
-            let str = String(format: "Frame %2d (type=%@, size=%5d bytes) pts %6lld key_frame %d [DTS %2d]",
-                             codecCtx.frameNumber,
-                             frame.pictType.description,
-                             frame.pktSize,
-                             frame.pts,
-                             frame.isKeyFrame,
-                             frame.codedPictureNumber)
-            print(str)
-            
-            frame.unref()
-        }
-        
-        num -= 1
-        if num <= 0 { break }
-        
-        pkt.unref()
+
+        let str = String(
+            format: "Frame %3d (type=%@, size=%5d bytes) pts %4lld key_frame %d [DTS %3lld]",
+            codecCtx.frameNumber,
+            frame.pictType.description,
+            frame.pktSize,
+            frame.pts,
+            frame.isKeyFrame,
+            frame.codedPictureNumber
+        )
+        print(str)
+
+        frame.unref()
     }
 }
 
-do {
-    try main()
-} catch {
-    print(error)
-}
+print("Done.")
+
 ```
