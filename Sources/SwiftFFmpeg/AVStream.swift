@@ -228,19 +228,19 @@ public final class AVStream {
         return codecpar.mediaType
     }
 
-    /// Fill the parameters struct based on the values from the supplied codec context.
-    ///
-    /// - Parameter codecCtx: AVCodecContext
-    /// - Throws: AVError
-    public func setParameters(_ codecCtx: AVCodecContext) throws {
-        try throwIfFail(avcodec_parameters_from_context(stream.codecpar, codecCtx.ctxPtr))
-    }
-
     /// Copy the contents of src to dst.
     ///
     /// - Parameter codecpar: AVCodecParameters
     /// - Throws: AVError
-    public func copyParameters(_ codecpar: AVCodecParameters) throws {
+    public func setParameters(_ codecpar: AVCodecParameters) throws {
         try throwIfFail(avcodec_parameters_copy(stream.codecpar, codecpar.parametersPtr))
+    }
+
+    /// Fill the parameters struct based on the values from the supplied codec context.
+    ///
+    /// - Parameter codecCtx: AVCodecContext
+    /// - Throws: AVError
+    public func copyParameters(from codecCtx: AVCodecContext) throws {
+        try throwIfFail(avcodec_parameters_from_context(stream.codecpar, codecCtx.ctxPtr))
     }
 }

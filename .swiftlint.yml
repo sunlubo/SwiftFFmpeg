@@ -5,3 +5,4 @@ disabled_rules:
   - identifier_name
   - function_parameter_count
   - file_length
+  - force_try
