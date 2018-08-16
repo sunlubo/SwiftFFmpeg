@@ -310,7 +310,12 @@ public final class AVFormatContext {
     /// - muxing: set by the user before avformat_write_header(). The caller must take care of closing / freeing
     ///   the IO context.
     internal var pb: AVIOContext? {
-        get { return AVIOContext(ctxPtr: ctx.pb) }
+        get {
+            if let ctxPtr = ctx.pb {
+                return AVIOContext(ctxPtr: ctxPtr)
+            }
+            return nil
+        }
         set {
             ioCtx = newValue
             return ctxPtr.pointee.pb = newValue?.ctxPtr
@@ -567,10 +572,10 @@ extension AVFormatContext {
     ///
     /// - Parameters:
     ///   - url: resource to access
-    ///   - mode: flags which control how the resource indicated by url is to be opened
+    ///   - flags: flags which control how the resource indicated by url is to be opened
     /// - Throws: AVError
-    public func openIO(url: String, mode: Int32) throws {
-        pb = try AVIOContext(url: url, mode: mode)
+    public func openIO(url: String, flags: AVIOFlag) throws {
+        pb = try AVIOContext(url: url, flags: flags)
     }
 
     /// Add a new stream to a media file.
