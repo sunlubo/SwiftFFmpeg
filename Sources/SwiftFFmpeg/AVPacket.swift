@@ -74,7 +74,12 @@ public final class AVPacket {
     /// A reference to the reference-counted buffer where the packet data is stored.
     /// May be `nil`, then the packet data is not reference-counted.
     public var buf: AVBuffer? {
-        get { return AVBuffer(bufPtr: packet.buf) }
+        get {
+            if let bufPtr = packet.buf {
+                return AVBuffer(bufPtr: bufPtr)
+            }
+            return nil
+        }
         set { packetPtr.pointee.buf = newValue?.bufPtr }
     }
 
