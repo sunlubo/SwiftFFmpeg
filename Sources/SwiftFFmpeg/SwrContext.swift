@@ -21,19 +21,19 @@ public final class SwrContext {
     /// Allocate SwrContext if needed and set/reset common parameters.
     ///
     /// - Parameters:
-    ///   - srcChannelLayout: input channel layout
-    ///   - srcSampleFmt: input sample format
-    ///   - srcSampleRate: input sample rate (frequency in Hz)
     ///   - dstChannelLayout: output channel layout
     ///   - dstSampleFmt: output sample format
     ///   - dstSampleRate: output sample rate (frequency in Hz)
+    ///   - srcChannelLayout: input channel layout
+    ///   - srcSampleFmt: input sample format
+    ///   - srcSampleRate: input sample rate (frequency in Hz)
     public init(
-        srcChannelLayout: AVChannelLayout,
-        srcSampleFmt: AVSampleFormat,
-        srcSampleRate: Int,
         dstChannelLayout: AVChannelLayout,
         dstSampleFmt: AVSampleFormat,
-        dstSampleRate: Int
+        dstSampleRate: Int,
+        srcChannelLayout: AVChannelLayout,
+        srcSampleFmt: AVSampleFormat,
+        srcSampleRate: Int
     ) {
         ctx = swr_alloc_set_opts(
             nil,
@@ -48,7 +48,7 @@ public final class SwrContext {
         )
     }
 
-    /// Check whether an swr context has been initialized or not.
+    /// A Boolean value indicating whether the context has been initialized or not.
     public var isInitialized: Bool {
         return swr_is_initialized(ctx) > 0
     }
@@ -77,16 +77,17 @@ public final class SwrContext {
     /// Convert audio.
     ///
     /// - Parameters:
-    ///   - src: input buffers, only the first one need to be set in case of packed audio
-    ///   - srcCount: number of input samples available in one channel
     ///   - dst: output buffers, only the first one need be set in case of packed audio
     ///   - dstCount: amount of space available for output in samples per channel
+    ///   - src: input buffers, only the first one need to be set in case of packed audio
+    ///   - srcCount: number of input samples available in one channel
     /// - Returns: number of samples output per channel, negative value on error
+    @discardableResult
     public func convert(
-        src: UnsafeMutablePointer<UnsafePointer<UInt8>?>,
-        srcCount: Int,
         dst: UnsafeMutablePointer<UnsafeMutablePointer<UInt8>?>,
-        dstCount: Int
+        dstCount: Int,
+        src: UnsafeMutablePointer<UnsafePointer<UInt8>?>,
+        srcCount: Int
     ) -> Int {
         let ret = swr_convert(ctx, dst, Int32(dstCount), src, Int32(srcCount))
         return Int(ret)

@@ -108,25 +108,23 @@ extension AVCodecID {
     }
 }
 
-// MARK: - AVCodecCap
-
-/// codec capabilities
-public struct AVCodecCap: OptionSet {
-    public let rawValue: Int32
-
-    public init(rawValue: Int32) {
-        self.rawValue = rawValue
-    }
-
-    /// Audio encoder supports receiving a different number of samples in each call.
-    public static let variableFrameSize = AVCodecCap(rawValue: AV_CODEC_CAP_VARIABLE_FRAME_SIZE)
-}
-
 // MARK: - AVCodec
 
 internal typealias CAVCodec = CFFmpeg.AVCodec
 
 public struct AVCodec {
+    /// Codec capabilities
+    public struct Cap: OptionSet {
+        public let rawValue: Int32
+
+        public init(rawValue: Int32) {
+            self.rawValue = rawValue
+        }
+
+        /// Audio encoder supports receiving a different number of samples in each call.
+        public static let variableFrameSize = Cap(rawValue: AV_CODEC_CAP_VARIABLE_FRAME_SIZE)
+    }
+
     internal let codecPtr: UnsafeMutablePointer<CAVCodec>
     internal var codec: CAVCodec { return codecPtr.pointee }
 
@@ -198,9 +196,9 @@ public struct AVCodec {
         return codec.id
     }
 
-    /// Codec capabilities.
-    public var capabilities: AVCodecCap {
-        return AVCodecCap(rawValue: codec.capabilities)
+    /// The codec's capabilities.
+    public var capabilities: AVCodec.Cap {
+        return Cap(rawValue: codec.capabilities)
     }
 
     /// Returns an array of the framerates supported by the codec.
@@ -264,12 +262,12 @@ public struct AVCodec {
         return codec.max_lowres
     }
 
-    /// Returns a Boolean value indicating whether the codec is decoder.
+    /// A Boolean value indicating whether the codec is decoder.
     public var isDecoder: Bool {
         return av_codec_is_decoder(codecPtr) != 0
     }
 
-    /// Returns a Boolean value indicating whether the codec is encoder.
+    /// A Boolean value indicating whether the codec is encoder.
     public var isEncoder: Bool {
         return av_codec_is_encoder(codecPtr) != 0
     }

@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "SwiftFFmpeg::SwiftFFmpegDemo"
-               BuildableName = "SwiftFFmpegDemo"
-               BlueprintName = "SwiftFFmpegDemo"
+               BlueprintIdentifier = "SwiftFFmpeg::SwiftFFmpeg"
+               BuildableName = "SwiftFFmpeg.framework"
+               BlueprintName = "SwiftFFmpeg"
                ReferencedContainer = "container:SwiftFFmpeg.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -28,9 +28,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "SwiftFFmpeg::SwiftFFmpeg"
-               BuildableName = "SwiftFFmpeg.framework"
-               BlueprintName = "SwiftFFmpeg"
+               BlueprintIdentifier = "SwiftFFmpeg::SwiftFFmpegDemo"
+               BuildableName = "SwiftFFmpegDemo"
+               BlueprintName = "SwiftFFmpegDemo"
                ReferencedContainer = "container:SwiftFFmpeg.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -69,9 +69,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "SwiftFFmpeg::SwiftFFmpegDemo"
-            BuildableName = "SwiftFFmpegDemo"
-            BlueprintName = "SwiftFFmpegDemo"
+            BlueprintIdentifier = "SwiftFFmpeg::SwiftFFmpeg"
+            BuildableName = "SwiftFFmpeg.framework"
+            BlueprintName = "SwiftFFmpeg"
             ReferencedContainer = "container:SwiftFFmpeg.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

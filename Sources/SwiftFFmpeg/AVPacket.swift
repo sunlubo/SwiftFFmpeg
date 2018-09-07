@@ -7,31 +7,6 @@
 
 import CFFmpeg
 
-// MARK: - AVPacketFlag
-
-public struct AVPacketFlag: OptionSet {
-    public let rawValue: Int32
-
-    public init(rawValue: Int32) {
-        self.rawValue = rawValue
-    }
-
-    /// The packet contains a keyframe
-    public static let key = AVPacketFlag(rawValue: AV_PKT_FLAG_KEY)
-    /// The packet content is corrupted
-    public static let corrupt = AVPacketFlag(rawValue: AV_PKT_FLAG_CORRUPT)
-    /// Flag is used to discard packets which are required to maintain valid decoder state
-    /// but are not required for output and should be dropped after decoding.
-    public static let discard = AVPacketFlag(rawValue: AV_PKT_FLAG_DISCARD)
-    /// The packet comes from a trusted source.
-    ///
-    /// Otherwise-unsafe constructs such as arbitrary pointers to data outside the packet may be followed.
-    public static let trusted = AVPacketFlag(rawValue: AV_PKT_FLAG_TRUSTED)
-    /// Flag is used to indicate packets that contain frames that can be discarded by the decoder.
-    /// I.e. Non-reference frames.
-    public static let disposable = AVPacketFlag(rawValue: AV_PKT_FLAG_DISPOSABLE)
-}
-
 // MARK: - AVPacket
 
 internal typealias CAVPacket = CFFmpeg.AVPacket
@@ -53,6 +28,29 @@ internal typealias CAVPacket = CFFmpeg.AVPacket
 ///
 /// The side data is always allocated with av_malloc(), copied by av_packet_ref() and freed by av_packet_unref().
 public final class AVPacket {
+    public struct Flag: OptionSet {
+        public let rawValue: Int32
+
+        public init(rawValue: Int32) {
+            self.rawValue = rawValue
+        }
+
+        /// The packet contains a keyframe
+        public static let key = Flag(rawValue: AV_PKT_FLAG_KEY)
+        /// The packet content is corrupted
+        public static let corrupt = Flag(rawValue: AV_PKT_FLAG_CORRUPT)
+        /// Flag is used to discard packets which are required to maintain valid decoder state
+        /// but are not required for output and should be dropped after decoding.
+        public static let discard = Flag(rawValue: AV_PKT_FLAG_DISCARD)
+        /// The packet comes from a trusted source.
+        ///
+        /// Otherwise-unsafe constructs such as arbitrary pointers to data outside the packet may be followed.
+        public static let trusted = Flag(rawValue: AV_PKT_FLAG_TRUSTED)
+        /// Flag is used to indicate packets that contain frames that can be discarded by the decoder.
+        /// I.e. Non-reference frames.
+        public static let disposable = Flag(rawValue: AV_PKT_FLAG_DISPOSABLE)
+    }
+
     internal let packetPtr: UnsafeMutablePointer<CAVPacket>
     internal var packet: CAVPacket { return packetPtr.pointee }
 
@@ -115,8 +113,8 @@ public final class AVPacket {
         set { packetPtr.pointee.stream_index = Int32(newValue) }
     }
 
-    public var flags: AVPacketFlag {
-        get { return AVPacketFlag(rawValue: packet.flags) }
+    public var flags: AVPacket.Flag {
+        get { return Flag(rawValue: packet.flags) }
         set { packetPtr.pointee.flags = newValue.rawValue }
     }
 
@@ -152,11 +150,16 @@ public final class AVPacket {
         av_packet_unref(packetPtr)
     }
 
+    /// Move every field in src to dst and reset src.
+    public func moveRef(to dst: AVPacket) {
+        av_packet_move_ref(dst.packetPtr, packetPtr)
+    }
+
     /// Create a new packet that references the same data as src.
     ///
     /// This is a shortcut for `av_packet_alloc() + av_packet_ref()`.
     ///
-    /// - Returns: newly created AVPacket on success, NULL on error.
+    /// - Returns: newly created `AVPacket` on success, nil on error.
     public func clone() -> AVPacket? {
         if let ptr = av_packet_clone(packetPtr) {
             return AVPacket(packetPtr: ptr)

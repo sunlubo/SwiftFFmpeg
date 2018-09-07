@@ -11,7 +11,7 @@ public final class AVImage {
 
     /// Compute the size of an image line with format and width for the plane.
     ///
-    /// - Returns: the computed size in bytes
+    /// - Returns: the computed size in bytes, a negative error code in case of failure
     public static func getLinesize(pixFmt: AVPixelFormat, width: Int, plane: Int) -> Int {
         return Int(av_image_get_linesize(pixFmt, Int32(width), Int32(plane)))
     }
@@ -68,10 +68,10 @@ public final class AVImage {
 
     /// Copy image in src to dst.
     public static func copy(
-        src: UnsafeMutablePointer<UnsafePointer<UInt8>?>,
-        srcLinesizes: UnsafePointer<Int32>,
         dst: UnsafeMutablePointer<UnsafeMutablePointer<UInt8>?>,
         dstLinesizes: UnsafeMutablePointer<Int32>,
+        src: UnsafeMutablePointer<UnsafePointer<UInt8>?>,
+        srcLinesizes: UnsafePointer<Int32>,
         pixFmt: AVPixelFormat,
         width: Int,
         height: Int

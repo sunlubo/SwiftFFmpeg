@@ -29,13 +29,10 @@ extension AVMediaType: CustomStringConvertible {
     public static let nb = AVMEDIA_TYPE_NB
 
     public var description: String {
-        if let strBytes = av_get_media_type_string(self) {
-            return String(cString: strBytes)
-        }
-        return "unknown"
+        return String(cString: av_get_media_type_string(self)) ?? "unknown"
     }
 }
 
 /// Free a memory block which has been allocated with a function of av_malloc() or av_realloc() family,
-/// and set the pointer pointing to it to `NULL`.
+/// and set the pointer pointing to it to nil.
 public let av_freep = CFFmpeg.av_freep

@@ -8,7 +8,6 @@
 import CFFmpeg
 
 public final class AVSample {
-
     /// Fill plane data pointers and linesize for samples with sample format.
     ///
     /// The data array is filled with the pointers to the samples data planes:

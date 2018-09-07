@@ -108,7 +108,7 @@ public final class AVFrame {
         set { framePtr.pointee.pts = newValue }
     }
 
-    /// DTS copied from the AVPacket that triggered returning this frame. (if frame threading isn't used)
+    /// DTS copied from the `AVPacket` that triggered returning this frame. (if frame threading isn't used)
     /// This is also the Presentation time of this `AVFrame` calculated from only `AVPacket.dts` values
     /// without pts values.
     public var dts: Int64 {
@@ -159,6 +159,14 @@ public final class AVFrame {
     /// The number of elements in `extendedBuf`.
     public var extendedBufCount: Int {
         return Int(frame.nb_extended_buf)
+    }
+
+    /// The frame timestamp estimated using various heuristics, in stream time base.
+    ///
+    /// - encoding: Unused.
+    /// - decoding: Set by libavcodec, read by user.
+    public var bestEffortTimestamp: Int64 {
+        return frame.best_effort_timestamp
     }
 
     /// Reordered pos from the last `AVPacket` that has been input into the decoder.
@@ -224,6 +232,14 @@ public final class AVFrame {
     /// Unreference all the buffers referenced by frame and reset the frame fields.
     public func unref() {
         av_frame_unref(framePtr)
+    }
+
+    /// Move everything contained in src to dst and reset src.
+    ///
+    /// - Warning: dst is not unreferenced, but directly overwritten without reading or deallocating its contents.
+    ///   Call `dst.unref()` manually before calling this function to ensure that no memory is leaked.
+    public func moveRef(to dst: AVFrame) {
+        av_frame_move_ref(dst.framePtr, framePtr)
     }
 
     /// Create a new frame that references the same data as src.
@@ -318,6 +334,12 @@ extension AVFrame {
     public var sampleAspectRatio: AVRational {
         get { return frame.sample_aspect_ratio }
         set { framePtr.pointee.sample_aspect_ratio = newValue }
+    }
+
+    /// When decoding, this signals how much the picture must be delayed.
+    /// ```extra_delay = repeat_pict / (2*fps)```
+    public var repeatPicture: Int {
+        return Int(frame.repeat_pict)
     }
 }
 

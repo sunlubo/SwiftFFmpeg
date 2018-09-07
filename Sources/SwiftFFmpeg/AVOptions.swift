@@ -92,10 +92,7 @@ public struct AVOption: CustomStringConvertible {
 
     /// short English help text
     public var help: String {
-        if let strBytes = option.help {
-            return String(cString: strBytes)
-        }
-        return ""
+        return String(cString: option.help) ?? ""
     }
 
     public var type: AVOptionType {
@@ -111,10 +108,7 @@ public struct AVOption: CustomStringConvertible {
         case .bool:
             return option.default_val.i64 != 0 ? "true" : "false"
         case .string:
-            if let strBytes = option.default_val.str {
-                return String(cString: strBytes)
-            }
-            return ""
+            return String(cString: option.default_val.str) ?? ""
         case .rational:
             return String(describing: option.default_val.q)
         default:
@@ -309,6 +303,7 @@ extension AVOptionProtocol {
         return list
     }
 }
+
 // MARK: - Extensions
 
 extension AVFormatContext: AVOptionProtocol {

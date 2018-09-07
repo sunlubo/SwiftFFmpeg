@@ -40,40 +40,42 @@ extension AVSampleFormat: CustomStringConvertible {
     /// Number of sample formats. **DO NOT USE** if linking dynamically.
     public static let NB = AV_SAMPLE_FMT_NB
 
-    /// The name of sample_fmt, or nil if sample_fmt is not recognized.
+    /// The name of the sample format, or nil if sample format is not recognized.
     public var name: String {
-        if let strBytes = av_get_sample_fmt_name(self) {
-            return String(cString: strBytes)
-        }
-        return "unknown"
+        return String(cString: av_get_sample_fmt_name(self)) ?? "unknown"
+    }
+
+    /// Number of bytes per sample or zero if unknown for the given sample format.
+    public var bytesPerSample: Int {
+        return Int(av_get_bytes_per_sample(self))
+    }
+
+    /// A Boolean value indicating whether the sample format is planar.
+    public var isPlanar: Bool {
+        return av_sample_fmt_is_planar(self) == 1
+    }
+
+    /// A Boolean value indicating whether the sample format is packed.
+    public var isPacked: Bool {
+        return !isPlanar
     }
 
     public var description: String {
         return name
     }
 
-    /// Get the packed alternative form of the given sample format or AV_SAMPLE_FMT_NONE on error.
+    /// Return the planar alternative form of the given sample format or `AVSampleFormat.NONE` on error.
     ///
-    /// If the passed sample_fmt is already in packed format, the format returned is the same as the input.
-    public var packedSampleFmt: AVSampleFormat {
-        return av_get_packed_sample_fmt(self)
-    }
-
-    /// Get the planar alternative form of the given sample format or AV_SAMPLE_FMT_NONE on error.
-    ///
-    /// If the passed sample_fmt is already in planar format, the format returned is the same as the input.
-    public var planarSampleFmt: AVSampleFormat {
+    /// If the passed sample format is already in planar format, the format returned is the same as the input.
+    public func toPlanar() -> AVSampleFormat {
         return av_get_planar_sample_fmt(self)
     }
 
-    /// Check if the sample format is planar.
-    public var isPlanar: Bool {
-        return av_sample_fmt_is_planar(self) == 1
-    }
-
-    /// Number of bytes per sample or zero if unknown for the given sample format.
-    public var bytesPerSample: Int {
-        return Int(av_get_bytes_per_sample(self))
+    /// Return the packed alternative form of the given sample format or `AVSampleFormat.NONE` on error.
+    ///
+    /// If the passed sample format is already in packed format, the format returned is the same as the input.
+    public func toPacked() -> AVSampleFormat {
+        return av_get_packed_sample_fmt(self)
     }
 }
 

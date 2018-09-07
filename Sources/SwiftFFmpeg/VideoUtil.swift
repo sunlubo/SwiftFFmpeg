@@ -68,15 +68,6 @@ extension AVPixelFormat: CustomStringConvertible {
     public static let MONOBLACK = AV_PIX_FMT_MONOBLACK
     /// 8 bits with AV_PIX_FMT_RGB32 palette
     public static let PAL8 = AV_PIX_FMT_PAL8
-    /// planar YUV 4:2:0, 12bpp, full scale (JPEG), deprecated in favor of AV_PIX_FMT_YUV420P and setting color_range
-    @available(*, deprecated, message: "Use AV_PIX_FMT_YUV420P and setting color_range.")
-    public static let YUVJ420P = AV_PIX_FMT_YUVJ420P
-    /// planar YUV 4:2:2, 16bpp, full scale (JPEG), deprecated in favor of AV_PIX_FMT_YUV422P and setting color_range
-    @available(*, deprecated, message: "Use AV_PIX_FMT_YUV422P and setting color_range.")
-    public static let YUVJ422P = AV_PIX_FMT_YUVJ422P
-    /// planar YUV 4:4:4, 24bpp, full scale (JPEG), deprecated in favor of AV_PIX_FMT_YUV444P and setting color_range
-    @available(*, deprecated, message: "Use AV_PIX_FMT_YUV444P and setting color_range.")
-    public static let YUVJ444P = AV_PIX_FMT_YUVJ444P
     /// packed YUV 4:2:2, 16bpp, Cb Y0 Cr Y1
     public static let UYVY422 = AV_PIX_FMT_UYVY422
     /// packed YUV 4:1:1, 12bpp, Cb Y0 Y1 Cr Y2 Y3
@@ -116,8 +107,6 @@ extension AVPixelFormat: CustomStringConvertible {
     public static let GRAY16LE = AV_PIX_FMT_GRAY16LE
     /// planar YUV 4:4:0 (1 Cr & Cb sample per 1x2 Y samples)
     public static let YUV440P = AV_PIX_FMT_YUV440P
-    /// planar YUV 4:4:0 full scale (JPEG), deprecated in favor of AV_PIX_FMT_YUV440P and setting color_range
-    public static let YUVJ440P = AV_PIX_FMT_YUVJ440P
     /// planar YUV 4:2:0, 20bpp, (1 Cr & Cb sample per 2x2 Y & A samples)
     public static let YUVA420P = AV_PIX_FMT_YUVA420P
     /// packed RGB 16:16:16, 48bpp, 16R, 16G, 16B, the 2-byte value for each R/G/B component is stored as big-endian
@@ -200,10 +189,7 @@ extension AVPixelFormat: CustomStringConvertible {
     }
 
     public var name: String {
-        if let strBytes = av_get_pix_fmt_name(self) {
-            return String(cString: strBytes)
-        }
-        return "unknown"
+        return String(cString: av_get_pix_fmt_name(self)) ?? "unknown"
     }
 
     /// The number of planes in the pixel format.

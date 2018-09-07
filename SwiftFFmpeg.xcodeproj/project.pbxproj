@@ -9,11 +9,11 @@
 /* Begin PBXAggregateTarget section */
 		"SwiftFFmpeg::SwiftFFmpegPackageTests::ProductTarget" /* SwiftFFmpegPackageTests */ = {
 			isa = PBXAggregateTarget;
-			buildConfigurationList = OBJ_87 /* Build configuration list for PBXAggregateTarget "SwiftFFmpegPackageTests" */;
+			buildConfigurationList = OBJ_91 /* Build configuration list for PBXAggregateTarget "SwiftFFmpegPackageTests" */;
 			buildPhases = (
 			);
 			dependencies = (
-				OBJ_90 /* PBXTargetDependency */,
+				OBJ_94 /* PBXTargetDependency */,
 			);
 			name = SwiftFFmpegPackageTests;
 			productName = SwiftFFmpegPackageTests;
@@ -21,53 +21,55 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		OBJ_100 /* SwiftFFmpeg.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "SwiftFFmpeg::SwiftFFmpeg::Product" /* SwiftFFmpeg.framework */; };
-		OBJ_48 /* AVBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_9 /* AVBuffer.swift */; };
-		OBJ_49 /* AVClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_10 /* AVClass.swift */; };
-		OBJ_50 /* AVCodec.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_11 /* AVCodec.swift */; };
-		OBJ_51 /* AVCodecContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_12 /* AVCodecContext.swift */; };
-		OBJ_52 /* AVCodecParserContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_13 /* AVCodecParserContext.swift */; };
-		OBJ_53 /* AVError.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_14 /* AVError.swift */; };
-		OBJ_54 /* AVFormatContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_15 /* AVFormatContext.swift */; };
-		OBJ_55 /* AVFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_16 /* AVFrame.swift */; };
-		OBJ_56 /* AVIOContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_17 /* AVIOContext.swift */; };
-		OBJ_57 /* AVImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_18 /* AVImage.swift */; };
-		OBJ_58 /* AVOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_19 /* AVOptions.swift */; };
-		OBJ_59 /* AVPacket.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_20 /* AVPacket.swift */; };
-		OBJ_60 /* AVSample.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_21 /* AVSample.swift */; };
-		OBJ_61 /* AVStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_22 /* AVStream.swift */; };
-		OBJ_62 /* AudioUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_23 /* AudioUtil.swift */; };
-		OBJ_63 /* CType.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_24 /* CType.swift */; };
-		OBJ_64 /* Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_25 /* Math.swift */; };
-		OBJ_65 /* SwrContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_26 /* SwrContext.swift */; };
-		OBJ_66 /* SwsContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_27 /* SwsContext.swift */; };
-		OBJ_67 /* Timestamp.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_28 /* Timestamp.swift */; };
-		OBJ_68 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_29 /* Util.swift */; };
-		OBJ_69 /* VideoUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_30 /* VideoUtil.swift */; };
-		OBJ_76 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_32 /* main.swift */; };
-		OBJ_78 /* SwiftFFmpeg.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "SwiftFFmpeg::SwiftFFmpeg::Product" /* SwiftFFmpeg.framework */; };
-		OBJ_85 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_6 /* Package.swift */; };
-		OBJ_96 /* AVBufferTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_35 /* AVBufferTests.swift */; };
-		OBJ_97 /* AVImageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_36 /* AVImageTests.swift */; };
-		OBJ_98 /* XCTestManifests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_37 /* XCTestManifests.swift */; };
+		OBJ_100 /* AVBufferTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_37 /* AVBufferTests.swift */; };
+		OBJ_101 /* AVImageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_38 /* AVImageTests.swift */; };
+		OBJ_102 /* XCTestManifests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_39 /* XCTestManifests.swift */; };
+		OBJ_104 /* SwiftFFmpeg.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "SwiftFFmpeg::SwiftFFmpeg::Product" /* SwiftFFmpeg.framework */; };
+		OBJ_50 /* AVBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_9 /* AVBuffer.swift */; };
+		OBJ_51 /* AVClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_10 /* AVClass.swift */; };
+		OBJ_52 /* AVCodec.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_11 /* AVCodec.swift */; };
+		OBJ_53 /* AVCodecContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_12 /* AVCodecContext.swift */; };
+		OBJ_54 /* AVCodecParserContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_13 /* AVCodecParserContext.swift */; };
+		OBJ_55 /* AVError.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_14 /* AVError.swift */; };
+		OBJ_56 /* AVFormatContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_15 /* AVFormatContext.swift */; };
+		OBJ_57 /* AVFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_16 /* AVFrame.swift */; };
+		OBJ_58 /* AVIOContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_17 /* AVIOContext.swift */; };
+		OBJ_59 /* AVImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_18 /* AVImage.swift */; };
+		OBJ_60 /* AVOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_19 /* AVOptions.swift */; };
+		OBJ_61 /* AVPacket.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_20 /* AVPacket.swift */; };
+		OBJ_62 /* AVSample.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_21 /* AVSample.swift */; };
+		OBJ_63 /* AVStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_22 /* AVStream.swift */; };
+		OBJ_64 /* AudioUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_23 /* AudioUtil.swift */; };
+		OBJ_65 /* CType.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_24 /* CType.swift */; };
+		OBJ_66 /* Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_25 /* Math.swift */; };
+		OBJ_67 /* PointerExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_26 /* PointerExt.swift */; };
+		OBJ_68 /* StringExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_27 /* StringExt.swift */; };
+		OBJ_69 /* SwrContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_28 /* SwrContext.swift */; };
+		OBJ_70 /* SwsContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_29 /* SwsContext.swift */; };
+		OBJ_71 /* Timestamp.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_30 /* Timestamp.swift */; };
+		OBJ_72 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_31 /* Util.swift */; };
+		OBJ_73 /* VideoUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_32 /* VideoUtil.swift */; };
+		OBJ_80 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_34 /* main.swift */; };
+		OBJ_82 /* SwiftFFmpeg.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "SwiftFFmpeg::SwiftFFmpeg::Product" /* SwiftFFmpeg.framework */; };
+		OBJ_89 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_6 /* Package.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		A46CA88921248612007CD347 /* PBXContainerItemProxy */ = {
+		A41B51A0214339ED0065470F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = OBJ_1 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = "SwiftFFmpeg::SwiftFFmpeg";
 			remoteInfo = SwiftFFmpeg;
 		};
-		A46CA88A21248612007CD347 /* PBXContainerItemProxy */ = {
+		A41B51A1214339ED0065470F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = OBJ_1 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = "SwiftFFmpeg::SwiftFFmpeg";
 			remoteInfo = SwiftFFmpeg;
 		};
-		A46CA88B21248613007CD347 /* PBXContainerItemProxy */ = {
+		A41B51A2214339EE0065470F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = OBJ_1 /* Project object */;
 			proxyType = 1;
@@ -93,85 +95,87 @@
 		OBJ_23 /* AudioUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioUtil.swift; sourceTree = "<group>"; };
 		OBJ_24 /* CType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CType.swift; sourceTree = "<group>"; };
 		OBJ_25 /* Math.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Math.swift; sourceTree = "<group>"; };
-		OBJ_26 /* SwrContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwrContext.swift; sourceTree = "<group>"; };
-		OBJ_27 /* SwsContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwsContext.swift; sourceTree = "<group>"; };
-		OBJ_28 /* Timestamp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Timestamp.swift; sourceTree = "<group>"; };
-		OBJ_29 /* Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
-		OBJ_30 /* VideoUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoUtil.swift; sourceTree = "<group>"; };
-		OBJ_32 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
-		OBJ_35 /* AVBufferTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVBufferTests.swift; sourceTree = "<group>"; };
-		OBJ_36 /* AVImageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVImageTests.swift; sourceTree = "<group>"; };
-		OBJ_37 /* XCTestManifests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCTestManifests.swift; sourceTree = "<group>"; };
+		OBJ_26 /* PointerExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointerExt.swift; sourceTree = "<group>"; };
+		OBJ_27 /* StringExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExt.swift; sourceTree = "<group>"; };
+		OBJ_28 /* SwrContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwrContext.swift; sourceTree = "<group>"; };
+		OBJ_29 /* SwsContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwsContext.swift; sourceTree = "<group>"; };
+		OBJ_30 /* Timestamp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Timestamp.swift; sourceTree = "<group>"; };
+		OBJ_31 /* Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
+		OBJ_32 /* VideoUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoUtil.swift; sourceTree = "<group>"; };
+		OBJ_34 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		OBJ_37 /* AVBufferTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVBufferTests.swift; sourceTree = "<group>"; };
+		OBJ_38 /* AVImageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVImageTests.swift; sourceTree = "<group>"; };
+		OBJ_39 /* XCTestManifests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCTestManifests.swift; sourceTree = "<group>"; };
 		OBJ_6 /* Package.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 		OBJ_9 /* AVBuffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVBuffer.swift; sourceTree = "<group>"; };
 		"SwiftFFmpeg::SwiftFFmpeg::Product" /* SwiftFFmpeg.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SwiftFFmpeg.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		"SwiftFFmpeg::SwiftFFmpegDemo::Product" /* SwiftFFmpegDemo */ = {isa = PBXFileReference; lastKnownFileType = text; path = SwiftFFmpegDemo; sourceTree = BUILT_PRODUCTS_DIR; };
+		"SwiftFFmpeg::SwiftFFmpegDemo::Product" /* SwiftFFmpegDemo */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; path = SwiftFFmpegDemo; sourceTree = BUILT_PRODUCTS_DIR; };
 		"SwiftFFmpeg::SwiftFFmpegTests::Product" /* SwiftFFmpegTests.xctest */ = {isa = PBXFileReference; lastKnownFileType = file; path = SwiftFFmpegTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		OBJ_70 /* Frameworks */ = {
+		OBJ_103 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_104 /* SwiftFFmpeg.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_74 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 0;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		OBJ_77 /* Frameworks */ = {
+		OBJ_81 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 0;
 			files = (
-				OBJ_78 /* SwiftFFmpeg.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		OBJ_99 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 0;
-			files = (
-				OBJ_100 /* SwiftFFmpeg.framework in Frameworks */,
+				OBJ_82 /* SwiftFFmpeg.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		OBJ_31 /* SwiftFFmpegDemo */ = {
+		OBJ_33 /* SwiftFFmpegDemo */ = {
 			isa = PBXGroup;
 			children = (
-				OBJ_32 /* main.swift */,
+				OBJ_34 /* main.swift */,
 			);
 			name = SwiftFFmpegDemo;
 			path = Sources/Demo;
 			sourceTree = SOURCE_ROOT;
 		};
-		OBJ_33 /* Tests */ = {
+		OBJ_35 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				OBJ_34 /* SwiftFFmpegTests */,
+				OBJ_36 /* SwiftFFmpegTests */,
 			);
 			name = Tests;
 			sourceTree = SOURCE_ROOT;
 		};
-		OBJ_34 /* SwiftFFmpegTests */ = {
+		OBJ_36 /* SwiftFFmpegTests */ = {
 			isa = PBXGroup;
 			children = (
-				OBJ_35 /* AVBufferTests.swift */,
-				OBJ_36 /* AVImageTests.swift */,
-				OBJ_37 /* XCTestManifests.swift */,
+				OBJ_37 /* AVBufferTests.swift */,
+				OBJ_38 /* AVImageTests.swift */,
+				OBJ_39 /* XCTestManifests.swift */,
 			);
 			name = SwiftFFmpegTests;
 			path = Tests/SwiftFFmpegTests;
 			sourceTree = SOURCE_ROOT;
 		};
-		OBJ_38 /* Dependencies */ = {
+		OBJ_40 /* Dependencies */ = {
 			isa = PBXGroup;
 			children = (
 			);
 			name = Dependencies;
 			sourceTree = "<group>";
 		};
-		OBJ_39 /* Products */ = {
+		OBJ_41 /* Products */ = {
 			isa = PBXGroup;
 			children = (
 				"SwiftFFmpeg::SwiftFFmpegTests::Product" /* SwiftFFmpegTests.xctest */,
@@ -186,9 +190,9 @@
 			children = (
 				OBJ_6 /* Package.swift */,
 				OBJ_7 /* Sources */,
-				OBJ_33 /* Tests */,
-				OBJ_38 /* Dependencies */,
-				OBJ_39 /* Products */,
+				OBJ_35 /* Tests */,
+				OBJ_40 /* Dependencies */,
+				OBJ_41 /* Products */,
 			);
 			name = "";
 			sourceTree = "<group>";
@@ -197,7 +201,7 @@
 			isa = PBXGroup;
 			children = (
 				OBJ_8 /* SwiftFFmpeg */,
-				OBJ_31 /* SwiftFFmpegDemo */,
+				OBJ_33 /* SwiftFFmpegDemo */,
 			);
 			name = Sources;
 			sourceTree = SOURCE_ROOT;
@@ -222,11 +226,13 @@
 				OBJ_23 /* AudioUtil.swift */,
 				OBJ_24 /* CType.swift */,
 				OBJ_25 /* Math.swift */,
-				OBJ_26 /* SwrContext.swift */,
-				OBJ_27 /* SwsContext.swift */,
-				OBJ_28 /* Timestamp.swift */,
-				OBJ_29 /* Util.swift */,
-				OBJ_30 /* VideoUtil.swift */,
+				OBJ_26 /* PointerExt.swift */,
+				OBJ_27 /* StringExt.swift */,
+				OBJ_28 /* SwrContext.swift */,
+				OBJ_29 /* SwsContext.swift */,
+				OBJ_30 /* Timestamp.swift */,
+				OBJ_31 /* Util.swift */,
+				OBJ_32 /* VideoUtil.swift */,
 			);
 			name = SwiftFFmpeg;
 			path = Sources/SwiftFFmpeg;
@@ -237,10 +243,11 @@
 /* Begin PBXNativeTarget section */
 		"SwiftFFmpeg::SwiftFFmpeg" /* SwiftFFmpeg */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = OBJ_44 /* Build configuration list for PBXNativeTarget "SwiftFFmpeg" */;
+			buildConfigurationList = OBJ_46 /* Build configuration list for PBXNativeTarget "SwiftFFmpeg" */;
 			buildPhases = (
-				OBJ_47 /* Sources */,
-				OBJ_70 /* Frameworks */,
+				OBJ_49 /* Sources */,
+				OBJ_74 /* Frameworks */,
+				A41B51A321433D650065470F /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -253,15 +260,15 @@
 		};
 		"SwiftFFmpeg::SwiftFFmpegDemo" /* SwiftFFmpegDemo */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = OBJ_72 /* Build configuration list for PBXNativeTarget "SwiftFFmpegDemo" */;
+			buildConfigurationList = OBJ_76 /* Build configuration list for PBXNativeTarget "SwiftFFmpegDemo" */;
 			buildPhases = (
-				OBJ_75 /* Sources */,
-				OBJ_77 /* Frameworks */,
+				OBJ_79 /* Sources */,
+				OBJ_81 /* Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				OBJ_79 /* PBXTargetDependency */,
+				OBJ_83 /* PBXTargetDependency */,
 			);
 			name = SwiftFFmpegDemo;
 			productName = SwiftFFmpegDemo;
@@ -270,15 +277,15 @@
 		};
 		"SwiftFFmpeg::SwiftFFmpegTests" /* SwiftFFmpegTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = OBJ_92 /* Build configuration list for PBXNativeTarget "SwiftFFmpegTests" */;
+			buildConfigurationList = OBJ_96 /* Build configuration list for PBXNativeTarget "SwiftFFmpegTests" */;
 			buildPhases = (
-				OBJ_95 /* Sources */,
-				OBJ_99 /* Frameworks */,
+				OBJ_99 /* Sources */,
+				OBJ_103 /* Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				OBJ_101 /* PBXTargetDependency */,
+				OBJ_105 /* PBXTargetDependency */,
 			);
 			name = SwiftFFmpegTests;
 			productName = SwiftFFmpegTests;
@@ -287,9 +294,9 @@
 		};
 		"SwiftFFmpeg::SwiftPMPackageDescription" /* SwiftFFmpegPackageDescription */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = OBJ_81 /* Build configuration list for PBXNativeTarget "SwiftFFmpegPackageDescription" */;
+			buildConfigurationList = OBJ_85 /* Build configuration list for PBXNativeTarget "SwiftFFmpegPackageDescription" */;
 			buildPhases = (
-				OBJ_84 /* Sources */,
+				OBJ_88 /* Sources */,
 			);
 			buildRules = (
 			);
@@ -306,6 +313,14 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 9999;
+				TargetAttributes = {
+					"SwiftFFmpeg::SwiftFFmpeg" = {
+						LastSwiftMigration = 1000;
+					};
+					"SwiftFFmpeg::SwiftFFmpegDemo" = {
+						LastSwiftMigration = 1000;
+					};
+				};
 			};
 			buildConfigurationList = OBJ_2 /* Build configuration list for PBXProject "SwiftFFmpeg" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -315,7 +330,7 @@
 				en,
 			);
 			mainGroup = OBJ_5 /*  */;
-			productRefGroup = OBJ_39 /* Products */;
+			productRefGroup = OBJ_41 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -328,79 +343,101 @@
 		};
 /* End PBXProject section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		A41B51A321433D650065470F /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
-		OBJ_47 /* Sources */ = {
+		OBJ_49 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
-				OBJ_48 /* AVBuffer.swift in Sources */,
-				OBJ_49 /* AVClass.swift in Sources */,
-				OBJ_50 /* AVCodec.swift in Sources */,
-				OBJ_51 /* AVCodecContext.swift in Sources */,
-				OBJ_52 /* AVCodecParserContext.swift in Sources */,
-				OBJ_53 /* AVError.swift in Sources */,
-				OBJ_54 /* AVFormatContext.swift in Sources */,
-				OBJ_55 /* AVFrame.swift in Sources */,
-				OBJ_56 /* AVIOContext.swift in Sources */,
-				OBJ_57 /* AVImage.swift in Sources */,
-				OBJ_58 /* AVOptions.swift in Sources */,
-				OBJ_59 /* AVPacket.swift in Sources */,
-				OBJ_60 /* AVSample.swift in Sources */,
-				OBJ_61 /* AVStream.swift in Sources */,
-				OBJ_62 /* AudioUtil.swift in Sources */,
-				OBJ_63 /* CType.swift in Sources */,
-				OBJ_64 /* Math.swift in Sources */,
-				OBJ_65 /* SwrContext.swift in Sources */,
-				OBJ_66 /* SwsContext.swift in Sources */,
-				OBJ_67 /* Timestamp.swift in Sources */,
-				OBJ_68 /* Util.swift in Sources */,
-				OBJ_69 /* VideoUtil.swift in Sources */,
+				OBJ_50 /* AVBuffer.swift in Sources */,
+				OBJ_51 /* AVClass.swift in Sources */,
+				OBJ_52 /* AVCodec.swift in Sources */,
+				OBJ_53 /* AVCodecContext.swift in Sources */,
+				OBJ_54 /* AVCodecParserContext.swift in Sources */,
+				OBJ_55 /* AVError.swift in Sources */,
+				OBJ_56 /* AVFormatContext.swift in Sources */,
+				OBJ_57 /* AVFrame.swift in Sources */,
+				OBJ_58 /* AVIOContext.swift in Sources */,
+				OBJ_59 /* AVImage.swift in Sources */,
+				OBJ_60 /* AVOptions.swift in Sources */,
+				OBJ_61 /* AVPacket.swift in Sources */,
+				OBJ_62 /* AVSample.swift in Sources */,
+				OBJ_63 /* AVStream.swift in Sources */,
+				OBJ_64 /* AudioUtil.swift in Sources */,
+				OBJ_65 /* CType.swift in Sources */,
+				OBJ_66 /* Math.swift in Sources */,
+				OBJ_67 /* PointerExt.swift in Sources */,
+				OBJ_68 /* StringExt.swift in Sources */,
+				OBJ_69 /* SwrContext.swift in Sources */,
+				OBJ_70 /* SwsContext.swift in Sources */,
+				OBJ_71 /* Timestamp.swift in Sources */,
+				OBJ_72 /* Util.swift in Sources */,
+				OBJ_73 /* VideoUtil.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		OBJ_75 /* Sources */ = {
+		OBJ_79 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
-				OBJ_76 /* main.swift in Sources */,
+				OBJ_80 /* main.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		OBJ_84 /* Sources */ = {
+		OBJ_88 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
-				OBJ_85 /* Package.swift in Sources */,
+				OBJ_89 /* Package.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		OBJ_95 /* Sources */ = {
+		OBJ_99 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
-				OBJ_96 /* AVBufferTests.swift in Sources */,
-				OBJ_97 /* AVImageTests.swift in Sources */,
-				OBJ_98 /* XCTestManifests.swift in Sources */,
+				OBJ_100 /* AVBufferTests.swift in Sources */,
+				OBJ_101 /* AVImageTests.swift in Sources */,
+				OBJ_102 /* XCTestManifests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		OBJ_101 /* PBXTargetDependency */ = {
+		OBJ_105 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = "SwiftFFmpeg::SwiftFFmpeg" /* SwiftFFmpeg */;
-			targetProxy = A46CA88A21248612007CD347 /* PBXContainerItemProxy */;
+			targetProxy = A41B51A1214339ED0065470F /* PBXContainerItemProxy */;
 		};
-		OBJ_79 /* PBXTargetDependency */ = {
+		OBJ_83 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = "SwiftFFmpeg::SwiftFFmpeg" /* SwiftFFmpeg */;
-			targetProxy = A46CA88921248612007CD347 /* PBXContainerItemProxy */;
+			targetProxy = A41B51A0214339ED0065470F /* PBXContainerItemProxy */;
 		};
-		OBJ_90 /* PBXTargetDependency */ = {
+		OBJ_94 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = "SwiftFFmpeg::SwiftFFmpegTests" /* SwiftFFmpegTests */;
-			targetProxy = A46CA88B21248613007CD347 /* PBXContainerItemProxy */;
+			targetProxy = A41B51A2214339EE0065470F /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -447,7 +484,7 @@
 			};
 			name = Release;
 		};
-		OBJ_45 /* Debug */ = {
+		OBJ_47 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ENABLE_TESTABILITY = YES;
@@ -475,12 +512,12 @@
 				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGET_NAME = SwiftFFmpeg;
 			};
 			name = Debug;
 		};
-		OBJ_46 /* Release */ = {
+		OBJ_48 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ENABLE_TESTABILITY = YES;
@@ -508,12 +545,12 @@
 				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGET_NAME = SwiftFFmpeg;
 			};
 			name = Release;
 		};
-		OBJ_73 /* Debug */ = {
+		OBJ_77 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = (
@@ -538,12 +575,12 @@
 				OTHER_SWIFT_FLAGS = "$(inherited) -I/usr/local/Cellar/ffmpeg/4.0.2/include";
 				SWIFT_FORCE_DYNAMIC_LINK_STDLIB = YES;
 				SWIFT_FORCE_STATIC_LINK_STDLIB = NO;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGET_NAME = SwiftFFmpegDemo;
 			};
 			name = Debug;
 		};
-		OBJ_74 /* Release */ = {
+		OBJ_78 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = (
@@ -568,12 +605,12 @@
 				OTHER_SWIFT_FLAGS = "$(inherited) -I/usr/local/Cellar/ffmpeg/4.0.2/include";
 				SWIFT_FORCE_DYNAMIC_LINK_STDLIB = YES;
 				SWIFT_FORCE_STATIC_LINK_STDLIB = NO;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGET_NAME = SwiftFFmpegDemo;
 			};
 			name = Release;
 		};
-		OBJ_82 /* Debug */ = {
+		OBJ_86 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				LD = /usr/bin/true;
@@ -582,7 +619,7 @@
 			};
 			name = Debug;
 		};
-		OBJ_83 /* Release */ = {
+		OBJ_87 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				LD = /usr/bin/true;
@@ -591,19 +628,19 @@
 			};
 			name = Release;
 		};
-		OBJ_88 /* Debug */ = {
+		OBJ_92 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 			};
 			name = Debug;
 		};
-		OBJ_89 /* Release */ = {
+		OBJ_93 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 			};
 			name = Release;
 		};
-		OBJ_93 /* Debug */ = {
+		OBJ_97 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
@@ -632,7 +669,7 @@
 			};
 			name = Debug;
 		};
-		OBJ_94 /* Release */ = {
+		OBJ_98 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
@@ -673,47 +710,47 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		OBJ_44 /* Build configuration list for PBXNativeTarget "SwiftFFmpeg" */ = {
+		OBJ_46 /* Build configuration list for PBXNativeTarget "SwiftFFmpeg" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				OBJ_45 /* Debug */,
-				OBJ_46 /* Release */,
+				OBJ_47 /* Debug */,
+				OBJ_48 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		OBJ_72 /* Build configuration list for PBXNativeTarget "SwiftFFmpegDemo" */ = {
+		OBJ_76 /* Build configuration list for PBXNativeTarget "SwiftFFmpegDemo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				OBJ_73 /* Debug */,
-				OBJ_74 /* Release */,
+				OBJ_77 /* Debug */,
+				OBJ_78 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		OBJ_81 /* Build configuration list for PBXNativeTarget "SwiftFFmpegPackageDescription" */ = {
+		OBJ_85 /* Build configuration list for PBXNativeTarget "SwiftFFmpegPackageDescription" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				OBJ_82 /* Debug */,
-				OBJ_83 /* Release */,
+				OBJ_86 /* Debug */,
+				OBJ_87 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		OBJ_87 /* Build configuration list for PBXAggregateTarget "SwiftFFmpegPackageTests" */ = {
+		OBJ_91 /* Build configuration list for PBXAggregateTarget "SwiftFFmpegPackageTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				OBJ_88 /* Debug */,
-				OBJ_89 /* Release */,
+				OBJ_92 /* Debug */,
+				OBJ_93 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		OBJ_92 /* Build configuration list for PBXNativeTarget "SwiftFFmpegTests" */ = {
+		OBJ_96 /* Build configuration list for PBXNativeTarget "SwiftFFmpegTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				OBJ_93 /* Debug */,
-				OBJ_94 /* Release */,
+				OBJ_97 /* Debug */,
+				OBJ_98 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

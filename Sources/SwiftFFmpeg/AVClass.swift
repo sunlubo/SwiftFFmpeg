@@ -75,10 +75,6 @@ extension AVClassCategory: CustomStringConvertible {
 
 internal typealias CAVClass = CFFmpeg.AVClass
 
-/// This structure stores compressed data.
-///
-/// It is typically exported by demuxers and then passed as input to decoders,
-/// or received as output from encoders and then passed to muxers.
 public final class AVClass {
     internal let clazzPtr: UnsafePointer<CAVClass>
     internal var clazz: CAVClass { return clazzPtr.pointee }
@@ -92,12 +88,15 @@ public final class AVClass {
         return String(cString: clazz.class_name)
     }
 
-    /// Category used for visualization (like color) This is only set if the category is equal for
-    /// all objects using this class.
+    /// The category of the class. It's used for visualization (like color).
+    ///
+    /// This is only set if the category is equal for all objects using this class.
     public var category: AVClassCategory {
         return clazz.category
     }
 }
+
+// MARK: - Extensions
 
 extension AVFormatContext {
 
@@ -117,5 +116,19 @@ extension AVFrame {
 
     public var avClass: AVClass {
         return AVClass(clazzPtr: avcodec_get_frame_class())
+    }
+}
+
+extension SwsContext {
+
+    public var avClass: AVClass {
+        return AVClass(clazzPtr: sws_get_class())
+    }
+}
+
+extension SwrContext {
+
+    public var avClass: AVClass {
+        return AVClass(clazzPtr: swr_get_class())
     }
 }

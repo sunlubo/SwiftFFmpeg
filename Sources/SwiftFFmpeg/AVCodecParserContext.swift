@@ -25,7 +25,7 @@ public final class AVCodecParserContext {
     /// - Parameters:
     ///   - data: input buffer.
     ///   - size: buffer size in bytes without the padding.
-    ///     I.e. the full buffer size is assumed to be buf_size + AV_INPUT_BUFFER_PADDING_SIZE.
+    ///     I.e. the full buffer size is assumed to be `buf_size + AV_INPUT_BUFFER_PADDING_SIZE`.
     ///     To signal EOF, this should be 0 (so that the last frame can be output).
     ///   - packet: packet
     ///   - pts: input presentation timestamp.

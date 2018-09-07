@@ -143,8 +143,8 @@ public final class AVStream {
 
     /// Format-specific stream ID.
     ///
-    /// - decoding: set by libavformat
-    /// - encoding: set by the user, replaced by libavformat if left unset
+    /// - encoding: Set by the user, replaced by libavformat if left unset.
+    /// - decoding: Set by libavformat.
     public var id: Int32 {
         get { return stream.id }
         set { streamPtr.pointee.id = newValue }
@@ -157,11 +157,11 @@ public final class AVStream {
 
     /// This is the fundamental unit of time (in seconds) in terms of which frame timestamps are represented.
     ///
-    /// - decoding: set by libavformat
-    /// - encoding: May be set by the caller before avformat_write_header() to provide a hint to the muxer about
-    ///   the desired timebase. In avformat_write_header(), the muxer will overwrite this field with the timebase
+    /// - encoding: May be set by the caller before `writeHeader` to provide a hint to the muxer about
+    ///   the desired timebase. In `writeHeader`, the muxer will overwrite this field with the timebase
     ///   that will actually be used for the timestamps written into the file (which may or may not be related to
     ///   the user-provided one, depending on the format).
+    /// - decoding: Set by libavformat.
     public var timebase: AVRational {
         get { return stream.time_base }
         set { streamPtr.pointee.time_base = newValue }
@@ -188,6 +188,9 @@ public final class AVStream {
     }
 
     /// sample aspect ratio (0 if unknown)
+    ///
+    /// - encoding: Set by user.
+    /// - decoding: Set by libavformat.
     public var sampleAspectRatio: AVRational {
         return stream.sample_aspect_ratio
     }
@@ -204,8 +207,8 @@ public final class AVStream {
 
     /// Average framerate.
     ///
-    /// - demuxing: May be set by libavformat when creating the stream or in avformat_find_stream_info().
-    /// - muxing: May be set by the caller before avformat_write_header().
+    /// - demuxing: May be set by libavformat when creating the stream or in `findStreamInfo`.
+    /// - muxing: May be set by the caller before `writeHeader`.
     public var averageFramerate: AVRational {
         return stream.avg_frame_rate
     }
@@ -220,6 +223,9 @@ public final class AVStream {
     }
 
     /// Codec parameters associated with this stream.
+    ///
+    /// - demuxing: filled by libavformat on stream creation or in `findStreamInfo`.
+    /// - muxing: Filled by the caller before `writeHeader`.
     public var codecpar: AVCodecParameters {
         return AVCodecParameters(parametersPtr: stream.codecpar)
     }
@@ -230,7 +236,6 @@ public final class AVStream {
 
     /// Copy the contents of src to dst.
     ///
-    /// - Parameter codecpar: AVCodecParameters
     /// - Throws: AVError
     public func setParameters(_ codecpar: AVCodecParameters) throws {
         try throwIfFail(avcodec_parameters_copy(stream.codecpar, codecpar.parametersPtr))
@@ -238,7 +243,6 @@ public final class AVStream {
 
     /// Fill the parameters struct based on the values from the supplied codec context.
     ///
-    /// - Parameter codecCtx: AVCodecContext
     /// - Throws: AVError
     public func copyParameters(from codecCtx: AVCodecContext) throws {
         try throwIfFail(avcodec_parameters_from_context(stream.codecpar, codecCtx.ctxPtr))

@@ -7,31 +7,29 @@
 
 import CFFmpeg
 
-// MARK: - SWSFlag
-
-public struct SWSFlag: OptionSet {
-    public let rawValue: Int32
-
-    public init(rawValue: Int32) {
-        self.rawValue = rawValue
-    }
-
-    public static let fastBilinear = SWSFlag(rawValue: SWS_FAST_BILINEAR)
-    public static let bilinear = SWSFlag(rawValue: SWS_BILINEAR)
-    public static let bicubic = SWSFlag(rawValue: SWS_BICUBIC)
-    public static let x = SWSFlag(rawValue: SWS_X)
-    public static let point = SWSFlag(rawValue: SWS_POINT)
-    public static let area = SWSFlag(rawValue: SWS_AREA)
-    public static let bicublin = SWSFlag(rawValue: SWS_BICUBLIN)
-    public static let gauss = SWSFlag(rawValue: SWS_GAUSS)
-    public static let sinc = SWSFlag(rawValue: SWS_SINC)
-    public static let lanczos = SWSFlag(rawValue: SWS_LANCZOS)
-    public static let spLine = SWSFlag(rawValue: SWS_SPLINE)
-}
-
 // MARK: - SwsContext
 
 public final class SwsContext {
+    public struct Flag: OptionSet {
+        public let rawValue: Int32
+
+        public init(rawValue: Int32) {
+            self.rawValue = rawValue
+        }
+
+        public static let fastBilinear = Flag(rawValue: SWS_FAST_BILINEAR)
+        public static let bilinear = Flag(rawValue: SWS_BILINEAR)
+        public static let bicubic = Flag(rawValue: SWS_BICUBIC)
+        public static let x = Flag(rawValue: SWS_X)
+        public static let point = Flag(rawValue: SWS_POINT)
+        public static let area = Flag(rawValue: SWS_AREA)
+        public static let bicublin = Flag(rawValue: SWS_BICUBLIN)
+        public static let gauss = Flag(rawValue: SWS_GAUSS)
+        public static let sinc = Flag(rawValue: SWS_SINC)
+        public static let lanczos = Flag(rawValue: SWS_LANCZOS)
+        public static let spLine = Flag(rawValue: SWS_SPLINE)
+    }
+
     internal let ctx: OpaquePointer
 
     /// Allocate an empty `SwsContext`.
@@ -52,7 +50,7 @@ public final class SwsContext {
     public init?(
         srcW: Int, srcH: Int, srcFormat: AVPixelFormat,
         dstW: Int, dstH: Int, dstFormat: AVPixelFormat,
-        flags: SWSFlag
+        flags: SwsContext.Flag
     ) {
         guard let ptr = sws_getContext(
             Int32(srcW), Int32(srcH), srcFormat,
