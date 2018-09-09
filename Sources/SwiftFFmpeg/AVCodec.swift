@@ -217,7 +217,7 @@ public struct AVCodec {
     public var pixFmts: [AVPixelFormat] {
         var list = [AVPixelFormat]()
         var ptr = codec.pix_fmts
-        while let p = ptr, p.pointee != .none {
+        while let p = ptr, p.pointee != .NONE {
             list.append(p.pointee)
             ptr = p.advanced(by: 1)
         }
@@ -239,7 +239,7 @@ public struct AVCodec {
     public var sampleFmts: [AVSampleFormat] {
         var list = [AVSampleFormat]()
         var ptr = codec.sample_fmts
-        while let p = ptr, p.pointee != .none {
+        while let p = ptr, p.pointee != .NONE {
             list.append(p.pointee)
             ptr = p.advanced(by: 1)
         }
