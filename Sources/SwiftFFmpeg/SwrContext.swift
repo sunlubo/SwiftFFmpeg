@@ -8,6 +8,8 @@
 import CFFmpeg
 
 public final class SwrContext {
+    public static let `class` = AVClass(cObjPtr: swr_get_class())
+    
     internal let ctx: OpaquePointer
 
     /// Allocate SwrContext.

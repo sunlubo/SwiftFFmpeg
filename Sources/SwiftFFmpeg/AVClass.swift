@@ -73,62 +73,28 @@ extension AVClassCategory: CustomStringConvertible {
     }
 }
 
-internal typealias CAVClass = CFFmpeg.AVClass
+typealias CAVClass = CFFmpeg.AVClass
 
-public final class AVClass {
-    internal let clazzPtr: UnsafePointer<CAVClass>
-    internal var clazz: CAVClass { return clazzPtr.pointee }
-
-    internal init(clazzPtr: UnsafePointer<CAVClass>) {
-        self.clazzPtr = clazzPtr
-    }
-
+public struct AVClass {
     /// The name of the class.
-    public var name: String {
-        return String(cString: clazz.class_name)
-    }
-
+    public let name: String
+    /// The options of the class.
+    public let options: [AVOption]
     /// The category of the class. It's used for visualization (like color).
     ///
     /// This is only set if the category is equal for all objects using this class.
-    public var category: AVClassCategory {
-        return clazz.category
-    }
-}
+    public let category: AVClassCategory
 
-// MARK: - Extensions
+    init(cObjPtr: UnsafePointer<CAVClass>) {
+        self.name = String(cString: cObjPtr.pointee.class_name)
+        self.category = cObjPtr.pointee.category
 
-extension AVFormatContext {
-
-    public var avClass: AVClass {
-        return AVClass(clazzPtr: avformat_get_class())
-    }
-}
-
-extension AVCodecContext {
-
-    public var avClass: AVClass {
-        return AVClass(clazzPtr: avcodec_get_class())
-    }
-}
-
-extension AVFrame {
-
-    public var avClass: AVClass {
-        return AVClass(clazzPtr: avcodec_get_frame_class())
-    }
-}
-
-extension SwsContext {
-
-    public var avClass: AVClass {
-        return AVClass(clazzPtr: sws_get_class())
-    }
-}
-
-extension SwrContext {
-
-    public var avClass: AVClass {
-        return AVClass(clazzPtr: swr_get_class())
+        var options = [AVOption]()
+        var opt = cObjPtr.pointee.option!
+        while opt.pointee.name != nil {
+            options.append(AVOption(cOption: opt.pointee))
+            opt = opt.advanced(by: 1)
+        }
+        self.options = options
     }
 }

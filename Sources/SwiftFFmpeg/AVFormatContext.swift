@@ -242,6 +242,8 @@ public final class AVFormatContext {
         /// Add bitstream filters as requested by the muxer.
         public static let autoBSF = Flag(rawValue: AVFMT_FLAG_AUTO_BSF)
     }
+    
+    public static let `class` = AVClass(cObjPtr: avformat_get_class())
 
     internal let ctxPtr: UnsafeMutablePointer<CAVFormatContext>
     internal var ctx: CAVFormatContext { return ctxPtr.pointee }

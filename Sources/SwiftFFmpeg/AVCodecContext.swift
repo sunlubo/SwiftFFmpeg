@@ -56,6 +56,8 @@ public final class AVCodecContext {
         /// Do not reset ASS ReadOrder field on flush (subtitles decoding).
         public static let roFlushNoop = Flag2(rawValue: AV_CODEC_FLAG2_RO_FLUSH_NOOP)
     }
+    
+    public static let `class` = AVClass(cObjPtr: avcodec_get_class())
 
     public let codec: AVCodec
 

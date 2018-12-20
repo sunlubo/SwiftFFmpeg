@@ -125,8 +125,6 @@ public struct AVOption: CustomStringConvertible {
         }
     }
 
-    let option: CAVOption
-
     public let name: String
     /// The short English help text about the option.
     public let help: String?
@@ -143,26 +141,25 @@ public struct AVOption: CustomStringConvertible {
     /// The logical unit to which the option belongs. Non-constant options and corresponding named constants share the same unit.
     public let unit: String?
 
-    init(option: CAVOption) {
-        self.option = option
-        self.name = String(cString: option.name)
-        self.help = String(cString: option.help)
-        self.offset = Int(option.offset)
-        self.type = option.type
-        self.min = option.min
-        self.max = option.max
-        self.flags = Flag(rawValue: option.flags)
-        self.unit = String(cString: option.unit)
-
+    init(cOption: CAVOption) {
+        self.name = String(cString: cOption.name)
+        self.help = String(cString: cOption.help)
+        self.offset = Int(cOption.offset)
+        self.type = cOption.type
+        self.min = cOption.min
+        self.max = cOption.max
+        self.flags = Flag(rawValue: cOption.flags)
+        self.unit = String(cString: cOption.unit)
+        
         switch type {
         case .flags, .int, .int64, .uint64, .const, .pixelFmt, .sampleFmt, .duration, .channelLayout:
-            self.defaultValue = option.default_val.i64
+            self.defaultValue = cOption.default_val.i64
         case .double, .float, .rational:
-            self.defaultValue = option.default_val.dbl
+            self.defaultValue = cOption.default_val.dbl
         case .bool:
-            self.defaultValue = option.default_val.i64 != 0 ? "true" : "false"
+            self.defaultValue = cOption.default_val.i64 != 0 ? "true" : "false"
         case .string, .imageSize, .videoRate, .color:
-            self.defaultValue = String(cString: option.default_val.str) ?? "nil"
+            self.defaultValue = String(cString: cOption.default_val.str) ?? "nil"
         case .binary:
             self.defaultValue = 0
         case .dict:
@@ -444,7 +441,7 @@ extension AVOptionAccessor {
             var list = [AVOption]()
             var prev: UnsafePointer<CAVOption>?
             while let option = av_opt_next(objPtr, prev) {
-                list.append(AVOption(option: option.pointee))
+                list.append(AVOption(cOption: option.pointee))
                 prev = option
             }
             return list
