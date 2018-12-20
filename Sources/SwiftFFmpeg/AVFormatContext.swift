@@ -715,3 +715,10 @@ extension AVFormatContext {
         try throwIfFail(av_write_trailer(ctxPtr))
     }
 }
+
+extension AVFormatContext: AVOptionAccessor {
+    
+    public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T {
+        return try body(ctxPtr)
+    }
+}

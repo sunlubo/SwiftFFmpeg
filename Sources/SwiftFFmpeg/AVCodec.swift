@@ -272,3 +272,13 @@ public struct AVCodec {
         return av_codec_is_encoder(codecPtr) != 0
     }
 }
+
+extension AVCodec: AVOptionAccessor {
+    
+    public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T {
+        var tmp = codec.priv_class
+        return try withUnsafeMutablePointer(to: &tmp) { ptr in
+            try body(ptr)
+        }
+    }
+}

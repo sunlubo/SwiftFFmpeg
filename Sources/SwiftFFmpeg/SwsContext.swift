@@ -120,3 +120,10 @@ public final class SwsContext {
         sws_freeContext(ctx)
     }
 }
+
+extension SwsContext: AVOptionAccessor {
+    
+    public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T {
+        return try body(UnsafeMutableRawPointer(ctx))
+    }
+}

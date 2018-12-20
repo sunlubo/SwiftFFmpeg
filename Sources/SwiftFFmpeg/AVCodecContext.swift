@@ -384,3 +384,10 @@ extension AVCodecContext {
         set { ctxPtr.pointee.channel_layout = newValue.rawValue }
     }
 }
+
+extension AVCodecContext: AVOptionAccessor {
+    
+    public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T {
+        return try body(ctxPtr)
+    }
+}
