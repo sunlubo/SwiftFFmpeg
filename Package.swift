@@ -1,4 +1,4 @@
-// swift-tools-version:4.0
+// swift-tools-version:4.2
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -11,12 +11,18 @@ let package = Package(
             targets: ["SwiftFFmpeg"]
         )
     ],
-    dependencies: [
-        .package(url: "https://github.com/sunlubo/CFFmpeg.git", from: "1.0.0")
-    ],
     targets: [
+        .systemLibrary(
+            name: "CFFmpeg",
+            path: "Modules",
+            pkgConfig: "libavformat",
+            providers: [
+                .brew(["ffmpeg"]),
+                .apt(["ffmpeg-dev"])
+            ]),
         .target(
-            name: "SwiftFFmpeg"
+            name: "SwiftFFmpeg",
+            dependencies: ["CFFmpeg"]
         ),
         .target(
             name: "SwiftFFmpegDemo",
