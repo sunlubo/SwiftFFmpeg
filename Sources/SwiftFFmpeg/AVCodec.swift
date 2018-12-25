@@ -202,59 +202,28 @@ public struct AVCodec {
     }
 
     /// Returns an array of the framerates supported by the codec.
-    public var supportedFramerates: [AVRational] {
-        var list = [AVRational]()
-        var ptr = codec.supported_framerates
-        let zero = AVRational(num: 0, den: 0)
-        while let p = ptr, p.pointee != zero {
-            list.append(p.pointee)
-            ptr = p.advanced(by: 1)
-        }
-        return list
+    public var supportedFramerates: [AVRational]? {
+        return values(codec.supported_framerates, until: AVRational(num: 0, den: 0))
     }
 
     /// Returns an array of the pixel formats supported by the codec.
-    public var pixFmts: [AVPixelFormat] {
-        var list = [AVPixelFormat]()
-        var ptr = codec.pix_fmts
-        while let p = ptr, p.pointee != .NONE {
-            list.append(p.pointee)
-            ptr = p.advanced(by: 1)
-        }
-        return list
+    public var pixFmts: [AVPixelFormat]? {
+        return values(codec.pix_fmts, until: .NONE)
     }
 
     /// Returns an array of the audio samplerates supported by the codec.
-    public var supportedSampleRates: [Int] {
-        var list = [Int]()
-        var ptr = codec.supported_samplerates
-        while let p = ptr, p.pointee != 0 {
-            list.append(Int(p.pointee))
-            ptr = p.advanced(by: 1)
-        }
-        return list
+    public var supportedSampleRates: [Int]? {
+        return values(codec.supported_samplerates, until: 0)?.map { Int($0) }
     }
 
     /// Returns an array of the sample formats supported by the codec.
-    public var sampleFmts: [AVSampleFormat] {
-        var list = [AVSampleFormat]()
-        var ptr = codec.sample_fmts
-        while let p = ptr, p.pointee != .NONE {
-            list.append(p.pointee)
-            ptr = p.advanced(by: 1)
-        }
-        return list
+    public var sampleFmts: [AVSampleFormat]? {
+        return values(codec.sample_fmts, until: .NONE)
     }
 
     /// Returns an array of the channel layouts supported by the codec.
-    public var channelLayouts: [AVChannelLayout] {
-        var list = [AVChannelLayout]()
-        var ptr = codec.channel_layouts
-        while let p = ptr, p.pointee != 0 {
-            list.append(AVChannelLayout(rawValue: p.pointee))
-            ptr = p.advanced(by: 1)
-        }
-        return list
+    public var channelLayouts: [AVChannelLayout]? {
+        return values(codec.channel_layouts, until: 0)?.map { AVChannelLayout(rawValue: $0) }
     }
 
     /// Maximum value for lowres supported by the decoder.

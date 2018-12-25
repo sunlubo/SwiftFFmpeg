@@ -34,3 +34,18 @@ internal func dumpUnrecognizedOptions(_ dict: OpaquePointer?) {
         tag = next
     }
 }
+
+internal func values<T>(_ ptr: UnsafePointer<T>?, until end: T) -> [T]? where T: Equatable {
+    return values(ptr, until: { $0 == end })
+}
+
+internal func values<T>(_ ptr: UnsafePointer<T>?, until predicate: (T) -> Bool) -> [T]? {
+    guard let start = ptr else { return nil }
+    
+    var end = start
+    while !predicate(end.pointee) {
+        end = end.advanced(by: 1)
+    }
+    guard end > start else { return [] }
+    return Array(UnsafeBufferPointer(start: start, count: end - start))
+}
