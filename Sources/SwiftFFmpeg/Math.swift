@@ -22,6 +22,11 @@ extension AVRational {
     public var toDouble: Double {
         return av_q2d(self)
     }
+    
+    /// Get the inverted rational
+    public var inverted: AVRational {
+        return av_inv_q(self)
+    }
 }
 
 extension AVRational: Equatable {

@@ -36,19 +36,35 @@ internal typealias CAVCodecParameters = CFFmpeg.AVCodecParameters
 public final class AVCodecParameters {
     internal let parametersPtr: UnsafeMutablePointer<CAVCodecParameters>
     internal var parameters: CAVCodecParameters { return parametersPtr.pointee }
-
-    internal init(parametersPtr: UnsafeMutablePointer<CAVCodecParameters>) {
+    private var freeWhenDone: Bool
+    
+    internal init(parametersPtr: UnsafeMutablePointer<CAVCodecParameters>, freeWhenDone: Bool = false) {
         self.parametersPtr = parametersPtr
+        self.freeWhenDone = freeWhenDone
+    }
+    
+    public convenience init() {
+        guard let parametersPtr = avcodec_parameters_alloc() else {
+            fatalError("avcodec_parameters_alloc")
+        }
+        self.init(parametersPtr: parametersPtr, freeWhenDone: true)
+    }
+    
+    public convenience init(with parameters: AVCodecParameters) throws {
+        self.init()
+        try copy(from: parameters)
     }
 
     /// General type of the encoded data.
     public var mediaType: AVMediaType {
-        return parameters.codec_type
+        get { return parameters.codec_type }
+        set { parametersPtr.pointee.codec_type = newValue }
     }
 
     /// Specific type of the encoded data (the codec used).
     public var codecId: AVCodecID {
-        return parameters.codec_id
+        get { return parameters.codec_id }
+        set { parametersPtr.pointee.codec_id = newValue }
     }
 
     /// Additional information about the codec (corresponds to the AVI FOURCC).
@@ -59,7 +75,19 @@ public final class AVCodecParameters {
 
     /// The average bitrate of the encoded data (in bits per second).
     public var bitRate: Int {
-        return Int(parameters.bit_rate)
+        get { return Int(parameters.bit_rate) }
+        set { parametersPtr.pointee.bit_rate = Int64(newValue) }
+    }
+    
+    /// Copy and replace self with the specified parameters
+    internal func copy(from parameters: AVCodecParameters) throws {
+        try throwIfFail(avcodec_parameters_copy(parametersPtr, parameters.parametersPtr))
+    }
+    
+    deinit {
+        guard freeWhenDone else { return }
+        var ptr: UnsafeMutablePointer<CAVCodecParameters>? = parametersPtr
+        avcodec_parameters_free(&ptr)
     }
 }
 
@@ -74,12 +102,14 @@ extension AVCodecParameters {
 
     /// The width of the video frame in pixels.
     public var width: Int {
-        return Int(parameters.width)
+        get { return Int(parameters.width) }
+        set { parametersPtr.pointee.width = Int32(newValue) }
     }
-
+    
     /// The height of the video frame in pixels.
     public var height: Int {
-        return Int(parameters.height)
+        get { return Int(parameters.height) }
+        set { parametersPtr.pointee.height = Int32(newValue) }
     }
 
     /// The aspect ratio (width / height) which a single pixel should have when displayed.

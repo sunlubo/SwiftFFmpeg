@@ -372,7 +372,8 @@ extension AVCodecContext {
 
     /// Number of samples per channel in an audio frame.
     public var frameSize: Int {
-        return Int(ctx.frame_size)
+        get { return Int(ctx.frame_size) }
+        set { ctxPtr.pointee.frame_size = Int32(newValue) }
     }
 
     /// Audio channel layout.

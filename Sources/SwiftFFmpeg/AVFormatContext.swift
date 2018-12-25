@@ -188,6 +188,18 @@ public struct AVOutputFormat {
         }
         return list
     }
+    
+    /// Get the AVCodecID for the given codec tag.
+    public func codecId(for codecTag: UInt32) -> AVCodecID? {
+        let codecId = av_codec_get_id(fmt.codec_tag, codecTag)
+        return (codecId != .NONE ? codecId : nil)
+    }
+    
+    /// Get the codec tag for the given codec id.
+    public func codecTag(for codecId: AVCodecID) -> UInt32? {
+        let tag = av_codec_get_tag(fmt.codec_tag, codecId)
+        return (tag != 0 ? tag : nil)
+    }
 }
 
 // MARK: - AVFormatContext
@@ -713,5 +725,12 @@ extension AVFormatContext {
     /// - Throws: AVError
     public func writeTrailer() throws {
         try throwIfFail(av_write_trailer(ctxPtr))
+    }
+    
+    /// Guess the frame rate, based on both the container and codec information.
+    ///
+    /// - Returns: the guessed (valid) frame rate, or 0/1 if no idea
+    func guessFrameRate(for stream: AVStream, frame: AVFrame? = nil) -> AVRational {
+        return av_guess_frame_rate(ctxPtr, stream.streamPtr, frame?.framePtr)
     }
 }
