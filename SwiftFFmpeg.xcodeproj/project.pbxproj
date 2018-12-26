@@ -28,20 +28,20 @@
       };
       "OBJ_10" = {
          isa = "PBXFileReference";
-         path = "AVClass.swift";
+         path = "main.swift";
          sourceTree = "<group>";
       };
       "OBJ_100" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_37";
+         fileRef = "OBJ_38";
       };
       "OBJ_101" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_38";
+         fileRef = "OBJ_39";
       };
       "OBJ_102" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_39";
+         fileRef = "OBJ_40";
       };
       "OBJ_103" = {
          isa = "PBXFrameworksBuildPhase";
@@ -58,48 +58,75 @@
          target = "SwiftFFmpeg::SwiftFFmpeg";
       };
       "OBJ_11" = {
-         isa = "PBXFileReference";
-         path = "AVCodec.swift";
-         sourceTree = "<group>";
+         isa = "PBXGroup";
+         children = (
+            "OBJ_12",
+            "OBJ_13",
+            "OBJ_14",
+            "OBJ_15",
+            "OBJ_16",
+            "OBJ_17",
+            "OBJ_18",
+            "OBJ_19",
+            "OBJ_20",
+            "OBJ_21",
+            "OBJ_22",
+            "OBJ_23",
+            "OBJ_24",
+            "OBJ_25",
+            "OBJ_26",
+            "OBJ_27",
+            "OBJ_28",
+            "OBJ_29",
+            "OBJ_30",
+            "OBJ_31",
+            "OBJ_32",
+            "OBJ_33",
+            "OBJ_34",
+            "OBJ_35"
+         );
+         name = "SwiftFFmpeg";
+         path = "Sources/SwiftFFmpeg";
+         sourceTree = "SOURCE_ROOT";
       };
       "OBJ_12" = {
          isa = "PBXFileReference";
-         path = "AVCodecContext.swift";
+         path = "AVBuffer.swift";
          sourceTree = "<group>";
       };
       "OBJ_13" = {
          isa = "PBXFileReference";
-         path = "AVCodecParserContext.swift";
+         path = "AVClass.swift";
          sourceTree = "<group>";
       };
       "OBJ_14" = {
          isa = "PBXFileReference";
-         path = "AVError.swift";
+         path = "AVCodec.swift";
          sourceTree = "<group>";
       };
       "OBJ_15" = {
          isa = "PBXFileReference";
-         path = "AVFormatContext.swift";
+         path = "AVCodecContext.swift";
          sourceTree = "<group>";
       };
       "OBJ_16" = {
          isa = "PBXFileReference";
-         path = "AVFrame.swift";
+         path = "AVCodecParserContext.swift";
          sourceTree = "<group>";
       };
       "OBJ_17" = {
          isa = "PBXFileReference";
-         path = "AVIOContext.swift";
+         path = "AVError.swift";
          sourceTree = "<group>";
       };
       "OBJ_18" = {
          isa = "PBXFileReference";
-         path = "AVImage.swift";
+         path = "AVFormatContext.swift";
          sourceTree = "<group>";
       };
       "OBJ_19" = {
          isa = "PBXFileReference";
-         path = "AVOptions.swift";
+         path = "AVFrame.swift";
          sourceTree = "<group>";
       };
       "OBJ_2" = {
@@ -113,52 +140,52 @@
       };
       "OBJ_20" = {
          isa = "PBXFileReference";
-         path = "AVPacket.swift";
+         path = "AVIOContext.swift";
          sourceTree = "<group>";
       };
       "OBJ_21" = {
          isa = "PBXFileReference";
-         path = "AVSample.swift";
+         path = "AVImage.swift";
          sourceTree = "<group>";
       };
       "OBJ_22" = {
          isa = "PBXFileReference";
-         path = "AVStream.swift";
+         path = "AVOptions.swift";
          sourceTree = "<group>";
       };
       "OBJ_23" = {
          isa = "PBXFileReference";
-         path = "AudioUtil.swift";
+         path = "AVPacket.swift";
          sourceTree = "<group>";
       };
       "OBJ_24" = {
          isa = "PBXFileReference";
-         path = "CType.swift";
+         path = "AVSample.swift";
          sourceTree = "<group>";
       };
       "OBJ_25" = {
          isa = "PBXFileReference";
-         path = "Math.swift";
+         path = "AVStream.swift";
          sourceTree = "<group>";
       };
       "OBJ_26" = {
          isa = "PBXFileReference";
-         path = "PointerExt.swift";
+         path = "AudioUtil.swift";
          sourceTree = "<group>";
       };
       "OBJ_27" = {
          isa = "PBXFileReference";
-         path = "StringExt.swift";
+         path = "CType.swift";
          sourceTree = "<group>";
       };
       "OBJ_28" = {
          isa = "PBXFileReference";
-         path = "SwrContext.swift";
+         path = "Math.swift";
          sourceTree = "<group>";
       };
       "OBJ_29" = {
          isa = "PBXFileReference";
-         path = "SwsContext.swift";
+         path = "PointerExt.swift";
          sourceTree = "<group>";
       };
       "OBJ_3" = {
@@ -202,66 +229,62 @@
       };
       "OBJ_30" = {
          isa = "PBXFileReference";
-         path = "Timestamp.swift";
+         path = "StringExt.swift";
          sourceTree = "<group>";
       };
       "OBJ_31" = {
          isa = "PBXFileReference";
-         path = "Util.swift";
+         path = "SwrContext.swift";
          sourceTree = "<group>";
       };
       "OBJ_32" = {
          isa = "PBXFileReference";
-         path = "VideoUtil.swift";
+         path = "SwsContext.swift";
          sourceTree = "<group>";
       };
       "OBJ_33" = {
-         isa = "PBXGroup";
-         children = (
-            "OBJ_34"
-         );
-         name = "SwiftFFmpegDemo";
-         path = "Sources/Demo";
-         sourceTree = "SOURCE_ROOT";
+         isa = "PBXFileReference";
+         path = "Timestamp.swift";
+         sourceTree = "<group>";
       };
       "OBJ_34" = {
          isa = "PBXFileReference";
-         path = "main.swift";
+         path = "Util.swift";
          sourceTree = "<group>";
       };
       "OBJ_35" = {
+         isa = "PBXFileReference";
+         path = "VideoUtil.swift";
+         sourceTree = "<group>";
+      };
+      "OBJ_36" = {
          isa = "PBXGroup";
          children = (
-            "OBJ_36"
+            "OBJ_37"
          );
          name = "Tests";
          path = "";
          sourceTree = "SOURCE_ROOT";
       };
-      "OBJ_36" = {
+      "OBJ_37" = {
          isa = "PBXGroup";
          children = (
-            "OBJ_37",
             "OBJ_38",
-            "OBJ_39"
+            "OBJ_39",
+            "OBJ_40"
          );
          name = "SwiftFFmpegTests";
          path = "Tests/SwiftFFmpegTests";
          sourceTree = "SOURCE_ROOT";
       };
-      "OBJ_37" = {
+      "OBJ_38" = {
          isa = "PBXFileReference";
          path = "AVBufferTests.swift";
          sourceTree = "<group>";
       };
-      "OBJ_38" = {
-         isa = "PBXFileReference";
-         path = "AVImageTests.swift";
-         sourceTree = "<group>";
-      };
       "OBJ_39" = {
          isa = "PBXFileReference";
-         path = "XCTestManifests.swift";
+         path = "AVImageTests.swift";
          sourceTree = "<group>";
       };
       "OBJ_4" = {
@@ -297,19 +320,16 @@
          name = "Release";
       };
       "OBJ_40" = {
-         isa = "PBXGroup";
-         children = (
-         );
-         name = "Dependencies";
-         path = "";
+         isa = "PBXFileReference";
+         path = "XCTestManifests.swift";
          sourceTree = "<group>";
       };
       "OBJ_41" = {
          isa = "PBXGroup";
          children = (
+            "SwiftFFmpeg::SwiftFFmpegDemo::Product",
             "SwiftFFmpeg::SwiftFFmpegTests::Product",
-            "SwiftFFmpeg::SwiftFFmpeg::Product",
-            "SwiftFFmpeg::SwiftFFmpegDemo::Product"
+            "SwiftFFmpeg::SwiftFFmpeg::Product"
          );
          name = "Products";
          path = "";
@@ -334,7 +354,7 @@
             );
             HEADER_SEARCH_PATHS = (
                "$(inherited)",
-               "$(SRCROOT)/.build/checkouts/CFFmpeg.git--1427026468773541552"
+               "$(SRCROOT)/Sources/CFFmpeg"
             );
             INFOPLIST_FILE = "SwiftFFmpeg.xcodeproj/SwiftFFmpeg_Info.plist";
             LD_RUNPATH_SEARCH_PATHS = (
@@ -343,16 +363,16 @@
             );
             OTHER_CFLAGS = (
                "$(inherited)",
-               "-I/usr/local/Cellar/ffmpeg/4.1/include"
+               "-I/usr/local/Cellar/ffmpeg/4.1_1/include"
             );
             OTHER_LDFLAGS = (
                "$(inherited)",
-               "-L/usr/local/Cellar/ffmpeg/4.1/lib",
+               "-L/usr/local/Cellar/ffmpeg/4.1_1/lib",
                "-lavformat"
             );
             OTHER_SWIFT_FLAGS = (
                "$(inherited)",
-               "-I/usr/local/Cellar/ffmpeg/4.1/include"
+               "-I/usr/local/Cellar/ffmpeg/4.1_1/include"
             );
             PRODUCT_BUNDLE_IDENTIFIER = "SwiftFFmpeg";
             PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
@@ -361,7 +381,7 @@
             SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
                "$(inherited)"
             );
-            SWIFT_VERSION = "4.0";
+            SWIFT_VERSION = "4.2";
             TARGET_NAME = "SwiftFFmpeg";
          };
          name = "Debug";
@@ -376,7 +396,7 @@
             );
             HEADER_SEARCH_PATHS = (
                "$(inherited)",
-               "$(SRCROOT)/.build/checkouts/CFFmpeg.git--1427026468773541552"
+               "$(SRCROOT)/Sources/CFFmpeg"
             );
             INFOPLIST_FILE = "SwiftFFmpeg.xcodeproj/SwiftFFmpeg_Info.plist";
             LD_RUNPATH_SEARCH_PATHS = (
@@ -385,16 +405,16 @@
             );
             OTHER_CFLAGS = (
                "$(inherited)",
-               "-I/usr/local/Cellar/ffmpeg/4.1/include"
+               "-I/usr/local/Cellar/ffmpeg/4.1_1/include"
             );
             OTHER_LDFLAGS = (
                "$(inherited)",
-               "-L/usr/local/Cellar/ffmpeg/4.1/lib",
+               "-L/usr/local/Cellar/ffmpeg/4.1_1/lib",
                "-lavformat"
             );
             OTHER_SWIFT_FLAGS = (
                "$(inherited)",
-               "-I/usr/local/Cellar/ffmpeg/4.1/include"
+               "-I/usr/local/Cellar/ffmpeg/4.1_1/include"
             );
             PRODUCT_BUNDLE_IDENTIFIER = "SwiftFFmpeg";
             PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
@@ -403,7 +423,7 @@
             SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
                "$(inherited)"
             );
-            SWIFT_VERSION = "4.0";
+            SWIFT_VERSION = "4.2";
             TARGET_NAME = "SwiftFFmpeg";
          };
          name = "Release";
@@ -442,8 +462,7 @@
          children = (
             "OBJ_6",
             "OBJ_7",
-            "OBJ_35",
-            "OBJ_40",
+            "OBJ_36",
             "OBJ_41"
          );
          path = "";
@@ -451,43 +470,43 @@
       };
       "OBJ_50" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_9";
+         fileRef = "OBJ_12";
       };
       "OBJ_51" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_10";
+         fileRef = "OBJ_13";
       };
       "OBJ_52" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_11";
+         fileRef = "OBJ_14";
       };
       "OBJ_53" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_12";
+         fileRef = "OBJ_15";
       };
       "OBJ_54" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_13";
+         fileRef = "OBJ_16";
       };
       "OBJ_55" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_14";
+         fileRef = "OBJ_17";
       };
       "OBJ_56" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_15";
+         fileRef = "OBJ_18";
       };
       "OBJ_57" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_16";
+         fileRef = "OBJ_19";
       };
       "OBJ_58" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_17";
+         fileRef = "OBJ_20";
       };
       "OBJ_59" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_18";
+         fileRef = "OBJ_21";
       };
       "OBJ_6" = {
          isa = "PBXFileReference";
@@ -497,49 +516,50 @@
       };
       "OBJ_60" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_19";
+         fileRef = "OBJ_22";
       };
       "OBJ_61" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_20";
+         fileRef = "OBJ_23";
       };
       "OBJ_62" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_21";
+         fileRef = "OBJ_24";
       };
       "OBJ_63" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_22";
+         fileRef = "OBJ_25";
       };
       "OBJ_64" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_23";
+         fileRef = "OBJ_26";
       };
       "OBJ_65" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_24";
+         fileRef = "OBJ_27";
       };
       "OBJ_66" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_25";
+         fileRef = "OBJ_28";
       };
       "OBJ_67" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_26";
+         fileRef = "OBJ_29";
       };
       "OBJ_68" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_27";
+         fileRef = "OBJ_30";
       };
       "OBJ_69" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_28";
+         fileRef = "OBJ_31";
       };
       "OBJ_7" = {
          isa = "PBXGroup";
          children = (
             "OBJ_8",
-            "OBJ_33"
+            "OBJ_9",
+            "OBJ_11"
          );
          name = "Sources";
          path = "";
@@ -547,19 +567,19 @@
       };
       "OBJ_70" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_29";
+         fileRef = "OBJ_32";
       };
       "OBJ_71" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_30";
+         fileRef = "OBJ_33";
       };
       "OBJ_72" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_31";
+         fileRef = "OBJ_34";
       };
       "OBJ_73" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_32";
+         fileRef = "OBJ_35";
       };
       "OBJ_74" = {
          isa = "PBXFrameworksBuildPhase";
@@ -584,7 +604,7 @@
             );
             HEADER_SEARCH_PATHS = (
                "$(inherited)",
-               "$(SRCROOT)/.build/checkouts/CFFmpeg.git--1427026468773541552"
+               "$(SRCROOT)/Sources/CFFmpeg"
             );
             INFOPLIST_FILE = "SwiftFFmpeg.xcodeproj/SwiftFFmpegDemo_Info.plist";
             LD_RUNPATH_SEARCH_PATHS = (
@@ -594,23 +614,23 @@
             );
             OTHER_CFLAGS = (
                "$(inherited)",
-               "-I/usr/local/Cellar/ffmpeg/4.1/include"
+               "-I/usr/local/Cellar/ffmpeg/4.1_1/include"
             );
             OTHER_LDFLAGS = (
                "$(inherited)",
-               "-L/usr/local/Cellar/ffmpeg/4.1/lib",
+               "-L/usr/local/Cellar/ffmpeg/4.1_1/lib",
                "-lavformat"
             );
             OTHER_SWIFT_FLAGS = (
                "$(inherited)",
-               "-I/usr/local/Cellar/ffmpeg/4.1/include"
+               "-I/usr/local/Cellar/ffmpeg/4.1_1/include"
             );
             SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
                "$(inherited)"
             );
             SWIFT_FORCE_DYNAMIC_LINK_STDLIB = "YES";
             SWIFT_FORCE_STATIC_LINK_STDLIB = "NO";
-            SWIFT_VERSION = "4.0";
+            SWIFT_VERSION = "4.2";
             TARGET_NAME = "SwiftFFmpegDemo";
          };
          name = "Debug";
@@ -624,7 +644,7 @@
             );
             HEADER_SEARCH_PATHS = (
                "$(inherited)",
-               "$(SRCROOT)/.build/checkouts/CFFmpeg.git--1427026468773541552"
+               "$(SRCROOT)/Sources/CFFmpeg"
             );
             INFOPLIST_FILE = "SwiftFFmpeg.xcodeproj/SwiftFFmpegDemo_Info.plist";
             LD_RUNPATH_SEARCH_PATHS = (
@@ -634,23 +654,23 @@
             );
             OTHER_CFLAGS = (
                "$(inherited)",
-               "-I/usr/local/Cellar/ffmpeg/4.1/include"
+               "-I/usr/local/Cellar/ffmpeg/4.1_1/include"
             );
             OTHER_LDFLAGS = (
                "$(inherited)",
-               "-L/usr/local/Cellar/ffmpeg/4.1/lib",
+               "-L/usr/local/Cellar/ffmpeg/4.1_1/lib",
                "-lavformat"
             );
             OTHER_SWIFT_FLAGS = (
                "$(inherited)",
-               "-I/usr/local/Cellar/ffmpeg/4.1/include"
+               "-I/usr/local/Cellar/ffmpeg/4.1_1/include"
             );
             SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
                "$(inherited)"
             );
             SWIFT_FORCE_DYNAMIC_LINK_STDLIB = "YES";
             SWIFT_FORCE_STATIC_LINK_STDLIB = "NO";
-            SWIFT_VERSION = "4.0";
+            SWIFT_VERSION = "4.2";
             TARGET_NAME = "SwiftFFmpegDemo";
          };
          name = "Release";
@@ -664,38 +684,14 @@
       "OBJ_8" = {
          isa = "PBXGroup";
          children = (
-            "OBJ_9",
-            "OBJ_10",
-            "OBJ_11",
-            "OBJ_12",
-            "OBJ_13",
-            "OBJ_14",
-            "OBJ_15",
-            "OBJ_16",
-            "OBJ_17",
-            "OBJ_18",
-            "OBJ_19",
-            "OBJ_20",
-            "OBJ_21",
-            "OBJ_22",
-            "OBJ_23",
-            "OBJ_24",
-            "OBJ_25",
-            "OBJ_26",
-            "OBJ_27",
-            "OBJ_28",
-            "OBJ_29",
-            "OBJ_30",
-            "OBJ_31",
-            "OBJ_32"
          );
-         name = "SwiftFFmpeg";
-         path = "Sources/SwiftFFmpeg";
+         name = "CFFmpeg";
+         path = "Sources/CFFmpeg";
          sourceTree = "SOURCE_ROOT";
       };
       "OBJ_80" = {
          isa = "PBXBuildFile";
-         fileRef = "OBJ_34";
+         fileRef = "OBJ_10";
       };
       "OBJ_81" = {
          isa = "PBXFrameworksBuildPhase";
@@ -726,15 +722,15 @@
             LD = "/usr/bin/true";
             OTHER_SWIFT_FLAGS = (
                "-swift-version",
-               "4",
+               "4.2",
                "-I",
-               "$(TOOLCHAIN_DIR)/usr/lib/swift/pm/4",
+               "$(TOOLCHAIN_DIR)/usr/lib/swift/pm/4_2",
                "-target",
                "x86_64-apple-macosx10.10",
                "-sdk",
                "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk"
             );
-            SWIFT_VERSION = "4.0";
+            SWIFT_VERSION = "4.2";
          };
          name = "Debug";
       };
@@ -744,15 +740,15 @@
             LD = "/usr/bin/true";
             OTHER_SWIFT_FLAGS = (
                "-swift-version",
-               "4",
+               "4.2",
                "-I",
-               "$(TOOLCHAIN_DIR)/usr/lib/swift/pm/4",
+               "$(TOOLCHAIN_DIR)/usr/lib/swift/pm/4_2",
                "-target",
                "x86_64-apple-macosx10.10",
                "-sdk",
                "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk"
             );
-            SWIFT_VERSION = "4.0";
+            SWIFT_VERSION = "4.2";
          };
          name = "Release";
       };
@@ -767,9 +763,13 @@
          fileRef = "OBJ_6";
       };
       "OBJ_9" = {
-         isa = "PBXFileReference";
-         path = "AVBuffer.swift";
-         sourceTree = "<group>";
+         isa = "PBXGroup";
+         children = (
+            "OBJ_10"
+         );
+         name = "SwiftFFmpegDemo";
+         path = "Sources/Demo";
+         sourceTree = "SOURCE_ROOT";
       };
       "OBJ_91" = {
          isa = "XCConfigurationList";
@@ -816,7 +816,7 @@
             );
             HEADER_SEARCH_PATHS = (
                "$(inherited)",
-               "$(SRCROOT)/.build/checkouts/CFFmpeg.git--1427026468773541552"
+               "$(SRCROOT)/Sources/CFFmpeg"
             );
             INFOPLIST_FILE = "SwiftFFmpeg.xcodeproj/SwiftFFmpegTests_Info.plist";
             LD_RUNPATH_SEARCH_PATHS = (
@@ -826,21 +826,21 @@
             );
             OTHER_CFLAGS = (
                "$(inherited)",
-               "-I/usr/local/Cellar/ffmpeg/4.1/include"
+               "-I/usr/local/Cellar/ffmpeg/4.1_1/include"
             );
             OTHER_LDFLAGS = (
                "$(inherited)",
-               "-L/usr/local/Cellar/ffmpeg/4.1/lib",
+               "-L/usr/local/Cellar/ffmpeg/4.1_1/lib",
                "-lavformat"
             );
             OTHER_SWIFT_FLAGS = (
                "$(inherited)",
-               "-I/usr/local/Cellar/ffmpeg/4.1/include"
+               "-I/usr/local/Cellar/ffmpeg/4.1_1/include"
             );
             SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
                "$(inherited)"
             );
-            SWIFT_VERSION = "4.0";
+            SWIFT_VERSION = "4.2";
             TARGET_NAME = "SwiftFFmpegTests";
          };
          name = "Debug";
@@ -856,7 +856,7 @@
             );
             HEADER_SEARCH_PATHS = (
                "$(inherited)",
-               "$(SRCROOT)/.build/checkouts/CFFmpeg.git--1427026468773541552"
+               "$(SRCROOT)/Sources/CFFmpeg"
             );
             INFOPLIST_FILE = "SwiftFFmpeg.xcodeproj/SwiftFFmpegTests_Info.plist";
             LD_RUNPATH_SEARCH_PATHS = (
@@ -866,21 +866,21 @@
             );
             OTHER_CFLAGS = (
                "$(inherited)",
-               "-I/usr/local/Cellar/ffmpeg/4.1/include"
+               "-I/usr/local/Cellar/ffmpeg/4.1_1/include"
             );
             OTHER_LDFLAGS = (
                "$(inherited)",
-               "-L/usr/local/Cellar/ffmpeg/4.1/lib",
+               "-L/usr/local/Cellar/ffmpeg/4.1_1/lib",
                "-lavformat"
             );
             OTHER_SWIFT_FLAGS = (
                "$(inherited)",
-               "-I/usr/local/Cellar/ffmpeg/4.1/include"
+               "-I/usr/local/Cellar/ffmpeg/4.1_1/include"
             );
             SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
                "$(inherited)"
             );
-            SWIFT_VERSION = "4.0";
+            SWIFT_VERSION = "4.2";
             TARGET_NAME = "SwiftFFmpegTests";
          };
          name = "Release";
