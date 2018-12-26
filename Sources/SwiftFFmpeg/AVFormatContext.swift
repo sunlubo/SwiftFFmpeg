@@ -84,7 +84,7 @@ public struct AVInputFormat {
     }
 
     /// Get all registered demuxers.
-    public static var all: [AVInputFormat] {
+    public static var supportedDemuxers: [AVInputFormat] {
         var list = [AVInputFormat]()
         var state: UnsafeMutableRawPointer?
         while let fmtPtr = av_demuxer_iterate(&state) {
@@ -180,7 +180,7 @@ public struct AVOutputFormat {
     }
 
     /// Get all registered muxers.
-    public static var all: [AVOutputFormat] {
+    public static var supportedMuxers: [AVOutputFormat] {
         var list = [AVOutputFormat]()
         var state: UnsafeMutableRawPointer?
         while let fmtPtr = av_muxer_iterate(&state) {
@@ -242,7 +242,7 @@ public final class AVFormatContext {
         /// Add bitstream filters as requested by the muxer.
         public static let autoBSF = Flag(rawValue: AVFMT_FLAG_AUTO_BSF)
     }
-    
+
     public static let `class` = AVClass(cObjPtr: avformat_get_class())
 
     internal let ctxPtr: UnsafeMutablePointer<CAVFormatContext>
@@ -719,7 +719,7 @@ extension AVFormatContext {
 }
 
 extension AVFormatContext: AVOptionAccessor {
-    
+
     public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T {
         return try body(ctxPtr)
     }

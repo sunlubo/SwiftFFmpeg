@@ -214,7 +214,7 @@ public struct AVCodec {
     }
 
     /// Returns an array of the pixel formats supported by the codec.
-    public var pixFmts: [AVPixelFormat] {
+    public var supportedPixelFormats: [AVPixelFormat] {
         var list = [AVPixelFormat]()
         var ptr = codec.pix_fmts
         while let p = ptr, p.pointee != .NONE {
@@ -236,7 +236,7 @@ public struct AVCodec {
     }
 
     /// Returns an array of the sample formats supported by the codec.
-    public var sampleFmts: [AVSampleFormat] {
+    public var supportedSampleFormats: [AVSampleFormat] {
         var list = [AVSampleFormat]()
         var ptr = codec.sample_fmts
         while let p = ptr, p.pointee != .NONE {
@@ -247,7 +247,7 @@ public struct AVCodec {
     }
 
     /// Returns an array of the channel layouts supported by the codec.
-    public var channelLayouts: [AVChannelLayout] {
+    public var supportedChannelLayouts: [AVChannelLayout] {
         var list = [AVChannelLayout]()
         var ptr = codec.channel_layouts
         while let p = ptr, p.pointee != 0 {
@@ -274,7 +274,7 @@ public struct AVCodec {
 }
 
 extension AVCodec: AVOptionAccessor {
-    
+
     public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T {
         var tmp = codec.priv_class
         return try withUnsafeMutablePointer(to: &tmp) { ptr in
