@@ -56,6 +56,8 @@ public final class AVCodecContext {
         /// Do not reset ASS ReadOrder field on flush (subtitles decoding).
         public static let roFlushNoop = Flag2(rawValue: AV_CODEC_FLAG2_RO_FLUSH_NOOP)
     }
+    
+    public static let `class` = AVClass(cObjPtr: avcodec_get_class())
 
     public let codec: AVCodec
 
@@ -382,5 +384,12 @@ extension AVCodecContext {
     public var channelLayout: AVChannelLayout {
         get { return AVChannelLayout(rawValue: ctx.channel_layout) }
         set { ctxPtr.pointee.channel_layout = newValue.rawValue }
+    }
+}
+
+extension AVCodecContext: AVOptionAccessor {
+    
+    public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T {
+        return try body(ctxPtr)
     }
 }

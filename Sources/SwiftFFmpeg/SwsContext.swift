@@ -29,6 +29,8 @@ public final class SwsContext {
         public static let lanczos = Flag(rawValue: SWS_LANCZOS)
         public static let spLine = Flag(rawValue: SWS_SPLINE)
     }
+    
+    public static let `class` = AVClass(cObjPtr: sws_get_class())
 
     internal let ctx: OpaquePointer
 
@@ -118,5 +120,12 @@ public final class SwsContext {
 
     deinit {
         sws_freeContext(ctx)
+    }
+}
+
+extension SwsContext: AVOptionAccessor {
+    
+    public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T {
+        return try body(UnsafeMutableRawPointer(ctx))
     }
 }

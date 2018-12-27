@@ -207,7 +207,7 @@ public struct AVCodec {
     }
 
     /// Returns an array of the pixel formats supported by the codec.
-    public var pixFmts: [AVPixelFormat]? {
+    public var supportedPixelFormats: [AVPixelFormat]? {
         return values(codec.pix_fmts, until: .NONE)
     }
 
@@ -217,12 +217,12 @@ public struct AVCodec {
     }
 
     /// Returns an array of the sample formats supported by the codec.
-    public var sampleFmts: [AVSampleFormat]? {
+    public var supportedSampleFormats: [AVSampleFormat]? {
         return values(codec.sample_fmts, until: .NONE)
     }
 
     /// Returns an array of the channel layouts supported by the codec.
-    public var channelLayouts: [AVChannelLayout]? {
+    public var supportedChannelLayouts: [AVChannelLayout]? {
         return values(codec.channel_layouts, until: 0)?.map { AVChannelLayout(rawValue: $0) }
     }
 
@@ -239,5 +239,15 @@ public struct AVCodec {
     /// A Boolean value indicating whether the codec is encoder.
     public var isEncoder: Bool {
         return av_codec_is_encoder(codecPtr) != 0
+    }
+}
+
+extension AVCodec: AVOptionAccessor {
+
+    public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T {
+        var tmp = codec.priv_class
+        return try withUnsafeMutablePointer(to: &tmp) { ptr in
+            try body(ptr)
+        }
     }
 }

@@ -30,6 +30,8 @@ internal typealias CAVFrame = CFFmpeg.AVFrame
 /// Fields can be accessed through `AVOptions`, the name string used, matches the
 /// C structure field name for fields accessible through `AVOptions`.
 public final class AVFrame {
+    public static let `class` = AVClass(cObjPtr: avcodec_get_frame_class())
+    
     internal let framePtr: UnsafeMutablePointer<CAVFrame>
     internal var frame: CAVFrame { return framePtr.pointee }
 
