@@ -113,18 +113,6 @@ extension AVCodecID {
 internal typealias CAVCodec = CFFmpeg.AVCodec
 
 public struct AVCodec {
-    /// Codec capabilities
-    public struct Cap: OptionSet {
-        public let rawValue: Int32
-
-        public init(rawValue: Int32) {
-            self.rawValue = rawValue
-        }
-
-        /// Audio encoder supports receiving a different number of samples in each call.
-        public static let variableFrameSize = Cap(rawValue: AV_CODEC_CAP_VARIABLE_FRAME_SIZE)
-    }
-
     internal let codecPtr: UnsafeMutablePointer<CAVCodec>
     internal var codec: CAVCodec { return codecPtr.pointee }
 
@@ -198,7 +186,7 @@ public struct AVCodec {
 
     /// The codec's capabilities.
     public var capabilities: AVCodec.Cap {
-        return Cap(rawValue: codec.capabilities)
+        return Cap(rawValue: UInt32(codec.capabilities))
     }
 
     /// Returns an array of the framerates supported by the codec.
@@ -239,6 +227,141 @@ public struct AVCodec {
     /// A Boolean value indicating whether the codec is encoder.
     public var isEncoder: Bool {
         return av_codec_is_encoder(codecPtr) != 0
+    }
+
+    /// Get all registered codecs.
+    public static var supportedCodecs: [AVCodec] {
+        var list = [AVCodec]()
+        var state: UnsafeMutableRawPointer?
+        while let codecPtr = av_codec_iterate(&state) {
+            list.append(AVCodec(codecPtr: codecPtr.mutable))
+        }
+        return list
+    }
+}
+
+// MARK: - Cap
+
+extension AVCodec {
+    /// Codec capabilities
+    public struct Cap: OptionSet {
+        public let rawValue: UInt32
+
+        public init(rawValue: UInt32) {
+            self.rawValue = rawValue
+        }
+
+        /// Decoder can use draw_horiz_band callback.
+        public static let drawHorizBand = Cap(rawValue: UInt32(AV_CODEC_CAP_DRAW_HORIZ_BAND))
+        /// Codec uses get_buffer() for allocating buffers and supports custom allocators.
+        /// If not set, it might not use get_buffer() at all or use operations that
+        /// assume the buffer was allocated by avcodec_default_get_buffer.
+        public static let dr1 = Cap(rawValue: UInt32(AV_CODEC_CAP_DR1))
+        public static let truncated = Cap(rawValue: UInt32(AV_CODEC_CAP_TRUNCATED))
+        /// Encoder or decoder requires flushing with NULL input at the end in order to
+        /// give the complete and correct output.
+        ///
+        /// - Note: If this flag is not set, the codec is guaranteed to never be fed with
+        ///       with NULL data. The user can still send NULL data to the public encode
+        ///       or decode function, but libavcodec will not pass it along to the codec
+        ///       unless this flag is set.
+        ///
+        /// Decoders:
+        /// The decoder has a non-zero delay and needs to be fed with avpkt->data=NULL,
+        /// avpkt->size=0 at the end to get the delayed data until the decoder no longer
+        /// returns frames.
+        ///
+        /// Encoders:
+        /// The encoder needs to be fed with NULL data at the end of encoding until the
+        /// encoder no longer returns data.
+        ///
+        /// - Note: For encoders implementing the AVCodec.encode2() function, setting this
+        ///       flag also means that the encoder must set the pts and duration for
+        ///       each output packet. If this flag is not set, the pts and duration will
+        ///       be determined by libavcodec from the input frame.
+        public static let delay = Cap(rawValue: UInt32(AV_CODEC_CAP_DELAY))
+        /// Codec can be fed a final frame with a smaller size.
+        /// This can be used to prevent truncation of the last audio samples.
+        public static let smallLastFrame = Cap(rawValue: UInt32(AV_CODEC_CAP_SMALL_LAST_FRAME))
+        /// Codec can output multiple frames per AVPacket.
+        /// Normally demuxers return one frame at a time, demuxers which do not do
+        /// are connected to a parser to split what they return into proper frames.
+        /// This flag is reserved to the very rare category of codecs which have a
+        /// bitstream that cannot be split into frames without timeconsuming
+        /// operations like full decoding. Demuxers carrying such bitstreams thus
+        /// may return multiple frames in a packet. This has many disadvantages like
+        /// prohibiting stream copy in many cases thus it should only be considered
+        /// as a last resort.
+        public static let subframes = Cap(rawValue: UInt32(AV_CODEC_CAP_SUBFRAMES))
+        /// Codec is experimental and is thus avoided in favor of non experimental encoders.
+        public static let experimental = Cap(rawValue: UInt32(AV_CODEC_CAP_EXPERIMENTAL))
+        /// Codec should fill in channel configuration and samplerate instead of container.
+        public static let channelConf = Cap(rawValue: UInt32(AV_CODEC_CAP_CHANNEL_CONF))
+        /// Codec supports frame-level multithreading.
+        public static let frameThreads = Cap(rawValue: UInt32(AV_CODEC_CAP_FRAME_THREADS))
+        /// Codec supports slice-based (or partition-based) multithreading.
+        public static let sliceThreads = Cap(rawValue: UInt32(AV_CODEC_CAP_SLICE_THREADS))
+        /// Codec supports changed parameters at any point.
+        public static let paramChange = Cap(rawValue: UInt32(AV_CODEC_CAP_PARAM_CHANGE))
+        /// Codec supports avctx->thread_count == 0 (auto).
+        public static let autoThreads = Cap(rawValue: UInt32(AV_CODEC_CAP_AUTO_THREADS))
+        /// Audio encoder supports receiving a different number of samples in each call.
+        public static let variableFrameSize = Cap(rawValue: UInt32(AV_CODEC_CAP_VARIABLE_FRAME_SIZE))
+        /// Decoder is not a preferred choice for probing.
+        /// This indicates that the decoder is not a good choice for probing.
+        /// It could for example be an expensive to spin up hardware decoder,
+        /// or it could simply not provide a lot of useful information about
+        /// the stream.
+        /// A decoder marked with this flag should only be used as last resort
+        /// choice for probing.
+        public static let avoidProbing = Cap(rawValue: UInt32(AV_CODEC_CAP_AVOID_PROBING))
+        /// Codec is intra only.
+        public static let intraOnly = Cap(rawValue: UInt32(AV_CODEC_CAP_INTRA_ONLY))
+        /// Codec is lossless.
+        public static let lossless = Cap(rawValue: AV_CODEC_CAP_LOSSLESS)
+        /// Codec is backed by a hardware implementation. Typically used to
+        /// identify a non-hwaccel hardware decoder. For information about hwaccels, use
+        /// avcodec_get_hw_config() instead.
+        public static let hardware = Cap(rawValue: UInt32(AV_CODEC_CAP_HARDWARE))
+        /// Codec is potentially backed by a hardware implementation, but not
+        /// necessarily. This is used instead of AV_CODEC_CAP_HARDWARE, if the
+        /// implementation provides some sort of internal fallback.
+        public static let hybrid = Cap(rawValue: UInt32(AV_CODEC_CAP_HYBRID))
+        /// This codec takes the reordered_opaque field from input AVFrames
+        /// and returns it in the corresponding field in AVCodecContext after
+        /// encoding.
+        public static let encoderReorderedOpaque = Cap(rawValue: 1 << 20)
+    }
+}
+
+extension AVCodec.Cap: CustomStringConvertible {
+
+    public var description: String {
+        var str = "["
+        if contains(.drawHorizBand) { str += "drawHorizBand, " }
+        if contains(.dr1) { str += "dr1, " }
+        if contains(.truncated) { str += "truncated, " }
+        if contains(.delay) { str += "delay, " }
+        if contains(.smallLastFrame) { str += "smallLastFrame, " }
+        if contains(.subframes) { str += "subframes, " }
+        if contains(.experimental) { str += "experimental, " }
+        if contains(.channelConf) { str += "channelConf, " }
+        if contains(.frameThreads) { str += "frameThreads, " }
+        if contains(.sliceThreads) { str += "sliceThreads, " }
+        if contains(.paramChange) { str += "paramChange, " }
+        if contains(.autoThreads) { str += "autoThreads, " }
+        if contains(.variableFrameSize) { str += "variableFrameSize, " }
+        if contains(.avoidProbing) { str += "avoidProbing, " }
+        if contains(.intraOnly) { str += "intraOnly, " }
+        if contains(.lossless) { str += "lossless, " }
+        if contains(.hardware) { str += "hardware, " }
+        if contains(.hybrid) { str += "hybrid, " }
+        if contains(.encoderReorderedOpaque) { str += "encoderReorderedOpaque, " }
+        if str.suffix(2) == ", " {
+            str.removeLast(2)
+        }
+        str += "]"
+        return str
     }
 }
 
