@@ -27,7 +27,7 @@ public func networkDeinit() -> Int32 {
     return avformat_network_deinit()
 }
 
-internal func dumpUnrecognizedOptions(_ dict: OpaquePointer?) {
+func dumpUnrecognizedOptions(_ dict: OpaquePointer?) {
     var tag: UnsafeMutablePointer<AVDictionaryEntry>?
     while let next = av_dict_get(dict, "", tag, AV_DICT_IGNORE_SUFFIX) {
         print("Warning: Option `\(String(cString: next.pointee.key!))` not recognized.")
@@ -35,13 +35,13 @@ internal func dumpUnrecognizedOptions(_ dict: OpaquePointer?) {
     }
 }
 
-internal func values<T>(_ ptr: UnsafePointer<T>?, until end: T) -> [T]? where T: Equatable {
+func values<T>(_ ptr: UnsafePointer<T>?, until end: T) -> [T]? where T: Equatable {
     return values(ptr, until: { $0 == end })
 }
 
-internal func values<T>(_ ptr: UnsafePointer<T>?, until predicate: (T) -> Bool) -> [T]? {
+func values<T>(_ ptr: UnsafePointer<T>?, until predicate: (T) -> Bool) -> [T]? {
     guard let start = ptr else { return nil }
-    
+
     var end = start
     while !predicate(end.pointee) {
         end = end.advanced(by: 1)

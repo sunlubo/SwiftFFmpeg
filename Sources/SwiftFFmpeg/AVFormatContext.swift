@@ -84,7 +84,7 @@ public struct AVInputFormat {
     }
 
     /// Get all registered demuxers.
-    public static var supportedDemuxers: [AVInputFormat] {
+    public static var supportedFormats: [AVInputFormat] {
         var list = [AVInputFormat]()
         var state: UnsafeMutableRawPointer?
         while let fmtPtr = av_demuxer_iterate(&state) {
@@ -180,7 +180,7 @@ public struct AVOutputFormat {
     }
 
     /// Get all registered muxers.
-    public static var supportedMuxers: [AVOutputFormat] {
+    public static var supportedFormats: [AVOutputFormat] {
         var list = [AVOutputFormat]()
         var state: UnsafeMutableRawPointer?
         while let fmtPtr = av_muxer_iterate(&state) {
