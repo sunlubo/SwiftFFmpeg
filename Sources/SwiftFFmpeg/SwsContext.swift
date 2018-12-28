@@ -10,33 +10,13 @@ import CFFmpeg
 // MARK: - SwsContext
 
 public final class SwsContext {
-    public struct Flag: OptionSet {
-        public let rawValue: Int32
+    public static let `class` = AVClass(cClassPtr: sws_get_class())
 
-        public init(rawValue: Int32) {
-            self.rawValue = rawValue
-        }
-
-        public static let fastBilinear = Flag(rawValue: SWS_FAST_BILINEAR)
-        public static let bilinear = Flag(rawValue: SWS_BILINEAR)
-        public static let bicubic = Flag(rawValue: SWS_BICUBIC)
-        public static let x = Flag(rawValue: SWS_X)
-        public static let point = Flag(rawValue: SWS_POINT)
-        public static let area = Flag(rawValue: SWS_AREA)
-        public static let bicublin = Flag(rawValue: SWS_BICUBLIN)
-        public static let gauss = Flag(rawValue: SWS_GAUSS)
-        public static let sinc = Flag(rawValue: SWS_SINC)
-        public static let lanczos = Flag(rawValue: SWS_LANCZOS)
-        public static let spLine = Flag(rawValue: SWS_SPLINE)
-    }
-    
-    public static let `class` = AVClass(cObjPtr: sws_get_class())
-
-    internal let ctx: OpaquePointer
+    let cContext: OpaquePointer
 
     /// Allocate an empty `SwsContext`.
     public init() {
-        ctx = sws_alloc_context()
+        cContext = sws_alloc_context()
     }
 
     /// Allocate and return an `SwsContext`.
@@ -63,7 +43,7 @@ public final class SwsContext {
         ) else {
             return nil
         }
-        ctx = ptr
+        cContext = ptr
     }
 
     /// Scale the image slice in srcSlice and put the resulting scaled slice in the image in dst.
@@ -91,7 +71,7 @@ public final class SwsContext {
         dst: UnsafePointer<UnsafeMutablePointer<UInt8>?>,
         dstStride: UnsafePointer<Int32>
     ) -> Int {
-        return Int(sws_scale(ctx, src, srcStride, Int32(srcSliceY), Int32(srcSliceH), dst, dstStride))
+        return Int(sws_scale(cContext, src, srcStride, Int32(srcSliceY), Int32(srcSliceH), dst, dstStride))
     }
 
     /// Returns a Boolean value indicating whether the pixel format is a supported input format.
@@ -119,13 +99,36 @@ public final class SwsContext {
     }
 
     deinit {
-        sws_freeContext(ctx)
+        sws_freeContext(cContext)
+    }
+}
+
+extension SwsContext {
+
+    public struct Flag: OptionSet {
+        public static let fastBilinear = Flag(rawValue: SWS_FAST_BILINEAR)
+        public static let bilinear = Flag(rawValue: SWS_BILINEAR)
+        public static let bicubic = Flag(rawValue: SWS_BICUBIC)
+        public static let x = Flag(rawValue: SWS_X)
+        public static let point = Flag(rawValue: SWS_POINT)
+        public static let area = Flag(rawValue: SWS_AREA)
+        public static let bicublin = Flag(rawValue: SWS_BICUBLIN)
+        public static let gauss = Flag(rawValue: SWS_GAUSS)
+        public static let sinc = Flag(rawValue: SWS_SINC)
+        public static let lanczos = Flag(rawValue: SWS_LANCZOS)
+        public static let spLine = Flag(rawValue: SWS_SPLINE)
+
+        public let rawValue: Int32
+
+        public init(rawValue: Int32) {
+            self.rawValue = rawValue
+        }
     }
 }
 
 extension SwsContext: AVOptionAccessor {
-    
+
     public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T {
-        return try body(UnsafeMutableRawPointer(ctx))
+        return try body(UnsafeMutableRawPointer(cContext))
     }
 }

@@ -25,6 +25,7 @@ extension AVRational {
 }
 
 extension AVRational: Equatable {
+
     public static func == (lhs: AVRational, rhs: AVRational) -> Bool {
         return av_cmp_q(lhs, rhs) == 0
     }
@@ -46,7 +47,6 @@ extension AVRounding {
     public static let up = AV_ROUND_UP
     /// Round to nearest and halfway cases away from zero.
     public static let nearInf = AV_ROUND_NEAR_INF
-
     /// Flag telling rescaling functions to pass `INT64_MIN`/`MAX` through
     /// unchanged, avoiding special cases for #AV_NOPTS_VALUE.
     ///

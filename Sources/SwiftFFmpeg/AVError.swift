@@ -10,21 +10,7 @@ import CFFmpeg
 private let AVERROR = swift_AVERROR
 private let AVUNERROR = swift_AVUNERROR
 
-public struct AVError: Error, Equatable, CustomStringConvertible {
-    public let code: Int32
-
-    public init(code: Int32) {
-        self.code = code
-    }
-
-    public var description: String {
-        let buf = UnsafeMutablePointer<Int8>.allocate(capacity: AV_ERROR_MAX_STRING_SIZE)
-        buf.initialize(to: 0)
-        defer { buf.deallocate() }
-
-        return String(cString: av_make_error_string(buf, AV_ERROR_MAX_STRING_SIZE, code))
-    }
-
+public struct AVError: Error, Equatable {
     /// Resource temporarily unavailable
     public static let EAGAIN = AVError(code: AVERROR(Darwin.EAGAIN))
     /// Invalid argument
@@ -83,9 +69,25 @@ public struct AVError: Error, Equatable, CustomStringConvertible {
     public static let HTTP_NOT_FOUND = AVError(code: swift_AVERROR_HTTP_NOT_FOUND)
     public static let HTTP_OTHER_4XX = AVError(code: swift_AVERROR_HTTP_OTHER_4XX)
     public static let HTTP_SERVER_ERROR = AVError(code: swift_AVERROR_HTTP_SERVER_ERROR)
+
+    public let code: Int32
+
+    public init(code: Int32) {
+        self.code = code
+    }
 }
 
-internal func throwIfFail(_ code: Int32) throws {
+extension AVError: CustomStringConvertible {
+
+    public var description: String {
+        let buf = UnsafeMutablePointer<Int8>.allocate(capacity: AV_ERROR_MAX_STRING_SIZE)
+        buf.initialize(to: 0)
+        defer { buf.deallocate() }
+        return String(cString: av_make_error_string(buf, AV_ERROR_MAX_STRING_SIZE, code))
+    }
+}
+
+func throwIfFail(_ code: Int32) throws {
     if code < 0 {
         throw AVError(code: code)
     }

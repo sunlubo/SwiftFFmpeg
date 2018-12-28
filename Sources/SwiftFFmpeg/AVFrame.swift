@@ -9,7 +9,7 @@ import CFFmpeg
 
 // MARK: - AVFrame
 
-internal typealias CAVFrame = CFFmpeg.AVFrame
+typealias CAVFrame = CFFmpeg.AVFrame
 
 /// This structure describes decoded (raw) audio or video data.
 ///
@@ -30,15 +30,15 @@ internal typealias CAVFrame = CFFmpeg.AVFrame
 /// Fields can be accessed through `AVOptions`, the name string used, matches the
 /// C structure field name for fields accessible through `AVOptions`.
 public final class AVFrame {
-    public static let `class` = AVClass(cObjPtr: avcodec_get_frame_class())
-    
-    internal let framePtr: UnsafeMutablePointer<CAVFrame>
-    internal var frame: CAVFrame { return framePtr.pointee }
+    public static let `class` = AVClass(cClassPtr: avcodec_get_frame_class())
+
+    let cFramePtr: UnsafeMutablePointer<CAVFrame>
+    var cFrame: CAVFrame { return cFramePtr.pointee }
 
     public var mediaType: AVMediaType = .unknown
 
-    internal init(framePtr: UnsafeMutablePointer<CAVFrame>) {
-        self.framePtr = framePtr
+    init(cFramePtr: UnsafeMutablePointer<CAVFrame>) {
+        self.cFramePtr = cFramePtr
     }
 
     /// Creates an `AVFrame` and set its fields to default values.
@@ -49,15 +49,15 @@ public final class AVFrame {
         guard let framePtr = av_frame_alloc() else {
             fatalError("av_frame_alloc")
         }
-        self.framePtr = framePtr
+        self.cFramePtr = framePtr
     }
 
     /// Pointer to the picture/channel planes.
     public var data: [UnsafeMutablePointer<UInt8>?] {
         get {
             return [
-                frame.data.0, frame.data.1, frame.data.2, frame.data.3,
-                frame.data.4, frame.data.5, frame.data.6, frame.data.7
+                cFrame.data.0, cFrame.data.1, cFrame.data.2, cFrame.data.3,
+                cFrame.data.4, cFrame.data.5, cFrame.data.6, cFrame.data.7
             ]
         }
         set {
@@ -65,7 +65,7 @@ public final class AVFrame {
             while list.count < AV_NUM_DATA_POINTERS {
                 list.append(nil)
             }
-            framePtr.pointee.data = (
+            cFramePtr.pointee.data = (
                 list[0], list[1], list[2], list[3],
                 list[4], list[5], list[6], list[7]
             )
@@ -87,8 +87,8 @@ public final class AVFrame {
     public var linesize: [Int] {
         get {
             let list = [
-                frame.linesize.0, frame.linesize.1, frame.linesize.2, frame.linesize.3,
-                frame.linesize.4, frame.linesize.5, frame.linesize.6, frame.linesize.7
+                cFrame.linesize.0, cFrame.linesize.1, cFrame.linesize.2, cFrame.linesize.3,
+                cFrame.linesize.4, cFrame.linesize.5, cFrame.linesize.6, cFrame.linesize.7
             ]
             return list.map({ Int($0) })
         }
@@ -97,7 +97,7 @@ public final class AVFrame {
             while list.count < AV_NUM_DATA_POINTERS {
                 list.append(0)
             }
-            framePtr.pointee.linesize = (
+            cFramePtr.pointee.linesize = (
                 list[0], list[1], list[2], list[3],
                 list[4], list[5], list[6], list[7]
             )
@@ -106,25 +106,25 @@ public final class AVFrame {
 
     /// Presentation timestamp in timebase units (time when frame should be shown to user).
     public var pts: Int64 {
-        get { return frame.pts }
-        set { framePtr.pointee.pts = newValue }
+        get { return cFrame.pts }
+        set { cFramePtr.pointee.pts = newValue }
     }
 
     /// DTS copied from the `AVPacket` that triggered returning this frame. (if frame threading isn't used)
     /// This is also the Presentation time of this `AVFrame` calculated from only `AVPacket.dts` values
     /// without pts values.
     public var dts: Int64 {
-        return frame.pkt_dts
+        return cFrame.pkt_dts
     }
 
     /// Picture number in bitstream order.
     public var codedPictureNumber: Int {
-        return Int(frame.coded_picture_number)
+        return Int(cFrame.coded_picture_number)
     }
 
     /// Picture number in display order.
     public var displayPictureNumber: Int {
-        return Int(frame.display_picture_number)
+        return Int(cFrame.display_picture_number)
     }
 
     /// `AVBuffer` references backing the data for this frame.
@@ -139,10 +139,10 @@ public final class AVFrame {
     /// `AVBuffer` are stored in the `extendedBuf` array.
     public var buf: [AVBuffer?] {
         let list = [
-            frame.buf.0, frame.buf.1, frame.buf.2, frame.buf.3,
-            frame.buf.4, frame.buf.5, frame.buf.6, frame.buf.7
+            cFrame.buf.0, cFrame.buf.1, cFrame.buf.2, cFrame.buf.3,
+            cFrame.buf.4, cFrame.buf.5, cFrame.buf.6, cFrame.buf.7
         ]
-        return list.map({ $0 != nil ? AVBuffer(bufPtr: $0!) : nil })
+        return list.map({ $0 != nil ? AVBuffer(cBufferPtr: $0!) : nil })
     }
 
     /// For planar audio which requires more than `AV_NUM_DATA_POINTERS` `AVBuffer`,
@@ -153,14 +153,14 @@ public final class AVFrame {
     public var extendedBuf: [AVBuffer] {
         var list = [AVBuffer]()
         for i in 0..<extendedBufCount {
-            list.append(AVBuffer(bufPtr: frame.extended_buf[i]!))
+            list.append(AVBuffer(cBufferPtr: cFrame.extended_buf[i]!))
         }
         return list
     }
 
     /// The number of elements in `extendedBuf`.
     public var extendedBufCount: Int {
-        return Int(frame.nb_extended_buf)
+        return Int(cFrame.nb_extended_buf)
     }
 
     /// The frame timestamp estimated using various heuristics, in stream time base.
@@ -168,7 +168,7 @@ public final class AVFrame {
     /// - encoding: Unused.
     /// - decoding: Set by libavcodec, read by user.
     public var bestEffortTimestamp: Int64 {
-        return frame.best_effort_timestamp
+        return cFrame.best_effort_timestamp
     }
 
     /// Reordered pos from the last `AVPacket` that has been input into the decoder.
@@ -176,7 +176,7 @@ public final class AVFrame {
     /// - encoding: Unused.
     /// - decoding: Set by libavcodec, read by user.
     public var pktPos: Int64 {
-        return frame.pkt_pos
+        return cFrame.pkt_pos
     }
 
     /// Duration of the corresponding packet, expressed in `AVStream.timebase` units, 0 if unknown.
@@ -184,7 +184,7 @@ public final class AVFrame {
     /// - encoding: Unused.
     /// - decoding: Set by libavcodec, read by user.
     public var pktDuration: Int64 {
-        return frame.pkt_duration
+        return cFrame.pkt_duration
     }
 
     /// Size of the corresponding packet containing the compressed frame. It is set to a negative value if unknown.
@@ -192,7 +192,7 @@ public final class AVFrame {
     /// - encoding: Unused.
     /// - decoding: Set by libavcodec, read by user.
     public var pktSize: Int {
-        return Int(frame.pkt_size)
+        return Int(cFrame.pkt_size)
     }
 
     /// The metadata of the frame.
@@ -203,18 +203,18 @@ public final class AVFrame {
         get {
             var dict = [String: String]()
             var tag: UnsafeMutablePointer<AVDictionaryEntry>?
-            while let next = av_dict_get(frame.metadata, "", tag, AV_DICT_IGNORE_SUFFIX) {
+            while let next = av_dict_get(cFrame.metadata, "", tag, AV_DICT_IGNORE_SUFFIX) {
                 dict[String(cString: next.pointee.key)] = String(cString: next.pointee.value)
                 tag = next
             }
             return dict
         }
         set {
-            var ptr = framePtr.pointee.metadata
+            var ptr = cFramePtr.pointee.metadata
             for (k, v) in newValue {
                 av_dict_set(&ptr, k, v, AVOptionSearchFlag.children.rawValue)
             }
-            framePtr.pointee.metadata = ptr
+            cFramePtr.pointee.metadata = ptr
         }
     }
 
@@ -228,12 +228,12 @@ public final class AVFrame {
     ///           function, or undefined behavior will occur.
     /// - Throws: AVError
     public func ref(dst: AVFrame) throws {
-        try throwIfFail(av_frame_ref(dst.framePtr, framePtr))
+        try throwIfFail(av_frame_ref(dst.cFramePtr, cFramePtr))
     }
 
     /// Unreference all the buffers referenced by frame and reset the frame fields.
     public func unref() {
-        av_frame_unref(framePtr)
+        av_frame_unref(cFramePtr)
     }
 
     /// Move everything contained in src to dst and reset src.
@@ -241,7 +241,7 @@ public final class AVFrame {
     /// - Warning: dst is not unreferenced, but directly overwritten without reading or deallocating its contents.
     ///   Call `dst.unref()` manually before calling this function to ensure that no memory is leaked.
     public func moveRef(to dst: AVFrame) {
-        av_frame_move_ref(dst.framePtr, framePtr)
+        av_frame_move_ref(dst.cFramePtr, cFramePtr)
     }
 
     /// Create a new frame that references the same data as src.
@@ -250,8 +250,8 @@ public final class AVFrame {
     ///
     /// - Returns: newly created `AVFrame` on success, nil on error.
     public func clone() -> AVFrame? {
-        if let ptr = av_frame_clone(framePtr) {
-            return AVFrame(framePtr: ptr)
+        if let ptr = av_frame_clone(cFramePtr) {
+            return AVFrame(cFramePtr: ptr)
         }
         return nil
     }
@@ -274,7 +274,7 @@ public final class AVFrame {
     ///   for the current CPU. It is highly recommended to pass 0 here unless you know what you are doing.
     /// - Throws: AVError
     public func allocBuffer(align: Int = 0) throws {
-        try throwIfFail(av_frame_get_buffer(framePtr, Int32(align)))
+        try throwIfFail(av_frame_get_buffer(cFramePtr, Int32(align)))
     }
 
     /// Check if the frame data is writable.
@@ -282,7 +282,7 @@ public final class AVFrame {
     /// - Returns: True if the frame data is writable (which is true if and only if each of the underlying buffers has
     ///   only one reference, namely the one stored in this frame).
     public func isWritable() -> Bool {
-        return av_frame_is_writable(framePtr) > 0
+        return av_frame_is_writable(cFramePtr) > 0
     }
 
     /// Ensure that the frame data is writable, avoiding data copy if possible.
@@ -291,11 +291,11 @@ public final class AVFrame {
     ///
     /// - Throws: AVError
     public func makeWritable() throws {
-        try throwIfFail(av_frame_make_writable(framePtr))
+        try throwIfFail(av_frame_make_writable(cFramePtr))
     }
 
     deinit {
-        var ptr: UnsafeMutablePointer<CAVFrame>? = framePtr
+        var ptr: UnsafeMutablePointer<CAVFrame>? = cFramePtr
         av_frame_free(&ptr)
     }
 }
@@ -306,42 +306,42 @@ extension AVFrame {
 
     /// Pixel format.
     public var pixFmt: AVPixelFormat {
-        get { return AVPixelFormat(frame.format) }
-        set { framePtr.pointee.format = newValue.rawValue }
+        get { return AVPixelFormat(cFrame.format) }
+        set { cFramePtr.pointee.format = newValue.rawValue }
     }
 
     /// Picture width.
     public var width: Int {
-        get { return Int(frame.width) }
-        set { framePtr.pointee.width = Int32(newValue) }
+        get { return Int(cFrame.width) }
+        set { cFramePtr.pointee.width = Int32(newValue) }
     }
 
     /// Picture height.
     public var height: Int {
-        get { return Int(frame.height) }
-        set { framePtr.pointee.height = Int32(newValue) }
+        get { return Int(cFrame.height) }
+        set { cFramePtr.pointee.height = Int32(newValue) }
     }
 
     /// A Boolean value indicating whether this frame is key frame.
     public var isKeyFrame: Bool {
-        return frame.key_frame == 1
+        return cFrame.key_frame == 1
     }
 
     /// The picture type of the frame.
     public var pictType: AVPictureType {
-        return frame.pict_type
+        return cFrame.pict_type
     }
 
     /// The sample aspect ratio for the video frame, 0/1 if unknown/unspecified.
     public var sampleAspectRatio: AVRational {
-        get { return frame.sample_aspect_ratio }
-        set { framePtr.pointee.sample_aspect_ratio = newValue }
+        get { return cFrame.sample_aspect_ratio }
+        set { cFramePtr.pointee.sample_aspect_ratio = newValue }
     }
 
     /// When decoding, this signals how much the picture must be delayed.
     /// ```extra_delay = repeat_pict / (2*fps)```
     public var repeatPicture: Int {
-        return Int(frame.repeat_pict)
+        return Int(cFrame.repeat_pict)
     }
 }
 
@@ -351,26 +351,26 @@ extension AVFrame {
 
     /// Sample format.
     public var sampleFmt: AVSampleFormat {
-        get { return AVSampleFormat(frame.format) }
-        set { framePtr.pointee.format = newValue.rawValue }
+        get { return AVSampleFormat(cFrame.format) }
+        set { cFramePtr.pointee.format = newValue.rawValue }
     }
 
     /// The sample rate of the audio data.
     public var sampleRate: Int {
-        get { return Int(frame.sample_rate) }
-        set { framePtr.pointee.sample_rate = Int32(newValue) }
+        get { return Int(cFrame.sample_rate) }
+        set { cFramePtr.pointee.sample_rate = Int32(newValue) }
     }
 
     /// The channel layout of the audio data.
     public var channelLayout: AVChannelLayout {
-        get { return AVChannelLayout(rawValue: frame.channel_layout) }
-        set { framePtr.pointee.channel_layout = newValue.rawValue }
+        get { return AVChannelLayout(rawValue: cFrame.channel_layout) }
+        set { cFramePtr.pointee.channel_layout = newValue.rawValue }
     }
 
     /// The number of audio samples (per channel) described by this frame.
     public var sampleCount: Int {
-        get { return Int(frame.nb_samples) }
-        set { framePtr.pointee.nb_samples = Int32(newValue) }
+        get { return Int(cFrame.nb_samples) }
+        set { cFramePtr.pointee.nb_samples = Int32(newValue) }
     }
 
     /// The number of audio channels.
@@ -378,7 +378,7 @@ extension AVFrame {
     /// - encoding: Unused.
     /// - decoding: Read by user.
     public var channelCount: Int {
-        get { return Int(frame.channels) }
-        set { framePtr.pointee.channels = Int32(newValue) }
+        get { return Int(cFrame.channels) }
+        set { cFramePtr.pointee.channels = Int32(newValue) }
     }
 }

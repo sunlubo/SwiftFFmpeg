@@ -7,17 +7,17 @@
 
 import CFFmpeg
 
-internal typealias CAVBuffer = CFFmpeg.AVBufferRef
+typealias CAVBuffer = CFFmpeg.AVBufferRef
 
 public final class AVBuffer {
-    internal var bufPtr: UnsafeMutablePointer<CAVBuffer>?
-    internal var buf: CAVBuffer {
-        precondition(bufPtr != nil, "buffer has been freed")
-        return bufPtr!.pointee
+    var cBufferPtr: UnsafeMutablePointer<CAVBuffer>?
+    var cBuffer: CAVBuffer {
+        precondition(cBufferPtr != nil, "buffer has been freed")
+        return cBufferPtr!.pointee
     }
 
-    internal init(bufPtr: UnsafeMutablePointer<CAVBuffer>) {
-        self.bufPtr = bufPtr
+    init(cBufferPtr: UnsafeMutablePointer<CAVBuffer>) {
+        self.cBufferPtr = cBufferPtr
     }
 
     /// Create an `AVBuffer` of the given size.
@@ -25,22 +25,22 @@ public final class AVBuffer {
         guard let bufPtr = av_buffer_alloc(Int32(size)) else {
             return nil
         }
-        self.bufPtr = bufPtr
+        self.cBufferPtr = bufPtr
     }
 
     /// The data buffer.
     public var data: UnsafeMutablePointer<UInt8> {
-        return buf.data
+        return cBuffer.data
     }
 
     /// Size of data in bytes.
     public var size: Int {
-        return Int(buf.size)
+        return Int(cBuffer.size)
     }
 
     public var refCount: Int {
-        precondition(bufPtr != nil, "buffer has been freed")
-        return Int(av_buffer_get_ref_count(bufPtr))
+        precondition(cBufferPtr != nil, "buffer has been freed")
+        return Int(av_buffer_get_ref_count(cBufferPtr))
     }
 
     /// Reallocate a given buffer.
@@ -48,16 +48,16 @@ public final class AVBuffer {
     /// - Parameter size: required new buffer size
     /// - Throws: AVError
     public func realloc(size: Int) throws {
-        precondition(bufPtr != nil, "buffer has been freed")
-        try throwIfFail(av_buffer_realloc(&bufPtr, Int32(size)))
+        precondition(cBufferPtr != nil, "buffer has been freed")
+        try throwIfFail(av_buffer_realloc(&cBufferPtr, Int32(size)))
     }
 
     /// Check if the buffer is writable.
     ///
     /// - Returns: True if and only if this is the only reference to the underlying buffer.
     public func isWritable() -> Bool {
-        precondition(bufPtr != nil, "buffer has been freed")
-        return av_buffer_is_writable(bufPtr) > 0
+        precondition(cBufferPtr != nil, "buffer has been freed")
+        return av_buffer_is_writable(cBufferPtr) > 0
     }
 
     /// Create a writable reference from a given buffer reference, avoiding data copy if possible.
@@ -66,20 +66,20 @@ public final class AVBuffer {
     ///
     /// - Throws: AVError
     public func makeWritable() throws {
-        precondition(bufPtr != nil, "buffer has been freed")
-        try throwIfFail(av_buffer_make_writable(&bufPtr))
+        precondition(cBufferPtr != nil, "buffer has been freed")
+        try throwIfFail(av_buffer_make_writable(&cBufferPtr))
     }
 
     /// Create a new reference to an `AVBuffer`.
     ///
     /// - Returns: a new `AVBuffer` referring to the same underlying buffer or nil on failure.
     public func ref() -> AVBuffer? {
-        precondition(bufPtr != nil, "buffer has been freed")
-        return AVBuffer(bufPtr: av_buffer_ref(bufPtr))
+        precondition(cBufferPtr != nil, "buffer has been freed")
+        return AVBuffer(cBufferPtr: av_buffer_ref(cBufferPtr))
     }
 
     /// Free a given reference and automatically free the buffer if there are no more references to it.
     public func unref() {
-        av_buffer_unref(&bufPtr)
+        av_buffer_unref(&cBufferPtr)
     }
 }

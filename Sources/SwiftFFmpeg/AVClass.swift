@@ -9,7 +9,7 @@ import CFFmpeg
 
 public typealias AVClassCategory = CFFmpeg.AVClassCategory
 
-extension AVClassCategory: CustomStringConvertible {
+extension AVClassCategory {
     public static let na = AV_CLASS_CATEGORY_NA
     public static let input = AV_CLASS_CATEGORY_INPUT
     public static let output = AV_CLASS_CATEGORY_OUTPUT
@@ -28,6 +28,9 @@ extension AVClassCategory: CustomStringConvertible {
     public static let deviceOutput = AV_CLASS_CATEGORY_DEVICE_OUTPUT
     public static let deviceInput = AV_CLASS_CATEGORY_DEVICE_INPUT
     public static let nb = AV_CLASS_CATEGORY_NB
+}
+
+extension AVClassCategory: CustomStringConvertible {
 
     public var description: String {
         switch self {
@@ -85,12 +88,12 @@ public struct AVClass {
     /// This is only set if the category is equal for all objects using this class.
     public let category: AVClassCategory
 
-    init(cObjPtr: UnsafePointer<CAVClass>) {
-        self.name = String(cString: cObjPtr.pointee.class_name)
-        self.category = cObjPtr.pointee.category
+    init(cClassPtr: UnsafePointer<CAVClass>) {
+        self.name = String(cString: cClassPtr.pointee.class_name)
+        self.category = cClassPtr.pointee.category
 
         var options = [AVOption]()
-        var opt = cObjPtr.pointee.option!
+        var opt = cClassPtr.pointee.option!
         while opt.pointee.name != nil {
             options.append(AVOption(cOption: opt.pointee))
             opt = opt.advanced(by: 1)

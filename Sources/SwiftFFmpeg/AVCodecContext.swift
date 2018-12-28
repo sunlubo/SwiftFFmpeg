@@ -8,35 +8,204 @@
 import CFFmpeg
 import Darwin.C
 
-// MARK: - AVCodecContext
-
-internal typealias CAVCodecContext = CFFmpeg.AVCodecContext
+typealias CAVCodecContext = CFFmpeg.AVCodecContext
 
 public final class AVCodecContext {
+    public static let `class` = AVClass(cClassPtr: avcodec_get_class())
+
+    public let codec: AVCodec
+
+    let cContextPtr: UnsafeMutablePointer<CAVCodecContext>
+    var cContext: CAVCodecContext { return cContextPtr.pointee }
+
+    /// Creates an `AVCodecContext` from the given codec.
+    ///
+    /// - Parameter codec: codec
+    public init?(codec: AVCodec) {
+        guard let ctxPtr = avcodec_alloc_context3(codec.cCodecPtr) else {
+            return nil
+        }
+        self.codec = codec
+        self.cContextPtr = ctxPtr
+    }
+
+    /// The codec's media type.
+    public var mediaType: AVMediaType {
+        return cContext.codec_type
+    }
+
+    /// The codec's id.
+    public var codecId: AVCodecID {
+        get { return cContext.codec_id }
+        set { cContextPtr.pointee.codec_id = newValue }
+    }
+
+    /// The codec's tag.
+    public var codecTag: UInt32 {
+        get { return cContext.codec_tag }
+        set { cContextPtr.pointee.codec_tag = newValue }
+    }
+
+    /// The average bitrate.
+    ///
+    /// - encoding: Set by user, unused for constant quantizer encoding.
+    /// - decoding: Set by user, may be overwritten by libavcodec if this info is available in the stream.
+    public var bitRate: Int {
+        get { return Int(cContext.bit_rate) }
+        set { cContextPtr.pointee.bit_rate = Int64(newValue) }
+    }
+
+    /// - encoding: Set by user.
+    /// - decoding: Set by user.
+    public var flags: AVCodecContext.Flag {
+        get { return Flag(rawValue: cContext.flags) }
+        set { cContextPtr.pointee.flags = newValue.rawValue }
+    }
+
+    /// - encoding: Set by user.
+    /// - decoding: Set by user.
+    public var flags2: AVCodecContext.Flag2 {
+        get { return Flag2(rawValue: cContext.flags2) }
+        set { cContextPtr.pointee.flags2 = newValue.rawValue }
+    }
+
+    /// This is the fundamental unit of time (in seconds) in terms of which frame timestamps are represented.
+    /// For fixed-fps content, timebase should be 1/framerate and timestamp increments should be identically 1.
+    /// This often, but not always is the inverse of the frame rate or field rate for video.
+    /// 1/time_base is not the average frame rate if the frame rate is not constant.
+    ///
+    /// - encoding: Must be set by user.
+    /// - decoding: The use of this field for decoding is deprecated. Use framerate instead.
+    public var timebase: AVRational {
+        get { return cContext.time_base }
+        set { cContextPtr.pointee.time_base = newValue }
+    }
+
+    /// Frame counter.
+    ///
+    /// - encoding: Total number of frames passed to the encoder so far.
+    /// - decoding: Total number of frames returned from the decoder so far.
+    public var frameNumber: Int {
+        return Int(cContext.frame_number)
+    }
+
+    /// A Boolean value indicating whether the codec is open.
+    public var isOpen: Bool {
+        return avcodec_is_open(cContextPtr) > 0
+    }
+
+    /// Fill the codec context based on the values from the supplied codec parameters.
+    ///
+    /// Any allocated fields in codec that have a corresponding field in par are freed and replaced with duplicates
+    /// of the corresponding field in par. Fields in codec that do not have a counterpart in par are not touched.
+    ///
+    /// - Parameter params: codec parameters
+    /// - Throws: AVError
+    public func setParameters(_ params: AVCodecParameters) throws {
+        try throwIfFail(avcodec_parameters_to_context(cContextPtr, params.cParametersPtr))
+    }
+
+    /// Initialize the `AVCodecContext`.
+    ///
+    /// - Parameters:
+    ///   - options: A dictionary filled with `AVCodecContext` and codec-private options.
+    /// - Throws: AVError
+    public func openCodec(options: [String: String]? = nil) throws {
+        var pm: OpaquePointer?
+        defer { av_dict_free(&pm) }
+        if let options = options {
+            for (k, v) in options {
+                av_dict_set(&pm, k, v, 0)
+            }
+        }
+
+        try throwIfFail(avcodec_open2(cContextPtr, codec.cCodecPtr, &pm))
+
+        dumpUnrecognizedOptions(pm)
+    }
+
+    /// Supply raw packet data as input to a decoder.
+    ///
+    /// - Parameter packet: The input `AVPacket`. Usually, this will be a single video frame, or several complete
+    ///   audio frames. It can be `nil` (or an `AVPacket` with data set to `nil` and size set to 0); in this case,
+    ///   it is considered a flush packet, which signals the end of the stream. Sending the first flush packet will
+    ///   return success. Subsequent ones are unnecessary and will return `AVError.EOF`. If the decoder still has
+    ///   frames buffered, it will return them after sending a flush packet.
+    /// - Throws: AVError
+    public func sendPacket(_ packet: AVPacket?) throws {
+        try throwIfFail(avcodec_send_packet(cContextPtr, packet?.cPacketPtr))
+    }
+
+    /// Return decoded output data from a decoder.
+    ///
+    /// - Parameter frame: This will be set to a reference-counted video or audio frame (depending on the decoder type)
+    ///   allocated by the decoder.
+    /// - Throws:
+    ///     - `AVError.EAGAIN` if output is not available in this state - user must try to send new input
+    ///     - `AVError.EOF` if the decoder has been fully flushed, and there will be no more output frames
+    ///     - `AVError.EINVAL` if codec not opened, or it is an encoder
+    ///     - legitimate decoding errors
+    public func receiveFrame(_ frame: AVFrame) throws {
+        try throwIfFail(avcodec_receive_frame(cContextPtr, frame.cFramePtr))
+    }
+
+    /// Supply a raw video or audio frame to the encoder.
+    ///
+    /// - Parameter frame: `AVFrame` containing the raw audio or video frame to be encoded.
+    ///   It can be nil, in which case it is considered a flush packet. This signals the end of the stream.
+    ///   If the encoder still has packets buffered, it will return them after this call. Once flushing mode has been
+    ///   entered, additional flush packets are ignored, and sending frames will return `AVError.EOF`.
+    /// - Throws:
+    ///     - `AVError.EAGAIN`: input is not accepted in the current state - user must read output with `receivePacket`.
+    ///       (once all output is read, the packet should be resent, and the call will not fail with `AVError.EAGAIN`).
+    ///     - `AVError.EOF` if the encoder has been flushed, and no new frames can be sent to it
+    ///     - `AVError.EINVAL` if codec not opened, refcounted_frames not set, it is a decoder, or requires flush
+    ///     - `AVError.ENOMEM` if failed to add packet to internal queue, or similar
+    ///     - legitimate decoding errors
+    public func sendFrame(_ frame: AVFrame?) throws {
+        try throwIfFail(avcodec_send_frame(cContextPtr, frame?.cFramePtr))
+    }
+
+    /// Read encoded data from the encoder.
+    ///
+    /// - Parameter packet: This will be set to a reference-counted packet allocated by the encoder.
+    /// - Throws:
+    ///     - `AVError.EAGAIN` if output is not available in the current state - user must try to send input
+    ///     - `AVError.EOF` if the encoder has been fully flushed, and there will be no more output packets
+    ///     - `AVError.EINVAL` if codec not opened, or it is an encoder
+    ///     - legitimate decoding errors
+    public func receivePacket(_ packet: AVPacket) throws {
+        try throwIfFail(avcodec_receive_packet(cContextPtr, packet.cPacketPtr))
+    }
+
+    deinit {
+        var ps: UnsafeMutablePointer<CAVCodecContext>? = cContextPtr
+        avcodec_free_context(&ps)
+    }
+}
+
+// MARK: - Flag
+
+extension AVCodecContext {
+
     /// Encoding support
     ///
     /// These flags can be passed in `flags` before initialization.
     public struct Flag: OptionSet {
+        /// Place global headers in extradata instead of every keyframe.
+        public static let globalHeader = Flag(rawValue: AV_CODEC_FLAG_GLOBAL_HEADER)
+
         public let rawValue: Int32
 
         public init(rawValue: Int32) {
             self.rawValue = rawValue
         }
-
-        /// Place global headers in extradata instead of every keyframe.
-        public static let globalHeader = Flag(rawValue: AV_CODEC_FLAG_GLOBAL_HEADER)
     }
 
     /// Encoding support
     ///
     /// These flags can be passed in `flags2` before initialization.
     public struct Flag2: OptionSet {
-        public let rawValue: Int32
-
-        public init(rawValue: Int32) {
-            self.rawValue = rawValue
-        }
-
         /// Allow non spec compliant speedup tricks.
         public static let fast = Flag2(rawValue: AV_CODEC_FLAG2_FAST)
         /// Skip bitstream encoding.
@@ -55,178 +224,12 @@ public final class AVCodecContext {
         public static let skipManual = Flag2(rawValue: AV_CODEC_FLAG2_SKIP_MANUAL)
         /// Do not reset ASS ReadOrder field on flush (subtitles decoding).
         public static let roFlushNoop = Flag2(rawValue: AV_CODEC_FLAG2_RO_FLUSH_NOOP)
-    }
-    
-    public static let `class` = AVClass(cObjPtr: avcodec_get_class())
 
-    public let codec: AVCodec
+        public let rawValue: Int32
 
-    internal let ctxPtr: UnsafeMutablePointer<CAVCodecContext>
-    internal var ctx: CAVCodecContext { return ctxPtr.pointee }
-
-    /// Creates an `AVCodecContext` from the given codec.
-    ///
-    /// - Parameter codec: codec
-    public init?(codec: AVCodec) {
-        guard let ctxPtr = avcodec_alloc_context3(codec.codecPtr) else {
-            return nil
+        public init(rawValue: Int32) {
+            self.rawValue = rawValue
         }
-        self.codec = codec
-        self.ctxPtr = ctxPtr
-    }
-
-    /// The codec's media type.
-    public var mediaType: AVMediaType {
-        return ctx.codec_type
-    }
-
-    /// The codec's id.
-    public var codecId: AVCodecID {
-        get { return ctx.codec_id }
-        set { ctxPtr.pointee.codec_id = newValue }
-    }
-
-    /// The codec's tag.
-    public var codecTag: UInt32 {
-        get { return ctx.codec_tag }
-        set { ctxPtr.pointee.codec_tag = newValue }
-    }
-
-    /// The average bitrate.
-    ///
-    /// - encoding: Set by user; unused for constant quantizer encoding.
-    /// - decoding: Set by user, may be overwritten by libavcodec if this info is available in the stream.
-    public var bitRate: Int {
-        get { return Int(ctx.bit_rate) }
-        set { ctxPtr.pointee.bit_rate = Int64(newValue) }
-    }
-
-    /// - encoding: Set by user.
-    /// - decoding: Set by user.
-    public var flags: AVCodecContext.Flag {
-        get { return Flag(rawValue: ctx.flags) }
-        set { ctxPtr.pointee.flags = newValue.rawValue }
-    }
-
-    /// - encoding: Set by user.
-    /// - decoding: Set by user.
-    public var flags2: AVCodecContext.Flag2 {
-        get { return Flag2(rawValue: ctx.flags2) }
-        set { ctxPtr.pointee.flags2 = newValue.rawValue }
-    }
-
-    /// This is the fundamental unit of time (in seconds) in terms of which frame timestamps are represented.
-    /// For fixed-fps content, timebase should be 1/framerate and timestamp increments should be identically 1.
-    /// This often, but not always is the inverse of the frame rate or field rate for video.
-    /// 1/time_base is not the average frame rate if the frame rate is not constant.
-    ///
-    /// - encoding: Must be set by user.
-    /// - decoding: The use of this field for decoding is deprecated. Use framerate instead.
-    public var timebase: AVRational {
-        get { return ctx.time_base }
-        set { ctxPtr.pointee.time_base = newValue }
-    }
-
-    /// Frame counter.
-    ///
-    /// - encoding: Total number of frames passed to the encoder so far.
-    /// - decoding: Total number of frames returned from the decoder so far.
-    public var frameNumber: Int {
-        return Int(ctx.frame_number)
-    }
-
-    /// A Boolean value indicating whether the codec is open.
-    public var isOpen: Bool {
-        return avcodec_is_open(ctxPtr) > 0
-    }
-
-    /// Fill the codec context based on the values from the supplied codec parameters.
-    ///
-    /// Any allocated fields in codec that have a corresponding field in par are freed and replaced with duplicates
-    /// of the corresponding field in par. Fields in codec that do not have a counterpart in par are not touched.
-    ///
-    /// - Parameter params: codec parameters
-    /// - Throws: AVError
-    public func setParameters(_ params: AVCodecParameters) throws {
-        try throwIfFail(avcodec_parameters_to_context(ctxPtr, params.parametersPtr))
-    }
-
-    /// Initialize the `AVCodecContext` to use the given `AVCodec`.
-    ///
-    /// - Parameters:
-    ///   - options: A dictionary filled with `AVCodecContext` and codec-private options.
-    /// - Throws: AVError
-    public func openCodec(options: [String: String]? = nil) throws {
-        var pm: OpaquePointer?
-        defer { av_dict_free(&pm) }
-        if let options = options {
-            for (k, v) in options {
-                av_dict_set(&pm, k, v, 0)
-            }
-        }
-
-        try throwIfFail(avcodec_open2(ctxPtr, codec.codecPtr, &pm))
-
-        dumpUnrecognizedOptions(pm)
-    }
-
-    /// Supply raw packet data as input to a decoder.
-    ///
-    /// - Parameter packet: The input `AVPacket`. Usually, this will be a single video frame, or several complete
-    ///   audio frames. It can be `nil` (or an `AVPacket` with data set to `nil` and size set to 0); in this case,
-    ///   it is considered a flush packet, which signals the end of the stream. Sending the first flush packet will
-    ///   return success. Subsequent ones are unnecessary and will return `AVError.EOF`. If the decoder still has
-    ///   frames buffered, it will return them after sending a flush packet.
-    /// - Throws: AVError
-    public func sendPacket(_ packet: AVPacket?) throws {
-        try throwIfFail(avcodec_send_packet(ctxPtr, packet?.packetPtr))
-    }
-
-    /// Return decoded output data from a decoder.
-    ///
-    /// - Parameter frame: This will be set to a reference-counted video or audio frame (depending on the decoder type)
-    ///   allocated by the decoder.
-    /// - Throws:
-    ///     - `AVError.EAGAIN` if output is not available in this state - user must try to send new input
-    ///     - `AVError.EOF` if the decoder has been fully flushed, and there will be no more output frames
-    ///     - `AVError.EINVAL` if codec not opened, or it is an encoder
-    ///     - legitimate decoding errors
-    public func receiveFrame(_ frame: AVFrame) throws {
-        try throwIfFail(avcodec_receive_frame(ctxPtr, frame.framePtr))
-    }
-
-    /// Supply a raw video or audio frame to the encoder.
-    ///
-    /// - Parameter frame: `AVFrame` containing the raw audio or video frame to be encoded.
-    ///   It can be nil, in which case it is considered a flush packet. This signals the end of the stream.
-    ///   If the encoder still has packets buffered, it will return them after this call. Once flushing mode has been
-    ///   entered, additional flush packets are ignored, and sending frames will return `AVError.EOF`.
-    /// - Throws:
-    ///     - `AVError.EAGAIN`: input is not accepted in the current state - user must read output with `receivePacket`.
-    ///       (once all output is read, the packet should be resent, and the call will not fail with `AVError.EAGAIN`).
-    ///     - `AVError.EOF` if the encoder has been flushed, and no new frames can be sent to it
-    ///     - `AVError.EINVAL` if codec not opened, refcounted_frames not set, it is a decoder, or requires flush
-    ///     - `AVError.ENOMEM` if failed to add packet to internal queue, or similar
-    ///     - legitimate decoding errors
-    public func sendFrame(_ frame: AVFrame?) throws {
-        try throwIfFail(avcodec_send_frame(ctxPtr, frame?.framePtr))
-    }
-
-    /// Read encoded data from the encoder.
-    ///
-    /// - Parameter packet: This will be set to a reference-counted packet allocated by the encoder.
-    /// - Throws:
-    ///     - `AVError.EAGAIN` if output is not available in the current state - user must try to send input
-    ///     - `AVError.EOF` if the encoder has been fully flushed, and there will be no more output packets
-    ///     - `AVError.EINVAL` if codec not opened, or it is an encoder
-    ///     - legitimate decoding errors
-    public func receivePacket(_ packet: AVPacket) throws {
-        try throwIfFail(avcodec_receive_packet(ctxPtr, packet.packetPtr))
-    }
-
-    deinit {
-        var ps: UnsafeMutablePointer<CAVCodecContext>? = ctxPtr
-        avcodec_free_context(&ps)
     }
 }
 
@@ -241,8 +244,8 @@ extension AVCodecContext {
     ///   Some decoders will require the dimensions to be set by the caller. During decoding, the decoder may
     ///   overwrite those values as required while parsing the data.
     public var width: Int {
-        get { return Int(ctx.width) }
-        set { ctxPtr.pointee.width = Int32(newValue) }
+        get { return Int(cContext.width) }
+        set { cContextPtr.pointee.width = Int32(newValue) }
     }
 
     /// picture height
@@ -252,8 +255,8 @@ extension AVCodecContext {
     ///   Some decoders will require the dimensions to be set by the caller. During decoding, the decoder may
     ///   overwrite those values as required while parsing the data.
     public var height: Int {
-        get { return Int(ctx.height) }
-        set { ctxPtr.pointee.height = Int32(newValue) }
+        get { return Int(cContext.height) }
+        set { cContextPtr.pointee.height = Int32(newValue) }
     }
 
     /// Bitstream width, may be different from `width` e.g. when
@@ -263,8 +266,8 @@ extension AVCodecContext {
     /// - decoding: May be set by the user before opening the decoder if known e.g. from the container.
     ///   During decoding, the decoder may overwrite those values as required while parsing the data.
     public var codedWidth: Int {
-        get { return Int(ctx.coded_width) }
-        set { ctxPtr.pointee.coded_width = Int32(newValue) }
+        get { return Int(cContext.coded_width) }
+        set { cContextPtr.pointee.coded_width = Int32(newValue) }
     }
 
     /// Bitstream height, may be different from `height` e.g. when
@@ -274,8 +277,8 @@ extension AVCodecContext {
     /// - decoding: May be set by the user before opening the decoder if known e.g. from the container.
     ///   During decoding, the decoder may overwrite those values as required while parsing the data.
     public var codedHeight: Int {
-        get { return Int(ctx.coded_height) }
-        set { ctxPtr.pointee.coded_height = Int32(newValue) }
+        get { return Int(cContext.coded_height) }
+        set { cContextPtr.pointee.coded_height = Int32(newValue) }
     }
 
     /// The number of pictures in a group of pictures, or 0 for intra_only.
@@ -283,8 +286,8 @@ extension AVCodecContext {
     /// - encoding: Set by user.
     /// - decoding: Unused.
     public var gopSize: Int {
-        get { return Int(ctx.gop_size) }
-        set { ctxPtr.pointee.gop_size = Int32(newValue) }
+        get { return Int(cContext.gop_size) }
+        set { cContextPtr.pointee.gop_size = Int32(newValue) }
     }
 
     /// Pixel format.
@@ -292,19 +295,19 @@ extension AVCodecContext {
     /// - encoding: Set by user.
     /// - decoding: Set by user if known, overridden by codec while parsing the data.
     public var pixFmt: AVPixelFormat {
-        get { return ctx.pix_fmt }
-        set { ctxPtr.pointee.pix_fmt = newValue }
+        get { return cContext.pix_fmt }
+        set { cContextPtr.pointee.pix_fmt = newValue }
     }
 
     /// Maximum number of B-frames between non-B-frames.
     ///
-    /// - Note: The output will be delayed by max_b_frames+1 relative to the input.
+    /// - Note: The output will be delayed by __max_b_frames+1__ relative to the input.
     ///
     /// - encoding: Set by user.
     /// - decoding: Unused.
     public var maxBFrames: Int {
-        get { return Int(ctx.max_b_frames) }
-        set { ctxPtr.pointee.max_b_frames = Int32(newValue) }
+        get { return Int(cContext.max_b_frames) }
+        set { cContextPtr.pointee.max_b_frames = Int32(newValue) }
     }
 
     /// Macroblock decision mode.
@@ -312,8 +315,8 @@ extension AVCodecContext {
     /// - encoding: Set by user.
     /// - decoding: Unused.
     public var mbDecision: Int {
-        get { return Int(ctx.mb_decision) }
-        set { ctxPtr.pointee.mb_decision = Int32(newValue) }
+        get { return Int(cContext.mb_decision) }
+        set { cContextPtr.pointee.mb_decision = Int32(newValue) }
     }
 
     /// Sample aspect ratio (0 if unknown).
@@ -324,26 +327,26 @@ extension AVCodecContext {
     /// - encoding: Set by user.
     /// - decoding: Set by codec.
     public var sampleAspectRatio: AVRational {
-        get { return ctx.sample_aspect_ratio }
-        set { ctxPtr.pointee.sample_aspect_ratio = newValue }
+        get { return cContext.sample_aspect_ratio }
+        set { cContextPtr.pointee.sample_aspect_ratio = newValue }
     }
 
-    /// low resolution decoding, 1-> 1/2 size, 2->1/4 size
+    /// low resolution decoding, 1->1/2 size, 2->1/4 size
     ///
     /// - encoding: Unused.
     /// - decoding: Set by user.
     public var lowres: Int32 {
-        return ctx.lowres
+        return cContext.lowres
     }
 
     /// Framerate.
     ///
     /// - encoding: May be used to signal the framerate of CFR content to an encoder.
-    /// - decoding: For codecs that store a framerate value in the compressed bitstream, the decoder may export it here.
-    ///   {0, 1} when unknown.
+    /// - decoding: For codecs that store a framerate value in the compressed bitstream,
+    ///   the decoder may export it here. {0, 1} when unknown.
     public var framerate: AVRational {
-        get { return ctx.framerate }
-        set { ctxPtr.pointee.framerate = newValue }
+        get { return cContext.framerate }
+        set { cContextPtr.pointee.framerate = newValue }
     }
 }
 
@@ -353,14 +356,14 @@ extension AVCodecContext {
 
     /// Samples per second.
     public var sampleRate: Int {
-        get { return Int(ctx.sample_rate) }
-        set { ctxPtr.pointee.sample_rate = Int32(newValue) }
+        get { return Int(cContext.sample_rate) }
+        set { cContextPtr.pointee.sample_rate = Int32(newValue) }
     }
 
     /// Number of audio channels.
     public var channelCount: Int {
-        get { return Int(ctx.channels) }
-        set { ctxPtr.pointee.channels = Int32(newValue) }
+        get { return Int(cContext.channels) }
+        set { cContextPtr.pointee.channels = Int32(newValue) }
     }
 
     /// Audio sample format.
@@ -368,13 +371,13 @@ extension AVCodecContext {
     /// - encoding: Set by user.
     /// - decoding: Set by libavcodec.
     public var sampleFmt: AVSampleFormat {
-        get { return ctx.sample_fmt }
-        set { ctxPtr.pointee.sample_fmt = newValue }
+        get { return cContext.sample_fmt }
+        set { cContextPtr.pointee.sample_fmt = newValue }
     }
 
     /// Number of samples per channel in an audio frame.
     public var frameSize: Int {
-        return Int(ctx.frame_size)
+        return Int(cContext.frame_size)
     }
 
     /// Audio channel layout.
@@ -382,14 +385,14 @@ extension AVCodecContext {
     /// - encoding: Set by user.
     /// - decoding: Set by user, may be overwritten by codec.
     public var channelLayout: AVChannelLayout {
-        get { return AVChannelLayout(rawValue: ctx.channel_layout) }
-        set { ctxPtr.pointee.channel_layout = newValue.rawValue }
+        get { return AVChannelLayout(rawValue: cContext.channel_layout) }
+        set { cContextPtr.pointee.channel_layout = newValue.rawValue }
     }
 }
 
 extension AVCodecContext: AVOptionAccessor {
-    
+
     public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T {
-        return try body(ctxPtr)
+        return try body(cContextPtr)
     }
 }

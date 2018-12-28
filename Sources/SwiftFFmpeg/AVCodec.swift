@@ -110,11 +110,11 @@ extension AVCodecID {
 
 // MARK: - AVCodec
 
-internal typealias CAVCodec = CFFmpeg.AVCodec
+typealias CAVCodec = CFFmpeg.AVCodec
 
 public struct AVCodec {
-    internal let codecPtr: UnsafeMutablePointer<CAVCodec>
-    internal var codec: CAVCodec { return codecPtr.pointee }
+    let cCodecPtr: UnsafeMutablePointer<CAVCodec>
+    var cCodec: CAVCodec { return cCodecPtr.pointee }
 
     /// Find a registered decoder with a matching codec ID.
     ///
@@ -124,7 +124,7 @@ public struct AVCodec {
         guard let codecPtr = avcodec_find_decoder(codecId) else {
             return nil
         }
-        return AVCodec(codecPtr: codecPtr)
+        return AVCodec(cCodecPtr: codecPtr)
     }
 
     /// Find a registered decoder with the specified name.
@@ -135,7 +135,7 @@ public struct AVCodec {
         guard let codecPtr = avcodec_find_decoder_by_name(name) else {
             return nil
         }
-        return AVCodec(codecPtr: codecPtr)
+        return AVCodec(cCodecPtr: codecPtr)
     }
 
     /// Find a registered encoder with a matching codec ID.
@@ -146,7 +146,7 @@ public struct AVCodec {
         guard let codecPtr = avcodec_find_encoder(codecId) else {
             return nil
         }
-        return AVCodec(codecPtr: codecPtr)
+        return AVCodec(cCodecPtr: codecPtr)
     }
 
     /// Find a registered encoder with the specified name.
@@ -157,76 +157,76 @@ public struct AVCodec {
         guard let codecPtr = avcodec_find_encoder_by_name(name) else {
             return nil
         }
-        return AVCodec(codecPtr: codecPtr)
+        return AVCodec(cCodecPtr: codecPtr)
     }
 
-    internal init(codecPtr: UnsafeMutablePointer<CAVCodec>) {
-        self.codecPtr = codecPtr
+    init(cCodecPtr: UnsafeMutablePointer<CAVCodec>) {
+        self.cCodecPtr = cCodecPtr
     }
 
     /// The codec's name.
     public var name: String {
-        return String(cString: codec.name)
+        return String(cString: cCodec.name)
     }
 
     /// The codec's descriptive name, meant to be more human readable than name.
     public var longName: String {
-        return String(cString: codec.long_name)
+        return String(cString: cCodec.long_name)
     }
 
     /// The codec's media type.
     public var mediaType: AVMediaType {
-        return codec.type
+        return cCodec.type
     }
 
     /// The codec's id.
     public var id: AVCodecID {
-        return codec.id
+        return cCodec.id
     }
 
     /// The codec's capabilities.
     public var capabilities: AVCodec.Cap {
-        return Cap(rawValue: UInt32(codec.capabilities))
+        return Cap(rawValue: UInt32(cCodec.capabilities))
     }
 
     /// Returns an array of the framerates supported by the codec.
     public var supportedFramerates: [AVRational]? {
-        return values(codec.supported_framerates, until: AVRational(num: 0, den: 0))
+        return values(cCodec.supported_framerates, until: AVRational(num: 0, den: 0))
     }
 
     /// Returns an array of the pixel formats supported by the codec.
     public var supportedPixelFormats: [AVPixelFormat]? {
-        return values(codec.pix_fmts, until: .NONE)
+        return values(cCodec.pix_fmts, until: .NONE)
     }
 
     /// Returns an array of the audio samplerates supported by the codec.
     public var supportedSampleRates: [Int]? {
-        return values(codec.supported_samplerates, until: 0)?.map { Int($0) }
+        return values(cCodec.supported_samplerates, until: 0)?.map { Int($0) }
     }
 
     /// Returns an array of the sample formats supported by the codec.
     public var supportedSampleFormats: [AVSampleFormat]? {
-        return values(codec.sample_fmts, until: .NONE)
+        return values(cCodec.sample_fmts, until: .NONE)
     }
 
     /// Returns an array of the channel layouts supported by the codec.
     public var supportedChannelLayouts: [AVChannelLayout]? {
-        return values(codec.channel_layouts, until: 0)?.map { AVChannelLayout(rawValue: $0) }
+        return values(cCodec.channel_layouts, until: 0)?.map { AVChannelLayout(rawValue: $0) }
     }
 
     /// Maximum value for lowres supported by the decoder.
     public var maxLowres: UInt8 {
-        return codec.max_lowres
+        return cCodec.max_lowres
     }
 
     /// A Boolean value indicating whether the codec is decoder.
     public var isDecoder: Bool {
-        return av_codec_is_decoder(codecPtr) != 0
+        return av_codec_is_decoder(cCodecPtr) != 0
     }
 
     /// A Boolean value indicating whether the codec is encoder.
     public var isEncoder: Bool {
-        return av_codec_is_encoder(codecPtr) != 0
+        return av_codec_is_encoder(cCodecPtr) != 0
     }
 
     /// Get all registered codecs.
@@ -234,7 +234,7 @@ public struct AVCodec {
         var list = [AVCodec]()
         var state: UnsafeMutableRawPointer?
         while let codecPtr = av_codec_iterate(&state) {
-            list.append(AVCodec(codecPtr: codecPtr.mutable))
+            list.append(AVCodec(cCodecPtr: codecPtr.mutable))
         }
         return list
     }
@@ -243,6 +243,7 @@ public struct AVCodec {
 // MARK: - Cap
 
 extension AVCodec {
+
     /// Codec capabilities
     public struct Cap: OptionSet {
         public let rawValue: UInt32
@@ -368,7 +369,7 @@ extension AVCodec.Cap: CustomStringConvertible {
 extension AVCodec: AVOptionAccessor {
 
     public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T {
-        var tmp = codec.priv_class
+        var tmp = cCodec.priv_class
         return try withUnsafeMutablePointer(to: &tmp) { ptr in
             try body(ptr)
         }

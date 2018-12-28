@@ -11,7 +11,7 @@ import CFFmpeg
 
 public typealias AVSampleFormat = CFFmpeg.AVSampleFormat
 
-extension AVSampleFormat: CustomStringConvertible {
+extension AVSampleFormat {
     public static let NONE = AV_SAMPLE_FMT_NONE
     /// unsigned 8 bits
     public static let U8 = AV_SAMPLE_FMT_U8
@@ -60,10 +60,6 @@ extension AVSampleFormat: CustomStringConvertible {
         return !isPlanar
     }
 
-    public var description: String {
-        return name
-    }
-
     /// Return the planar alternative form of the given sample format or `AVSampleFormat.NONE` on error.
     ///
     /// If the passed sample format is already in planar format, the format returned is the same as the input.
@@ -79,6 +75,13 @@ extension AVSampleFormat: CustomStringConvertible {
     }
 }
 
+extension AVSampleFormat: CustomStringConvertible {
+
+    public var description: String {
+        return name
+    }
+}
+
 // MARK: - Audio Channel
 
 // A channel layout is a 64-bits integer with a bit set for every channel.
@@ -87,21 +90,7 @@ extension AVSampleFormat: CustomStringConvertible {
 // @note this data structure is not powerful enough to handle channels
 // combinations that have the same channel multiple times, such as dual-mono.
 
-public struct AVChannel: Equatable, CustomStringConvertible {
-    public let rawValue: UInt64
-
-    public init(rawValue: UInt64) {
-        self.rawValue = rawValue
-    }
-
-    public var name: String {
-        return String(cString: av_get_channel_name(rawValue))
-    }
-
-    public var description: String {
-        return name
-    }
-
+public struct AVChannel: Equatable {
     public static let frontLeft = AVChannel(rawValue: UInt64(AV_CH_FRONT_LEFT))
     public static let frontRight = AVChannel(rawValue: UInt64(AV_CH_FRONT_RIGHT))
     public static let frontCenter = AVChannel(rawValue: UInt64(AV_CH_FRONT_CENTER))
@@ -129,63 +118,28 @@ public struct AVChannel: Equatable, CustomStringConvertible {
     public static let surroundDirectLeft = AVChannel(rawValue: AV_CH_SURROUND_DIRECT_LEFT)
     public static let surroundDirectRight = AVChannel(rawValue: AV_CH_SURROUND_DIRECT_RIGHT)
     public static let lowFrequency2 = AVChannel(rawValue: AV_CH_LOW_FREQUENCY_2)
-}
 
-// MARK: - Audio Channel Layout
-
-public struct AVChannelLayout: Equatable, CustomStringConvertible {
     public let rawValue: UInt64
 
     public init(rawValue: UInt64) {
         self.rawValue = rawValue
     }
 
-    /// Return a channel layout id that matches name, or 0 if no match is found.
-    ///
-    /// - Parameter name: Name can be one or several of the following notations, separated by '+' or '|':
-    ///   - the name of an usual channel layout (mono, stereo, 4.0, quad, 5.0, 5.0(side), 5.1, 5.1(side), 7.1,
-    ///     7.1(wide), downmix);
-    ///   - the name of a single channel (FL, FR, FC, LFE, BL, BR, FLC, FRC, BC, SL, SR, TC, TFL, TFC, TFR, TBL,
-    ///     TBC, TBR, DL, DR);
-    ///   - a number of channels, in decimal, followed by 'c', yielding the default channel layout for that number
-    ////    of channels (@see av_get_default_channel_layout);
-    ///   - a channel layout mask, in hexadecimal starting with "0x" (see the AV_CH_* macros).
-    ///
-    ///     Example: "stereo+FC" = "2c+FC" = "2c+1c" = "0x7"
-    public init(name: String) {
-        self.init(rawValue: av_get_channel_layout(name))
+    public var name: String {
+        return String(cString: av_get_channel_name(rawValue))
     }
+}
 
-    /// Return the number of channels in the channel layout.
-    public var channelCount: Int {
-        return Int(av_get_channel_layout_nb_channels(rawValue))
-    }
+extension AVChannel: CustomStringConvertible {
 
     public var description: String {
-        let buf = UnsafeMutablePointer<Int8>.allocate(capacity: 256)
-        buf.initialize(to: 0)
-        defer { buf.deallocate() }
-        av_get_channel_layout_string(buf, 256, Int32(channelCount), rawValue)
-        return String(cString: buf)
+        return name
     }
+}
 
-    /// Get the index of a channel in channel_layout.
-    ///
-    /// - Parameter channel: a channel layout describing exactly one channel which must be present in channel_layout.
-    /// - Returns: index of channel in channel_layout on success, nil on error.
-    public func index(for channel: AVChannel) -> Int? {
-        let i = av_get_channel_layout_channel_index(rawValue, channel.rawValue)
-        return i >= 0 ? Int(i) : nil
-    }
+// MARK: - Audio Channel Layout
 
-    /// Get default channel layout for a given number of channels.
-    ///
-    /// - Parameter count: number of channels
-    /// - Returns: AVChannelLayout
-    public static func `default`(forChannelCount count: Int32) -> AVChannelLayout {
-        return AVChannelLayout(rawValue: UInt64(av_get_default_channel_layout(count)))
-    }
-
+public struct AVChannelLayout: Equatable {
     public static let CHL_NONE = AVChannelLayout(rawValue: 0)
     /// Channel mask value used for AVCodecContext.request_channel_layout
     /// to indicate that the user requests the channel order of the decoder output
@@ -219,4 +173,59 @@ public struct AVChannelLayout: Equatable, CustomStringConvertible {
     public static let CHL_OCTAGONAL = AVChannelLayout(rawValue: swift_AV_CH_LAYOUT_OCTAGONAL)
     public static let CHL_HEXADECAGONAL = AVChannelLayout(rawValue: swift_AV_CH_LAYOUT_HEXADECAGONAL)
     public static let CHL_STEREO_DOWNMIX = AVChannelLayout(rawValue: swift_AV_CH_LAYOUT_STEREO_DOWNMIX)
+
+    public let rawValue: UInt64
+
+    public init(rawValue: UInt64) {
+        self.rawValue = rawValue
+    }
+
+    /// Return a channel layout id that matches name, or 0 if no match is found.
+    ///
+    /// - Parameter name: Name can be one or several of the following notations, separated by '+' or '|':
+    ///   - the name of an usual channel layout (mono, stereo, 4.0, quad, 5.0, 5.0(side), 5.1, 5.1(side), 7.1,
+    ///     7.1(wide), downmix);
+    ///   - the name of a single channel (FL, FR, FC, LFE, BL, BR, FLC, FRC, BC, SL, SR, TC, TFL, TFC, TFR, TBL,
+    ///     TBC, TBR, DL, DR);
+    ///   - a number of channels, in decimal, followed by 'c', yielding the default channel layout for that number
+    ////    of channels (@see av_get_default_channel_layout);
+    ///   - a channel layout mask, in hexadecimal starting with "0x" (see the AV_CH_* macros).
+    ///
+    ///     Example: "stereo+FC" = "2c+FC" = "2c+1c" = "0x7"
+    public init(name: String) {
+        self.init(rawValue: av_get_channel_layout(name))
+    }
+
+    /// Return the number of channels in the channel layout.
+    public var channelCount: Int {
+        return Int(av_get_channel_layout_nb_channels(rawValue))
+    }
+
+    /// Get the index of a channel in channel_layout.
+    ///
+    /// - Parameter channel: a channel layout describing exactly one channel which must be present in channel_layout.
+    /// - Returns: index of channel in channel_layout on success, nil on error.
+    public func index(for channel: AVChannel) -> Int? {
+        let i = av_get_channel_layout_channel_index(rawValue, channel.rawValue)
+        return i >= 0 ? Int(i) : nil
+    }
+
+    /// Get default channel layout for a given number of channels.
+    ///
+    /// - Parameter count: number of channels
+    /// - Returns: AVChannelLayout
+    public static func `default`(forChannelCount count: Int32) -> AVChannelLayout {
+        return AVChannelLayout(rawValue: UInt64(av_get_default_channel_layout(count)))
+    }
+}
+
+extension AVChannelLayout: CustomStringConvertible {
+
+    public var description: String {
+        let buf = UnsafeMutablePointer<Int8>.allocate(capacity: 256)
+        buf.initialize(to: 0)
+        defer { buf.deallocate() }
+        av_get_channel_layout_string(buf, 256, Int32(channelCount), rawValue)
+        return String(cString: buf)
+    }
 }

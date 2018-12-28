@@ -11,7 +11,7 @@ import CFFmpeg
 
 public typealias AVOptionType = CFFmpeg.AVOptionType
 
-extension AVOptionType: CustomStringConvertible {
+extension AVOptionType {
     public static let flags = AV_OPT_TYPE_FLAGS
     public static let int = AV_OPT_TYPE_INT
     public static let int64 = AV_OPT_TYPE_INT64
@@ -34,6 +34,9 @@ extension AVOptionType: CustomStringConvertible {
     public static let color = AV_OPT_TYPE_COLOR
     public static let channelLayout = AV_OPT_TYPE_CHANNEL_LAYOUT
     public static let bool = AV_OPT_TYPE_BOOL
+}
+
+extension AVOptionType: CustomStringConvertible {
 
     public var description: String {
         switch self {
@@ -80,51 +83,6 @@ extension AVOptionType: CustomStringConvertible {
 typealias CAVOption = CFFmpeg.AVOption
 
 public struct AVOption: CustomStringConvertible {
-    public struct Flag: OptionSet, CustomStringConvertible {
-        public let rawValue: Int32
-
-        public init(rawValue: Int32) {
-            self.rawValue = rawValue
-        }
-
-        /// A generic parameter which can be set by the user for muxing or encoding.
-        public static let encoding = Flag(rawValue: AV_OPT_FLAG_ENCODING_PARAM)
-        /// A generic parameter which can be set by the user for demuxing or decoding.
-        public static let decoding = Flag(rawValue: AV_OPT_FLAG_DECODING_PARAM)
-        public static let audio = Flag(rawValue: AV_OPT_FLAG_AUDIO_PARAM)
-        public static let video = Flag(rawValue: AV_OPT_FLAG_VIDEO_PARAM)
-        public static let subtitle = Flag(rawValue: AV_OPT_FLAG_SUBTITLE_PARAM)
-        /// The option is intended for exporting values to the caller.
-        public static let export = Flag(rawValue: AV_OPT_FLAG_EXPORT)
-        /// The option may not be set through the AVOptions API, only read.
-        /// This flag only makes sense when AV_OPT_FLAG_EXPORT is also set.
-        public static let readonly = Flag(rawValue: AV_OPT_FLAG_READONLY)
-        /// A generic parameter which can be set by the user for bit stream filtering.
-        public static let bsf = Flag(rawValue: AV_OPT_FLAG_BSF_PARAM)
-        /// A generic parameter which can be set by the user for filtering.
-        public static let filtering = Flag(rawValue: AV_OPT_FLAG_FILTERING_PARAM)
-        /// Set if option is deprecated, users should refer to AVOption.help text for more information.
-        public static let deprecated = Flag(rawValue: AV_OPT_FLAG_DEPRECATED)
-
-        public var description: String {
-            var str = "["
-            if contains(.encoding) { str += "encoding, " }
-            if contains(.decoding) { str += "decoding, " }
-            if contains(.audio) { str += "audio, " }
-            if contains(.video) { str += "video, " }
-            if contains(.subtitle) { str += "subtitle, " }
-            if contains(.export) { str += "export, " }
-            if contains(.bsf) { str += "bsf, " }
-            if contains(.filtering) { str += "filtering, " }
-            if contains(.deprecated) { str += "deprecated, " }
-            if str.suffix(2) == ", " {
-                str.removeLast(2)
-            }
-            str += "]"
-            return str
-        }
-    }
-
     public let name: String
     /// The short English help text about the option.
     public let help: String?
@@ -188,6 +146,59 @@ public struct AVOption: CustomStringConvertible {
             str.removeLast(2)
         }
         str += "}"
+        return str
+    }
+}
+
+// MARK: - Flag
+
+extension AVOption {
+
+    public struct Flag: OptionSet {
+        /// A generic parameter which can be set by the user for muxing or encoding.
+        public static let encoding = Flag(rawValue: AV_OPT_FLAG_ENCODING_PARAM)
+        /// A generic parameter which can be set by the user for demuxing or decoding.
+        public static let decoding = Flag(rawValue: AV_OPT_FLAG_DECODING_PARAM)
+        public static let audio = Flag(rawValue: AV_OPT_FLAG_AUDIO_PARAM)
+        public static let video = Flag(rawValue: AV_OPT_FLAG_VIDEO_PARAM)
+        public static let subtitle = Flag(rawValue: AV_OPT_FLAG_SUBTITLE_PARAM)
+        /// The option is intended for exporting values to the caller.
+        public static let export = Flag(rawValue: AV_OPT_FLAG_EXPORT)
+        /// The option may not be set through the AVOptions API, only read.
+        /// This flag only makes sense when AV_OPT_FLAG_EXPORT is also set.
+        public static let readonly = Flag(rawValue: AV_OPT_FLAG_READONLY)
+        /// A generic parameter which can be set by the user for bit stream filtering.
+        public static let bsf = Flag(rawValue: AV_OPT_FLAG_BSF_PARAM)
+        /// A generic parameter which can be set by the user for filtering.
+        public static let filtering = Flag(rawValue: AV_OPT_FLAG_FILTERING_PARAM)
+        /// Set if option is deprecated, users should refer to AVOption.help text for more information.
+        public static let deprecated = Flag(rawValue: AV_OPT_FLAG_DEPRECATED)
+
+        public let rawValue: Int32
+
+        public init(rawValue: Int32) {
+            self.rawValue = rawValue
+        }
+    }
+}
+
+extension AVOption.Flag: CustomStringConvertible {
+
+    public var description: String {
+        var str = "["
+        if contains(.encoding) { str += "encoding, " }
+        if contains(.decoding) { str += "decoding, " }
+        if contains(.audio) { str += "audio, " }
+        if contains(.video) { str += "video, " }
+        if contains(.subtitle) { str += "subtitle, " }
+        if contains(.export) { str += "export, " }
+        if contains(.bsf) { str += "bsf, " }
+        if contains(.filtering) { str += "filtering, " }
+        if contains(.deprecated) { str += "deprecated, " }
+        if str.suffix(2) == ", " {
+            str.removeLast(2)
+        }
+        str += "]"
         return str
     }
 }

@@ -12,7 +12,7 @@ import CFFmpeg
 public typealias AVPictureType = CFFmpeg.AVPictureType
 
 /// AVPicture types, pixel formats and basic image planes manipulation.
-extension AVPictureType: CustomStringConvertible {
+extension AVPictureType {
     /// Undefined
     public static let NONE = AV_PICTURE_TYPE_NONE
     /// Intra
@@ -29,6 +29,9 @@ extension AVPictureType: CustomStringConvertible {
     public static let SP = AV_PICTURE_TYPE_SP
     /// BI type
     public static let BI = AV_PICTURE_TYPE_BI
+}
+
+extension AVPictureType: CustomStringConvertible {
 
     public var description: String {
         let char = av_get_picture_type_char(self)
@@ -42,7 +45,7 @@ extension AVPictureType: CustomStringConvertible {
 public typealias AVPixelFormat = CFFmpeg.AVPixelFormat
 
 /// Pixel format.
-extension AVPixelFormat: CustomStringConvertible {
+extension AVPixelFormat {
     public static let NONE = AV_PIX_FMT_NONE
     /// planar YUV 4:2:0, 12bpp, (1 Cr & Cb sample per 2x2 Y samples)
     public static let YUV420P = AV_PIX_FMT_YUV420P
@@ -197,6 +200,9 @@ extension AVPixelFormat: CustomStringConvertible {
         let count = Int(av_pix_fmt_count_planes(self))
         return count >= 0 ? count : 0
     }
+}
+
+extension AVPixelFormat: CustomStringConvertible {
 
     public var description: String {
         return name
