@@ -57,14 +57,14 @@ public final class AVCodecContext {
 
     /// - encoding: Set by user.
     /// - decoding: Set by user.
-    public var flags: AVCodecContext.Flag {
-        get { return Flag(rawValue: cContext.flags) }
-        set { cContextPtr.pointee.flags = newValue.rawValue }
+    public var flags: Flag {
+        get { return Flag(rawValue: UInt32(cContext.flags)) }
+        set { cContextPtr.pointee.flags = Int32(newValue.rawValue) }
     }
 
     /// - encoding: Set by user.
     /// - decoding: Set by user.
-    public var flags2: AVCodecContext.Flag2 {
+    public var flags2: Flag2 {
         get { return Flag2(rawValue: cContext.flags2) }
         set { cContextPtr.pointee.flags2 = newValue.rawValue }
     }
@@ -190,21 +190,90 @@ extension AVCodecContext {
 
     /// Encoding support
     ///
-    /// These flags can be passed in `flags` before initialization.
+    /// These flags can be passed in `AVCodecContext.flags` before initialization.
     public struct Flag: OptionSet {
+        /// Allow decoders to produce frames with data planes that are not aligned
+        /// to CPU requirements (e.g. due to cropping).
+        public static let unaligned = Flag(rawValue: UInt32(AV_CODEC_FLAG_UNALIGNED))
+        /// Use fixed qscale.
+        public static let qscale = Flag(rawValue: UInt32(AV_CODEC_FLAG_QSCALE))
+        /// 4 MV per MB allowed / advanced prediction for H.263.
+        public static let p4mv = Flag(rawValue: UInt32(AV_CODEC_FLAG_4MV))
+        /// Output even those frames that might be corrupted.
+        public static let outputCorrupted = Flag(rawValue: UInt32(AV_CODEC_FLAG_OUTPUT_CORRUPT))
+        /// Use qpel MC.
+        public static let qpel = Flag(rawValue: UInt32(AV_CODEC_FLAG_QPEL))
+        /// Use internal 2pass ratecontrol in first pass mode.
+        public static let pass1 = Flag(rawValue: UInt32(AV_CODEC_FLAG_PASS1))
+        /// Use internal 2pass ratecontrol in second pass mode.
+        public static let pass2 = Flag(rawValue: UInt32(AV_CODEC_FLAG_PASS2))
+        /// loop filter.
+        public static let loopFilter = Flag(rawValue: UInt32(AV_CODEC_FLAG_LOOP_FILTER))
+        /// Only decode/encode grayscale.
+        public static let gray = Flag(rawValue: UInt32(AV_CODEC_FLAG_GRAY))
+        /// error[?] variables will be set during encoding.
+        public static let psnr = Flag(rawValue: UInt32(AV_CODEC_FLAG_PSNR))
+        /// Input bitstream might be truncated at a random location instead of only at frame boundaries.
+        public static let truncated = Flag(rawValue: UInt32(AV_CODEC_FLAG_TRUNCATED))
+        /// Use interlaced DCT.
+        public static let interlacedDCT = Flag(rawValue: UInt32(AV_CODEC_FLAG_INTERLACED_DCT))
+        /// Force low delay.
+        public static let lowDelay = Flag(rawValue: UInt32(AV_CODEC_FLAG_LOW_DELAY))
         /// Place global headers in extradata instead of every keyframe.
-        public static let globalHeader = Flag(rawValue: AV_CODEC_FLAG_GLOBAL_HEADER)
+        public static let globalHeader = Flag(rawValue: UInt32(AV_CODEC_FLAG_GLOBAL_HEADER))
+        /// Use only bitexact stuff (except (I)DCT).
+        public static let bitexact = Flag(rawValue: UInt32(AV_CODEC_FLAG_BITEXACT))
+        /// H.263 advanced intra coding / MPEG-4 AC prediction
+        public static let acPred = Flag(rawValue: UInt32(AV_CODEC_FLAG_AC_PRED))
+        /// interlaced motion estimation
+        public static let interlacedME = Flag(rawValue: UInt32(AV_CODEC_FLAG_INTERLACED_ME))
+        public static let closedGOP = Flag(rawValue: AV_CODEC_FLAG_CLOSED_GOP)
 
-        public let rawValue: Int32
+        public let rawValue: UInt32
 
-        public init(rawValue: Int32) {
+        public init(rawValue: UInt32) {
             self.rawValue = rawValue
         }
     }
+}
+
+extension AVCodecContext.Flag: CustomStringConvertible {
+
+    public var description: String {
+        var str = "["
+        if contains(.unaligned) { str += "unaligned, " }
+        if contains(.qscale) { str += "qscale, " }
+        if contains(.p4mv) { str += "p4mv, " }
+        if contains(.outputCorrupted) { str += "outputCorrupted, " }
+        if contains(.qpel) { str += "qpel, " }
+        if contains(.pass1) { str += "pass1, " }
+        if contains(.pass2) { str += "pass2, " }
+        if contains(.loopFilter) { str += "loopFilter, " }
+        if contains(.gray) { str += "gray, " }
+        if contains(.psnr) { str += "psnr, " }
+        if contains(.truncated) { str += "truncated, " }
+        if contains(.interlacedDCT) { str += "interlacedDCT, " }
+        if contains(.lowDelay) { str += "lowDelay, " }
+        if contains(.globalHeader) { str += "globalHeader, " }
+        if contains(.bitexact) { str += "bitexact, " }
+        if contains(.acPred) { str += "acPred, " }
+        if contains(.interlacedME) { str += "interlacedME, " }
+        if contains(.closedGOP) { str += "closedGOP, " }
+        if str.suffix(2) == ", " {
+            str.removeLast(2)
+        }
+        str += "]"
+        return str
+    }
+}
+
+// MARK: - Flag2
+
+extension AVCodecContext {
 
     /// Encoding support
     ///
-    /// These flags can be passed in `flags2` before initialization.
+    /// These flags can be passed in `AVCodecContext.flags2` before initialization.
     public struct Flag2: OptionSet {
         /// Allow non spec compliant speedup tricks.
         public static let fast = Flag2(rawValue: AV_CODEC_FLAG2_FAST)
@@ -233,6 +302,26 @@ extension AVCodecContext {
     }
 }
 
+extension AVCodecContext.Flag2: CustomStringConvertible {
+
+    public var description: String {
+        var str = "["
+        if contains(.fast) { str += "fast, " }
+        if contains(.noOutput) { str += "noOutput, " }
+        if contains(.localHeader) { str += "localHeader, " }
+        if contains(.chunks) { str += "chunks, " }
+        if contains(.ignoreCrop) { str += "ignoreCrop, " }
+        if contains(.showAll) { str += "showAll, " }
+        if contains(.exportMVS) { str += "exportMVS, " }
+        if contains(.skipManual) { str += "skipManual, " }
+        if contains(.roFlushNoop) { str += "roFlushNoop, " }
+        if str.suffix(2) == ", " {
+            str.removeLast(2)
+        }
+        str += "]"
+        return str
+    }
+}
 // MARK: - Video
 
 extension AVCodecContext {
@@ -294,7 +383,7 @@ extension AVCodecContext {
     ///
     /// - encoding: Set by user.
     /// - decoding: Set by user if known, overridden by codec while parsing the data.
-    public var pixFmt: AVPixelFormat {
+    public var pixelFormat: AVPixelFormat {
         get { return cContext.pix_fmt }
         set { cContextPtr.pointee.pix_fmt = newValue }
     }
@@ -370,7 +459,7 @@ extension AVCodecContext {
     ///
     /// - encoding: Set by user.
     /// - decoding: Set by libavcodec.
-    public var sampleFmt: AVSampleFormat {
+    public var sampleFormat: AVSampleFormat {
         get { return cContext.sample_fmt }
         set { cContextPtr.pointee.sample_fmt = newValue }
     }

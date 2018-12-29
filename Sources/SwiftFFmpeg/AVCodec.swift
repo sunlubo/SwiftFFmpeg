@@ -329,8 +329,7 @@ extension AVCodec {
         /// implementation provides some sort of internal fallback.
         public static let hybrid = Cap(rawValue: UInt32(AV_CODEC_CAP_HYBRID))
         /// This codec takes the reordered_opaque field from input AVFrames
-        /// and returns it in the corresponding field in AVCodecContext after
-        /// encoding.
+        /// and returns it in the corresponding field in AVCodecContext after encoding.
         public static let encoderReorderedOpaque = Cap(rawValue: 1 << 20)
     }
 }
