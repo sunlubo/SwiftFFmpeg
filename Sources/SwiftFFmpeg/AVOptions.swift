@@ -203,17 +203,6 @@ extension AVOption.Flag: CustomStringConvertible {
     }
 }
 
-// MARK: - AVOptionError
-
-public enum AVOptionError: Error {
-    /// No matching option exists
-    case optionNotFound
-    /// The value is out of range
-    case outOfRange
-    /// The value is not valid
-    case invalidValue
-}
-
 // MARK: - AVOptionSearchFlag
 
 public enum AVOptionSearchFlag: Int32 {
@@ -228,24 +217,6 @@ public enum AVOptionSearchFlag: Int32 {
 
 public protocol AVOptionAccessor {
     func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T
-}
-
-extension AVOptionAccessor {
-
-    func checkResult(_ code: Int32) throws {
-        guard code != 0 else { return }
-
-        switch code {
-        case AVError.OPTION_NOT_FOUND.code:
-            throw AVOptionError.optionNotFound
-        case ERANGE:
-            throw AVOptionError.outOfRange
-        case EINVAL:
-            throw AVOptionError.invalidValue
-        default:
-            throw AVError(code: code)
-        }
-    }
 }
 
 // MARK: - Option setting functions
@@ -265,7 +236,7 @@ extension AVOptionAccessor {
         _ value: String, forKey key: String, searchFlags: AVOptionSearchFlag = .children
     ) throws {
         try withUnsafeObjectPointer { objPtr in
-            try checkResult(av_opt_set(objPtr, key, value, searchFlags.rawValue))
+            try throwIfFail(av_opt_set(objPtr, key, value, searchFlags.rawValue))
         }
     }
 
@@ -274,7 +245,7 @@ extension AVOptionAccessor {
         _ value: T, forKey key: String, searchFlags: AVOptionSearchFlag = .children
     ) throws {
         try withUnsafeObjectPointer { objPtr in
-            try checkResult(av_opt_set_int(objPtr, key, Int64(value), searchFlags.rawValue))
+            try throwIfFail(av_opt_set_int(objPtr, key, Int64(value), searchFlags.rawValue))
         }
     }
 
@@ -283,7 +254,7 @@ extension AVOptionAccessor {
         _ value: Double, forKey key: String, searchFlags: AVOptionSearchFlag = .children
     ) throws {
         try withUnsafeObjectPointer { objPtr in
-            try checkResult(av_opt_set_double(objPtr, key, value, searchFlags.rawValue))
+            try throwIfFail(av_opt_set_double(objPtr, key, value, searchFlags.rawValue))
         }
     }
 
@@ -292,7 +263,7 @@ extension AVOptionAccessor {
         _ value: AVRational, forKey key: String, searchFlags: AVOptionSearchFlag = .children
     ) throws {
         try withUnsafeObjectPointer { objPtr in
-            try checkResult(av_opt_set_q(objPtr, key, value, searchFlags.rawValue))
+            try throwIfFail(av_opt_set_q(objPtr, key, value, searchFlags.rawValue))
         }
     }
 
@@ -301,7 +272,7 @@ extension AVOptionAccessor {
         _ value: UnsafePointer<UInt8>, forKey key: String, searchFlags: AVOptionSearchFlag = .children
     ) throws {
         try withUnsafeObjectPointer { objPtr in
-            try checkResult(av_opt_set_bin(objPtr, key, value, 0, searchFlags.rawValue))
+            try throwIfFail(av_opt_set_bin(objPtr, key, value, 0, searchFlags.rawValue))
         }
     }
 
@@ -310,7 +281,7 @@ extension AVOptionAccessor {
         _ size: (width: Int, height: Int), forKey key: String, searchFlags: AVOptionSearchFlag = .children
     ) throws {
         try withUnsafeObjectPointer { objPtr in
-            try checkResult(
+            try throwIfFail(
                 av_opt_set_image_size(objPtr, key, Int32(size.width), Int32(size.height), searchFlags.rawValue)
             )
         }
@@ -321,7 +292,7 @@ extension AVOptionAccessor {
         _ value: AVPixelFormat, forKey key: String, searchFlags: AVOptionSearchFlag = .children
     ) throws {
         try withUnsafeObjectPointer { objPtr in
-            try checkResult(av_opt_set_pixel_fmt(objPtr, key, value, searchFlags.rawValue))
+            try throwIfFail(av_opt_set_pixel_fmt(objPtr, key, value, searchFlags.rawValue))
         }
     }
 
@@ -330,7 +301,7 @@ extension AVOptionAccessor {
         _ value: AVSampleFormat, forKey key: String, searchFlags: AVOptionSearchFlag = .children
     ) throws {
         try withUnsafeObjectPointer { objPtr in
-            try checkResult(av_opt_set_sample_fmt(objPtr, key, value, searchFlags.rawValue))
+            try throwIfFail(av_opt_set_sample_fmt(objPtr, key, value, searchFlags.rawValue))
         }
     }
 
@@ -339,7 +310,7 @@ extension AVOptionAccessor {
         _ value: AVRational, forKey key: String, searchFlags: AVOptionSearchFlag = .children
     ) throws {
         try withUnsafeObjectPointer { objPtr in
-            try checkResult(av_opt_set_video_rate(objPtr, key, value, searchFlags.rawValue))
+            try throwIfFail(av_opt_set_video_rate(objPtr, key, value, searchFlags.rawValue))
         }
     }
 
@@ -348,7 +319,7 @@ extension AVOptionAccessor {
         _ value: AVChannelLayout, forKey key: String, searchFlags: AVOptionSearchFlag = .children
     ) throws {
         try withUnsafeObjectPointer { objPtr in
-            try checkResult(av_opt_set_channel_layout(objPtr, key, Int64(value.rawValue), searchFlags.rawValue))
+            try throwIfFail(av_opt_set_channel_layout(objPtr, key, Int64(value.rawValue), searchFlags.rawValue))
         }
     }
 }
@@ -369,7 +340,7 @@ extension AVOptionAccessor {
     public func string(forKey key: String, searchFlags: AVOptionSearchFlag = .children) throws -> String {
         return try withUnsafeObjectPointer { objPtr in
             var outVal: UnsafeMutablePointer<UInt8>?
-            try checkResult(av_opt_get(objPtr, key, searchFlags.rawValue, &outVal))
+            try throwIfFail(av_opt_get(objPtr, key, searchFlags.rawValue, &outVal))
             return String(cString: outVal!)
         }
     }
@@ -378,7 +349,7 @@ extension AVOptionAccessor {
     public func integer(forKey key: String, searchFlags: AVOptionSearchFlag = .children) throws -> Int64 {
         return try withUnsafeObjectPointer { objPtr in
             var outVal: Int64 = 0
-            try checkResult(av_opt_get_int(objPtr, key, searchFlags.rawValue, &outVal))
+            try throwIfFail(av_opt_get_int(objPtr, key, searchFlags.rawValue, &outVal))
             return outVal
         }
     }
@@ -387,7 +358,7 @@ extension AVOptionAccessor {
     public func double(forKey key: String, searchFlags: AVOptionSearchFlag = .children) throws -> Double {
         return try withUnsafeObjectPointer { objPtr in
             var outVal: Double = 0
-            try checkResult(av_opt_get_double(objPtr, key, searchFlags.rawValue, &outVal))
+            try throwIfFail(av_opt_get_double(objPtr, key, searchFlags.rawValue, &outVal))
             return outVal
         }
     }
@@ -396,7 +367,7 @@ extension AVOptionAccessor {
     public func rational(forKey key: String, searchFlags: AVOptionSearchFlag = .children) throws -> AVRational {
         return try withUnsafeObjectPointer { objPtr in
             var outVal = AVRational(num: 0, den: 0)
-            try checkResult(av_opt_get_q(objPtr, key, searchFlags.rawValue, &outVal))
+            try throwIfFail(av_opt_get_q(objPtr, key, searchFlags.rawValue, &outVal))
             return outVal
         }
     }
@@ -406,7 +377,7 @@ extension AVOptionAccessor {
         return try withUnsafeObjectPointer { objPtr in
             var wOutVal: Int32 = 0
             var hOutVal: Int32 = 0
-            try checkResult(av_opt_get_image_size(objPtr, key, searchFlags.rawValue, &wOutVal, &hOutVal))
+            try throwIfFail(av_opt_get_image_size(objPtr, key, searchFlags.rawValue, &wOutVal, &hOutVal))
             return (Int(wOutVal), Int(hOutVal))
         }
     }
@@ -415,7 +386,7 @@ extension AVOptionAccessor {
     public func pixelFmt(forKey key: String, searchFlags: AVOptionSearchFlag = .children) throws -> AVPixelFormat {
         return try withUnsafeObjectPointer { objPtr in
             var outVal = AVPixelFormat.NONE
-            try checkResult(av_opt_get_pixel_fmt(objPtr, key, searchFlags.rawValue, &outVal))
+            try throwIfFail(av_opt_get_pixel_fmt(objPtr, key, searchFlags.rawValue, &outVal))
             return outVal
         }
     }
@@ -424,7 +395,7 @@ extension AVOptionAccessor {
     public func sampleFmt(forKey key: String, searchFlags: AVOptionSearchFlag = .children) throws -> AVSampleFormat {
         return try withUnsafeObjectPointer { objPtr in
             var outVal = AVSampleFormat.NONE
-            try checkResult(av_opt_get_sample_fmt(objPtr, key, searchFlags.rawValue, &outVal))
+            try throwIfFail(av_opt_get_sample_fmt(objPtr, key, searchFlags.rawValue, &outVal))
             return outVal
         }
     }
@@ -433,7 +404,7 @@ extension AVOptionAccessor {
     public func videoRate(forKey key: String, searchFlags: AVOptionSearchFlag = .children) throws -> AVRational {
         return try withUnsafeObjectPointer { objPtr in
             var outVal = AVRational(num: 0, den: 0)
-            try checkResult(av_opt_get_video_rate(objPtr, key, searchFlags.rawValue, &outVal))
+            try throwIfFail(av_opt_get_video_rate(objPtr, key, searchFlags.rawValue, &outVal))
             return outVal
         }
     }
@@ -442,7 +413,7 @@ extension AVOptionAccessor {
     public func channelLayout(forKey key: String, searchFlags: AVOptionSearchFlag = .children) throws -> Int64 {
         return try withUnsafeObjectPointer { objPtr in
             var outVal: Int64 = 0
-            try checkResult(av_opt_get_channel_layout(objPtr, key, searchFlags.rawValue, &outVal))
+            try throwIfFail(av_opt_get_channel_layout(objPtr, key, searchFlags.rawValue, &outVal))
             return outVal
         }
     }
