@@ -10,14 +10,13 @@ import CFFmpeg
 typealias CAVCodecParserContext = CFFmpeg.AVCodecParserContext
 
 public final class AVCodecParserContext {
-    private let codecCtx: AVCodecContext
+    private let codecContext: AVCodecContext
+    private let cContextPtr: UnsafeMutablePointer<CAVCodecParserContext>
+    private var cContext: CAVCodecParserContext { return cContextPtr.pointee }
 
-    let cContextPtr: UnsafeMutablePointer<CAVCodecParserContext>
-    var cContext: CAVCodecParserContext { return cContextPtr.pointee }
-
-    public init(codecCtx: AVCodecContext) {
-        self.codecCtx = codecCtx
-        self.cContextPtr = av_parser_init(Int32(codecCtx.codec.id.rawValue))
+    public init(codecContext: AVCodecContext) {
+        self.codecContext = codecContext
+        self.cContextPtr = av_parser_init(Int32(codecContext.codec.id.rawValue))
     }
 
     /// Parse a packet.
@@ -42,7 +41,17 @@ public final class AVCodecParserContext {
     ) -> Int {
         var poutbuf: UnsafeMutablePointer<UInt8>?
         var poutbufSize: Int32 = 0
-        let ret = av_parser_parse2(cContextPtr, codecCtx.cContextPtr, &poutbuf, &poutbufSize, data, Int32(size), pts, dts, pos)
+        let ret = av_parser_parse2(
+            cContextPtr,
+            codecContext.cContextPtr,
+            &poutbuf,
+            &poutbufSize,
+            data,
+            Int32(size),
+            pts,
+            dts,
+            pos
+        )
         packet.cPacketPtr.pointee.data = poutbuf
         packet.cPacketPtr.pointee.size = poutbufSize
         return Int(ret)
