@@ -37,10 +37,13 @@ final class AVBufferTests: XCTestCase {
         XCTAssertEqual(buf1.isWritable(), true)
 
         buf2.unref()
-        XCTAssertEqual(buf2.bufPtr, nil)
+        XCTAssertEqual(buf2.cBufferPtr, nil)
 
         let buf3 = buf1.ref()!
         try! buf3.realloc(size: 200)
+        XCTAssertEqual(buf1.size, 100)
+        XCTAssertEqual(buf1.refCount, 1)
+        XCTAssertEqual(buf1.isWritable(), true)
         XCTAssertEqual(buf3.size, 200)
         XCTAssertEqual(buf3.refCount, 1)
         XCTAssertEqual(buf3.isWritable(), true)
