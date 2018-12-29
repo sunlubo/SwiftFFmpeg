@@ -82,7 +82,7 @@ public struct AVClass {
     /// The name of the class.
     public let name: String
     /// The options of the class.
-    public let options: [AVOption]
+    public let options: [AVOption]?
     /// The category of the class. It's used for visualization (like color).
     ///
     /// This is only set if the category is equal for all objects using this class.
@@ -91,13 +91,6 @@ public struct AVClass {
     init(cClassPtr: UnsafePointer<CAVClass>) {
         self.name = String(cString: cClassPtr.pointee.class_name)
         self.category = cClassPtr.pointee.category
-
-        var options = [AVOption]()
-        var opt = cClassPtr.pointee.option!
-        while opt.pointee.name != nil {
-            options.append(AVOption(cOption: opt.pointee))
-            opt = opt.advanced(by: 1)
-        }
-        self.options = options
+        self.options = values(cClassPtr.pointee.option, until: { $0.name == nil })?.map(AVOption.init(cOption:))
     }
 }
