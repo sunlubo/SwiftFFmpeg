@@ -16,13 +16,13 @@ fmtCtx.dumpFormat(isOutput: false)
 guard let stream = fmtCtx.videoStream else {
     fatalError("No video stream")
 }
-guard let codec = AVCodec.findDecoderById(stream.codecpar.codecId) else {
+guard let codec = AVCodec.findDecoderById(stream.codecParameters.codecId) else {
     fatalError("Codec not found")
 }
 guard let codecCtx = AVCodecContext(codec: codec) else {
     fatalError("Could not allocate video codec context.")
 }
-try codecCtx.setParameters(stream.codecpar)
+try codecCtx.setParameters(stream.codecParameters)
 try codecCtx.openCodec()
 
 let pkt = AVPacket()
@@ -40,18 +40,18 @@ while let _ = try? fmtCtx.readFrame(into: pkt) {
     while true {
         do {
             try codecCtx.receiveFrame(frame)
-        } catch let err as AVError where err == .EAGAIN || err == .EOF {
+        } catch let err as AVError where err == .tryAgain || err == .eof {
             break
         }
 
         let str = String(
             format: "Frame %3d (type=%@, size=%5d bytes) pts %4lld key_frame %d [DTS %3lld]",
             codecCtx.frameNumber,
-            frame.pictType.description,
+            frame.pictureType.description,
             frame.pktSize,
             frame.pts,
             frame.isKeyFrame,
-            frame.codedPictureNumber
+            frame.dts
         )
         print(str)
 
