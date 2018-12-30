@@ -111,13 +111,8 @@ public final class AVCodecContext {
     ///   - options: A dictionary filled with `AVCodecContext` and codec-private options.
     /// - Throws: AVError
     public func openCodec(options: [String: String]? = nil) throws {
-        var pm: OpaquePointer?
+        var pm: OpaquePointer? = options?.toAVDict()
         defer { av_dict_free(&pm) }
-        if let options = options {
-            for (k, v) in options {
-                av_dict_set(&pm, k, v, 0)
-            }
-        }
 
         try throwIfFail(avcodec_open2(cContextPtr, codec.cCodecPtr, &pm))
 

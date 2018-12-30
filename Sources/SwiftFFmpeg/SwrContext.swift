@@ -24,26 +24,26 @@ public final class SwrContext {
     ///
     /// - Parameters:
     ///   - dstChannelLayout: output channel layout
-    ///   - dstSampleFmt: output sample format
+    ///   - dstSampleFormat: output sample format
     ///   - dstSampleRate: output sample rate (frequency in Hz)
     ///   - srcChannelLayout: input channel layout
-    ///   - srcSampleFmt: input sample format
+    ///   - srcSampleFormat: input sample format
     ///   - srcSampleRate: input sample rate (frequency in Hz)
     public init(
         dstChannelLayout: AVChannelLayout,
-        dstSampleFmt: AVSampleFormat,
+        dstSampleFormat: AVSampleFormat,
         dstSampleRate: Int,
         srcChannelLayout: AVChannelLayout,
-        srcSampleFmt: AVSampleFormat,
+        srcSampleFormat: AVSampleFormat,
         srcSampleRate: Int
     ) {
         cContext = swr_alloc_set_opts(
             nil,
             Int64(dstChannelLayout.rawValue),
-            dstSampleFmt,
+            dstSampleFormat,
             Int32(dstSampleRate),
             Int64(srcChannelLayout.rawValue),
-            srcSampleFmt,
+            srcSampleFormat,
             Int32(srcSampleRate),
             0,
             nil

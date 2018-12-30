@@ -86,3 +86,20 @@ extension AVIOContext {
         }
     }
 }
+
+extension AVIOContext.Flag: CustomStringConvertible {
+
+    public var description: String {
+        var str = "["
+        if contains(.read) { str += "read, " }
+        if contains(.write) { str += "write, " }
+        if contains(.readWrite) { str += "readWrite, " }
+        if contains(.nonBlock) { str += "nonBlock, " }
+        if contains(.direct) { str += "direct, " }
+        if str.suffix(2) == ", " {
+            str.removeLast(2)
+        }
+        str += "]"
+        return str
+    }
+}

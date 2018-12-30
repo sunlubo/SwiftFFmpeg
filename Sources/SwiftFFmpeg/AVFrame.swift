@@ -32,10 +32,10 @@ typealias CAVFrame = CFFmpeg.AVFrame
 public final class AVFrame {
     public static let `class` = AVClass(cClassPtr: avcodec_get_frame_class())
 
+    public var mediaType: AVMediaType = .unknown
+
     let cFramePtr: UnsafeMutablePointer<CAVFrame>
     var cFrame: CAVFrame { return cFramePtr.pointee }
-
-    public var mediaType: AVMediaType = .unknown
 
     init(cFramePtr: UnsafeMutablePointer<CAVFrame>) {
         self.cFramePtr = cFramePtr
@@ -137,7 +137,7 @@ public final class AVFrame {
     /// contains all the references. For planar audio with more than `AV_NUM_DATA_POINTERS`
     /// channels, there may be more buffers than can fit in this array. Then the extra
     /// `AVBuffer` are stored in the `extendedBuf` array.
-    public var buf: [AVBuffer?] {
+    public var buffer: [AVBuffer?] {
         let list = [
             cFrame.buf.0, cFrame.buf.1, cFrame.buf.2, cFrame.buf.3,
             cFrame.buf.4, cFrame.buf.5, cFrame.buf.6, cFrame.buf.7
@@ -150,16 +150,16 @@ public final class AVFrame {
     ///
     /// Note that this is different from `AVFrame.extended_data`, which always contains all the pointers.
     /// This array only contains the extra pointers, which cannot fit into `AVFrame.buf`.
-    public var extendedBuf: [AVBuffer] {
+    public var extendedBuffer: [AVBuffer] {
         var list = [AVBuffer]()
-        for i in 0..<extendedBufCount {
+        for i in 0..<extendedBufferCount {
             list.append(AVBuffer(cBufferPtr: cFrame.extended_buf[i]!))
         }
         return list
     }
 
-    /// The number of elements in `extendedBuf`.
-    public var extendedBufCount: Int {
+    /// The number of elements in `extendedBuffer`.
+    public var extendedBufferCount: Int {
         return Int(cFrame.nb_extended_buf)
     }
 
@@ -175,7 +175,7 @@ public final class AVFrame {
     ///
     /// - encoding: Unused.
     /// - decoding: Set by libavcodec, read by user.
-    public var pktPos: Int64 {
+    public var pktPosition: Int64 {
         return cFrame.pkt_pos
     }
 
@@ -218,12 +218,33 @@ public final class AVFrame {
         }
     }
 
+    /// Allocate new buffer(s) for audio or video data.
+    ///
+    /// The following fields must be set on frame before calling this function:
+    ///   - `pixFmt` for video, `sampleFmt` for audio
+    ///   - `width` and `height` for video
+    ///   - `sampleCount` and `channelLayout` for audio
+    ///
+    /// This function will fill `AVFrame.data` and `AVFrame.buf` arrays and, if necessary, allocate and fill
+    /// `AVFrame.extendedData` and `AVFrame.extendedBuf`. For planar formats, one buffer will be allocated for
+    ///  each plane.
+    ///
+    /// - Warning: If frame already has been allocated, calling this function will leak memory.
+    ///   In addition, undefined behavior can occur in certain cases.
+    ///
+    /// - Parameter align: Required buffer size alignment. If equal to 0, alignment will be chosen automatically
+    ///   for the current CPU. It is highly recommended to pass 0 here unless you know what you are doing.
+    /// - Throws: AVError
+    public func allocBuffer(align: Int = 0) throws {
+        try throwIfFail(av_frame_get_buffer(cFramePtr, Int32(align)))
+    }
+
     /// Set up a new reference to the data described by the source frame.
     ///
     /// Copy frame properties from src to dst and create a new reference for each `AVBuffer` from src.
     /// If src is not reference counted, new buffers are allocated and the data is copied.
     ///
-    /// - Warning: dst MUST have been either unreferenced with av_frame_unref(dst),
+    /// - Warning: dst __must__ have been either unreferenced with av_frame_unref(dst),
     ///           or newly allocated with av_frame_alloc() before calling this
     ///           function, or undefined behavior will occur.
     /// - Throws: AVError
@@ -256,27 +277,6 @@ public final class AVFrame {
         return nil
     }
 
-    /// Allocate new buffer(s) for audio or video data.
-    ///
-    /// The following fields must be set on frame before calling this function:
-    ///   - `pixFmt` for video, `sampleFmt` for audio
-    ///   - `width` and `height` for video
-    ///   - `sampleCount` and `channelLayout` for audio
-    ///
-    /// This function will fill `AVFrame.data` and `AVFrame.buf` arrays and, if necessary, allocate and fill
-    /// `AVFrame.extendedData` and `AVFrame.extendedBuf`. For planar formats, one buffer will be allocated for
-    ///  each plane.
-    ///
-    /// - Warning: If frame already has been allocated, calling this function will leak memory.
-    ///   In addition, undefined behavior can occur in certain cases.
-    ///
-    /// - Parameter align: Required buffer size alignment. If equal to 0, alignment will be chosen automatically
-    ///   for the current CPU. It is highly recommended to pass 0 here unless you know what you are doing.
-    /// - Throws: AVError
-    public func allocBuffer(align: Int = 0) throws {
-        try throwIfFail(av_frame_get_buffer(cFramePtr, Int32(align)))
-    }
-
     /// Check if the frame data is writable.
     ///
     /// - Returns: True if the frame data is writable (which is true if and only if each of the underlying buffers has
@@ -305,7 +305,7 @@ public final class AVFrame {
 extension AVFrame {
 
     /// Pixel format.
-    public var pixFmt: AVPixelFormat {
+    public var pixelFormat: AVPixelFormat {
         get { return AVPixelFormat(cFrame.format) }
         set { cFramePtr.pointee.format = newValue.rawValue }
     }
@@ -328,7 +328,7 @@ extension AVFrame {
     }
 
     /// The picture type of the frame.
-    public var pictType: AVPictureType {
+    public var pictureType: AVPictureType {
         return cFrame.pict_type
     }
 
@@ -350,7 +350,7 @@ extension AVFrame {
 extension AVFrame {
 
     /// Sample format.
-    public var sampleFmt: AVSampleFormat {
+    public var sampleFormat: AVSampleFormat {
         get { return AVSampleFormat(cFrame.format) }
         set { cFramePtr.pointee.format = newValue.rawValue }
     }

@@ -12,8 +12,8 @@ public final class AVImage {
     /// Compute the size of an image line with format and width for the plane.
     ///
     /// - Returns: the computed size in bytes, a negative error code in case of failure
-    public static func getLinesize(pixFmt: AVPixelFormat, width: Int, plane: Int) -> Int {
-        return Int(av_image_get_linesize(pixFmt, Int32(width), Int32(plane)))
+    public static func getLinesize(pixelFormat: AVPixelFormat, width: Int, plane: Int) -> Int {
+        return Int(av_image_get_linesize(pixelFormat, Int32(width), Int32(plane)))
     }
 
     /// Fill plane linesizes for an image with pixel format and width.
@@ -22,10 +22,10 @@ public final class AVImage {
     @discardableResult
     public static func fillLinesizes(
         _ linesizes: UnsafeMutablePointer<Int32>,
-        pixFmt: AVPixelFormat,
+        pixelFormat: AVPixelFormat,
         width: Int
     ) -> Bool {
-        return av_image_fill_linesizes(linesizes, pixFmt, Int32(width)) >= 0
+        return av_image_fill_linesizes(linesizes, pixelFormat, Int32(width)) >= 0
     }
 
     /// Fill plane data pointers for an image with pixel format pix_fmt and height height.
@@ -38,12 +38,12 @@ public final class AVImage {
     @discardableResult
     public static func fillPointers(
         _ data: UnsafeMutablePointer<UnsafeMutablePointer<UInt8>?>,
-        pixFmt: AVPixelFormat,
+        pixelFormat: AVPixelFormat,
         height: Int,
         ptr: UnsafeMutablePointer<UInt8>?,
         linesizes: UnsafePointer<Int32>
     ) -> Int {
-        return Int(av_image_fill_pointers(data, pixFmt, Int32(height), ptr, linesizes))
+        return Int(av_image_fill_pointers(data, pixelFormat, Int32(height), ptr, linesizes))
     }
 
     /// Allocate an image with size w and h and pixel format pix_fmt, and fill pointers and linesizes accordingly.
@@ -55,10 +55,10 @@ public final class AVImage {
         linesizes: UnsafeMutablePointer<Int32>,
         width: Int,
         height: Int,
-        pixFmt: AVPixelFormat,
+        pixelFormat: AVPixelFormat,
         align: Int
     ) -> Int {
-        let ret = av_image_alloc(data, linesizes, Int32(width), Int32(height), pixFmt, Int32(align))
+        let ret = av_image_alloc(data, linesizes, Int32(width), Int32(height), pixelFormat, Int32(align))
         return Int(ret)
     }
 
@@ -72,22 +72,22 @@ public final class AVImage {
         dstLinesizes: UnsafeMutablePointer<Int32>,
         src: UnsafeMutablePointer<UnsafePointer<UInt8>?>,
         srcLinesizes: UnsafePointer<Int32>,
-        pixFmt: AVPixelFormat,
+        pixelFormat: AVPixelFormat,
         width: Int,
         height: Int
     ) {
-        av_image_copy(dst, dstLinesizes, src, srcLinesizes, pixFmt, Int32(width), Int32(height))
+        av_image_copy(dst, dstLinesizes, src, srcLinesizes, pixelFormat, Int32(width), Int32(height))
     }
 
     /// Return the size in bytes of the amount of data required to store an image with the given parameters.
     ///
     /// - Parameters:
-    ///   - pixFmt: the pixel format of the image
+    ///   - pixelFormat: the pixel format of the image
     ///   - width: the width of the image in pixels
     ///   - height: the height of the image in pixels
     ///   - align: the assumed linesize alignment
     /// - Returns: the buffer size in bytes, a negative error code in case of failure
-    public static func getBufferSize(pixFmt: AVPixelFormat, width: Int, height: Int, align: Int) -> Int {
-        return Int(av_image_get_buffer_size(pixFmt, Int32(width), Int32(height), Int32(align)))
+    public static func getBufferSize(pixelFormat: AVPixelFormat, width: Int, height: Int, align: Int) -> Int {
+        return Int(av_image_get_buffer_size(pixelFormat, Int32(width), Int32(height), Int32(align)))
     }
 }

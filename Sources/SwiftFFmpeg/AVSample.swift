@@ -8,6 +8,7 @@
 import CFFmpeg
 
 public final class AVSample {
+
     /// Fill plane data pointers and linesize for samples with sample format.
     ///
     /// The data array is filled with the pointers to the samples data planes:
@@ -26,7 +27,7 @@ public final class AVSample {
     ///   - ptr: the pointer to a buffer containing the samples
     ///   - channelCount: the number of channels
     ///   - sampleCount: the number of samples in a single channel
-    ///   - sampleFmt: the sample format
+    ///   - sampleFormat: the sample format
     ///   - align: buffer size alignment (0 = default, 1 = no alignment)
     /// - Returns:  the size in bytes required for the audio buffer, a negative error code in case of failure
     @discardableResult
@@ -36,7 +37,7 @@ public final class AVSample {
         ptr: UnsafeMutablePointer<UInt8>?,
         channelCount: Int,
         sampleCount: Int,
-        sampleFmt: AVSampleFormat,
+        sampleFormat: AVSampleFormat,
         align: Int
     ) -> Int {
         let ret = av_samples_fill_arrays(
@@ -45,7 +46,7 @@ public final class AVSample {
             ptr,
             Int32(channelCount),
             Int32(sampleCount),
-            sampleFmt,
+            sampleFormat,
             Int32(align)
         )
         return Int(ret)
@@ -58,7 +59,7 @@ public final class AVSample {
     ///   - linesize: aligned size for audio buffer(s)
     ///   - channelCount: the number of channels
     ///   - sampleCount: the number of samples in a single channel
-    ///   - sampleFmt: the sample format
+    ///   - sampleFormat: the sample format
     ///   - align: buffer size alignment (0 = default, 1 = no alignment)
     /// - Returns: the size in bytes required for the audio buffer, a negative error code in case of failure
     @discardableResult
@@ -67,10 +68,10 @@ public final class AVSample {
         linesize: UnsafeMutablePointer<Int32>,
         channelCount: Int,
         sampleCount: Int,
-        sampleFmt: AVSampleFormat,
+        sampleFormat: AVSampleFormat,
         align: Int
     ) -> Int {
-        let ret = av_samples_alloc(data, linesize, Int32(channelCount), Int32(sampleCount), sampleFmt, Int32(align))
+        let ret = av_samples_alloc(data, linesize, Int32(channelCount), Int32(sampleCount), sampleFormat, Int32(align))
         return Int(ret)
     }
 
@@ -84,7 +85,7 @@ public final class AVSample {
     ///   - linesize: aligned size for audio buffer(s)
     ///   - channelCount: the number of channels
     ///   - sampleCount: the number of samples in a single channel
-    ///   - sampleFmt: the sample format
+    ///   - sampleFormat: the sample format
     ///   - align: buffer size alignment (0 = default, 1 = no alignment)
     /// - Returns: the size in bytes required for the audio buffer, a negative error code in case of failure
     @discardableResult
@@ -93,7 +94,7 @@ public final class AVSample {
         linesize: UnsafeMutablePointer<Int32>,
         channelCount: Int,
         sampleCount: Int,
-        sampleFmt: AVSampleFormat,
+        sampleFormat: AVSampleFormat,
         align: Int
     ) -> Int {
         let ret = av_samples_alloc_array_and_samples(
@@ -101,7 +102,7 @@ public final class AVSample {
             linesize,
             Int32(channelCount),
             Int32(sampleCount),
-            sampleFmt,
+            sampleFormat,
             Int32(align)
         )
         return Int(ret)
@@ -117,17 +118,17 @@ public final class AVSample {
     ///   - linesize: calculated linesize
     ///   - channelCount: the number of channels
     ///   - sampleCount: the number of samples in a single channel
-    ///   - sampleFmt: the sample format
+    ///   - sampleFormat: the sample format
     ///   - align: buffer size alignment (0 = default, 1 = no alignment)
     /// - Returns: required buffer size, or negative error code on failure
     public static func getBufferSize(
         linesize: UnsafeMutablePointer<Int32>? = nil,
         channelCount: Int,
         sampleCount: Int,
-        sampleFmt: AVSampleFormat,
+        sampleFormat: AVSampleFormat,
         align: Int
     ) -> Int {
-        let ret = av_samples_get_buffer_size(linesize, Int32(channelCount), Int32(sampleCount), sampleFmt, Int32(align))
+        let ret = av_samples_get_buffer_size(linesize, Int32(channelCount), Int32(sampleCount), sampleFormat, Int32(align))
         return Int(ret)
     }
 }

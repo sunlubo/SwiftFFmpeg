@@ -48,7 +48,7 @@ public final class AVPacket {
 
     /// A reference to the reference-counted buffer where the packet data is stored.
     /// May be `nil`, then the packet data is not reference-counted.
-    public var buf: AVBuffer? {
+    public var buffer: AVBuffer? {
         get {
             if let bufPtr = cPacket.buf {
                 return AVBuffer(cBufferPtr: bufPtr)
@@ -90,7 +90,7 @@ public final class AVPacket {
         set { cPacketPtr.pointee.stream_index = Int32(newValue) }
     }
 
-    public var flags: AVPacket.Flag {
+    public var flags: Flag {
         get { return Flag(rawValue: cPacket.flags) }
         set { cPacketPtr.pointee.flags = newValue.rawValue }
     }
@@ -103,9 +103,19 @@ public final class AVPacket {
     }
 
     /// Byte position in stream, -1 if unknown.
-    public var pos: Int64 {
+    public var position: Int64 {
         get { return cPacket.pos }
         set { cPacketPtr.pointee.pos = newValue }
+    }
+
+    /// Convert valid timing fields (timestamps / durations) in a packet from one timebase to another.
+    /// Timestamps with unknown values (`noPTS`) will be ignored.
+    ///
+    /// - Parameters:
+    ///   - src: source timebase, in which the timing fields in pkt are expressed.
+    ///   - dst: destination timebase, to which the timing fields will be converted.
+    public func rescaleTs(from src: AVRational, to dst: AVRational) {
+        av_packet_rescale_ts(cPacketPtr, src, dst)
     }
 
     /// Setup a new reference to the data described by a given packet.
@@ -151,16 +161,6 @@ public final class AVPacket {
         try throwIfFail(av_packet_make_writable(cPacketPtr))
     }
 
-    /// Convert valid timing fields (timestamps / durations) in a packet from one timebase to another.
-    /// Timestamps with unknown values (`noPTS`) will be ignored.
-    ///
-    /// - Parameters:
-    ///   - src: source timebase, in which the timing fields in pkt are expressed.
-    ///   - dst: destination timebase, to which the timing fields will be converted.
-    public func rescaleTs(from src: AVRational, to dst: AVRational) {
-        av_packet_rescale_ts(cPacketPtr, src, dst)
-    }
-
     deinit {
         var ptr: UnsafeMutablePointer<CAVPacket>? = cPacketPtr
         av_packet_free(&ptr)
@@ -192,5 +192,22 @@ extension AVPacket {
         public init(rawValue: Int32) {
             self.rawValue = rawValue
         }
+    }
+}
+
+extension AVPacket.Flag: CustomStringConvertible {
+
+    public var description: String {
+        var str = "["
+        if contains(.key) { str += "key, " }
+        if contains(.corrupt) { str += "corrupt, " }
+        if contains(.discard) { str += "discard, " }
+        if contains(.trusted) { str += "trusted, " }
+        if contains(.disposable) { str += "disposable, " }
+        if str.suffix(2) == ", " {
+            str.removeLast(2)
+        }
+        str += "]"
+        return str
     }
 }

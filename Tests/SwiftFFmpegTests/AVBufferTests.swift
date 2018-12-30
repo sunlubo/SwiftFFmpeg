@@ -47,5 +47,10 @@ final class AVBufferTests: XCTestCase {
         XCTAssertEqual(buf3.size, 200)
         XCTAssertEqual(buf3.refCount, 1)
         XCTAssertEqual(buf3.isWritable(), true)
+
+        buf1.unref()
+        buf3.unref()
+        XCTAssertEqual(buf1.cBufferPtr, nil)
+        XCTAssertEqual(buf3.cBufferPtr, nil)
     }
 }

@@ -68,7 +68,7 @@ public final class AVCodecParameters {
 extension AVCodecParameters {
 
     /// Pixel format.
-    public var pixFmt: AVPixelFormat {
+    public var pixelFormat: AVPixelFormat {
         return AVPixelFormat(cParameters.format)
     }
 
@@ -101,7 +101,7 @@ extension AVCodecParameters {
 extension AVCodecParameters {
 
     /// Sample format.
-    public var sampleFmt: AVSampleFormat {
+    public var sampleFormat: AVSampleFormat {
         return AVSampleFormat(cParameters.format)
     }
 
@@ -224,14 +224,14 @@ public final class AVStream {
 
     /// Codec parameters associated with this stream.
     ///
-    /// - demuxing: filled by libavformat on stream creation or in `findStreamInfo`.
+    /// - demuxing: Filled by libavformat on stream creation or in `findStreamInfo`.
     /// - muxing: Filled by the caller before `writeHeader`.
-    public var codecpar: AVCodecParameters {
+    public var codecParameters: AVCodecParameters {
         return AVCodecParameters(cParametersPtr: cStream.codecpar)
     }
 
     public var mediaType: AVMediaType {
-        return codecpar.mediaType
+        return codecParameters.mediaType
     }
 
     /// Copy the contents of src to dst.

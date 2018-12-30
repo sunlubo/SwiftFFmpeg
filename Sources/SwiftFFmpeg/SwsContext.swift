@@ -22,21 +22,21 @@ public final class SwsContext {
     /// Allocate and return an `SwsContext`.
     ///
     /// - Parameters:
-    ///   - srcW: the width of the source image
-    ///   - srcH: the height of the source image
-    ///   - srcFormat: the source image format
-    ///   - dstW: the width of the destination image
-    ///   - dstH: the height of the destination image
-    ///   - dstFormat: the destination image format
+    ///   - srcWidth: the width of the source image
+    ///   - srcHeight: the height of the source image
+    ///   - srcPixelFormat: the source image format
+    ///   - dstWidth: the width of the destination image
+    ///   - dstHeight: the height of the destination image
+    ///   - dstPixelFormat: the destination image format
     ///   - flags: specify which algorithm and options to use for rescaling
     public init?(
-        srcW: Int, srcH: Int, srcFormat: AVPixelFormat,
-        dstW: Int, dstH: Int, dstFormat: AVPixelFormat,
-        flags: SwsContext.Flag
+        srcWidth: Int, srcHeight: Int, srcPixelFormat: AVPixelFormat,
+        dstWidth: Int, dstHeight: Int, dstPixelFormat: AVPixelFormat,
+        flags: Flag
     ) {
         guard let ptr = sws_getContext(
-            Int32(srcW), Int32(srcH), srcFormat,
-            Int32(dstW), Int32(dstH), dstFormat,
+            Int32(srcWidth), Int32(srcHeight), srcPixelFormat,
+            Int32(dstWidth), Int32(dstHeight), dstPixelFormat,
             flags.rawValue,
             nil, nil,
             nil
@@ -58,7 +58,7 @@ public final class SwsContext {
     ///   - srcStride: the array containing the strides for each plane of the source image
     ///   - srcSliceY: the position in the source image of the slice to process, that is the number
     ///     (counted starting from zero) in the image of the first row of the slice
-    ///   - srcSliceH: the height of the source slice, that is the number of rows in the slice
+    ///   - srcSliceHeight: the height of the source slice, that is the number of rows in the slice
     ///   - dst: the array containing the pointers to the planes of the destination image
     ///   - dstStride: the array containing the strides for each plane of the destination image
     /// - Returns: the height of the output slice
@@ -67,11 +67,11 @@ public final class SwsContext {
         src: UnsafePointer<UnsafePointer<UInt8>?>,
         srcStride: UnsafePointer<Int32>,
         srcSliceY: Int,
-        srcSliceH: Int,
+        srcSliceHeight: Int,
         dst: UnsafePointer<UnsafeMutablePointer<UInt8>?>,
         dstStride: UnsafePointer<Int32>
     ) -> Int {
-        return Int(sws_scale(cContext, src, srcStride, Int32(srcSliceY), Int32(srcSliceH), dst, dstStride))
+        return Int(sws_scale(cContext, src, srcStride, Int32(srcSliceY), Int32(srcSliceHeight), dst, dstStride))
     }
 
     /// Returns a Boolean value indicating whether the pixel format is a supported input format.
@@ -123,6 +123,29 @@ extension SwsContext {
         public init(rawValue: Int32) {
             self.rawValue = rawValue
         }
+    }
+}
+
+extension SwsContext.Flag: CustomStringConvertible {
+
+    public var description: String {
+        var str = "["
+        if contains(.fastBilinear) { str += "fastBilinear, " }
+        if contains(.bilinear) { str += "bilinear, " }
+        if contains(.bicubic) { str += "bicubic, " }
+        if contains(.x) { str += "x, " }
+        if contains(.point) { str += "point, " }
+        if contains(.area) { str += "area, " }
+        if contains(.bicublin) { str += "bicublin, " }
+        if contains(.gauss) { str += "gauss, " }
+        if contains(.sinc) { str += "sinc, " }
+        if contains(.lanczos) { str += "lanczos, " }
+        if contains(.spLine) { str += "spLine, " }
+        if str.suffix(2) == ", " {
+            str.removeLast(2)
+        }
+        str += "]"
+        return str
     }
 }
 
