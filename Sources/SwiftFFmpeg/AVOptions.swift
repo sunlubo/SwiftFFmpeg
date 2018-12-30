@@ -26,8 +26,8 @@ extension AVOptionType {
     public static let const = AV_OPT_TYPE_CONST
     /// offset must point to two consecutive integers
     public static let imageSize = AV_OPT_TYPE_IMAGE_SIZE
-    public static let pixelFmt = AV_OPT_TYPE_PIXEL_FMT
-    public static let sampleFmt = AV_OPT_TYPE_SAMPLE_FMT
+    public static let pixelFormat = AV_OPT_TYPE_PIXEL_FMT
+    public static let sampleFormat = AV_OPT_TYPE_SAMPLE_FMT
     /// offset must point to AVRational
     public static let videoRate = AV_OPT_TYPE_VIDEO_RATE
     public static let duration = AV_OPT_TYPE_DURATION
@@ -58,9 +58,9 @@ extension AVOptionType: CustomStringConvertible {
             return "const"
         case .imageSize:
             return "image size"
-        case .pixelFmt:
+        case .pixelFormat:
             return "pixel format"
-        case .sampleFmt:
+        case .sampleFormat:
             return "sample format"
         case .videoRate:
             return "video rate"
@@ -110,7 +110,7 @@ public struct AVOption: CustomStringConvertible {
         self.unit = String(cString: cOption.unit)
 
         switch type {
-        case .flags, .int, .int64, .uint64, .const, .pixelFmt, .sampleFmt, .duration, .channelLayout:
+        case .flags, .int, .int64, .uint64, .const, .pixelFormat, .sampleFormat, .duration, .channelLayout:
             self.defaultValue = cOption.default_val.i64
         case .double, .float, .rational:
             self.defaultValue = cOption.default_val.dbl
@@ -277,7 +277,7 @@ extension AVOptionAccessor {
     }
 
     /// av_opt_set_image_size
-    public func setImageSize(
+    public func set(
         _ size: (width: Int, height: Int), forKey key: String, searchFlags: AVOptionSearchFlag = .children
     ) throws {
         try withUnsafeObjectPointer { objPtr in
@@ -315,7 +315,7 @@ extension AVOptionAccessor {
     }
 
     /// av_opt_set_channel_layout
-    public func setChannelLayout(
+    public func set(
         _ value: AVChannelLayout, forKey key: String, searchFlags: AVOptionSearchFlag = .children
     ) throws {
         try withUnsafeObjectPointer { objPtr in
@@ -383,7 +383,7 @@ extension AVOptionAccessor {
     }
 
     /// av_opt_get_pixel_fmt
-    public func pixelFmt(forKey key: String, searchFlags: AVOptionSearchFlag = .children) throws -> AVPixelFormat {
+    public func pixelFormat(forKey key: String, searchFlags: AVOptionSearchFlag = .children) throws -> AVPixelFormat {
         return try withUnsafeObjectPointer { objPtr in
             var outVal = AVPixelFormat.NONE
             try throwIfFail(av_opt_get_pixel_fmt(objPtr, key, searchFlags.rawValue, &outVal))
@@ -392,7 +392,7 @@ extension AVOptionAccessor {
     }
 
     /// av_opt_get_sample_fmt
-    public func sampleFmt(forKey key: String, searchFlags: AVOptionSearchFlag = .children) throws -> AVSampleFormat {
+    public func sampleFormat(forKey key: String, searchFlags: AVOptionSearchFlag = .children) throws -> AVSampleFormat {
         return try withUnsafeObjectPointer { objPtr in
             var outVal = AVSampleFormat.NONE
             try throwIfFail(av_opt_get_sample_fmt(objPtr, key, searchFlags.rawValue, &outVal))
