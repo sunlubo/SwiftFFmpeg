@@ -626,13 +626,13 @@ extension AVFormatContext {
 
     public struct SeekFlag {
         /// seek backward
-        public static let backward = Flag(rawValue: AVSEEK_FLAG_BACKWARD)
+        public static let backward = SeekFlag(rawValue: AVSEEK_FLAG_BACKWARD)
         /// seeking based on position in bytes
-        public static let byte = Flag(rawValue: AVSEEK_FLAG_BYTE)
+        public static let byte = SeekFlag(rawValue: AVSEEK_FLAG_BYTE)
         /// seek to any frame, even non-keyframes
-        public static let any = Flag(rawValue: AVSEEK_FLAG_ANY)
+        public static let any = SeekFlag(rawValue: AVSEEK_FLAG_ANY)
         /// seeking based on frame number
-        public static let frame = Flag(rawValue: AVSEEK_FLAG_FRAME)
+        public static let frame = SeekFlag(rawValue: AVSEEK_FLAG_FRAME)
 
         public let rawValue: Int32
 
