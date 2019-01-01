@@ -246,12 +246,6 @@ extension AVCodec {
 
     /// Codec capabilities
     public struct Cap: OptionSet {
-        public let rawValue: UInt32
-
-        public init(rawValue: UInt32) {
-            self.rawValue = rawValue
-        }
-
         /// Decoder can use draw_horiz_band callback.
         public static let drawHorizBand = Cap(rawValue: UInt32(AV_CODEC_CAP_DRAW_HORIZ_BAND))
         /// Codec uses get_buffer() for allocating buffers and supports custom allocators.
@@ -331,6 +325,12 @@ extension AVCodec {
         /// This codec takes the reordered_opaque field from input AVFrames
         /// and returns it in the corresponding field in AVCodecContext after encoding.
         public static let encoderReorderedOpaque = Cap(rawValue: 1 << 20)
+
+        public let rawValue: UInt32
+
+        public init(rawValue: UInt32) {
+            self.rawValue = rawValue
+        }
     }
 }
 
