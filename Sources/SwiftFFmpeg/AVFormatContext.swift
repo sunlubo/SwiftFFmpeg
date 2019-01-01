@@ -247,7 +247,7 @@ typealias CAVFormatContext = CFFmpeg.AVFormatContext
 public final class AVFormatContext {
     public static let `class` = AVClass(cClassPtr: avformat_get_class())
 
-    let cContextPtr: UnsafeMutablePointer<CAVFormatContext>
+    var cContextPtr: UnsafeMutablePointer<CAVFormatContext>!
     var cContext: CAVFormatContext { return cContextPtr.pointee }
 
     private var isOpen = false
@@ -375,8 +375,7 @@ public final class AVFormatContext {
 
     deinit {
         if isOpen {
-            var ps: UnsafeMutablePointer<CAVFormatContext>? = cContextPtr
-            avformat_close_input(&ps)
+            avformat_close_input(&cContextPtr)
         } else {
             avformat_free_context(cContextPtr)
         }
@@ -521,8 +520,7 @@ extension AVFormatContext {
         var pm: OpaquePointer? = options?.toAVDict()
         defer { av_dict_free(&pm) }
 
-        var ps: UnsafeMutablePointer<CAVFormatContext>? = cContextPtr
-        try throwIfFail(avformat_open_input(&ps, url, format?.cFormatPtr, &pm))
+        try throwIfFail(avformat_open_input(&cContextPtr, url, format?.cFormatPtr, &pm))
         isOpen = true
 
         dumpUnrecognizedOptions(pm)
