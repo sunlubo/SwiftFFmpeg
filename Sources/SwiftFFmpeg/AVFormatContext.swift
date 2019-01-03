@@ -118,6 +118,16 @@ extension AVInputFormat.Flag: CustomStringConvertible {
     }
 }
 
+extension AVInputFormat: AVOptionAccessor {
+
+    public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T {
+        var tmp = cFormat.priv_class
+        return try withUnsafeMutablePointer(to: &tmp) { ptr in
+            try body(ptr)
+        }
+    }
+}
+
 // MARK: - AVOutputFormat
 
 typealias CAVOutputFormat = CFFmpeg.AVOutputFormat
@@ -246,6 +256,16 @@ extension AVOutputFormat.Flag: CustomStringConvertible {
         }
         str += "]"
         return str
+    }
+}
+
+extension AVOutputFormat: AVOptionAccessor {
+
+    public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T {
+        var tmp = cFormat.priv_class
+        return try withUnsafeMutablePointer(to: &tmp) { ptr in
+            try body(ptr)
+        }
     }
 }
 
