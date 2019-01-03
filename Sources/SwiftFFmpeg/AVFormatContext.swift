@@ -130,6 +130,16 @@ public struct AVOutputFormat {
         self.cFormatPtr = cFormatPtr
     }
 
+    /// Find `AVOutputFormat` based on the short name of the output format.
+    ///
+    /// - Parameter name: name of the input format
+    public init?(name: String) {
+        guard let fmtPtr = av_guess_format(name, nil, nil) else {
+            return nil
+        }
+        self.init(cFormatPtr: fmtPtr)
+    }
+
     /// A comma separated list of short names for the format.
     public var name: String {
         return String(cString: cFormat.name)
