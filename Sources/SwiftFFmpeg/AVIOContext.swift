@@ -252,9 +252,10 @@ public final class AVIOContext {
     }
 
     /// Get the filesize.
-    public func size() throws -> Int {
+    public func size() throws -> Int64 {
         let ret = avio_size(cContextPtr)
-        return Int(ret)
+        try throwIfFail(Int32(ret))
+        return ret
     }
 
     /// Checks if the end of the given file stream has been reached.

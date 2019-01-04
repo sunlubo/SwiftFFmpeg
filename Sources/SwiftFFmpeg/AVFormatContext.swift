@@ -539,6 +539,20 @@ extension AVFormatContext {
         return cContext.duration
     }
 
+    /// Total stream bitrate in bit/s, 0 if not available.
+    /// Never set it directly if the file_size and the duration are known as FFmpeg can compute it automatically.
+    public var bitRate: Int64 {
+        return cContext.bit_rate
+    }
+
+    /// The size of the file.
+    public var size: Int64 {
+        if let pb = pb {
+            return (try? pb.size()) ?? 0
+        }
+        return 0
+    }
+
     /// Open an input stream and read the header.
     ///
     /// - Parameter url: URL of the stream to open.
