@@ -280,8 +280,7 @@ public final class AVFormatContext {
     var cContextPtr: UnsafeMutablePointer<CAVFormatContext>!
     var cContext: CAVFormatContext { return cContextPtr.pointee }
 
-    private var isOpen = false
-    private var ioCtx: AVIOContext?
+    private var ioContext: AVIOContext?
 
     init(cContextPtr: UnsafeMutablePointer<CAVFormatContext>) {
         self.cContextPtr = cContextPtr
@@ -316,7 +315,7 @@ public final class AVFormatContext {
             return nil
         }
         set {
-            ioCtx = newValue
+            ioContext = newValue
             return cContextPtr.pointee.pb = newValue?.cContextPtr
         }
     }
@@ -404,11 +403,7 @@ public final class AVFormatContext {
     }
 
     deinit {
-        if isOpen {
-            avformat_close_input(&cContextPtr)
-        } else {
-            avformat_free_context(cContextPtr)
-        }
+        avformat_close_input(&cContextPtr)
     }
 }
 
@@ -510,7 +505,6 @@ extension AVFormatContext {
         var ctxPtr: UnsafeMutablePointer<CAVFormatContext>?
         try throwIfFail(avformat_open_input(&ctxPtr, url, format?.cFormatPtr, &pm))
         self.init(cContextPtr: ctxPtr!)
-        self.isOpen = true
 
         dumpUnrecognizedOptions(pm)
     }
@@ -565,7 +559,6 @@ extension AVFormatContext {
         defer { av_dict_free(&pm) }
 
         try throwIfFail(avformat_open_input(&cContextPtr, url, format?.cFormatPtr, &pm))
-        isOpen = true
 
         dumpUnrecognizedOptions(pm)
     }
