@@ -571,8 +571,34 @@ extension AVFormatContext {
     }
 
     /// Read packets of a media file to get stream information.
-    public func findStreamInfo() throws {
-        try throwIfFail(avformat_find_stream_info(cContextPtr, nil))
+    ///
+    /// This is useful for file formats with no headers such as MPEG.
+    /// This function also computes the real framerate in case of MPEG-2 repeat frame mode.
+    /// The logical file position is not changed by this function; examined packets may be buffered
+    /// for later processing.
+    ///
+    /// - Note: This function isn't guaranteed to open all the codecs, so options being non-empty at return
+    ///   is a perfectly normal behavior.
+    ///
+    /// - Parameter options: If non-NULL, an `streamCount` long array of pointers to dictionaries,
+    ///   where i-th member contains options for codec corresponding to i-th stream. On return each dictionary
+    ///   will be filled with options that were not found.
+    /// - Throws: AVError
+    public func findStreamInfo(options: [[String: String]]? = nil) throws {
+        if let options = options, !options.isEmpty {
+            var pms = [OpaquePointer?](repeating: nil, count: streamCount)
+            for (i, opt) in options.enumerated() where i < streamCount {
+                pms[i] = opt.toAVDict()
+            }
+            try throwIfFail(avformat_find_stream_info(cContextPtr, &pms))
+            pms.forEach { pm in
+                var pm = pm
+                dumpUnrecognizedOptions(pm)
+                av_dict_free(&pm)
+            }
+        } else {
+            try throwIfFail(avformat_find_stream_info(cContextPtr, nil))
+        }
     }
 
     /// Find the "best" stream in the file.
