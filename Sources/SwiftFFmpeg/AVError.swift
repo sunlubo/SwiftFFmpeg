@@ -7,20 +7,17 @@
 
 import CFFmpeg
 
-private let AVERROR = swift_AVERROR
-private let AVUNERROR = swift_AVUNERROR
-
 public struct AVError: Error, Equatable {
     /// Resource temporarily unavailable
-    public static let tryAgain = AVError(code: AVERROR(Darwin.EAGAIN))
+    public static let tryAgain = AVError(code: swift_AVERROR(Darwin.EAGAIN))
     /// Invalid argument
-    public static let invalidArgument = AVError(code: AVERROR(Darwin.EINVAL))
+    public static let invalidArgument = AVError(code: swift_AVERROR(Darwin.EINVAL))
     /// Cannot allocate memory
-    public static let outOfMemory = AVError(code: AVERROR(Darwin.ENOMEM))
+    public static let outOfMemory = AVError(code: swift_AVERROR(Darwin.ENOMEM))
     /// The value is out of range
-    public static let outOfRange = AVError(code: AVERROR(Darwin.ERANGE))
+    public static let outOfRange = AVError(code: swift_AVERROR(Darwin.ERANGE))
     /// The value is not valid
-    public static let invalidValue = AVError(code: AVERROR(Darwin.EINVAL))
+    public static let invalidValue = AVError(code: swift_AVERROR(Darwin.EINVAL))
 
     /// Bitstream filter not found
     public static let bsfNotFound = AVError(code: swift_AVERROR_BSF_NOT_FOUND)
