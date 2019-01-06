@@ -524,13 +524,13 @@ extension AVFormatContext {
         set { cContextPtr.pointee.iformat = newValue?.cFormatPtr }
     }
 
-    /// Position of the first frame of the component, in AV_TIME_BASE fractional seconds.
+    /// Position of the first frame of the component, in `avTimeBase` fractional seconds.
     /// Never set this value directly: It is deduced from the `AVStream` values.
     public var startTime: Int64 {
         return cContext.start_time
     }
 
-    /// Duration of the stream, in AV_TIME_BASE fractional seconds. Only set this value if you know
+    /// Duration of the stream, in `avTimeBase` fractional seconds. Only set this value if you know
     /// none of the individual stream durations and also do not set any of them.
     /// This is deduced from the AVStream values if not set.
     public var duration: Int64 {
@@ -655,8 +655,8 @@ extension AVFormatContext {
     ///
     /// - Parameters:
     ///   - streamIndex: If stream_index is `-1`, a default stream is selected, and timestamp is automatically
-    ///     converted from AV_TIME_BASE units to the stream specific time_base.
-    ///   - timestamp: Timestamp in AVStream.time_base units or, if no stream is specified, in AV_TIME_BASE units.
+    ///     converted from `avTimeBase` units to the stream specific time_base.
+    ///   - timestamp: Timestamp in AVStream.time_base units or, if no stream is specified, in `avTimeBase` units.
     ///   - flags: flags which select direction and seeking mode
     /// - Throws: AVError
     public func seekFrame(streamIndex: Int, timestamp: Int64, flags: SeekFlag) throws {

@@ -327,12 +327,12 @@ public final class AVIOContext {
     ///
     /// - Parameters:
     ///   - streamIndex: The stream index that the timestamp is relative to.
-    ///     If stream_index is `-1` the timestamp should be in AV_TIME_BASE
+    ///     If stream_index is `-1` the timestamp should be in `avTimeBase`
     ///     units from the beginning of the presentation.
     ///     If a stream_index >= 0 is used and the protocol does not support
     ///     seeking based on component streams, the call will fail.
     ///   - timestamp: timestamp in AVStream.time_base units
-    ///     or if there is no stream specified then in AV_TIME_BASE units.
+    ///     or if there is no stream specified then in `avTimeBase` units.
     ///   - flags: Optional combination of AVSEEK_FLAG_BACKWARD, AVSEEK_FLAG_BYTE
     ///     and AVSEEK_FLAG_ANY. The protocol may silently ignore
     ///     AVSEEK_FLAG_BACKWARD and AVSEEK_FLAG_ANY, but AVSEEK_FLAG_BYTE will

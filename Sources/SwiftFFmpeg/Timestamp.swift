@@ -7,6 +7,11 @@
 
 import CFFmpeg
 
+/// Internal time base represented as integer
+public let avTimeBase = AV_TIME_BASE
+/// Internal time base represented as fractional value
+public let avTimeBaseQ = av_get_time_base_q()
+
 extension Int64 {
     /// Undefined timestamp value.
     ///
