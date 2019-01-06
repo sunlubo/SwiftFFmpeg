@@ -22,12 +22,40 @@ extension AVRational {
     public var toDouble: Double {
         return av_q2d(self)
     }
+
+    /// Invert a rational. `1 / q`
+    public var inverted: AVRational {
+        return av_inv_q(self)
+    }
 }
 
 extension AVRational: Equatable {
 
-    public static func == (lhs: AVRational, rhs: AVRational) -> Bool {
+    public static func ==(lhs: AVRational, rhs: AVRational) -> Bool {
         return av_cmp_q(lhs, rhs) == 0
+    }
+}
+
+extension AVRational {
+
+    /// Add two rationals.
+    public static func +(lhs: AVRational, rhs: AVRational) -> AVRational {
+        return av_add_q(lhs, rhs)
+    }
+
+    /// Subtract one rational from another.
+    public static func -(lhs: AVRational, rhs: AVRational) -> AVRational {
+        return av_sub_q(lhs, rhs)
+    }
+
+    /// Multiply two rationals.
+    public static func *(lhs: AVRational, rhs: AVRational) -> AVRational {
+        return av_mul_q(lhs, rhs)
+    }
+
+    /// Divide one rational by another.
+    public static func /(lhs: AVRational, rhs: AVRational) -> AVRational {
+        return av_div_q(lhs, rhs)
     }
 }
 
