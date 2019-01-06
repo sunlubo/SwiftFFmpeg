@@ -7,9 +7,6 @@
 
 import CFFmpeg
 
-public let AV_INPUT_BUFFER_PADDING_SIZE = Int(CFFmpeg.AV_INPUT_BUFFER_PADDING_SIZE)
-public let AV_ERROR_MAX_STRING_SIZE = Int(CFFmpeg.AV_ERROR_MAX_STRING_SIZE)
-
 // MARK: - AVMediaType
 
 public typealias AVMediaType = CFFmpeg.AVMediaType

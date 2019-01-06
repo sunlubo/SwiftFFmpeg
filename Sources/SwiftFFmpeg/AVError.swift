@@ -84,10 +84,10 @@ public struct AVError: Error, Equatable {
 extension AVError: CustomStringConvertible {
 
     public var description: String {
-        let buf = UnsafeMutablePointer<Int8>.allocate(capacity: AV_ERROR_MAX_STRING_SIZE)
+        let buf = UnsafeMutablePointer<Int8>.allocate(capacity: Int(AV_ERROR_MAX_STRING_SIZE))
         buf.initialize(to: 0)
         defer { buf.deallocate() }
-        return String(cString: av_make_error_string(buf, AV_ERROR_MAX_STRING_SIZE, code))
+        return String(cString: av_make_error_string(buf, Int(AV_ERROR_MAX_STRING_SIZE), code))
     }
 }
 
