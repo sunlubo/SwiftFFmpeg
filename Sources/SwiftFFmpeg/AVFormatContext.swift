@@ -807,7 +807,7 @@ extension AVFormatContext {
     ///
     ///   The timestamps (`AVPacket.pts`, `AVPacket.dts`) must be set to correct values in the stream's
     ///   timebase (unless the output format is flagged with the `AVOutputFormat.Flag.noTimestamps` flag,
-    ///   then they can be set to `noPTS`).
+    ///   then they can be set to `avNoPTS`).
     ///   The dts for subsequent packets passed to this function must be strictly increasing when compared
     ///   in their respective timebases (unless the output format is flagged with the
     ///   `AVOutputFormat.Flag.tsNonstrict`, then they merely have to be nondecreasing).
@@ -839,7 +839,7 @@ extension AVFormatContext {
     ///
     ///   The timestamps (`AVPacket.pts`, `AVPacket.dts`) must be set to correct values in the stream's timebase
     ///   (unless the output format is flagged with the `AVOutputFormat.Flag.noTimestamps` flag, then they can be
-    ///   set to `noPTS`).
+    ///   set to `avNoPTS`).
     ///   The dts for subsequent packets in one stream must be strictly increasing (unless the output format is
     ///   flagged with the `AVOutputFormat.Flag.tsNonstrict`, then they merely have to be nondecreasing).
     ///  `AVPacket.duration` should also be set if known.

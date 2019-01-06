@@ -61,7 +61,7 @@ public final class AVPacket {
     /// Presentation timestamp in `AVStream.timebase` units; the time at which the decompressed packet
     /// will be presented to the user.
     ///
-    /// Can be `noPTS` if it is not stored in the file.
+    /// Can be `avNoPTS` if it is not stored in the file.
     public var pts: Int64 {
         get { return cPacket.pts }
         set { cPacketPtr.pointee.pts = newValue }
@@ -69,7 +69,7 @@ public final class AVPacket {
 
     /// Decompression timestamp in `AVStream.timebase` units; the time at which the packet is decompressed.
     ///
-    /// Can be `noPTS` if it is not stored in the file.
+    /// Can be `avNoPTS` if it is not stored in the file.
     public var dts: Int64 {
         get { return cPacket.dts }
         set { cPacketPtr.pointee.dts = newValue }
@@ -109,7 +109,7 @@ public final class AVPacket {
     }
 
     /// Convert valid timing fields (timestamps / durations) in a packet from one timebase to another.
-    /// Timestamps with unknown values (`noPTS`) will be ignored.
+    /// Timestamps with unknown values (`avNoPTS`) will be ignored.
     ///
     /// - Parameters:
     ///   - src: source timebase, in which the timing fields in pkt are expressed.

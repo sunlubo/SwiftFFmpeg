@@ -11,13 +11,10 @@ import CFFmpeg
 public let avTimeBase = AV_TIME_BASE
 /// Internal time base represented as fractional value
 public let avTimeBaseQ = av_get_time_base_q()
-
-extension Int64 {
-    /// Undefined timestamp value.
-    ///
-    /// Usually reported by demuxer that work on containers that do not provide either pts or dts.
-    public static let noPTS = swift_AV_NOPTS_VALUE // ((int64_t)UINT64_C(0x8000000000000000)) == Int64.min
-}
+/// Undefined timestamp value.
+///
+/// Usually reported by demuxer that work on containers that do not provide either pts or dts.
+public let avNoPTS = swift_AV_NOPTS_VALUE // ((int64_t)UINT64_C(0x8000000000000000)) == Int64.min
 
 /// Compare two timestamps each in its own time base.
 ///

@@ -35,8 +35,8 @@ public final class AVCodecParserContext {
         data: UnsafePointer<UInt8>,
         size: Int,
         packet: AVPacket,
-        pts: Int64 = .noPTS,
-        dts: Int64 = .noPTS,
+        pts: Int64 = avNoPTS,
+        dts: Int64 = avNoPTS,
         pos: Int64 = 0
     ) -> Int {
         var poutbuf: UnsafeMutablePointer<UInt8>?
