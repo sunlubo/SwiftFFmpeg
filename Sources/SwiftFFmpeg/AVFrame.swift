@@ -304,19 +304,19 @@ public final class AVFrame {
 
 extension AVFrame {
 
-    /// Pixel format.
+    /// The pixel format of the picture.
     public var pixelFormat: AVPixelFormat {
         get { return AVPixelFormat(cFrame.format) }
         set { cFramePtr.pointee.format = newValue.rawValue }
     }
 
-    /// Picture width.
+    /// The width of the picture, in pixels.
     public var width: Int {
         get { return Int(cFrame.width) }
         set { cFramePtr.pointee.width = Int32(newValue) }
     }
 
-    /// Picture height.
+    /// The height of the picture, in pixels.
     public var height: Int {
         get { return Int(cFrame.height) }
         set { cFramePtr.pointee.height = Int32(newValue) }
@@ -325,6 +325,11 @@ extension AVFrame {
     /// A Boolean value indicating whether this frame is key frame.
     public var isKeyFrame: Bool {
         return cFrame.key_frame == 1
+    }
+
+    /// A Boolean value indicating whether this frame is interlaced or progressive frame.
+    public var isInterlacedFrame: Bool {
+        return cFrame.interlaced_frame == 1
     }
 
     /// The picture type of the frame.
