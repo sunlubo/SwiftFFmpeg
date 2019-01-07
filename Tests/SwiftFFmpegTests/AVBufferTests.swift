@@ -15,7 +15,7 @@ final class AVBufferTests: XCTestCase {
     ]
 
     func test() {
-        let buf1 = AVBuffer(size: 100)!
+        let buf1 = AVBuffer(size: 100)
         XCTAssertEqual(buf1.size, 100)
         XCTAssertEqual(buf1.refCount, 1)
         XCTAssertEqual(buf1.isWritable(), true)
@@ -28,7 +28,7 @@ final class AVBufferTests: XCTestCase {
         XCTAssertEqual(buf1.refCount, 2)
         XCTAssertEqual(buf1.isWritable(), false)
 
-        try! buf2.makeWritable()
+        buf2.makeWritable()
         XCTAssertEqual(buf2.size, 100)
         XCTAssertEqual(buf2.refCount, 1)
         XCTAssertEqual(buf2.isWritable(), true)
@@ -40,7 +40,7 @@ final class AVBufferTests: XCTestCase {
         XCTAssertEqual(buf2.cBufferPtr, nil)
 
         let buf3 = buf1.ref()!
-        try! buf3.realloc(size: 200)
+        buf3.realloc(size: 200)
         XCTAssertEqual(buf1.size, 100)
         XCTAssertEqual(buf1.refCount, 1)
         XCTAssertEqual(buf1.isWritable(), true)
