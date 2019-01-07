@@ -88,8 +88,17 @@ extension AVError: CustomStringConvertible {
     }
 }
 
-func throwIfFail(_ code: Int32) throws {
+func throwIfFail(_ condition: @autoclosure () -> Int32) throws {
+    let code = condition()
     if code < 0 {
         throw AVError(code: code)
+    }
+}
+
+// ENOMEM
+func abortIfFail(_ condition: @autoclosure () -> Int32) {
+    let code = condition()
+    if code < 0 {
+        fatalError(AVError(code: code).description)
     }
 }
