@@ -65,6 +65,14 @@
       <CommandLineArguments>
          <CommandLineArgument
             argument = "/Users/sun/AV/kda.flv"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "/Users/sun/AV/&#x604b;&#x4eba;&#x5fc3;.mp3"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "/Users/sun/AV/BoML.mp4"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>
