@@ -7,8 +7,7 @@ if CommandLine.argc < 2 {
 }
 let input = CommandLine.arguments[1]
 
-let fmtCtx = AVFormatContext()
-try fmtCtx.openInput(input)
+let fmtCtx = try AVFormatContext(url: input)
 try fmtCtx.findStreamInfo()
 
 fmtCtx.dumpFormat(isOutput: false)
@@ -19,10 +18,8 @@ guard let stream = fmtCtx.videoStream else {
 guard let codec = AVCodec.findDecoderById(stream.codecParameters.codecId) else {
     fatalError("Codec not found")
 }
-guard let codecCtx = AVCodecContext(codec: codec) else {
-    fatalError("Could not allocate video codec context.")
-}
-try codecCtx.setParameters(stream.codecParameters)
+let codecCtx = AVCodecContext(codec: codec)
+codecCtx.setParameters(stream.codecParameters)
 try codecCtx.openCodec()
 
 let pkt = AVPacket()
