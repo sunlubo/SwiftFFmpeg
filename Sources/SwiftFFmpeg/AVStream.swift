@@ -58,8 +58,18 @@ public final class AVCodecParameters {
     }
 
     /// The average bitrate of the encoded data (in bits per second).
-    public var bitRate: Int {
-        return Int(cParameters.bit_rate)
+    public var bitRate: Int64 {
+        return cParameters.bit_rate
+    }
+
+    /// Copy the contents from the supplied codec parameters.
+    public func copy(from codecpar: AVCodecParameters) {
+        abortIfFail(avcodec_parameters_copy(cParametersPtr, codecpar.cParametersPtr))
+    }
+
+    /// Fill the parameters struct based on the values from the supplied codec context.
+    public func copy(from codecCtx: AVCodecContext) {
+        abortIfFail(avcodec_parameters_from_context(cParametersPtr, codecCtx.cContextPtr))
     }
 }
 
@@ -232,19 +242,5 @@ public final class AVStream {
 
     public var mediaType: AVMediaType {
         return codecParameters.mediaType
-    }
-
-    /// Copy the contents of src to dst.
-    ///
-    /// - Throws: AVError
-    public func setParameters(_ codecpar: AVCodecParameters) throws {
-        try throwIfFail(avcodec_parameters_copy(cStream.codecpar, codecpar.cParametersPtr))
-    }
-
-    /// Fill the parameters struct based on the values from the supplied codec context.
-    ///
-    /// - Throws: AVError
-    public func copyParameters(from codecCtx: AVCodecContext) throws {
-        try throwIfFail(avcodec_parameters_from_context(cStream.codecpar, codecCtx.cContextPtr))
     }
 }

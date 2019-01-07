@@ -18,14 +18,13 @@ public final class AVImage {
 
     /// Fill plane linesizes for an image with pixel format and width.
     ///
-    /// - Returns: true in case of success, false otherwise
-    @discardableResult
+    /// - Throws: AVError
     public static func fillLinesizes(
         _ linesizes: UnsafeMutablePointer<Int32>,
         pixelFormat: AVPixelFormat,
         width: Int
-    ) -> Bool {
-        return av_image_fill_linesizes(linesizes, pixelFormat, Int32(width)) >= 0
+    ) throws {
+        try throwIfFail(av_image_fill_linesizes(linesizes, pixelFormat, Int32(width)))
     }
 
     /// Fill plane data pointers for an image with pixel format pix_fmt and height height.
@@ -35,6 +34,7 @@ public final class AVImage {
     ///   - ptr: the pointer to a buffer which will contain the image
     ///   - linesizes: the array containing the linesize for each plane, should be filled by `fillLinesizes`
     /// - Returns: the size in bytes required for the image buffer, a negative error code in case of failure
+    /// - Throws: AVError
     @discardableResult
     public static func fillPointers(
         _ data: UnsafeMutablePointer<UnsafeMutablePointer<UInt8>?>,

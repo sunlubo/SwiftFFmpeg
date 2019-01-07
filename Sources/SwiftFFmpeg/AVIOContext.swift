@@ -238,6 +238,8 @@ public final class AVIOContext {
     }
 
     /// Skip given number of bytes forward.
+    ///
+    /// - Throws: AVError
     public func skip(offset: Int64) throws -> Int {
         let ret = avio_skip(cContextPtr, offset)
         try throwIfFail(Int32(ret))
@@ -245,6 +247,8 @@ public final class AVIOContext {
     }
 
     /// Returns the file position indicator for the file stream.
+    ///
+    /// - Throws: AVError
     public func tell() throws -> Int {
         let ret = avio_tell(cContextPtr)
         try throwIfFail(Int32(ret))
@@ -252,6 +256,8 @@ public final class AVIOContext {
     }
 
     /// Get the filesize.
+    ///
+    /// - Throws: AVError
     public func size() throws -> Int64 {
         let ret = avio_size(cContextPtr)
         try throwIfFail(Int32(ret))
@@ -345,6 +351,8 @@ public final class AVIOContext {
     }
 
     /// Accept and allocate a client context on a server context.
+    ///
+    /// - Throws: AVError
     public func accept() throws -> AVIOContext {
         var clientCtxPtr: UnsafeMutablePointer<CAVIOContext>!
         try throwIfFail(avio_accept(cContextPtr, &clientCtxPtr))
@@ -362,6 +370,7 @@ public final class AVIOContext {
     /// avio_handshake() does nothing and returns 0 immediately.
     ///
     /// - Returns: `true` on a complete and successful handshake, `false` if the handshake progressed, but is not complete.
+    /// - Throws: AVError
     public func handshake() throws -> Bool {
         let ret = avio_handshake(cContextPtr)
         try throwIfFail(ret)
@@ -434,9 +443,9 @@ extension AVIOContext {
         public static let readWrite = Flag(rawValue: AVIO_FLAG_READ_WRITE)
         /// Use non-blocking mode.
         ///
-        /// If this flag is set, operations on the context will return `AVError.EAGAIN` if they can not be
+        /// If this flag is set, operations on the context will return `AVError.tryAgain` if they can not be
         /// performed immediately.
-        /// If this flag is not set, operations on the context will never return `AVError.EAGAIN`.
+        /// If this flag is not set, operations on the context will never return `AVError.tryAgain`.
         /// Note that this flag does not affect the opening/connecting of the context. Connecting a protocol
         /// will always block if necessary (e.g. on network protocols) but never hang (e.g. on busy devices).
         ///

@@ -214,8 +214,8 @@ public struct AVChannelLayout: Equatable {
     ///
     /// - Parameter count: number of channels
     /// - Returns: AVChannelLayout
-    public static func `default`(forChannelCount count: Int32) -> AVChannelLayout {
-        return AVChannelLayout(rawValue: UInt64(av_get_default_channel_layout(count)))
+    public static func `default`(forChannelCount count: Int) -> AVChannelLayout {
+        return AVChannelLayout(rawValue: UInt64(av_get_default_channel_layout(Int32(count))))
     }
 }
 

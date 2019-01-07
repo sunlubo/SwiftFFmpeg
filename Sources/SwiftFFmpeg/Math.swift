@@ -14,10 +14,6 @@ public typealias AVRational = CFFmpeg.AVRational
 
 extension AVRational {
 
-    public init(num: Int, den: Int) {
-        self.init(num: Int32(num), den: Int32(den))
-    }
-
     /// Convert an AVRational to a `double`.
     public var toDouble: Double {
         return av_q2d(self)

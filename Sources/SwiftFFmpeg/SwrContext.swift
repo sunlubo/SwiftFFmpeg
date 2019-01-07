@@ -10,14 +10,17 @@ import CFFmpeg
 public final class SwrContext {
     public static let `class` = AVClass(cClassPtr: swr_get_class())
 
-    let cContext: OpaquePointer
+    let cContextPtr: OpaquePointer
 
     /// Allocate SwrContext.
     ///
     /// If you use this function you will need to set the parameters (manually or with swr_alloc_set_opts())
     /// before calling swr_init().
     public init() {
-        cContext = swr_alloc()
+        guard let ctxPtr = swr_alloc() else {
+            fatalError("swr_alloc")
+        }
+        self.cContextPtr = ctxPtr
     }
 
     /// Allocate SwrContext if needed and set/reset common parameters.
@@ -37,7 +40,7 @@ public final class SwrContext {
         srcSampleFormat: AVSampleFormat,
         srcSampleRate: Int
     ) {
-        cContext = swr_alloc_set_opts(
+        cContextPtr = swr_alloc_set_opts(
             nil,
             Int64(dstChannelLayout.rawValue),
             dstSampleFormat,
@@ -52,14 +55,14 @@ public final class SwrContext {
 
     /// A Boolean value indicating whether the context has been initialized or not.
     public var isInitialized: Bool {
-        return swr_is_initialized(cContext) > 0
+        return swr_is_initialized(cContextPtr) > 0
     }
 
     /// Initialize context after user parameters have been set.
     ///
     /// - Throws: AVError
     public func initialize() throws {
-        try throwIfFail(swr_init(cContext))
+        try throwIfFail(swr_init(cContextPtr))
     }
 
     /// Gets the delay the next input sample will experience relative to the next output sample.
@@ -73,7 +76,7 @@ public final class SwrContext {
     ///     out_sample_rate then an exact rounding-free delay will be eturned
     /// - Returns: the delay in 1 / base units.
     public func getDelay(_ timebase: Int64) -> Int {
-        return Int(swr_get_delay(cContext, timebase))
+        return Int(swr_get_delay(cContextPtr, timebase))
     }
 
     /// Convert audio.
@@ -91,12 +94,12 @@ public final class SwrContext {
         src: UnsafeMutablePointer<UnsafePointer<UInt8>?>,
         srcCount: Int
     ) -> Int {
-        let ret = swr_convert(cContext, dst, Int32(dstCount), src, Int32(srcCount))
+        let ret = swr_convert(cContextPtr, dst, Int32(dstCount), src, Int32(srcCount))
         return Int(ret)
     }
 
     deinit {
-        var ptr: OpaquePointer? = cContext
+        var ptr: OpaquePointer? = cContextPtr
         swr_free(&ptr)
     }
 }
@@ -104,6 +107,6 @@ public final class SwrContext {
 extension SwrContext: AVOptionAccessor {
 
     public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T {
-        return try body(UnsafeMutableRawPointer(cContext))
+        return try body(UnsafeMutableRawPointer(cContextPtr))
     }
 }

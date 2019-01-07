@@ -12,11 +12,14 @@ import CFFmpeg
 public final class SwsContext {
     public static let `class` = AVClass(cClassPtr: sws_get_class())
 
-    let cContext: OpaquePointer
+    let cContextPtr: OpaquePointer
 
     /// Allocate an empty `SwsContext`.
     public init() {
-        cContext = sws_alloc_context()
+        guard let ctxPtr = sws_alloc_context() else {
+            fatalError("sws_alloc_context")
+        }
+        self.cContextPtr = ctxPtr
     }
 
     /// Allocate and return an `SwsContext`.
@@ -43,7 +46,7 @@ public final class SwsContext {
         ) else {
             return nil
         }
-        cContext = ptr
+        cContextPtr = ptr
     }
 
     /// Scale the image slice in srcSlice and put the resulting scaled slice in the image in dst.
@@ -71,14 +74,14 @@ public final class SwsContext {
         dst: UnsafePointer<UnsafeMutablePointer<UInt8>?>,
         dstStride: UnsafePointer<Int32>
     ) -> Int {
-        return Int(sws_scale(cContext, src, srcStride, Int32(srcSliceY), Int32(srcSliceHeight), dst, dstStride))
+        return Int(sws_scale(cContextPtr, src, srcStride, Int32(srcSliceY), Int32(srcSliceHeight), dst, dstStride))
     }
 
     /// Returns a Boolean value indicating whether the pixel format is a supported input format.
     ///
     /// - Parameter pixFmt: pixel format
     /// - Returns: true if it is supported; otherwise false.
-    public static func isSupportedInput(_ pixFmt: AVPixelFormat) -> Bool {
+    public static func supportsInput(_ pixFmt: AVPixelFormat) -> Bool {
         return sws_isSupportedInput(pixFmt) > 0
     }
 
@@ -86,7 +89,7 @@ public final class SwsContext {
     ///
     /// - Parameter pixFmt: pixel format
     /// - Returns: true if it is supported; otherwise false.
-    public static func isSupportedOutput(_ pixFmt: AVPixelFormat) -> Bool {
+    public static func supportsOutput(_ pixFmt: AVPixelFormat) -> Bool {
         return sws_isSupportedOutput(pixFmt) > 0
     }
 
@@ -94,12 +97,12 @@ public final class SwsContext {
     ///
     /// - Parameter pixFmt: pixel format
     /// - Returns: true if it is supported; otherwise false.
-    public static func isSupportedEndiannessConversion(_ pixFmt: AVPixelFormat) -> Bool {
+    public static func supportsEndiannessConversion(_ pixFmt: AVPixelFormat) -> Bool {
         return sws_isSupportedEndiannessConversion(pixFmt) > 0
     }
 
     deinit {
-        sws_freeContext(cContext)
+        sws_freeContext(cContextPtr)
     }
 }
 
@@ -152,6 +155,6 @@ extension SwsContext.Flag: CustomStringConvertible {
 extension SwsContext: AVOptionAccessor {
 
     public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T {
-        return try body(UnsafeMutableRawPointer(cContext))
+        return try body(UnsafeMutableRawPointer(cContextPtr))
     }
 }

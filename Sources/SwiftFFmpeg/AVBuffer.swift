@@ -20,22 +20,25 @@ public final class AVBuffer {
         self.cBufferPtr = cBufferPtr
     }
 
-    /// Create an AVBuffer from an existing array.
+    /// Create an `AVBuffer` from an existing array.
     ///
-    /// If this function is successful, data is owned by the AVBuffer. The caller may
-    /// only access data through the returned AVBuffer and references derived from it.
-    /// If this function fails, data is left untouched.
+    /// If this function is successful, data is owned by the `AVBuffer`. The caller may
+    /// only access data through the returned `AVBuffer` and references derived from it.
     ///
     /// - Parameters:
     ///   - data: data array
     ///   - size: size of data in bytes
     ///   - flags: a combination of `AVBuffer.Flag`
-    public convenience init?(data: UnsafeMutablePointer<UInt8>, size: Int, flags: AVBuffer.Flag = Flag(rawValue: 0)) {
+    public convenience init(
+        data: UnsafeMutablePointer<UInt8>,
+        size: Int,
+        flags: Flag = Flag(rawValue: 0)
+    ) {
         let freeFn: @convention(c) (UnsafeMutableRawPointer?, UnsafeMutablePointer<UInt8>?) -> Void = { opaque, data in
             data?.deallocate()
         }
         guard let bufPtr = av_buffer_create(data, Int32(size), freeFn, nil, flags.rawValue) else {
-            return nil
+            fatalError("av_buffer_create")
         }
         self.init(cBufferPtr: bufPtr)
     }
@@ -43,9 +46,9 @@ public final class AVBuffer {
     /// Create an `AVBuffer` of the given size.
     ///
     /// - Parameter size: size of the buffer
-    public convenience init?(size: Int) {
+    public convenience init(size: Int) {
         guard let bufPtr = av_buffer_alloc(Int32(size)) else {
-            return nil
+            fatalError("av_buffer_alloc")
         }
         self.init(cBufferPtr: bufPtr)
     }
@@ -68,10 +71,9 @@ public final class AVBuffer {
     /// Reallocate a given buffer.
     ///
     /// - Parameter size: required new buffer size
-    /// - Throws: AVError
-    public func realloc(size: Int) throws {
+    public func realloc(size: Int) {
         precondition(cBufferPtr != nil, "buffer has been freed")
-        try throwIfFail(av_buffer_realloc(&cBufferPtr, Int32(size)))
+        abortIfFail(av_buffer_realloc(&cBufferPtr, Int32(size)))
     }
 
     /// Check if the buffer is writable.
@@ -85,16 +87,14 @@ public final class AVBuffer {
     /// Create a writable reference from a given buffer reference, avoiding data copy if possible.
     ///
     /// Do nothing if the frame is writable, allocate new buffers and copy the data if it is not.
-    ///
-    /// - Throws: AVError
-    public func makeWritable() throws {
+    public func makeWritable() {
         precondition(cBufferPtr != nil, "buffer has been freed")
-        try throwIfFail(av_buffer_make_writable(&cBufferPtr))
+        abortIfFail(av_buffer_make_writable(&cBufferPtr))
     }
 
     /// Create a new reference to an `AVBuffer`.
     ///
-    /// - Returns: a new `AVBuffer` referring to the same underlying buffer or nil on failure.
+    /// - Returns: a new `AVBuffer` referring to the same underlying buffer or `nil` on failure.
     public func ref() -> AVBuffer? {
         precondition(cBufferPtr != nil, "buffer has been freed")
         return AVBuffer(cBufferPtr: av_buffer_ref(cBufferPtr))
@@ -130,9 +130,9 @@ public final class AVBufferPool {
     /// Allocate and initialize a buffer pool.
     ///
     /// - Parameter size: size of each buffer in this pool
-    public init?(size: Int) {
+    public init(size: Int) {
         guard let poolPtr = av_buffer_pool_init(Int32(size), nil) else {
-            return nil
+            fatalError("av_buffer_pool_init")
         }
         self.cPoolPtr = poolPtr
     }

@@ -288,7 +288,10 @@ public final class AVFormatContext {
 
     /// Allocate an `AVFormatContext`.
     public init() {
-        self.cContextPtr = avformat_alloc_context()
+        guard let ctxPtr = avformat_alloc_context() else {
+            fatalError("avformat_alloc_context")
+        }
+        self.cContextPtr = ctxPtr
     }
 
     /// Input or output URL.
@@ -674,10 +677,8 @@ extension AVFormatContext {
     ///
     /// This does not flush the AVIOContext (s->pb). If necessary, call
     /// avio_flush(s->pb) before calling this function.
-    ///
-    /// - Throws: AVError
-    public func flush() throws {
-        try throwIfFail(avformat_flush(cContextPtr))
+    public func flush() {
+        avformat_flush(cContextPtr)
     }
 
     /// Start playing a network-based stream (e.g. RTSP stream) at the current position.
