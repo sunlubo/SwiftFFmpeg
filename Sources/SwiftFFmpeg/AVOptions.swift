@@ -346,11 +346,11 @@ extension AVOptionAccessor {
     }
 
     /// av_opt_get_int
-    public func integer(forKey key: String, searchFlags: AVOptionSearchFlag = .children) throws -> Int64 {
+    public func integer<T: FixedWidthInteger>(forKey key: String, searchFlags: AVOptionSearchFlag = .children) throws -> T {
         return try withUnsafeObjectPointer { objPtr in
             var outVal: Int64 = 0
             try throwIfFail(av_opt_get_int(objPtr, key, searchFlags.rawValue, &outVal))
-            return outVal
+            return T(outVal)
         }
     }
 
