@@ -394,7 +394,7 @@ extension AVOptionAccessor {
     /// av_opt_get_sample_fmt
     public func sampleFormat(forKey key: String, searchFlags: AVOptionSearchFlag = .children) throws -> AVSampleFormat {
         return try withUnsafeObjectPointer { objPtr in
-            var outVal = AVSampleFormat.NONE
+            var outVal = AVSampleFormat.none
             try throwIfFail(av_opt_get_sample_fmt(objPtr, key, searchFlags.rawValue, &outVal))
             return outVal
         }

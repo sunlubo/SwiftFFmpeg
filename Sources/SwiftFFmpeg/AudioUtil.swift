@@ -12,35 +12,42 @@ import CFFmpeg
 public typealias AVSampleFormat = CFFmpeg.AVSampleFormat
 
 extension AVSampleFormat {
-    public static let NONE = AV_SAMPLE_FMT_NONE
+    public static let none = AV_SAMPLE_FMT_NONE
     /// unsigned 8 bits
-    public static let U8 = AV_SAMPLE_FMT_U8
+    public static let u8 = AV_SAMPLE_FMT_U8
     /// signed 16 bits
-    public static let S16 = AV_SAMPLE_FMT_S16
+    public static let s16 = AV_SAMPLE_FMT_S16
     /// signed 32 bits
-    public static let S32 = AV_SAMPLE_FMT_S32
+    public static let s32 = AV_SAMPLE_FMT_S32
     /// float
-    public static let FLT = AV_SAMPLE_FMT_FLT
+    public static let flt = AV_SAMPLE_FMT_FLT
     /// double
-    public static let DBL = AV_SAMPLE_FMT_DBL
+    public static let dbl = AV_SAMPLE_FMT_DBL
     /// unsigned 8 bits, planar
-    public static let U8P = AV_SAMPLE_FMT_U8P
+    public static let u8p = AV_SAMPLE_FMT_U8P
     /// signed 16 bits, planar
-    public static let S16P = AV_SAMPLE_FMT_S16P
+    public static let s16p = AV_SAMPLE_FMT_S16P
     /// signed 32 bits, planar
-    public static let S32P = AV_SAMPLE_FMT_S32P
+    public static let s32p = AV_SAMPLE_FMT_S32P
     /// float, planar
-    public static let FLTP = AV_SAMPLE_FMT_FLTP
+    public static let fltp = AV_SAMPLE_FMT_FLTP
     /// double, planar
-    public static let DBLP = AV_SAMPLE_FMT_DBLP
+    public static let dblp = AV_SAMPLE_FMT_DBLP
     /// signed 64 bits
-    public static let S64 = AV_SAMPLE_FMT_S64
+    public static let s64 = AV_SAMPLE_FMT_S64
     /// signed 64 bits, planar
-    public static let S64P = AV_SAMPLE_FMT_S64P
+    public static let s64p = AV_SAMPLE_FMT_S64P
     /// Number of sample formats. **DO NOT USE** if linking dynamically.
-    public static let NB = AV_SAMPLE_FMT_NB
+    public static let nb = AV_SAMPLE_FMT_NB
 
-    /// The name of the sample format, or nil if sample format is not recognized.
+    /// Return a sample format corresponding to name, or `nil` on error.
+    ///
+    /// - Parameter name: the name of the sample format
+    public init(named name: String) {
+        self = av_get_sample_fmt(name)
+    }
+
+    /// The name of the sample format, or `nil` if sample format is not recognized.
     public var name: String {
         return String(cString: av_get_sample_fmt_name(self)) ?? "unknown"
     }

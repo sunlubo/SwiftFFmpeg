@@ -206,7 +206,7 @@ public struct AVCodec {
 
     /// Returns an array of the sample formats supported by the codec.
     public var supportedSampleFormats: [AVSampleFormat]? {
-        return values(cCodec.sample_fmts, until: .NONE)
+        return values(cCodec.sample_fmts, until: .none)
     }
 
     /// Returns an array of the channel layouts supported by the codec.
