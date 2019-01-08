@@ -32,8 +32,6 @@ typealias CAVFrame = CFFmpeg.AVFrame
 public final class AVFrame {
     public static let `class` = AVClass(cClassPtr: avcodec_get_frame_class())
 
-    public var mediaType: AVMediaType = .unknown
-
     let cFramePtr: UnsafeMutablePointer<CAVFrame>
     var cFrame: CAVFrame { return cFramePtr.pointee }
 
