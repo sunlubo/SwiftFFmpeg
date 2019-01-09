@@ -310,7 +310,7 @@ public final class AVFormatContext {
     ///   or set by `openInput`.
     /// - muxing: Set by the user before `writeHeader`. The caller must take care of closing / freeing
     ///   the IO context.
-    internal var pb: AVIOContext? {
+    public var pb: AVIOContext? {
         get {
             if let ctxPtr = cContext.pb {
                 return AVIOContext(cContextPtr: ctxPtr)
