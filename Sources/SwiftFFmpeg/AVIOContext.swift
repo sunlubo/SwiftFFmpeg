@@ -185,15 +185,93 @@ public typealias AVIOInterruptCallback = AVIOInterruptCB
 
 typealias CAVIOContext = CFFmpeg.AVIOContext
 
+public typealias AVIOReadHandler = (UnsafeMutableRawPointer?, UnsafeMutablePointer<UInt8>?, Int) -> Int
+public typealias AVIOWriteHandler = (UnsafeMutableRawPointer?, UnsafeMutablePointer<UInt8>?, Int) -> Int
+public typealias AVIOSeekHandler = (UnsafeMutableRawPointer?, Int64, Int) -> Int64
+
+typealias IOBoxValue = (
+    opaque: UnsafeMutableRawPointer,
+    read: AVIOReadHandler?,
+    write: AVIOWriteHandler?,
+    seek: AVIOSeekHandler?
+)
+typealias IOBox = Box<IOBoxValue>
+
 /// Bytestream IO Context.
 public final class AVIOContext {
     let cContextPtr: UnsafeMutablePointer<CAVIOContext>
     var cContext: CAVIOContext { return cContextPtr.pointee }
 
+    private var opaque: IOBox?
+    private var freeWhenDone: Bool = false
     private var isOpen: Bool = false
 
     init(cContextPtr: UnsafeMutablePointer<CAVIOContext>) {
         self.cContextPtr = cContextPtr
+    }
+
+    /// Allocate and initialize an `AVIOContext` for buffered I/O.
+    ///
+    /// - Parameters:
+    ///   - buffer: Memory block for input/output operations via `AVIOContext`.
+    ///   - size: The buffer size is very important for performance. For protocols with fixed blocksize
+    ///     it should be set to this blocksize. For others a typical size is a cache page, e.g. 4kb.
+    ///   - writable: Set to `true` if the buffer should be writable, `false` otherwise.
+    ///   - opaque: An opaque pointer to user-specific data.
+    ///   - read: A handler for refilling the buffer, may be `nil`.
+    ///     For stream protocols, must never return 0 but rather a proper AVERROR code.
+    ///   - write: A handler for writing the buffer contents, may be `nil`.
+    ///     The function may not change the input buffers content.
+    ///   - seek: A handler for seeking to specified byte position, may be `nil`.
+    public convenience init(
+        buffer: UnsafeMutablePointer<UInt8>,
+        size: Int,
+        writable: Bool,
+        opaque: UnsafeMutableRawPointer,
+        readHandler: AVIOReadHandler?,
+        writeHandler: AVIOWriteHandler?,
+        seekHandler: AVIOSeekHandler?
+    ) {
+        // Store everything we want to pass into the c function in a `Box` so we can hand-over the reference.
+        let box = IOBox((opaque: opaque, read: readHandler, write: writeHandler, seek: seekHandler))
+        var read: (@convention(c) (UnsafeMutableRawPointer?, UnsafeMutablePointer<UInt8>?, Int32) -> Int32)?
+        if readHandler != nil {
+            read = { (opaque, buffer, size) -> Int32 in
+                let value = Unmanaged<IOBox>.fromOpaque(opaque!).takeUnretainedValue().value
+                let ret = value.read!(value.opaque, buffer, Int(size))
+                return Int32(ret)
+            }
+        }
+        var write: (@convention(c) (UnsafeMutableRawPointer?, UnsafeMutablePointer<UInt8>?, Int32) -> Int32)?
+        if writeHandler != nil {
+            write = { (opaque, buffer, size) -> Int32 in
+                let value = Unmanaged<IOBox>.fromOpaque(opaque!).takeUnretainedValue().value
+                let ret = value.write!(value.opaque, buffer, Int(size))
+                return Int32(ret)
+            }
+        }
+        var seek: (@convention(c) (UnsafeMutableRawPointer?, Int64, Int32) -> Int64)?
+        if seekHandler != nil {
+            seek = { (opaque, offset, size) -> Int64 in
+                let value = Unmanaged<IOBox>.fromOpaque(opaque!).takeUnretainedValue().value
+                return value.seek!(value.opaque, offset, Int(size))
+            }
+        }
+        let ptr = avio_alloc_context(
+            buffer,
+            Int32(size),
+            writable ? 1 : 0,
+            Unmanaged.passUnretained(box).toOpaque(),
+            read,
+            write,
+            seek
+        )
+        guard let ctxPtr = ptr else {
+            fatalError("avio_alloc_context")
+        }
+        self.init(cContextPtr: ctxPtr)
+        self.opaque = box
+        self.freeWhenDone = true
     }
 
     /// Create and initialize a `AVIOContext` for accessing the resource indicated by url.
@@ -227,11 +305,11 @@ public final class AVIOContext {
         dumpUnrecognizedOptions(pm)
     }
 
-    public func write(_ buf: UnsafePointer<UInt8>, size: Int) {
-        avio_write(cContextPtr, buf, Int32(size))
+    public func write(_ buffer: UnsafePointer<UInt8>, size: Int) {
+        avio_write(cContextPtr, buffer, Int32(size))
     }
 
-    public func seek(offset: Int64, whence: SeekWhence) throws -> Int {
+    public func seek(to offset: Int64, whence: SeekWhence) throws -> Int {
         let ret = avio_seek(cContextPtr, offset, whence.rawValue)
         try throwIfFail(Int32(ret))
         return Int(ret)
@@ -240,7 +318,7 @@ public final class AVIOContext {
     /// Skip given number of bytes forward.
     ///
     /// - Throws: AVError
-    public func skip(offset: Int64) throws -> Int {
+    public func skip(to offset: Int64) throws -> Int {
         let ret = avio_skip(cContextPtr, offset)
         try throwIfFail(Int32(ret))
         return Int(ret)
@@ -284,12 +362,12 @@ public final class AVIOContext {
     /// Read size bytes from `AVIOContext` into buf.
     ///
     /// - Parameters:
-    ///   - buf: The buffer into which the data is read.
+    ///   - buffer: The buffer into which the data is read.
     ///   - size: The maximum number of bytes read.
     /// - Returns: The total number of bytes read into the buffer.
     /// - Throws: AVError
-    public func read(buf: UnsafeMutablePointer<UInt8>, size: Int) throws -> Int {
-        let ret = avio_read(cContextPtr, buf, Int32(size))
+    public func read(_ buffer: UnsafeMutablePointer<UInt8>, size: Int) throws -> Int {
+        let ret = avio_read(cContextPtr, buffer, Int32(size))
         try throwIfFail(ret)
         return Int(ret)
     }
@@ -299,17 +377,17 @@ public final class AVIOContext {
     /// Useful to reduce latency in certain cases.
     ///
     /// - Parameters:
-    ///   - buf: The buffer into which the data is read.
+    ///   - buffer: The buffer into which the data is read.
     ///   - size: The maximum number of bytes read.
     /// - Returns: number of bytes read
     /// - Throws: AVError
-    public func partialRead(buf: UnsafeMutablePointer<UInt8>, size: Int) throws -> Int {
-        let ret = avio_read_partial(cContextPtr, buf, Int32(size))
+    public func partialRead(_ buffer: UnsafeMutablePointer<UInt8>, size: Int) throws -> Int {
+        let ret = avio_read_partial(cContextPtr, buffer, Int32(size))
         try throwIfFail(ret)
         return Int(ret)
     }
 
-    /// Pause playing
+    /// Pause playing.
     ///
     /// Only meaningful if using a network streaming protocol (e.g. MMS).
     ///
@@ -318,7 +396,7 @@ public final class AVIOContext {
         try throwIfFail(avio_pause(cContextPtr, 1))
     }
 
-    /// Resume playing
+    /// Resume playing.
     ///
     /// Only meaningful if using a network streaming protocol (e.g. MMS).
     ///
@@ -332,19 +410,19 @@ public final class AVIOContext {
     /// Only meaningful if using a network streaming protocol (e.g. MMS.).
     ///
     /// - Parameters:
+    ///   - timestamp: timestamp in AVStream.time_base units
+    ///     or if there is no stream specified then in `avTimeBase` units.
     ///   - streamIndex: The stream index that the timestamp is relative to.
     ///     If stream_index is `-1` the timestamp should be in `avTimeBase`
     ///     units from the beginning of the presentation.
     ///     If a stream_index >= 0 is used and the protocol does not support
     ///     seeking based on component streams, the call will fail.
-    ///   - timestamp: timestamp in AVStream.time_base units
-    ///     or if there is no stream specified then in `avTimeBase` units.
     ///   - flags: Optional combination of AVSEEK_FLAG_BACKWARD, AVSEEK_FLAG_BYTE
     ///     and AVSEEK_FLAG_ANY. The protocol may silently ignore
     ///     AVSEEK_FLAG_BACKWARD and AVSEEK_FLAG_ANY, but AVSEEK_FLAG_BYTE will
     ///     fail if used and not supported.
     /// - Throws: AVError
-    public func seek(streamIndex: Int64, timestamp: Int64, flags: AVFormatContext.SeekFlag) throws -> Int {
+    public func seek(to timestamp: Int64, streamIndex: Int64, flags: AVFormatContext.SeekFlag) throws -> Int {
         let ret = avio_seek_time(cContextPtr, Int32(streamIndex), timestamp, flags.rawValue)
         try throwIfFail(Int32(ret))
         return Int(ret)
@@ -369,7 +447,8 @@ public final class AVIOContext {
     /// or each individual chunk of the request can constitute a step. If the handshake is already finished,
     /// avio_handshake() does nothing and returns 0 immediately.
     ///
-    /// - Returns: `true` on a complete and successful handshake, `false` if the handshake progressed, but is not complete.
+    /// - Returns: `true` on a complete and successful handshake, `false` if the handshake progressed,
+    ///   but is not complete.
     /// - Throws: AVError
     public func handshake() throws -> Bool {
         let ret = avio_handshake(cContextPtr)
@@ -416,6 +495,11 @@ public final class AVIOContext {
     }
 
     deinit {
+        if freeWhenDone {
+            av_free(cContext.buffer)
+            var pb: UnsafeMutablePointer<CAVIOContext>? = cContextPtr
+            avio_context_free(&pb)
+        }
         assert(!isOpen, "AVIOContext must be close")
     }
 }
@@ -503,4 +587,64 @@ extension AVIOContext {
             self.rawValue = rawValue
         }
     }
+}
+
+/// Move or rename a resource.
+///
+/// - Note: url_src and url_dst should share the same protocol and authority.
+///
+/// - Parameters:
+///   - src: url to resource to be moved
+///   - dst: new url to resource if the operation succeeded
+/// - Throws: AVError
+public func avMove(_ src: String, _ dst: String) throws {
+    try throwIfFail(avpriv_io_move(src, dst))
+}
+
+/// Delete a resource.
+///
+/// - Parameter url: resource to be deleted.
+/// - Throws: AVError
+public func avDelete(_ url: String) throws {
+    try throwIfFail(avpriv_io_delete(url))
+}
+
+/// Allocate a memory block with alignment suitable for all memory accesses
+/// (including vectors if available on the CPU).
+///
+/// - Parameter size: Size in bytes for the memory block to be allocated
+/// - Returns: Pointer to the allocated block, or `nil` if the block cannot be allocated.
+public func avMalloc(size: Int) -> UnsafeMutableRawPointer? {
+    return av_malloc(size)
+}
+
+/// Allocate a memory block with alignment suitable for all memory accesses
+/// (including vectors if available on the CPU) and zero all the bytes of the block.
+///
+/// - Parameter size: Size in bytes for the memory block to be allocated
+/// - Returns: Pointer to the allocated block, or `nil` if the block cannot be allocated.
+public func avMallocz(size: Int) -> UnsafeMutableRawPointer? {
+    return av_mallocz(size)
+}
+
+/// Read the file with name filename, and put its content in a newly
+/// allocated buffer or map it with mmap() when available.
+/// In case of success set `buffer` to the read or mmapped buffer, and
+/// `size` to the size in bytes of the buffer.
+/// Unlike mmap this function succeeds with zero sized files, in this
+/// case *bufptr will be set to NULL and *size will be set to 0.
+/// The returned buffer must be released with av_file_unmap().
+///
+/// - Throws: AVError
+public func avFileMap(
+    filename: String,
+    buffer: UnsafeMutablePointer<UnsafeMutablePointer<UInt8>?>,
+    size: UnsafeMutablePointer<Int>
+) throws {
+    try throwIfFail(av_file_map(filename, buffer, size, 0, nil))
+}
+
+/// Unmap or free the buffer bufptr created by av_file_map().
+public func avFileUnmap(buffer: UnsafeMutablePointer<UInt8>, size: Int) {
+    av_file_unmap(buffer, size)
 }

@@ -7,6 +7,15 @@
 
 import CFFmpeg
 
+/// Allows to "box" another value.
+final class Box<T> {
+    let value: T
+
+    init(_ value: T) {
+        self.value = value
+    }
+}
+
 /// Do global initialization of network libraries. This is optional, and not recommended anymore.
 ///
 /// This functions only exists to work around thread-safety issues
