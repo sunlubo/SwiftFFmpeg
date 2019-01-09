@@ -400,9 +400,11 @@ public final class AVFormatContext {
     /// Print detailed information about the input or output format, such as duration, bitrate, streams,
     /// container, programs, metadata, side data, codec and time base.
     ///
-    /// - Parameters isOutput: Select whether the specified context is an input(0) or output(1).
-    public func dumpFormat(isOutput: Bool) {
-        av_dump_format(cContextPtr, 0, url, isOutput ? 1 : 0)
+    /// - Parameters:
+    ///   - url: the URL to print, such as source or destination file
+    ///   - isOutput: Select whether the specified context is an input(false) or output(true).
+    public func dumpFormat(url: String? = nil, isOutput: Bool) {
+        av_dump_format(cContextPtr, 0, url ?? self.url, isOutput ? 1 : 0)
     }
 
     deinit {
@@ -562,7 +564,7 @@ extension AVFormatContext {
     ///   - options: A dictionary filled with `AVFormatContext` and demuxer-private options.
     /// - Throws: AVError
     public func openInput(
-        _ url: String,
+        _ url: String? = nil,
         format: AVInputFormat? = nil,
         options: [String: String]? = nil
     ) throws {
