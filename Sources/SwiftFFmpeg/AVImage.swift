@@ -45,38 +45,6 @@ public final class AVImage {
         self.freeWhenDone = true
     }
 
-    /// Create an image from the given pixel buffer.
-    ///
-    /// - Parameters:
-    ///   - width: image width
-    ///   - height: image height
-    ///   - pixelFormat: image pixel format
-    ///   - buffer: pixel buffer
-    ///   - linesizes: linesizes for the image
-    public init(
-        width: Int,
-        height: Int,
-        pixelFormat: AVPixelFormat,
-        buffer: UnsafeMutablePointer<UnsafePointer<UInt8>?>,
-        linesizes: UnsafePointer<Int32>
-    ) {
-        let dstData = UnsafeMutablePointer<UnsafeMutablePointer<UInt8>?>.allocate(capacity: 4)
-        dstData.initialize(to: nil)
-
-        let dstLinesizes = UnsafeMutablePointer<Int32>.allocate(capacity: 4)
-        dstLinesizes.initialize(to: 0)
-
-        av_image_copy(dstData, dstLinesizes, buffer, linesizes, pixelFormat, Int32(width), Int32(height))
-
-        self.data = UnsafeMutableBufferPointer(start: dstData, count: 4)
-        self.size = Int(av_image_get_buffer_size(pixelFormat, Int32(width), Int32(height), 1))
-        self.linesizes = UnsafeMutableBufferPointer(start: dstLinesizes, count: 4)
-        self.width = width
-        self.height = height
-        self.pixelFormat = pixelFormat
-        self.freeWhenDone = false
-    }
-
     /// Create an image from the given frame.
     public init(frame: AVFrame) {
         precondition(frame.pixelFormat != .NONE)
