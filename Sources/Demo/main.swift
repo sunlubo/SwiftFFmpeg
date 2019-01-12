@@ -2,58 +2,28 @@ import Foundation
 import SwiftFFmpeg
 
 if CommandLine.argc < 2 {
-    print("Usage: \(CommandLine.arguments[0]) <input file>")
+    print("""
+    USAGE: \(CommandLine.arguments[0]) subcommand
+    
+    SUBCOMMANDS:
+      avio_dir_cmd        API example program to show how to manipulate resources accessed through AVIOContext.
+      avio_reading        API example program to show how to read from a custom buffer accessed through AVIOContext.
+      decode_video        video decoding with libavcodec API example
+      decode_audio        audio decoding with libavcodec API example
+    """)
     exit(1)
 }
-let input = CommandLine.arguments[1]
 
-let fmtCtx = try AVFormatContext(url: input)
-try fmtCtx.findStreamInfo()
-
-fmtCtx.dumpFormat(isOutput: false)
-
-guard let stream = fmtCtx.videoStream else {
-    fatalError("No video stream")
+let subcommand = CommandLine.arguments[1]
+switch subcommand {
+case "avio_dir_cmd":
+    try avio_dir_cmd()
+case "avio_reading":
+    try avio_reading()
+case "decode_video":
+    try decode_video()
+case "decode_audio":
+    try decode_audio()
+default:
+    ()
 }
-guard let codec = AVCodec.findDecoderById(stream.codecParameters.codecId) else {
-    fatalError("Codec not found")
-}
-let codecCtx = AVCodecContext(codec: codec)
-codecCtx.setParameters(stream.codecParameters)
-try codecCtx.openCodec()
-
-let pkt = AVPacket()
-let frame = AVFrame()
-
-while let _ = try? fmtCtx.readFrame(into: pkt) {
-    defer { pkt.unref() }
-
-    if pkt.streamIndex != stream.index {
-        continue
-    }
-
-    try codecCtx.sendPacket(pkt)
-
-    while true {
-        do {
-            try codecCtx.receiveFrame(frame)
-        } catch let err as AVError where err == .tryAgain || err == .eof {
-            break
-        }
-
-        let str = String(
-            format: "Frame %3d (type=%@, size=%5d bytes) pts %4lld key_frame %d [DTS %3lld]",
-            codecCtx.frameNumber,
-            frame.pictureType.description,
-            frame.pktSize,
-            frame.pts,
-            frame.isKeyFrame,
-            frame.dts
-        )
-        print(str)
-
-        frame.unref()
-    }
-}
-
-print("Done.")
