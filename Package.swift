@@ -21,9 +21,9 @@ let package = Package(
             dependencies: ["CFFmpeg"]
         ),
         .target(
-            name: "SwiftFFmpegDemo",
+            name: "SwiftFFmpegExamples",
             dependencies: ["SwiftFFmpeg"],
-            path: "Sources/Demo"
+            path: "Sources/Examples"
         ),
         .testTarget(
             name: "SwiftFFmpegTests",

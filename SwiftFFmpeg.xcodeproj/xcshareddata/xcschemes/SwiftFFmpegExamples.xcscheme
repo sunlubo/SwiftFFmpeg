@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "SwiftFFmpeg::SwiftFFmpegDemo"
-               BuildableName = "SwiftFFmpegDemo"
-               BlueprintName = "SwiftFFmpegDemo"
+               BlueprintIdentifier = "SwiftFFmpeg::SwiftFFmpegExamples"
+               BuildableName = "SwiftFFmpegExamples"
+               BlueprintName = "SwiftFFmpegExamples"
                ReferencedContainer = "container:SwiftFFmpeg.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -56,26 +56,12 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "SwiftFFmpeg::SwiftFFmpegDemo"
-            BuildableName = "SwiftFFmpegDemo"
-            BlueprintName = "SwiftFFmpegDemo"
+            BlueprintIdentifier = "SwiftFFmpeg::SwiftFFmpegExamples"
+            BuildableName = "SwiftFFmpegExamples"
+            BlueprintName = "SwiftFFmpegExamples"
             ReferencedContainer = "container:SwiftFFmpeg.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
-      <CommandLineArguments>
-         <CommandLineArgument
-            argument = "/Users/sun/AV/kda.flv"
-            isEnabled = "NO">
-         </CommandLineArgument>
-         <CommandLineArgument
-            argument = "/Users/sun/AV/&#x604b;&#x4eba;&#x5fc3;.mp3"
-            isEnabled = "NO">
-         </CommandLineArgument>
-         <CommandLineArgument
-            argument = "/Users/sun/AV/BoML.mp4"
-            isEnabled = "YES">
-         </CommandLineArgument>
-      </CommandLineArguments>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>
