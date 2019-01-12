@@ -74,11 +74,34 @@ public final class AVImage {
         linesizes.deallocate()
     }
 
+    /// Copy image from the given pixel buffer.
+    public func copy(
+        from buffer: UnsafeMutablePointer<UnsafePointer<UInt8>?>,
+        linesizes: UnsafePointer<Int32>
+    ) {
+        av_image_copy(
+            data.baseAddress,
+            self.linesizes.baseAddress,
+            buffer,
+            linesizes,
+            pixelFormat,
+            Int32(width),
+            Int32(height)
+        )
+    }
+
+    /// Copy image from the given frame.
+    public func copy(from frame: AVFrame) {
+        frame.data.withMemoryRebound(to: UnsafePointer<UInt8>?.self) { ptr in
+            copy(from: ptr.baseAddress!, linesizes: frame.linesize.baseAddress!)
+        }
+    }
+
     /// Reformat image using the given `SwsContext`.
     ///
     /// - Throws: AVError
     public func reformat(context: SwsContext) throws -> AVImage {
-        let dstWidth = try context.integer(forKey: "dstw") as Int
+        let dstWidth  = try context.integer(forKey: "dstw") as Int
         let dstHeight = try context.integer(forKey: "dsth") as Int
         let dstFormat = try context.pixelFormat(forKey: "dst_format")
         let image = AVImage(width: dstWidth, height: dstHeight, pixelFormat: dstFormat)
