@@ -5,6 +5,7 @@
 #include <libavutil/common.h>
 #include <libavutil/error.h>
 #include <libavutil/opt.h>
+#include <libavutil/file.h>
 #include <libavutil/timestamp.h>
 #include <libavutil/pixdesc.h>
 #include <libavutil/imgutils.h>

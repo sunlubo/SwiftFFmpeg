@@ -18,55 +18,40 @@ final class AVImageTests: XCTestCase {
 
     let width = 1080
     let height = 1920
-    let pixFmt = AVPixelFormat.YUV420P
-
-    var buf = [UnsafeMutablePointer<UInt8>?](repeating: nil, count: 4)
-    var linesizes = [Int32](repeating: 0, count: 4)
-    var totalSize = 0
+    let pixelFormat = AVPixelFormat.YUV420P
+    var image: AVImage!
 
     override func setUp() {
         super.setUp()
 
-        totalSize = AVImage.alloc(
-            data: &buf,
-            linesizes: &linesizes,
-            width: width,
-            height: height,
-            pixelFormat: pixFmt,
-            align: 1
-        )
-    }
-
-    override func tearDown() {
-        super.tearDown()
-
-        AVImage.free(&buf)
+        image = AVImage(width: width, height: height, pixelFormat: pixelFormat, align: 1)
     }
 
     func testBuf() {
-        XCTAssertNotNil(buf[0])
-        XCTAssertNotNil(buf[1])
-        XCTAssertNotNil(buf[2])
-        XCTAssertNil(buf[3])
+        XCTAssertNotNil(image.data[0])
+        XCTAssertNotNil(image.data[1])
+        XCTAssertNotNil(image.data[2])
+        XCTAssertNil(image.data[3])
 
-        var ptr = [UnsafeMutablePointer<UInt8>?](repeating: nil, count: 4)
-        AVImage.fillPointers(&ptr, pixelFormat: pixFmt, height: height, ptr: buf.first!, linesizes: linesizes)
-        XCTAssertEqual(buf, ptr)
+        var data = [UnsafeMutablePointer<UInt8>?](repeating: nil, count: 4)
+        let linesizes = image.linesizes.map({ Int32($0) })
+        try! AVImage.fillPointers(&data, pixelFormat: pixelFormat, height: height, buffer: image.data[0], linesizes: linesizes)
+        XCTAssertEqual(image.data[0], data.first)
     }
 
     func testLinesizes() {
-        XCTAssertEqual(linesizes, [1080, 540, 540, 0])
+        XCTAssertEqual(Array(image.linesizes), [1080, 540, 540, 0])
 
-        let lss = (0..<4).map({ Int32(AVImage.getLinesize(pixelFormat: pixFmt, width: width, plane: $0)) })
-        XCTAssertEqual(linesizes, lss)
+        let linesizes1 = (0..<4).map({ try! AVImage.getLinesize(pixelFormat: pixelFormat, width: width, plane: $0) })
+        XCTAssertEqual(Array(image.linesizes), linesizes1.map({ Int32($0) }))
 
-        var ptr = [Int32](repeating: 0, count: 4)
-        AVImage.fillLinesizes(&ptr, pixelFormat: pixFmt, width: width)
-        XCTAssertEqual(linesizes, ptr)
+        var linesizes2 = [Int32](repeating: 0, count: 4)
+        try! AVImage.fillLinesizes(&linesizes2, pixelFormat: pixelFormat, width: width)
+        XCTAssertEqual(Array(image.linesizes), linesizes2)
     }
 
     func testTotalSize() {
-        let size = AVImage.getBufferSize(pixelFormat: pixFmt, width: width, height: height, align: 1)
-        XCTAssertEqual(totalSize, size)
+        let size = try! AVImage.getBufferSize(pixelFormat: pixelFormat, width: width, height: height, align: 1)
+        XCTAssertEqual(image.size, size)
     }
 }

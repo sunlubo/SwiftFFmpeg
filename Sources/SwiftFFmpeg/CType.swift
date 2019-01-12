@@ -11,7 +11,6 @@ import CFFmpeg
 
 public typealias AVMediaType = CFFmpeg.AVMediaType
 
-/// Media Type
 extension AVMediaType {
     /// Usually treated as `data`
     public static let unknown = AVMEDIA_TYPE_UNKNOWN
@@ -31,7 +30,3 @@ extension AVMediaType: CustomStringConvertible {
         return String(cString: av_get_media_type_string(self)) ?? "unknown"
     }
 }
-
-/// Free a memory block which has been allocated with a function of av_malloc() or av_realloc() family,
-/// and set the pointer pointing to it to nil.
-public let av_freep = CFFmpeg.av_freep

@@ -67,14 +67,14 @@ extension AVSampleFormat {
         return !isPlanar
     }
 
-    /// Return the planar alternative form of the given sample format or `AVSampleFormat.NONE` on error.
+    /// Return the planar alternative form of the given sample format or `AVSampleFormat.none` on error.
     ///
     /// If the passed sample format is already in planar format, the format returned is the same as the input.
     public func toPlanar() -> AVSampleFormat {
         return av_get_planar_sample_fmt(self)
     }
 
-    /// Return the packed alternative form of the given sample format or `AVSampleFormat.NONE` on error.
+    /// Return the packed alternative form of the given sample format or `AVSampleFormat.none` on error.
     ///
     /// If the passed sample format is already in packed format, the format returned is the same as the input.
     public func toPacked() -> AVSampleFormat {
@@ -94,7 +94,8 @@ extension AVSampleFormat: CustomStringConvertible {
 // A channel layout is a 64-bits integer with a bit set for every channel.
 // The number of bits set must be equal to the number of channels.
 // The value 0 means that the channel layout is not known.
-// @note this data structure is not powerful enough to handle channels
+//
+// - Note: this data structure is not powerful enough to handle channels
 // combinations that have the same channel multiple times, such as dual-mono.
 
 public struct AVChannel: Equatable {
@@ -118,7 +119,7 @@ public struct AVChannel: Equatable {
     public static let topBackRight = AVChannel(rawValue: UInt64(AV_CH_TOP_BACK_RIGHT))
     /// Stereo downmix.
     public static let stereoLeft = AVChannel(rawValue: UInt64(AV_CH_STEREO_LEFT))
-    /// See AV_CH_STEREO_LEFT.
+    /// See `stereoLeft`.
     public static let stereoRight = AVChannel(rawValue: UInt64(AV_CH_STEREO_RIGHT))
     public static let wideLeft = AVChannel(rawValue: AV_CH_WIDE_LEFT)
     public static let wideRight = AVChannel(rawValue: AV_CH_WIDE_RIGHT)
@@ -148,9 +149,8 @@ extension AVChannel: CustomStringConvertible {
 
 public struct AVChannelLayout: Equatable {
     public static let CHL_NONE = AVChannelLayout(rawValue: 0)
-    /// Channel mask value used for AVCodecContext.request_channel_layout
-    /// to indicate that the user requests the channel order of the decoder output
-    /// to be the native codec channel order.
+    /// Channel mask value used for AVCodecContext.request_channel_layout to indicate that
+    /// the user requests the channel order of the decoder output to be the native codec channel order.
     public static let CHL_NATIVE = AVChannelLayout(rawValue: swift_AV_CH_LAYOUT_NATIVE)
     public static let CHL_MONO = AVChannelLayout(rawValue: swift_AV_CH_LAYOUT_MONO)
     public static let CHL_STEREO = AVChannelLayout(rawValue: swift_AV_CH_LAYOUT_STEREO)
@@ -208,10 +208,10 @@ public struct AVChannelLayout: Equatable {
         return Int(av_get_channel_layout_nb_channels(rawValue))
     }
 
-    /// Get the index of a channel in channel_layout.
+    /// Get the index of a channel in channel layout.
     ///
-    /// - Parameter channel: a channel layout describing exactly one channel which must be present in channel_layout.
-    /// - Returns: index of channel in channel_layout on success, nil on error.
+    /// - Parameter channel: a channel layout describing exactly one channel which must be present in channel layout.
+    /// - Returns: index of channel in channel layout on success, `nil` on error.
     public func index(for channel: AVChannel) -> Int? {
         let i = av_get_channel_layout_channel_index(rawValue, channel.rawValue)
         return i >= 0 ? Int(i) : nil

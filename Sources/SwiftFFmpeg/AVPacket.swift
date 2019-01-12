@@ -20,11 +20,11 @@ typealias CAVPacket = CFFmpeg.AVPacket
 /// with no compressed data, containing only side data (e.g. to update some stream
 /// parameters at the end of encoding).
 ///
-/// The semantics of data ownership depends on the `buf` field.
+/// The semantics of data ownership depends on the `buffer` field.
 /// If it is set, the packet data is dynamically allocated and is valid indefinitely
 /// until a call to `unref` reduces the reference count to 0.
 ///
-/// If the `buf` field is not set `ref` would make a copy instead of increasing the reference count.
+/// If the `buffer` field is not set, `ref` would make a copy instead of increasing the reference count.
 ///
 /// The side data is always allocated with av_malloc(), copied by av_packet_ref() and freed by av_packet_unref().
 public final class AVPacket {
@@ -38,7 +38,7 @@ public final class AVPacket {
     /// Allocate an `AVPacket` and set its fields to default values.
     ///
     /// - Note: This only allocates the `AVPacket` itself, not the data buffers.
-    ///   Those must be allocated through other means such as av_new_packet.
+    ///   Those must be allocated through other means such as `av_new_packet`.
     public init() {
         guard let packetPtr = av_packet_alloc() else {
             fatalError("av_packet_alloc")
@@ -61,7 +61,7 @@ public final class AVPacket {
     /// Presentation timestamp in `AVStream.timebase` units; the time at which the decompressed packet
     /// will be presented to the user.
     ///
-    /// Can be `avNoPTS` if it is not stored in the file.
+    /// Can be `AVTimestamp.noPTS` if it is not stored in the file.
     public var pts: Int64 {
         get { return cPacket.pts }
         set { cPacketPtr.pointee.pts = newValue }
@@ -69,7 +69,7 @@ public final class AVPacket {
 
     /// Decompression timestamp in `AVStream.timebase` units; the time at which the packet is decompressed.
     ///
-    /// Can be `avNoPTS` if it is not stored in the file.
+    /// Can be `AVTimestamp.noPTS` if it is not stored in the file.
     public var dts: Int64 {
         get { return cPacket.dts }
         set { cPacketPtr.pointee.dts = newValue }
@@ -109,12 +109,12 @@ public final class AVPacket {
     }
 
     /// Convert valid timing fields (timestamps / durations) in a packet from one timebase to another.
-    /// Timestamps with unknown values (`avNoPTS`) will be ignored.
+    /// Timestamps with unknown values (`AVTimestamp.noPTS`) will be ignored.
     ///
     /// - Parameters:
     ///   - src: source timebase, in which the timing fields in pkt are expressed.
     ///   - dst: destination timebase, to which the timing fields will be converted.
-    public func rescaleTs(from src: AVRational, to dst: AVRational) {
+    public func rescaleTimestamp(from src: AVRational, to dst: AVRational) {
         av_packet_rescale_ts(cPacketPtr, src, dst)
     }
 
@@ -125,28 +125,32 @@ public final class AVPacket {
     ///
     /// All the other fields are copied from src.
     ///
+    /// - Parameter src: the source packet
     /// - Throws: AVerror
-    public func ref(dst: AVPacket) throws {
-        try throwIfFail(av_packet_ref(dst.cPacketPtr, cPacketPtr))
+    public func ref(from src: AVPacket) throws {
+        try throwIfFail(av_packet_ref(cPacketPtr, src.cPacketPtr))
     }
 
     /// Wipe the packet.
     ///
-    /// Unreference the buffer referenced by the packet and reset the remaining packet fields to their default values.
+    /// Unreference the buffer referenced by the packet and reset the remaining packet fields
+    /// to their default values.
     public func unref() {
         av_packet_unref(cPacketPtr)
     }
 
     /// Move every field in src to dst and reset src.
-    public func moveRef(to dst: AVPacket) {
-        av_packet_move_ref(dst.cPacketPtr, cPacketPtr)
+    ///
+    /// - Parameter src: the source packet
+    public func moveRef(from src: AVPacket) {
+        av_packet_move_ref(cPacketPtr, src.cPacketPtr)
     }
 
     /// Create a new packet that references the same data as src.
     ///
     /// This is a shortcut for `av_packet_alloc() + av_packet_ref()`.
     ///
-    /// - Returns: newly created `AVPacket` on success, nil on error.
+    /// - Returns: newly created `AVPacket` on success, `nil` on error.
     public func clone() -> AVPacket? {
         if let ptr = av_packet_clone(cPacketPtr) {
             return AVPacket(cPacketPtr: ptr)
@@ -167,14 +171,14 @@ public final class AVPacket {
     }
 }
 
-// MARK: - Flag
+// MARK: - AVPacket.Flag
 
 extension AVPacket {
 
     public struct Flag: OptionSet {
-        /// The packet contains a keyframe
+        /// The packet contains a keyframe.
         public static let key = Flag(rawValue: AV_PKT_FLAG_KEY)
-        /// The packet content is corrupted
+        /// The packet content is corrupted.
         public static let corrupt = Flag(rawValue: AV_PKT_FLAG_CORRUPT)
         /// Flag is used to discard packets which are required to maintain valid decoder state
         /// but are not required for output and should be dropped after decoding.

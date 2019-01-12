@@ -66,9 +66,11 @@ public struct AVInputFormat {
     }
 }
 
+// MARK: - AVInputFormat.Flag
+
 extension AVInputFormat {
 
-    /// Flags used by `AVInputFormat.flags`.
+    /// Flags used by `flags`.
     public struct Flag: OptionSet {
         /// Demuxer will use avio_open, no opened file should be provided by the caller.
         public static let noFile = Flag(rawValue: AVFMT_NOFILE)
@@ -171,22 +173,22 @@ public struct AVOutputFormat {
         return String(cString: cFormat.mime_type)
     }
 
-    /// default audio codec
+    /// The default audio codec of the muxer.
     public var audioCodec: AVCodecID {
         return cFormat.audio_codec
     }
 
-    /// default video codec
+    /// The default video codec of the muxer.
     public var videoCodec: AVCodecID {
         return cFormat.video_codec
     }
 
-    /// default subtitle codec
+    /// The default subtitle codec of the muxer.
     public var subtitleCodec: AVCodecID {
         return cFormat.subtitle_codec
     }
 
-    public var flags: AVOutputFormat.Flag {
+    public var flags: Flag {
         get { return Flag(rawValue: cFormat.flags) }
         set { cFormatPtr.pointee.flags = newValue.rawValue }
     }
@@ -202,9 +204,11 @@ public struct AVOutputFormat {
     }
 }
 
+// MARK: - AVOutputFormat.Flag
+
 extension AVOutputFormat {
 
-    /// Flags used by `AVOutputFormat.flags`.
+    /// Flags used by `flags`.
     public struct Flag: OptionSet {
         /// Demuxer will use avio_open, no opened file should be provided by the caller.
         public static let noFile = Flag(rawValue: AVFMT_NOFILE)
@@ -296,20 +300,18 @@ public final class AVFormatContext {
 
     /// Input or output URL.
     ///
-    /// - demuxing: set by `openInput`, initialized to an empty string if url parameter was nil in `openInput`.
-    /// - muxing: may be set by the caller before calling `writeHeader` (or avformat_init_output() if that is
-    ///   called first) to a string which is freeable by av_free(). Set to an empty string if it was nil in
-    ///   avformat_init_output().
+    /// - demuxing: Set by `openInput`, initialized to an empty string if `url` parameter was `nil` in `openInput`.
+    /// - muxing: May be set by the caller before calling `writeHeader` to a string. Set to an empty string if
+    ///   it was `nil` in `writeHeader`.
     public var url: String? {
-        return String(cString: cContext.url)
+        get { return String(cString: cContext.url) }
+        set { cContextPtr.pointee.url = av_strdup(newValue) }
     }
 
     /// I/O context.
     ///
-    /// - demuxing: Either set by the user before `openInput` (then the user must close it manually)
-    ///   or set by `openInput`.
-    /// - muxing: Set by the user before `writeHeader`. The caller must take care of closing / freeing
-    ///   the IO context.
+    /// - demuxing: Either set by the user before `openInput` (then the user must close it manually) or set by `openInput`.
+    /// - muxing: Set by the user before `writeHeader`. The caller must take care of closing the IO context.
     public var pb: AVIOContext? {
         get {
             if let ctxPtr = cContext.pb {
@@ -323,7 +325,7 @@ public final class AVFormatContext {
         }
     }
 
-    /// Number of streams.
+    /// The number of streams in the file.
     public var streamCount: Int {
         return Int(cContext.nb_streams)
     }
@@ -342,21 +344,25 @@ public final class AVFormatContext {
         return list
     }
 
+    /// The first video stream in the file.
     public var videoStream: AVStream? {
         return streams.first { $0.mediaType == .video }
     }
 
+    /// The first audio stream in the file.
     public var audioStream: AVStream? {
         return streams.first { $0.mediaType == .audio }
     }
 
+    /// The first subtitle stream in the file.
     public var subtitleStream: AVStream? {
         return streams.first { $0.mediaType == .subtitle }
     }
 
-    /// Flags modifying the (de)muxer behaviour.
+    /// The flags used to modify the (de)muxer behaviour.
     ///
-    /// Set by the user before `openInput` / `writeHeader`.
+    /// - demuxing: Set by the caller before `openInput`.
+    /// - muxing: Set by the caller before `writeHeader`.
     public var flags: Flag {
         get { return Flag(rawValue: cContext.flags) }
         set { cContextPtr.pointee.flags = newValue.rawValue }
@@ -368,10 +374,10 @@ public final class AVFormatContext {
     /// - muxing: May be set by the caller before `writeHeader`.
     public var metadata: [String: String] {
         var dict = [String: String]()
-        var tag: UnsafeMutablePointer<AVDictionaryEntry>?
-        while let next = av_dict_get(cContext.metadata, "", tag, AV_DICT_IGNORE_SUFFIX) {
-            dict[String(cString: next.pointee.key)] = String(cString: next.pointee.value)
-            tag = next
+        var prev: UnsafeMutablePointer<AVDictionaryEntry>?
+        while let tag = av_dict_get(cContext.metadata, "", prev, AV_DICT_IGNORE_SUFFIX) {
+            dict[String(cString: tag.pointee.key)] = String(cString: tag.pointee.value)
+            prev = tag
         }
         return dict
     }
@@ -386,12 +392,12 @@ public final class AVFormatContext {
         set { cContextPtr.pointee.interrupt_callback = newValue }
     }
 
-    /// The stream index for specified media type.
+    /// The first stream index for the specified media type.
     ///
     /// - Parameter mediaType: media type
     /// - Returns: stream index if it exists
     public func streamIndex(for mediaType: AVMediaType) -> Int? {
-        if let index = streams.index(where: { $0.codecParameters.mediaType == mediaType }) {
+        if let index = streams.firstIndex(where: { $0.codecParameters.mediaType == mediaType }) {
             return index
         }
         return nil
@@ -412,11 +418,11 @@ public final class AVFormatContext {
     }
 }
 
-// MARK: - Flag
+// MARK: - AVFormatContext.Flag
 
 extension AVFormatContext {
 
-    /// Flags modifying the (de)muxer behaviour.
+    /// Flags used to modify the (de)muxer behaviour.
     public struct Flag: OptionSet {
         /// Generate missing pts even if it requires parsing future frames.
         public static let genPTS = Flag(rawValue: AVFMT_FLAG_GENPTS)
@@ -529,21 +535,17 @@ extension AVFormatContext {
         set { cContextPtr.pointee.iformat = newValue?.cFormatPtr }
     }
 
-    /// Position of the first frame of the component, in `avTimeBase` fractional seconds.
-    /// Never set this value directly: It is deduced from the `AVStream` values.
+    /// Position of the first frame of the component, in `AVTimestamp.timebase` fractional seconds.
     public var startTime: Int64 {
         return cContext.start_time
     }
 
-    /// Duration of the stream, in `avTimeBase` fractional seconds. Only set this value if you know
-    /// none of the individual stream durations and also do not set any of them.
-    /// This is deduced from the AVStream values if not set.
+    /// Duration of the stream, in `AVTimestamp.timebase` fractional seconds. 
     public var duration: Int64 {
         return cContext.duration
     }
 
     /// Total stream bitrate in bit/s, 0 if not available.
-    /// Never set it directly if the file_size and the duration are known as FFmpeg can compute it automatically.
     public var bitRate: Int64 {
         return cContext.bit_rate
     }
@@ -638,7 +640,7 @@ extension AVFormatContext {
     /// - Parameters:
     ///   - stream: the stream which the frame is part of
     ///   - frame: the frame with the aspect ratio to be determined
-    /// - Returns: the guessed (valid) sample_aspect_ratio, 0/1 if no idea
+    /// - Returns: the guessed (valid) sample aspect ratio, 0/1 if no idea
     public func guessSampleAspectRatio(stream: AVStream?, frame: AVFrame?) -> AVRational {
         return av_guess_sample_aspect_ratio(cContextPtr, stream?.cStreamPtr, frame?.cFramePtr)
     }
@@ -659,12 +661,13 @@ extension AVFormatContext {
     /// Seek to the keyframe at timestamp.
     ///
     /// - Parameters:
-    ///   - streamIndex: If stream_index is `-1`, a default stream is selected, and timestamp is automatically
-    ///     converted from `avTimeBase` units to the stream specific time_base.
-    ///   - timestamp: Timestamp in AVStream.time_base units or, if no stream is specified, in `avTimeBase` units.
+    ///   - timestamp: Timestamp in `AVStream.timebase` units or, if no stream is specified,
+    ///     in `AVTimestamp.timebase` units.
+    ///   - streamIndex: If `streamIndex` is -1, a default stream is selected, and timestamp
+    ///     is automatically converted from `AVTimestamp.timebase` units to the stream specific timebase.
     ///   - flags: flags which select direction and seeking mode
     /// - Throws: AVError
-    public func seekFrame(streamIndex: Int, timestamp: Int64, flags: SeekFlag) throws {
+    public func seekFrame(to timestamp: Int64, streamIndex: Int, flags: SeekFlag) throws {
         try throwIfFail(av_seek_frame(cContextPtr, Int32(streamIndex), timestamp, flags.rawValue))
     }
 
@@ -677,8 +680,7 @@ extension AVFormatContext {
     /// not change when calling this function. If you want a complete reset, it's
     /// better to open a new AVFormatContext.
     ///
-    /// This does not flush the AVIOContext (s->pb). If necessary, call
-    /// avio_flush(s->pb) before calling this function.
+    /// This does not flush the AVIOContext (`pb`). If necessary, call `pb.flush` before calling this function.
     public func flush() {
         avformat_flush(cContextPtr)
     }
@@ -686,19 +688,21 @@ extension AVFormatContext {
     /// Start playing a network-based stream (e.g. RTSP stream) at the current position.
     ///
     /// - Throws: AVError
-    public func readPlay() throws {
+    public func play() throws {
         try throwIfFail(av_read_play(cContextPtr))
     }
 
     /// Pause a network-based stream (e.g. RTSP stream).
     ///
-    /// Use `readPlay` to resume it.
+    /// Use `play` to resume it.
     ///
     /// - Throws: AVError
-    public func readPause() throws {
+    public func pause() throws {
         try throwIfFail(av_read_pause(cContextPtr))
     }
 }
+
+// MARK: - AVFormatContext.SeekFlag
 
 extension AVFormatContext {
 
@@ -727,7 +731,7 @@ extension AVFormatContext {
     /// Allocate an `AVFormatContext` for an output format.
     ///
     /// - Parameters:
-    ///   - format: format to use for allocating the context, if `nil` formatName and filename are used instead
+    ///   - format: the format to use for allocating the context, if `nil` formatName and filename are used instead
     ///   - formatName: the name of output format to use for allocating the context, if `nil` filename is used instead
     ///   - filename: the name of the filename to use for allocating the context, may be `nil`
     /// - Throws: AVError
@@ -764,9 +768,9 @@ extension AVFormatContext {
 
     /// Add a new stream to a media file.
     ///
-    /// - Parameter codec: If non-nil, the `AVCodecContext` corresponding to the new stream will be initialized
-    ///   to use this codec. This is needed for e.g. codec-specific defaults to be set, so codec should be
-    ///   provided if it is known.
+    /// - Parameter codec: If non-nil, the `AVCodecContext` corresponding to the new stream will be
+    ///   initialized to use this codec. This is needed for e.g. codec-specific defaults to be set, 
+    ///   so codec should be provided if it is known.
     /// - Returns: newly created stream or `nil` on error.
     public func addStream(codec: AVCodec? = nil) -> AVStream? {
         if let streamPtr = avformat_new_stream(cContextPtr, codec?.cCodecPtr) {
@@ -780,7 +784,7 @@ extension AVFormatContext {
     /// - Note: The `outputFormat` field must be set to the desired output format;
     ///   The `pb` field must be set to an already opened `AVIOContext`.
     ///
-    /// - Parameter options: the `AVFormatContext` and muxer-private options.
+    /// - Parameter options: the `AVFormatContext` and muxer-private options
     /// - Throws: AVError
     public func writeHeader(options: [String: String]? = nil) throws {
         var pm: OpaquePointer? = options?.toAVDict()
@@ -802,7 +806,7 @@ extension AVFormatContext {
     ///   `interleavedWriteFrame`, this function does not take ownership of the packet passed to it
     ///   (though some muxers may make an internal reference to the input packet).
     ///
-    ///   This parameter can be nil (at any time, not just at the end), in order to immediately flush
+    ///   This parameter can be `nil` (at any time, not just at the end), in order to immediately flush
     ///   data buffered within the muxer, for muxers that buffer up data internally before writing it
     ///   to the output.
     ///
@@ -810,7 +814,7 @@ extension AVFormatContext {
     ///
     ///   The timestamps (`AVPacket.pts`, `AVPacket.dts`) must be set to correct values in the stream's
     ///   timebase (unless the output format is flagged with the `AVOutputFormat.Flag.noTimestamps` flag,
-    ///   then they can be set to `avNoPTS`).
+    ///   then they can be set to `AVTimestamp.noPTS`).
     ///   The dts for subsequent packets passed to this function must be strictly increasing when compared
     ///   in their respective timebases (unless the output format is flagged with the
     ///   `AVOutputFormat.Flag.tsNonstrict`, then they merely have to be nondecreasing).
@@ -831,18 +835,18 @@ extension AVFormatContext {
     ///
     /// - Parameter pkt: The packet containing the data to be written.
     ///
-    ///   If the packet is reference-counted, this function will take ownership of this reference and unreference
-    ///   it later when it sees fit.
-    ///   The caller must not access the data through this reference after this function returns. If the packet
-    ///   is not reference-counted, libavformat will make a copy.
+    ///   If the packet is reference-counted, this function will take ownership of this reference and 
+    ///   unreference it later when it sees fit.
+    ///   The caller must not access the data through this reference after this function returns. 
+    ///   If the packet is not reference-counted, libavformat will make a copy.
     ///
-    ///   This parameter can be nil (at any time, not just at the end), to flush the interleaving queues.
+    ///   This parameter can be `nil` (at any time, not just at the end), to flush the interleaving queues.
     ///
     ///   Packet's `streamIndex` field must be set to the index of the corresponding stream in `streams`.
     ///
     ///   The timestamps (`AVPacket.pts`, `AVPacket.dts`) must be set to correct values in the stream's timebase
     ///   (unless the output format is flagged with the `AVOutputFormat.Flag.noTimestamps` flag, then they can be
-    ///   set to `avNoPTS`).
+    ///   set to `AVTimestamp.noPTS`).
     ///   The dts for subsequent packets in one stream must be strictly increasing (unless the output format is
     ///   flagged with the `AVOutputFormat.Flag.tsNonstrict`, then they merely have to be nondecreasing).
     ///  `AVPacket.duration` should also be set if known.

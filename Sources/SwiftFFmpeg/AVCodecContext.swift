@@ -41,6 +41,7 @@ public final class AVCodecContext {
     }
 
     /// fourcc (LSB first, so "ABCD" -> ('D'<<24) + ('C'<<16) + ('B'<<8) + 'A').
+    ///
     /// This is used to work around some encoder bugs.
     /// A demuxer should set this to what is stored in the field used to identify the codec.
     /// If there are multiple such fields in a container then the demuxer should choose the one
@@ -52,12 +53,12 @@ public final class AVCodecContext {
     ///
     /// - encoding: Set by user, if not then the default based on codec_id will be used.
     /// - decoding: Set by user, will be converted to uppercase by libavcodec during init.
-    public var codecTag: UInt {
-        get { return UInt(cContext.codec_tag) }
-        set { cContextPtr.pointee.codec_tag = UInt32(newValue) }
+    public var codecTag: UInt32 {
+        get { return cContext.codec_tag }
+        set { cContextPtr.pointee.codec_tag = newValue }
     }
 
-    /// the average bitrate
+    /// The average bitrate.
     ///
     /// - encoding: Set by user, unused for constant quantizer encoding.
     /// - decoding: Set by user, may be overwritten by libavcodec if this info is available in the stream.
@@ -66,7 +67,7 @@ public final class AVCodecContext {
         set { cContextPtr.pointee.bit_rate = newValue }
     }
 
-    /// number of bits the bitstream is allowed to diverge from the reference.
+    /// Number of bits the bitstream is allowed to diverge from the reference.
     /// the reference can be CBR (for CBR pass1) or VBR (for pass2)
     ///
     /// - encoding: Set by user, unused for constant quantizer encoding.
@@ -76,6 +77,8 @@ public final class AVCodecContext {
         set { cContextPtr.pointee.bit_rate_tolerance = Int32(newValue) }
     }
 
+    /// AVCodecContext.Flag
+    ///
     /// - encoding: Set by user.
     /// - decoding: Set by user.
     public var flags: Flag {
@@ -83,6 +86,8 @@ public final class AVCodecContext {
         set { cContextPtr.pointee.flags = Int32(newValue.rawValue) }
     }
 
+    /// AVCodecContext.Flag2
+    ///
     /// - encoding: Set by user.
     /// - decoding: Set by user.
     public var flags2: Flag2 {
@@ -94,9 +99,9 @@ public final class AVCodecContext {
     /// are represented. For fixed-fps content, timebase should be 1/framerate and timestamp
     /// increments should be identically 1.
     /// This often, but not always is the inverse of the frame rate or field rate for video.
-    /// 1/time_base is not the average frame rate if the frame rate is not constant.
+    /// 1/timebase is not the average frame rate if the frame rate is not constant.
     ///
-    /// Like containers, elementary streams also can store timestamps, 1/time_base
+    /// Like containers, elementary streams also can store timestamps, 1/timebase
     /// is the unit in which these timestamps are specified.
     /// As example of such codec time base see ISO/IEC 14496-2:2001(E)
     /// vop_time_increment_resolution and fixed_vop_rate
@@ -180,7 +185,7 @@ public final class AVCodecContext {
     /// Supply a raw video or audio frame to the encoder.
     ///
     /// - Parameter frame: `AVFrame` containing the raw audio or video frame to be encoded.
-    ///   It can be nil, in which case it is considered a flush packet. This signals the end of the stream.
+    ///   It can be `nil`, in which case it is considered a flush packet. This signals the end of the stream.
     ///   If the encoder still has packets buffered, it will return them after this call.
     ///   Once flushing mode has been entered, additional flush packets are ignored, and sending frames
     ///   will return `AVError.eof`.
@@ -199,9 +204,9 @@ public final class AVCodecContext {
     ///
     /// - Parameter packet: This will be set to a reference-counted packet allocated by the encoder.
     /// - Throws:
-    ///     - `AVError.tryAgain` if output is not available in the current state - user must try to send input
-    ///     - `AVError.eof` if the encoder has been fully flushed, and there will be no more output packets
-    ///     - `AVError.invalidArgument` if codec not opened, or it is an encoder
+    ///     - `AVError.tryAgain` if output is not available in the current state - user must try to send input.
+    ///     - `AVError.eof` if the encoder has been fully flushed, and there will be no more output packets.
+    ///     - `AVError.invalidArgument` if codec not opened, or it is an encoder.
     ///     - legitimate decoding errors
     public func receivePacket(_ packet: AVPacket) throws {
         try throwIfFail(avcodec_receive_packet(cContextPtr, packet.cPacketPtr))
@@ -213,7 +218,7 @@ public final class AVCodecContext {
     }
 }
 
-// MARK: - Flag
+// MARK: - AVCodecContext.Flag
 
 extension AVCodecContext {
 
@@ -296,7 +301,7 @@ extension AVCodecContext.Flag: CustomStringConvertible {
     }
 }
 
-// MARK: - Flag2
+// MARK: - AVCodecContext.Flag2
 
 extension AVCodecContext {
 
@@ -355,7 +360,7 @@ extension AVCodecContext.Flag2: CustomStringConvertible {
 
 extension AVCodecContext {
 
-    /// picture width
+    /// The width of the picture.
     ///
     /// - encoding: Must be set by user.
     /// - decoding: May be set by the user before opening the decoder if known e.g. from the container.
@@ -366,7 +371,7 @@ extension AVCodecContext {
         set { cContextPtr.pointee.width = Int32(newValue) }
     }
 
-    /// picture height
+    /// The height of the picture.
     ///
     /// - encoding: Must be set by user.
     /// - decoding: May be set by the user before opening the decoder if known e.g. from the container.
@@ -377,8 +382,8 @@ extension AVCodecContext {
         set { cContextPtr.pointee.height = Int32(newValue) }
     }
 
-    /// Bitstream width, may be different from `width` e.g. when
-    /// the decoded frame is cropped before being output or lowres is enabled.
+    /// Bitstream width, may be different from `width` e.g. when the decoded frame is cropped before 
+    /// being output or lowres is enabled.
     ///
     /// - encoding: Unused.
     /// - decoding: May be set by the user before opening the decoder if known e.g. from the container.
@@ -388,8 +393,8 @@ extension AVCodecContext {
         set { cContextPtr.pointee.coded_width = Int32(newValue) }
     }
 
-    /// Bitstream height, may be different from `height` e.g. when
-    /// the decoded frame is cropped before being output or lowres is enabled.
+    /// Bitstream height, may be different from `height` e.g. when the decoded frame is cropped before 
+    /// being output or lowres is enabled.
     ///
     /// - encoding: Unused.
     /// - decoding: May be set by the user before opening the decoder if known e.g. from the container.
@@ -408,7 +413,7 @@ extension AVCodecContext {
         set { cContextPtr.pointee.gop_size = Int32(newValue) }
     }
 
-    /// Pixel format.
+    /// The pixel format of the picture.
     ///
     /// - encoding: Set by user.
     /// - decoding: Set by user if known, overridden by codec while parsing the data.
@@ -437,7 +442,7 @@ extension AVCodecContext {
         set { cContextPtr.pointee.mb_decision = Int32(newValue) }
     }
 
-    /// Sample aspect ratio (0 if unknown).
+    /// Sample aspect ratio (0/0 if unknown).
     ///
     /// That is the width of a pixel divided by the height of the pixel.
     /// Numerator and denominator must be relatively prime and smaller than 256 for some video standards.
@@ -457,11 +462,11 @@ extension AVCodecContext {
         return Int(cContext.lowres)
     }
 
-    /// Framerate.
+    /// The framerate of the video.
     ///
     /// - encoding: May be used to signal the framerate of CFR content to an encoder.
     /// - decoding: For codecs that store a framerate value in the compressed bitstream,
-    ///   the decoder may export it here. {0, 1} when unknown.
+    ///   the decoder may export it here. 0/1 when unknown.
     public var framerate: AVRational {
         get { return cContext.framerate }
         set { cContextPtr.pointee.framerate = newValue }
@@ -495,7 +500,8 @@ extension AVCodecContext {
 
     /// Number of samples per channel in an audio frame.
     public var frameSize: Int {
-        return Int(cContext.frame_size)
+        get { return Int(cContext.frame_size) }
+        set { cContextPtr.pointee.frame_size = Int32(newValue) }
     }
 
     /// Audio channel layout.

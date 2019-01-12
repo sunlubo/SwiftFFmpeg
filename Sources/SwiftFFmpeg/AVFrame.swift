@@ -19,16 +19,16 @@ typealias CAVFrame = CFFmpeg.AVFrame
 /// to its original clean state before it is reused again.
 ///
 /// The data described by an `AVFrame` is usually reference counted through the
-/// `AVBuffer` API. The underlying buffer references are stored in `AVFrame.buf` /
-/// `AVFrame.extended_buf`. An `AVFrame` is considered to be reference counted if at
-/// least one reference is set, i.e. if `AVFrame.buf[0] != nil`. In such a case,
-/// every single data plane must be contained in one of the buffers in `AVFrame.buf`
-/// or `AVFrame.extended_buf`.
+/// `AVBuffer` API. The underlying buffer references are stored in `AVFrame.buffer` /
+/// `AVFrame.extendedBuffer`. An `AVFrame` is considered to be reference counted if at
+/// least one reference is set, i.e. if `AVFrame.buffer[0] != nil`. In such a case,
+/// every single data plane must be contained in one of the buffers in `AVFrame.buffer`
+/// or `AVFrame.extendedBuffer`.
 /// There may be a single buffer for all the data, or one separate buffer for
 /// each plane, or anything in between.
 ///
-/// Fields can be accessed through `AVOptions`, the name string used, matches the
-/// C structure field name for fields accessible through `AVOptions`.
+/// Fields can be accessed through `AVOption`s, the name string used, matches the
+/// C structure field name for fields accessible through `AVOption`s.
 public final class AVFrame {
     public static let `class` = AVClass(cClassPtr: avcodec_get_frame_class())
 
@@ -51,22 +51,17 @@ public final class AVFrame {
     }
 
     /// Pointer to the picture/channel planes.
-    public var data: [UnsafeMutablePointer<UInt8>?] {
+    public var data: UnsafeMutableBufferPointer<UnsafeMutablePointer<UInt8>?> {
         get {
-            return [
-                cFrame.data.0, cFrame.data.1, cFrame.data.2, cFrame.data.3,
-                cFrame.data.4, cFrame.data.5, cFrame.data.6, cFrame.data.7
-            ]
+            return withUnsafeBytes(of: &cFramePtr.pointee.data) { rawPtr in
+                let start = rawPtr.baseAddress!.assumingMemoryBound(to: UnsafeMutablePointer<UInt8>?.self).mutable
+                return UnsafeMutableBufferPointer(start: start, count: 8)
+            }
         }
         set {
-            var list = newValue
-            while list.count < AV_NUM_DATA_POINTERS {
-                list.append(nil)
+            withUnsafeMutableBytes(of: &cFramePtr.pointee.data) { rawPtr -> Void in
+                rawPtr.copyMemory(from: UnsafeRawBufferPointer(newValue))
             }
-            cFramePtr.pointee.data = (
-                list[0], list[1], list[2], list[3],
-                list[4], list[5], list[6], list[7]
-            )
         }
     }
 
@@ -82,24 +77,38 @@ public final class AVFrame {
     ///
     /// - Note: The linesize may be larger than the size of usable data -- there may be extra padding present
     ///   for performance reasons.
-    public var linesize: [Int] {
+    public var linesize: UnsafeMutableBufferPointer<Int32> {
         get {
-            let list = [
-                cFrame.linesize.0, cFrame.linesize.1, cFrame.linesize.2, cFrame.linesize.3,
-                cFrame.linesize.4, cFrame.linesize.5, cFrame.linesize.6, cFrame.linesize.7
-            ]
-            return list.map({ Int($0) })
+            return withUnsafeBytes(of: &cFramePtr.pointee.linesize) { rawPtr in
+                let start = rawPtr.baseAddress!.assumingMemoryBound(to: Int32.self).mutable
+                return UnsafeMutableBufferPointer(start: start, count: 8)
+            }
         }
         set {
-            var list = newValue.map({ Int32($0) })
-            while list.count < AV_NUM_DATA_POINTERS {
-                list.append(0)
+            withUnsafeMutableBytes(of: &cFramePtr.pointee.linesize) { rawPtr -> Void in
+                rawPtr.copyMemory(from: UnsafeRawBufferPointer(newValue))
             }
-            cFramePtr.pointee.linesize = (
-                list[0], list[1], list[2], list[3],
-                list[4], list[5], list[6], list[7]
-            )
         }
+    }
+
+    /// pointers to the data planes/channels.
+    ///
+    /// For video, this should simply point to `data`.
+    ///
+    /// For planar audio, each channel has a separate data pointer, and `linesize[0]` contains
+    /// the size of each channel buffer.
+    /// For packed audio, there is just one data pointer, and `linesize[0]` contains
+    /// the total size of the buffer for all channels.
+    ///
+    /// - Note: Both `data` and `extendedData` should always be set in a valid frame,
+    ///   but for planar audio with more channels that can fit in `data`,
+    ///   `extendedData` must be used in order to access all channels.
+    public var extendedData: UnsafeMutableBufferPointer<UnsafeMutablePointer<UInt8>?> {
+        get {
+            let count = pixelFormat != .none ? 4 : channelCount
+            return UnsafeMutableBufferPointer(start: cFrame.extended_data, count: count)
+        }
+        set { cFramePtr.pointee.extended_data = newValue.baseAddress }
     }
 
     /// Presentation timestamp in timebase units (time when frame should be shown to user).
@@ -109,7 +118,7 @@ public final class AVFrame {
     }
 
     /// DTS copied from the `AVPacket` that triggered returning this frame. (if frame threading isn't used)
-    /// This is also the Presentation time of this `AVFrame` calculated from only `AVPacket.dts` values
+    /// This is also the presentation time of this `AVFrame` calculated from only `AVPacket.dts` values
     /// without pts values.
     public var dts: Int64 {
         return cFrame.pkt_dts
@@ -128,13 +137,13 @@ public final class AVFrame {
     /// `AVBuffer` references backing the data for this frame.
     ///
     /// If all elements of this array are `nil`, then this frame is not reference counted.
-    /// This array must be filled contiguously -- if `buf[i]` is non-nil then `buf[j]` must
+    /// This array must be filled contiguously -- if `buffer[i]` is non-nil then `buffer[j]` must
     /// also be non-nil for all `j < i`.
     ///
     /// There may be at most one `AVBuffer` per data plane, so for video this array always
-    /// contains all the references. For planar audio with more than `AV_NUM_DATA_POINTERS`
+    /// contains all the references. For planar audio with more than `AVConstant.dataPointersNumber`
     /// channels, there may be more buffers than can fit in this array. Then the extra
-    /// `AVBuffer` are stored in the `extendedBuf` array.
+    /// `AVBuffer` are stored in the `extendedBuffer` array.
     public var buffer: [AVBuffer?] {
         let list = [
             cFrame.buf.0, cFrame.buf.1, cFrame.buf.2, cFrame.buf.3,
@@ -143,11 +152,11 @@ public final class AVFrame {
         return list.map({ $0 != nil ? AVBuffer(cBufferPtr: $0!) : nil })
     }
 
-    /// For planar audio which requires more than `AV_NUM_DATA_POINTERS` `AVBuffer`,
-    /// this array will hold all the references which cannot fit into `AVFrame.buf`.
+    /// For planar audio which requires more than `AVConstant.dataPointersNumber` `AVBuffer`,
+    /// this array will hold all the references which cannot fit into `AVFrame.buffer`.
     ///
-    /// Note that this is different from `AVFrame.extended_data`, which always contains all the pointers.
-    /// This array only contains the extra pointers, which cannot fit into `AVFrame.buf`.
+    /// Note that this is different from `AVFrame.extendedData`, which always contains all the pointers.
+    /// This array only contains the extra pointers, which cannot fit into `AVFrame.buffer`.
     public var extendedBuffer: [AVBuffer] {
         var list = [AVBuffer]()
         for i in 0..<extendedBufferCount {
@@ -185,7 +194,8 @@ public final class AVFrame {
         return cFrame.pkt_duration
     }
 
-    /// Size of the corresponding packet containing the compressed frame. It is set to a negative value if unknown.
+    /// Size of the corresponding packet containing the compressed frame. 
+    /// It is set to a negative value if unknown.
     ///
     /// - encoding: Unused.
     /// - decoding: Set by libavcodec, read by user.
@@ -210,7 +220,7 @@ public final class AVFrame {
         set {
             var ptr = cFramePtr.pointee.metadata
             for (k, v) in newValue {
-                av_dict_set(&ptr, k, v, AVOptionSearchFlag.children.rawValue)
+                av_dict_set(&ptr, k, v, AV_OPT_SEARCH_CHILDREN)
             }
             cFramePtr.pointee.metadata = ptr
         }
@@ -219,13 +229,13 @@ public final class AVFrame {
     /// Allocate new buffer(s) for audio or video data.
     ///
     /// The following fields must be set on frame before calling this function:
-    ///   - `pixFmt` for video, `sampleFmt` for audio
+    ///   - `pixelFormat` for video, `sampleFormat` for audio
     ///   - `width` and `height` for video
     ///   - `sampleCount` and `channelLayout` for audio
     ///
-    /// This function will fill `AVFrame.data` and `AVFrame.buf` arrays and, if necessary, allocate and fill
-    /// `AVFrame.extendedData` and `AVFrame.extendedBuf`. For planar formats, one buffer will be allocated for
-    ///  each plane.
+    /// This function will fill `AVFrame.data` and `AVFrame.buffer` arrays and, if necessary, 
+    /// allocate and fill `AVFrame.extendedData` and `AVFrame.extendedBuffer`. For planar formats, 
+    /// one buffer will be allocated for each plane.
     ///
     /// - Warning: If frame already has been allocated, calling this function will leak memory.
     ///   In addition, undefined behavior can occur in certain cases.
@@ -240,14 +250,15 @@ public final class AVFrame {
     /// Set up a new reference to the data described by the source frame.
     ///
     /// Copy frame properties from src to dst and create a new reference for each `AVBuffer` from src.
-    /// If src is not reference counted, new buffers are allocated and the data is copied.
+    /// If `src` is not reference counted, new buffers are allocated and the data is copied.
     ///
-    /// - Warning: dst __must__ have been either unreferenced with av_frame_unref(dst),
-    ///           or newly allocated with av_frame_alloc() before calling this
-    ///           function, or undefined behavior will occur.
+    /// - Warning: dst __must__ have been either unreferenced with `unref`, or newly allocated before
+    ///   calling this function, or undefined behavior will occur.
+    ///
+    /// - Parameter src: the source frame
     /// - Throws: AVError
-    public func ref(dst: AVFrame) throws {
-        try throwIfFail(av_frame_ref(dst.cFramePtr, cFramePtr))
+    public func ref(from src: AVFrame) throws {
+        try throwIfFail(av_frame_ref(cFramePtr, src.cFramePtr))
     }
 
     /// Unreference all the buffers referenced by frame and reset the frame fields.
@@ -259,8 +270,10 @@ public final class AVFrame {
     ///
     /// - Warning: dst is not unreferenced, but directly overwritten without reading or deallocating its contents.
     ///   Call `dst.unref()` manually before calling this function to ensure that no memory is leaked.
-    public func moveRef(to dst: AVFrame) {
-        av_frame_move_ref(dst.cFramePtr, cFramePtr)
+    ///
+    /// - Parameter src: the source frame
+    public func moveRef(from src: AVFrame) {
+        av_frame_move_ref(cFramePtr, src.cFramePtr)
     }
 
     /// Create a new frame that references the same data as src.
@@ -277,8 +290,8 @@ public final class AVFrame {
 
     /// Check if the frame data is writable.
     ///
-    /// - Returns: True if the frame data is writable (which is true if and only if each of the underlying buffers has
-    ///   only one reference, namely the one stored in this frame).
+    /// - Returns: `true` if the frame data is writable (which is true if and only if each of the underlying buffers
+    ///   has only one reference, namely the one stored in this frame).
     public func isWritable() -> Bool {
         return av_frame_is_writable(cFramePtr) > 0
     }
@@ -290,6 +303,44 @@ public final class AVFrame {
     /// - Throws: AVError
     public func makeWritable() throws {
         try throwIfFail(av_frame_make_writable(cFramePtr))
+    }
+
+    /// Copy the frame data from src to dst.
+    ///
+    /// This function does not allocate anything, dst must be already initialized and
+    /// allocated with the same parameters as src.
+    ///
+    /// This function only copies the frame data (i.e. the contents of the data /
+    /// extended data arrays), not any other properties.
+    ///
+    /// - Parameter src: the source frame
+    /// - Throws: AVError
+    public func copy(from src: AVFrame) throws {
+        try throwIfFail(av_frame_copy(cFramePtr, src.cFramePtr))
+    }
+
+    /// Copy only "metadata" fields from src to dst.
+    ///
+    /// Metadata for the purpose of this function are those fields that do not affect
+    /// the data layout in the buffers. E.g. pts, sample rate (for audio) or sample
+    /// aspect ratio (for video), but not width/height or channel layout.
+    /// Side data is also copied.
+    ///
+    /// - Parameter src: the source frame
+    /// - Throws: AVError
+    public func copyProperties(from src: AVFrame) throws {
+        try throwIfFail(av_frame_copy_props(cFramePtr, src.cFramePtr))
+    }
+
+    /// Get the buffer reference a given data plane is stored in.
+    ///
+    /// - Parameter plane: index of the data plane of interest in `extendedData`.
+    /// - Returns: the buffer reference that contains the plane or `nil` if the input frame is not valid.
+    public func planeBuffer(at plane: Int) -> AVBuffer? {
+        if let ptr = av_frame_get_plane_buffer(cFramePtr, Int32(plane)) {
+            return AVBuffer(cBufferPtr: ptr)
+        }
+        return nil
     }
 
     deinit {
@@ -352,7 +403,7 @@ extension AVFrame {
 
 extension AVFrame {
 
-    /// Sample format.
+    /// The sample format of the audio data.
     public var sampleFormat: AVSampleFormat {
         get { return AVSampleFormat(cFrame.format) }
         set { cFramePtr.pointee.format = newValue.rawValue }

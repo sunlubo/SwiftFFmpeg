@@ -1,11 +1,112 @@
 //
-//  AVIOContext.swift
+//  AVIO.swift
 //  SwiftFFmpeg
 //
 //  Created by sunlubo on 2018/7/25.
 //
 
 import CFFmpeg
+
+// MARK: - AVIO
+
+public enum AVIO {
+
+    /// Allocate a memory block with alignment suitable for all memory accesses
+    /// (including vectors if available on the CPU).
+    ///
+    /// - Parameter size: Size in bytes for the memory block to be allocated
+    /// - Returns: Pointer to the allocated block, or `nil` if the block cannot be allocated.
+    public static func malloc(size: Int) -> UnsafeMutableRawPointer? {
+        return av_malloc(size)
+    }
+
+    /// Allocate a memory block with alignment suitable for all memory accesses
+    /// (including vectors if available on the CPU) and zero all the bytes of the block.
+    ///
+    /// - Parameter size: Size in bytes for the memory block to be allocated
+    /// - Returns: Pointer to the allocated block, or `nil` if the block cannot be allocated.
+    public static func mallocz(size: Int) -> UnsafeMutableRawPointer? {
+        return av_mallocz(size)
+    }
+
+    /// Allocate, reallocate, or free a block of memory.
+    ///
+    /// If `ptr` is `nil` and `size` > 0, allocate a new block. If `size` is zero,
+    /// free the memory block pointed to by `ptr`. Otherwise, expand or shrink that
+    /// block of memory according to `size`.
+    ///
+    /// - Warning: Unlike `malloc`, the returned pointer is not guaranteed to be correctly aligned.
+    ///
+    /// - Parameters:
+    ///   - ptr: Pointer to a memory block already allocated with `realloc` or `nil`
+    ///   - size: Size in bytes of the memory block to be allocated or reallocated
+    /// - Returns: Pointer to a newly-reallocated block or `nil` if the block cannot be reallocated
+    ///   or the function is used to free the memory block
+    public static func realloc(_ ptr: UnsafeMutableRawPointer?, size: Int) -> UnsafeMutableRawPointer? {
+        return av_realloc(ptr, size)
+    }
+
+    /// Free a memory block which has been allocated with a function of `malloc` or `realloc` family.
+    ///
+    /// - Note: `ptr = nil` is explicitly allowed.
+    /// - Note: It is recommended that you use `freep` instead, to prevent leaving behind dangling pointers.
+    ///
+    /// - Parameter ptr: Pointer to the memory block which should be freed.
+    public static func free(_ ptr: UnsafeMutableRawPointer?) {
+        av_free(ptr)
+    }
+
+    /// Free a memory block which has been allocated with a function of `malloc` or `realloc` family,
+    /// and set the pointer pointing to it to `nil`.
+    ///
+    /// - Note: `*ptr = NULL` is safe and leads to no action.
+    ///
+    /// - Parameter ptr: Pointer to the pointer to the memory block which should be freed
+    public static func freep(_ ptr: UnsafeMutableRawPointer?) {
+        av_freep(ptr)
+    }
+
+    /// Read the file with name, and put its content in a newly allocated buffer or
+    /// map it with `mmap()` when available.
+    /// In case of success set `buffer` to the read or mmapped buffer, and `size` to the size in bytes of the buffer.
+    /// Unlike mmap this function succeeds with zero sized files, in this case `*bufptr` will be set to `nil`
+    /// and `*size` will be set to 0.
+    /// The returned buffer must be released with `fileUnmap`.
+    ///
+    /// - Throws: AVError
+    public static func fileMap(
+        filename: String,
+        buffer: UnsafeMutablePointer<UnsafeMutablePointer<UInt8>?>,
+        size: UnsafeMutablePointer<Int>
+    ) throws {
+        try throwIfFail(av_file_map(filename, buffer, size, 0, nil))
+    }
+
+    /// Unmap or free the buffer bufptr created by `fileMap`.
+    public static func fileUnmap(buffer: UnsafeMutablePointer<UInt8>, size: Int) {
+        av_file_unmap(buffer, size)
+    }
+
+    /// Move or rename a resource.
+    ///
+    /// - Note: `src` and `dst` should share the same protocol and authority.
+    ///
+    /// - Parameters:
+    ///   - src: url to resource to be moved
+    ///   - dst: new url to resource if the operation succeeded
+    /// - Throws: AVError
+    public static func move(_ src: String, _ dst: String) throws {
+        try throwIfFail(avpriv_io_move(src, dst))
+    }
+
+    /// Delete a resource.
+    ///
+    /// - Parameter url: resource to be deleted.
+    /// - Throws: AVError
+    public static func delete(_ url: String) throws {
+        try throwIfFail(avpriv_io_delete(url))
+    }
+}
 
 // MARK: - AVIODirEntryType
 
@@ -110,9 +211,7 @@ typealias CAVIODirContext = CFFmpeg.AVIODirContext
 
 public final class AVIODirContext {
     let cContextPtr: UnsafeMutablePointer<CAVIODirContext>
-    var cContext: CAVIODirContext {
-        return cContextPtr.pointee
-    }
+    var cContext: CAVIODirContext { return cContextPtr.pointee }
 
     private var isOpen: Bool = false
 
@@ -148,7 +247,7 @@ public final class AVIODirContext {
     }
 
     deinit {
-        assert(!isOpen, "AVIODirContext must be close")
+        assert(!isOpen, "AVIODirContext must be close.")
     }
 }
 
@@ -185,9 +284,9 @@ public typealias AVIOInterruptCallback = AVIOInterruptCB
 
 typealias CAVIOContext = CFFmpeg.AVIOContext
 
-public typealias AVIOReadHandler = (UnsafeMutableRawPointer?, UnsafeMutablePointer<UInt8>?, Int) -> Int
+public typealias AVIOReadHandler  = (UnsafeMutableRawPointer?, UnsafeMutablePointer<UInt8>?, Int) -> Int
 public typealias AVIOWriteHandler = (UnsafeMutableRawPointer?, UnsafeMutablePointer<UInt8>?, Int) -> Int
-public typealias AVIOSeekHandler = (UnsafeMutableRawPointer?, Int64, Int) -> Int64
+public typealias AVIOSeekHandler  = (UnsafeMutableRawPointer?, Int64, Int) -> Int64
 
 typealias IOBoxValue = (
     opaque: UnsafeMutableRawPointer,
@@ -218,11 +317,11 @@ public final class AVIOContext {
     ///     it should be set to this blocksize. For others a typical size is a cache page, e.g. 4kb.
     ///   - writable: Set to `true` if the buffer should be writable, `false` otherwise.
     ///   - opaque: An opaque pointer to user-specific data.
-    ///   - read: A handler for refilling the buffer, may be `nil`.
+    ///   - readHandler: A handler for refilling the buffer, may be `nil`.
     ///     For stream protocols, must never return 0 but rather a proper AVERROR code.
-    ///   - write: A handler for writing the buffer contents, may be `nil`.
+    ///   - writeHandler: A handler for writing the buffer contents, may be `nil`.
     ///     The function may not change the input buffers content.
-    ///   - seek: A handler for seeking to specified byte position, may be `nil`.
+    ///   - seekHandler: A handler for seeking to specified byte position, may be `nil`.
     public convenience init(
         buffer: UnsafeMutablePointer<UInt8>,
         size: Int,
@@ -276,7 +375,8 @@ public final class AVIOContext {
 
     /// Create and initialize a `AVIOContext` for accessing the resource indicated by url.
     ///
-    /// - Note: When the resource indicated by url has been opened in read+write mode, the AVIOContext can be used only for writing.
+    /// - Note: When the resource indicated by url has been opened in _read+write_ mode,
+    ///   the `AVIOContext` can be used only for writing.
     ///
     /// - Parameters:
     ///   - url: resource to access
@@ -305,10 +405,23 @@ public final class AVIOContext {
         dumpUnrecognizedOptions(pm)
     }
 
+    deinit {
+        if freeWhenDone {
+            av_free(cContext.buffer)
+            var pb: UnsafeMutablePointer<CAVIOContext>? = cContextPtr
+            avio_context_free(&pb)
+        }
+        assert(!isOpen, "AVIOContext must be close.")
+    }
+
+    /// Writes the contents of a provided data buffer to the receiver.
     public func write(_ buffer: UnsafePointer<UInt8>, size: Int) {
         avio_write(cContextPtr, buffer, Int32(size))
     }
 
+    /// Sets the file position indicator for the file stream to the value pointed to by offset.
+    ///
+    /// - Throws: AVError
     public func seek(to offset: Int64, whence: SeekWhence) throws -> Int {
         let ret = avio_seek(cContextPtr, offset, whence.rawValue)
         try throwIfFail(Int32(ret))
@@ -359,7 +472,7 @@ public final class AVIOContext {
         avio_flush(cContextPtr)
     }
 
-    /// Read size bytes from `AVIOContext` into buf.
+    /// Read size bytes from `AVIOContext` into buffer.
     ///
     /// - Parameters:
     ///   - buffer: The buffer into which the data is read.
@@ -372,7 +485,8 @@ public final class AVIOContext {
         return Int(ret)
     }
 
-    /// Read size bytes from AVIOContext into buf. Unlike `read`, this is allowed to read fewer bytes than requested.
+    /// Read size bytes from `AVIOContext` into buffer. Unlike `read`, this is allowed to read
+    /// fewer bytes than requested.
     /// The missing bytes can be read in the next call. This always tries to read at least 1 byte.
     /// Useful to reduce latency in certain cases.
     ///
@@ -389,7 +503,7 @@ public final class AVIOContext {
 
     /// Pause playing.
     ///
-    /// Only meaningful if using a network streaming protocol (e.g. MMS).
+    /// - Note: Only meaningful if using a network streaming protocol (e.g. MMS).
     ///
     /// - Throws: AVError
     public func pause() throws {
@@ -398,7 +512,7 @@ public final class AVIOContext {
 
     /// Resume playing.
     ///
-    /// Only meaningful if using a network streaming protocol (e.g. MMS).
+    /// - Note: Only meaningful if using a network streaming protocol (e.g. MMS).
     ///
     /// - Throws: AVError
     public func resume() throws {
@@ -407,20 +521,19 @@ public final class AVIOContext {
 
     /// Seek to a given timestamp relative to some component stream.
     ///
-    /// Only meaningful if using a network streaming protocol (e.g. MMS.).
+    /// - Note: Only meaningful if using a network streaming protocol (e.g. MMS.).
     ///
     /// - Parameters:
-    ///   - timestamp: timestamp in AVStream.time_base units
-    ///     or if there is no stream specified then in `avTimeBase` units.
+    ///   - timestamp: timestamp in `AVStream.timebase` units or if there is no stream specified
+    ///     then in `AVTimestamp.timebase` units.
     ///   - streamIndex: The stream index that the timestamp is relative to.
-    ///     If stream_index is `-1` the timestamp should be in `avTimeBase`
-    ///     units from the beginning of the presentation.
-    ///     If a stream_index >= 0 is used and the protocol does not support
-    ///     seeking based on component streams, the call will fail.
-    ///   - flags: Optional combination of AVSEEK_FLAG_BACKWARD, AVSEEK_FLAG_BYTE
-    ///     and AVSEEK_FLAG_ANY. The protocol may silently ignore
-    ///     AVSEEK_FLAG_BACKWARD and AVSEEK_FLAG_ANY, but AVSEEK_FLAG_BYTE will
-    ///     fail if used and not supported.
+    ///     If `streamIndex` is -1 the timestamp should be in `AVTimestamp.timebase` units from
+    ///     the beginning of the presentation.
+    ///     If a `streamIndex` >= 0 is used and the protocol does not support seeking based on
+    ///     component streams, the call will fail.
+    ///   - flags: Optional combination of `SeekFlag.backward`, `SeekFlag.byte` and `SeekFlag.any`.
+    ///     The protocol may silently ignore `SeekFlag.backward` and `SeekFlag.any`, but `SeekFlag.byte`
+    ///     will fail if used and not supported.
     /// - Throws: AVError
     public func seek(to timestamp: Int64, streamIndex: Int64, flags: AVFormatContext.SeekFlag) throws -> Int {
         let ret = avio_seek_time(cContextPtr, Int32(streamIndex), timestamp, flags.rawValue)
@@ -439,13 +552,13 @@ public final class AVIOContext {
 
     /// Perform one step of the protocol handshake to accept a new client.
     ///
-    /// This function must be called on a client returned by avio_accept() before using it as a read/write context.
-    /// It is separate from avio_accept() because it may block.
+    /// This function must be called on a client returned by `accept` before using it as a read/write context.
+    /// It is separate from `accept` because it may block.
     /// A step of the handshake is defined by places where the application may decide to change the proceedings.
     /// For example, on a protocol with a request header and a reply header, each one can constitute a step
     /// because the application may use the parameters from the request to change parameters in the reply;
     /// or each individual chunk of the request can constitute a step. If the handshake is already finished,
-    /// avio_handshake() does nothing and returns 0 immediately.
+    /// `handshake` does nothing and returns 0 immediately.
     ///
     /// - Returns: `true` on a complete and successful handshake, `false` if the handshake progressed,
     ///   but is not complete.
@@ -493,15 +606,6 @@ public final class AVIOContext {
         }
         return protocols
     }
-
-    deinit {
-        if freeWhenDone {
-            av_free(cContext.buffer)
-            var pb: UnsafeMutablePointer<CAVIOContext>? = cContextPtr
-            avio_context_free(&pb)
-        }
-        assert(!isOpen, "AVIOContext must be close")
-    }
 }
 
 extension AVIOContext: AVOptionAccessor {
@@ -511,7 +615,7 @@ extension AVIOContext: AVOptionAccessor {
     }
 }
 
-// MARK: - Flag
+// MARK: - AVIOContext.Flag
 
 extension AVIOContext {
 
@@ -566,7 +670,7 @@ extension AVIOContext.Flag: CustomStringConvertible {
     }
 }
 
-// MARK: - SeekWhence
+// MARK: - AVIOContext.SeekWhence
 
 extension AVIOContext {
 
@@ -587,64 +691,4 @@ extension AVIOContext {
             self.rawValue = rawValue
         }
     }
-}
-
-/// Move or rename a resource.
-///
-/// - Note: url_src and url_dst should share the same protocol and authority.
-///
-/// - Parameters:
-///   - src: url to resource to be moved
-///   - dst: new url to resource if the operation succeeded
-/// - Throws: AVError
-public func avMove(_ src: String, _ dst: String) throws {
-    try throwIfFail(avpriv_io_move(src, dst))
-}
-
-/// Delete a resource.
-///
-/// - Parameter url: resource to be deleted.
-/// - Throws: AVError
-public func avDelete(_ url: String) throws {
-    try throwIfFail(avpriv_io_delete(url))
-}
-
-/// Allocate a memory block with alignment suitable for all memory accesses
-/// (including vectors if available on the CPU).
-///
-/// - Parameter size: Size in bytes for the memory block to be allocated
-/// - Returns: Pointer to the allocated block, or `nil` if the block cannot be allocated.
-public func avMalloc(size: Int) -> UnsafeMutableRawPointer? {
-    return av_malloc(size)
-}
-
-/// Allocate a memory block with alignment suitable for all memory accesses
-/// (including vectors if available on the CPU) and zero all the bytes of the block.
-///
-/// - Parameter size: Size in bytes for the memory block to be allocated
-/// - Returns: Pointer to the allocated block, or `nil` if the block cannot be allocated.
-public func avMallocz(size: Int) -> UnsafeMutableRawPointer? {
-    return av_mallocz(size)
-}
-
-/// Read the file with name filename, and put its content in a newly
-/// allocated buffer or map it with mmap() when available.
-/// In case of success set `buffer` to the read or mmapped buffer, and
-/// `size` to the size in bytes of the buffer.
-/// Unlike mmap this function succeeds with zero sized files, in this
-/// case *bufptr will be set to NULL and *size will be set to 0.
-/// The returned buffer must be released with av_file_unmap().
-///
-/// - Throws: AVError
-public func avFileMap(
-    filename: String,
-    buffer: UnsafeMutablePointer<UnsafeMutablePointer<UInt8>?>,
-    size: UnsafeMutablePointer<Int>
-) throws {
-    try throwIfFail(av_file_map(filename, buffer, size, 0, nil))
-}
-
-/// Unmap or free the buffer bufptr created by av_file_map().
-public func avFileUnmap(buffer: UnsafeMutablePointer<UInt8>, size: Int) {
-    av_file_unmap(buffer, size)
 }

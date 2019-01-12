@@ -28,7 +28,7 @@ extension AVDiscard {
     public static let all = AVDISCARD_ALL
 }
 
-// MARK: - Audio
+// MARK: - AVCodecParameters
 
 typealias CAVCodecParameters = CFFmpeg.AVCodecParameters
 
@@ -77,7 +77,7 @@ public final class AVCodecParameters {
 
 extension AVCodecParameters {
 
-    /// Pixel format.
+    /// The pixel format of the video frame.
     public var pixelFormat: AVPixelFormat {
         return AVPixelFormat(cParameters.format)
     }
@@ -94,8 +94,8 @@ extension AVCodecParameters {
 
     /// The aspect ratio (width / height) which a single pixel should have when displayed.
     ///
-    /// When the aspect ratio is unknown / undefined, the numerator should be
-    /// set to 0 (the denominator may have any value).
+    /// When the aspect ratio is unknown / undefined, the numerator should be set to 0
+    /// (the denominator may have any value).
     public var sampleAspectRatio: AVRational {
         return cParameters.sample_aspect_ratio
     }
@@ -110,14 +110,13 @@ extension AVCodecParameters {
 
 extension AVCodecParameters {
 
-    /// Sample format.
+    /// The sample format of audio.
     public var sampleFormat: AVSampleFormat {
         return AVSampleFormat(cParameters.format)
     }
 
-    /// The channel layout bitmask. May be 0 if the channel layout is
-    /// unknown or unspecified, otherwise the number of bits set must be equal to
-    /// the channels field.
+    /// The channel layout bitmask. May be 0 if the channel layout is unknown or unspecified,
+    /// otherwise the number of bits set must be equal to the channels field.
     public var channelLayout: AVChannelLayout {
         return AVChannelLayout(rawValue: cParameters.channel_layout)
     }
@@ -177,7 +176,7 @@ public final class AVStream {
         set { cStreamPtr.pointee.time_base = newValue }
     }
 
-    /// pts of the first frame of the stream in presentation order, in stream time base.
+    /// pts of the first frame of the stream in presentation order, in stream timebase.
     public var startTime: Int64 {
         return cStream.start_time
     }
@@ -205,6 +204,7 @@ public final class AVStream {
         return cStream.sample_aspect_ratio
     }
 
+    /// The metadata of the stream.
     public var metadata: [String: String] {
         var dict = [String: String]()
         var tag: UnsafeMutablePointer<AVDictionaryEntry>?
@@ -240,6 +240,7 @@ public final class AVStream {
         return AVCodecParameters(cParametersPtr: cStream.codecpar)
     }
 
+    /// The media type of the stream.
     public var mediaType: AVMediaType {
         return codecParameters.mediaType
     }

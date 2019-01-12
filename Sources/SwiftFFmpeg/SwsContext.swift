@@ -14,7 +14,7 @@ public final class SwsContext {
 
     let cContextPtr: OpaquePointer
 
-    /// Allocate an empty `SwsContext`.
+    /// Create an empty `SwsContext`.
     public init() {
         guard let ctxPtr = sws_alloc_context() else {
             fatalError("sws_alloc_context")
@@ -22,7 +22,7 @@ public final class SwsContext {
         self.cContextPtr = ctxPtr
     }
 
-    /// Allocate and return an `SwsContext`.
+    /// Create an `SwsContext` use the given parameters.
     ///
     /// - Parameters:
     ///   - srcWidth: the width of the source image
@@ -49,7 +49,7 @@ public final class SwsContext {
         cContextPtr = ptr
     }
 
-    /// Scale the image slice in srcSlice and put the resulting scaled slice in the image in dst.
+    /// Scale the image slice in `src` and put the resulting scaled slice in the image in `dst`.
     ///
     /// A slice is a sequence of consecutive rows in an image.
     ///
@@ -80,7 +80,7 @@ public final class SwsContext {
     /// Returns a Boolean value indicating whether the pixel format is a supported input format.
     ///
     /// - Parameter pixFmt: pixel format
-    /// - Returns: true if it is supported; otherwise false.
+    /// - Returns: `true` if it is supported; otherwise `false`.
     public static func supportsInput(_ pixFmt: AVPixelFormat) -> Bool {
         return sws_isSupportedInput(pixFmt) > 0
     }
@@ -88,7 +88,7 @@ public final class SwsContext {
     /// Returns a Boolean value indicating whether the pixel format is a supported output format.
     ///
     /// - Parameter pixFmt: pixel format
-    /// - Returns: true if it is supported; otherwise false.
+    /// - Returns: `true` if it is supported; otherwise `false`.
     public static func supportsOutput(_ pixFmt: AVPixelFormat) -> Bool {
         return sws_isSupportedOutput(pixFmt) > 0
     }
@@ -96,7 +96,7 @@ public final class SwsContext {
     /// Returns a Boolean value indicating whether an endianness conversion is supported.
     ///
     /// - Parameter pixFmt: pixel format
-    /// - Returns: true if it is supported; otherwise false.
+    /// - Returns: `true` if it is supported; otherwise `false`.
     public static func supportsEndiannessConversion(_ pixFmt: AVPixelFormat) -> Bool {
         return sws_isSupportedEndiannessConversion(pixFmt) > 0
     }
@@ -109,17 +109,39 @@ public final class SwsContext {
 extension SwsContext {
 
     public struct Flag: OptionSet {
+        /// Select fast bilinear scaling algorithm.
         public static let fastBilinear = Flag(rawValue: SWS_FAST_BILINEAR)
+        /// Select bilinear scaling algorithm.
         public static let bilinear = Flag(rawValue: SWS_BILINEAR)
+        /// Select bicubic scaling algorithm.
         public static let bicubic = Flag(rawValue: SWS_BICUBIC)
+        /// Select experimental scaling algorithm.
         public static let x = Flag(rawValue: SWS_X)
+        /// Select nearest neighbor rescaling algorithm.
         public static let point = Flag(rawValue: SWS_POINT)
+        /// Select averaging area rescaling algorithm.
         public static let area = Flag(rawValue: SWS_AREA)
+        /// Select bicubic scaling algorithm for the luma component, bilinear for chroma components.
         public static let bicublin = Flag(rawValue: SWS_BICUBLIN)
+        /// Select Gaussian rescaling algorithm.
         public static let gauss = Flag(rawValue: SWS_GAUSS)
+        /// Select sinc rescaling algorithm.
         public static let sinc = Flag(rawValue: SWS_SINC)
+        /// Select Lanczos rescaling algorithm.
         public static let lanczos = Flag(rawValue: SWS_LANCZOS)
-        public static let spLine = Flag(rawValue: SWS_SPLINE)
+        /// Select natural bicubic spline rescaling algorithm.
+        public static let spline = Flag(rawValue: SWS_SPLINE)
+
+        /// Enable printing/debug logging.
+        public static let printInfo = Flag(rawValue: SWS_PRINT_INFO)
+        /// Enable full chroma interpolation.
+        public static let fullChromaInt = Flag(rawValue: SWS_FULL_CHR_H_INT)
+        /// Select full chroma input.
+        public static let fullChromaInp = Flag(rawValue: SWS_FULL_CHR_H_INP)
+        /// Enable accurate rounding.
+        public static let accurateRnd = Flag(rawValue: SWS_ACCURATE_RND)
+        /// Enable bitexact output.
+        public static let bitexact = Flag(rawValue: SWS_BITEXACT)
 
         public let rawValue: Int32
 
@@ -143,7 +165,12 @@ extension SwsContext.Flag: CustomStringConvertible {
         if contains(.gauss) { str += "gauss, " }
         if contains(.sinc) { str += "sinc, " }
         if contains(.lanczos) { str += "lanczos, " }
-        if contains(.spLine) { str += "spLine, " }
+        if contains(.spline) { str += "spLine, " }
+        if contains(.printInfo) { str += "printInfo, " }
+        if contains(.fullChromaInt) { str += "fullChromaInt, " }
+        if contains(.fullChromaInp) { str += "fullChromaInp, " }
+        if contains(.accurateRnd) { str += "accurateRnd, " }
+        if contains(.bitexact) { str += "bitexact, " }
         if str.suffix(2) == ", " {
             str.removeLast(2)
         }

@@ -74,7 +74,7 @@ extension AVRounding {
     /// Flag telling rescaling functions to pass `INT64_MIN`/`MAX` through
     /// unchanged, avoiding special cases for #AV_NOPTS_VALUE.
     ///
-    /// Unlike other values of the enumeration AVRounding, this value is a
+    /// Unlike other values of the enumeration `AVRounding`, this value is a
     /// bitmask that must be used in conjunction with another value of the
     /// enumeration through a bitwise OR, in order to set behavior for normal
     /// cases.
@@ -98,17 +98,26 @@ extension AVRounding {
     }
 }
 
-/// Rescale a integer with specified rounding.
-///
-/// The operation is mathematically equivalent to `a * b / c`, but writing that
-/// directly can overflow, and does not support different rounding methods.
-public func rescale<T: BinaryInteger>(_ a: T, _ b: T, _ c: T, _ rnd: AVRounding = .inf) -> Int64 {
-    return av_rescale_rnd(Int64(a), Int64(b), Int64(c), rnd)
-}
+public enum AVMath {
 
-/// Rescale a integer by 2 rational numbers with specified rounding.
-///
-/// The operation is mathematically equivalent to `a * bq / cq`.
-public func rescale<T: BinaryInteger>(_ a: T, _ b: AVRational, _ c: AVRational, _ rnd: AVRounding = .inf) -> Int64 {
-    return av_rescale_q_rnd(Int64(a), b, c, rnd)
+    /// Rescale a integer with specified rounding.
+    ///
+    /// The operation is mathematically equivalent to `a * b / c`, but writing that
+    /// directly can overflow, and does not support different rounding methods.
+    public static func rescale<T: BinaryInteger>(
+        _ a: T, _ b: T, _ c: T,
+        _ rnd: AVRounding = .inf
+    ) -> Int64 {
+        return av_rescale_rnd(Int64(a), Int64(b), Int64(c), rnd)
+    }
+
+    /// Rescale a integer by 2 rational numbers with specified rounding.
+    ///
+    /// The operation is mathematically equivalent to `a * bq / cq`.
+    public static func rescale<T: BinaryInteger>(
+        _ a: T, _ b: AVRational, _ c: AVRational,
+        _ rnd: AVRounding = .inf
+    ) -> Int64 {
+        return av_rescale_q_rnd(Int64(a), b, c, rnd)
+    }
 }

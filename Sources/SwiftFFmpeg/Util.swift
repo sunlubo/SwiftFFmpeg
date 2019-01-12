@@ -16,7 +16,8 @@ final class Box<T> {
     }
 }
 
-/// Do global initialization of network libraries. This is optional, and not recommended anymore.
+/// Do global initialization of network libraries.
+/// This is optional, and not recommended anymore.
 ///
 /// This functions only exists to work around thread-safety issues
 /// with older GnuTLS or OpenSSL libraries. If libavformat is linked
@@ -37,10 +38,10 @@ public func networkDeinit() -> Int32 {
 }
 
 func dumpUnrecognizedOptions(_ dict: OpaquePointer?) {
-    var tag: UnsafeMutablePointer<AVDictionaryEntry>?
-    while let next = av_dict_get(dict, "", tag, AV_DICT_IGNORE_SUFFIX) {
-        print("Warning: Option `\(String(cString: next.pointee.key!))` not recognized.")
-        tag = next
+    var prev: UnsafeMutablePointer<AVDictionaryEntry>?
+    while let tag = av_dict_get(dict, "", prev, AV_DICT_IGNORE_SUFFIX) {
+        print("Warning: Option '\(String(cString: tag.pointee.key!))' not recognized.")
+        prev = tag
     }
 }
 

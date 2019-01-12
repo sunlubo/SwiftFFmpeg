@@ -11,7 +11,6 @@ import CFFmpeg
 
 public typealias AVPictureType = CFFmpeg.AVPictureType
 
-/// AVPicture types, pixel formats and basic image planes manipulation.
 extension AVPictureType {
     /// Undefined
     public static let NONE = AV_PICTURE_TYPE_NONE
@@ -44,7 +43,6 @@ extension AVPictureType: CustomStringConvertible {
 
 public typealias AVPixelFormat = CFFmpeg.AVPixelFormat
 
-/// Pixel format.
 extension AVPixelFormat {
     public static let NONE = AV_PIX_FMT_NONE
     /// planar YUV 4:2:0, 12bpp, (1 Cr & Cb sample per 2x2 Y samples)
@@ -180,17 +178,16 @@ extension AVPixelFormat {
 
     /// Return the pixel format corresponding to name.
     ///
-    /// If there is no pixel format with name name, then looks for a
-    /// pixel format with the name corresponding to the native endian
-    /// format of name.
-    /// For example in a little-endian system, first looks for "gray16",
-    /// then for "gray16le".
+    /// If there is no pixel format with name name, then looks for a pixel format with the name
+    /// corresponding to the native endian format of name.
+    /// For example in a little-endian system, first looks for "gray16", then for "gray16le".
     ///
-    /// Finally if no pixel format has been found, returns AV_PIX_FMT_NONE.
+    /// Finally if no pixel format has been found, returns `AVPixelFormat.NONE`.
     public init(name: String) {
         self = av_get_pix_fmt(name)
     }
 
+    // The name of the pixel format.
     public var name: String {
         return String(cString: av_get_pix_fmt_name(self)) ?? "unknown"
     }

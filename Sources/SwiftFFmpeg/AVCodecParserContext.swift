@@ -10,9 +10,9 @@ import CFFmpeg
 typealias CAVCodecParserContext = CFFmpeg.AVCodecParserContext
 
 public typealias AVCodecParserResult = (
-    Int, // The number of bytes of the input bitstream used.
-    Int, // The number of bytes of the parsed buffer or zero if not yet finished.
-    UnsafeMutablePointer<UInt8>? // The parsed buffer or nil if not yet finished.
+    UnsafeMutablePointer<UInt8>?, // The parsed buffer or nil if not yet finished.
+    Int,                          // The number of bytes of the parsed buffer or zero if not yet finished.
+    Int                           // The number of bytes of the input bitstream used.
 )
 
 public final class AVCodecParserContext {
@@ -33,7 +33,7 @@ public final class AVCodecParserContext {
     /// - Parameters:
     ///   - data: input buffer.
     ///   - size: buffer size in bytes without the padding.
-    ///     I.e. the full buffer size is assumed to be `buf_size + AV_INPUT_BUFFER_PADDING_SIZE`.
+    ///     I.e. the full buffer size is assumed to be `buf_size + AVConstant.inputBufferPaddingSize`.
     ///     To signal EOF, this should be 0 (so that the last frame can be output).
     ///   - pts: input presentation timestamp.
     ///   - dts: input decoding timestamp.
@@ -43,17 +43,17 @@ public final class AVCodecParserContext {
     public func parse(
         data: UnsafePointer<UInt8>,
         size: Int,
-        pts: Int64 = avNoPTS,
-        dts: Int64 = avNoPTS,
+        pts: Int64 = AVTimestamp.noPTS,
+        dts: Int64 = AVTimestamp.noPTS,
         pos: Int64 = 0
     ) throws -> AVCodecParserResult {
-        var poutbuf: UnsafeMutablePointer<UInt8>?
-        var poutbufSize: Int32 = 0
+        var buf: UnsafeMutablePointer<UInt8>?
+        var bufSize: Int32 = 0
         let ret = av_parser_parse2(
             cContextPtr,
             codecContext.cContextPtr,
-            &poutbuf,
-            &poutbufSize,
+            &buf,
+            &bufSize,
             data,
             Int32(size),
             pts,
@@ -62,7 +62,7 @@ public final class AVCodecParserContext {
         )
         try throwIfFail(ret)
 
-        return (Int(ret), Int(poutbufSize), poutbuf)
+        return (buf, Int(bufSize), Int(ret))
     }
 
     deinit {
