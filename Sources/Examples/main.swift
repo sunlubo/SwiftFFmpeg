@@ -21,6 +21,9 @@ if CommandLine.argc < 2 {
                           This program reads frames from a file, decodes them, and writes decoded
                           video frames to a rawvideo file named video_output_file, and decoded
                           audio frames to a rawaudio file named audio_output_file.
+      encode_video        video encoding with libavcodec API example
+      encode_audio        audio encoding with libavcodec API example.
+      metadata            example program to demonstrate the use of the libavformat metadata API.
     """)
     exit(1)
 }
@@ -37,6 +40,12 @@ case "decode_audio":
     try decode_audio()
 case "demuxing_decoding":
     try demuxing_decoding()
+case "encode_video":
+    try encode_video()
+case "encode_audio":
+    try encode_audio()
+case "metadata":
+    try metadata()
 default:
     ()
 }
