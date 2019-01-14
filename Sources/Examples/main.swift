@@ -25,6 +25,14 @@ if CommandLine.argc < 2 {
       encode_audio        audio encoding with libavcodec API example.
       http_multiclient    API example program to serve http to multiple clients.
       metadata            example program to demonstrate the use of the libavformat metadata API.
+      remuxing            API example program to remux a media file with libavformat and libavcodec.
+                          The output format is guessed according to the file extension.
+      scaling_video       API example program to show how to scale an image with libswscale.
+                          This program generates a series of pictures, rescales them to the given
+                          output_size and saves them to an output file named output_file.
+      resampling_audio    API example program to show how to resample an audio stream with libswresample.
+                          This program generates a series of audio frames, resamples them to a specified
+                          output format and rate and saves them to an output file named output_file.
     """)
     exit(1)
 }
@@ -45,10 +53,16 @@ case "encode_video":
     try encode_video()
 case "encode_audio":
     try encode_audio()
-case "metadata":
-    try metadata()
 case "http_multiclient":
     try http_multiclient()
+case "metadata":
+    try metadata()
+case "remuxing":
+    try remuxing()
+case "scaling_video":
+    try scaling_video()
+case "resampling_audio":
+    try resampling_audio()
 default:
     ()
 }
