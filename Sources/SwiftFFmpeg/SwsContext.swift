@@ -63,6 +63,7 @@ public final class SwsContext {
     ///   - dst: the array containing the pointers to the planes of the destination image
     ///   - dstStride: the array containing the strides for each plane of the destination image
     /// - Returns: the height of the output slice
+    /// - Throws: AVError
     @discardableResult
     public func scale(
         src: UnsafePointer<UnsafePointer<UInt8>?>,
@@ -71,8 +72,10 @@ public final class SwsContext {
         srcSliceHeight: Int,
         dst: UnsafePointer<UnsafeMutablePointer<UInt8>?>,
         dstStride: UnsafePointer<Int32>
-    ) -> Int {
-        return Int(sws_scale(cContextPtr, src, srcStride, Int32(srcSliceY), Int32(srcSliceHeight), dst, dstStride))
+    ) throws -> Int {
+        let ret = sws_scale(cContextPtr, src, srcStride, Int32(srcSliceY), Int32(srcSliceHeight), dst, dstStride)
+        try throwIfFail(ret)
+        return Int(ret)
     }
 
     /// Returns a Boolean value indicating whether the pixel format is a supported input format.
