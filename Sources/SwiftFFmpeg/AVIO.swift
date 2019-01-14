@@ -411,7 +411,6 @@ public final class AVIOContext {
             var pb: UnsafeMutablePointer<CAVIOContext>? = cContextPtr
             avio_context_free(&pb)
         }
-        assert(!isOpen, "AVIOContext must be close.")
     }
 
     /// Writes the contents of a provided data buffer to the receiver.
