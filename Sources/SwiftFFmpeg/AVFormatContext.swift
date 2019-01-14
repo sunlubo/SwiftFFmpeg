@@ -763,7 +763,7 @@ extension AVFormatContext {
     ///   - url: resource to access
     ///   - flags: flags which control how the resource indicated by url is to be opened
     /// - Throws: AVError
-    public func openIO(url: String, flags: AVIOContext.Flag) throws {
+    public func openOutput(url: String, flags: AVIOContext.Flag) throws {
         pb = try AVIOContext(url: url, flags: flags)
     }
 
