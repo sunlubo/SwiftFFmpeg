@@ -371,13 +371,16 @@ public final class AVFormatContext {
     /// - demuxing: Set by libavformat in `openInput`.
     /// - muxing: May be set by the caller before `writeHeader`.
     public var metadata: [String: String] {
-        var dict = [String: String]()
-        var prev: UnsafeMutablePointer<AVDictionaryEntry>?
-        while let tag = av_dict_get(cContext.metadata, "", prev, AV_DICT_IGNORE_SUFFIX) {
-            dict[String(cString: tag.pointee.key)] = String(cString: tag.pointee.value)
-            prev = tag
+        get {
+            var dict = [String: String]()
+            var prev: UnsafeMutablePointer<AVDictionaryEntry>?
+            while let tag = av_dict_get(cContext.metadata, "", prev, AV_DICT_IGNORE_SUFFIX) {
+                dict[String(cString: tag.pointee.key)] = String(cString: tag.pointee.value)
+                prev = tag
+            }
+            return dict
         }
-        return dict
+        set { cContextPtr.pointee.metadata = newValue.toAVDict() }
     }
 
     /// Custom interrupt callbacks for the I/O layer.
@@ -538,7 +541,7 @@ extension AVFormatContext {
         return cContext.start_time
     }
 
-    /// Duration of the stream, in `AVTimestamp.timebase` fractional seconds. 
+    /// Duration of the stream, in `AVTimestamp.timebase` fractional seconds.
     public var duration: Int64 {
         return cContext.duration
     }
@@ -767,7 +770,7 @@ extension AVFormatContext {
     /// Add a new stream to a media file.
     ///
     /// - Parameter codec: If non-nil, the `AVCodecContext` corresponding to the new stream will be
-    ///   initialized to use this codec. This is needed for e.g. codec-specific defaults to be set, 
+    ///   initialized to use this codec. This is needed for e.g. codec-specific defaults to be set,
     ///   so codec should be provided if it is known.
     /// - Returns: newly created stream or `nil` on error.
     public func addStream(codec: AVCodec? = nil) -> AVStream? {
@@ -833,9 +836,9 @@ extension AVFormatContext {
     ///
     /// - Parameter pkt: The packet containing the data to be written.
     ///
-    ///   If the packet is reference-counted, this function will take ownership of this reference and 
+    ///   If the packet is reference-counted, this function will take ownership of this reference and
     ///   unreference it later when it sees fit.
-    ///   The caller must not access the data through this reference after this function returns. 
+    ///   The caller must not access the data through this reference after this function returns.
     ///   If the packet is not reference-counted, libavformat will make a copy.
     ///
     ///   This parameter can be `nil` (at any time, not just at the end), to flush the interleaving queues.
