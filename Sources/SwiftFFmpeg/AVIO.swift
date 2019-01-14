@@ -573,11 +573,8 @@ public final class AVIOContext {
     ///
     /// The internal buffer is automatically flushed before closing the resource.
     public func close() {
-        if isOpen {
-            var pb: UnsafeMutablePointer<CAVIOContext>? = cContextPtr
-            avio_closep(&pb)
-            isOpen = false
-        }
+        avio_close(cContextPtr)
+        isOpen = false
     }
 
     /// Return the name of the protocol that will handle the passed url.
