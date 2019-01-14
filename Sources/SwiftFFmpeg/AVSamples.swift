@@ -8,7 +8,7 @@
 import CFFmpeg
 
 public final class AVSamples {
-    public let data: UnsafeMutablePointer<UnsafeMutablePointer<UInt8>?>
+    public let data: UnsafeMutableBufferPointer<UnsafeMutablePointer<UInt8>?>
     public let size: Int
     public let linesize: Int
     public let channelCount: Int
@@ -37,7 +37,7 @@ public final class AVSamples {
         guard ret >= 0 else {
             abort("av_samples_alloc: \(AVError(code: ret))")
         }
-        self.data = data
+        self.data = UnsafeMutableBufferPointer(start: data, count: 4)
         self.size = Int(ret)
         self.linesize = Int(linesize)
         self.channelCount = channelCount
@@ -46,13 +46,29 @@ public final class AVSamples {
     }
 
     deinit {
-        av_freep(data)
+        av_freep(data.baseAddress)
         data.deallocate()
     }
 
     /// Fill an audio buffer with silence.
     public func setSilence() {
-        av_samples_set_silence(data, 0, Int32(sampleCount), Int32(channelCount), sampleFormat)
+        av_samples_set_silence(data.baseAddress, 0, Int32(sampleCount), Int32(channelCount), sampleFormat)
+    }
+
+    /// Reformat samples using the given `SwrContext`.
+    ///
+    /// - Returns: number of samples output per channel
+    /// - Throws: AVError
+    @discardableResult
+    public func reformat(using context: SwrContext, to samples: AVSamples) throws -> Int {
+        return try data.withMemoryRebound(to: UnsafePointer<UInt8>?.self) { bufPtr in
+            return try context.convert(
+                dst: samples.data.baseAddress!,
+                dstCount: samples.sampleCount,
+                src: bufPtr.baseAddress!,
+                srcCount: sampleCount
+            )
+        }
     }
 
     /// Get the required buffer size for the given audio parameters.
