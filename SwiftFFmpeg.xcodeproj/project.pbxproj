@@ -22,6 +22,8 @@
 
 /* Begin PBXBuildFile section */
 		A44924FD21E9A6AA0062BC77 /* demuxing_decoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = A44924FC21E9A6AA0062BC77 /* demuxing_decoding.swift */; };
+		A4BF513121EB1BEB00464F4C /* http_multiclient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4BF513021EB1BEB00464F4C /* http_multiclient.swift */; };
+		A4BF513521EB2ADF00464F4C /* AVLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4BF513421EB2ADF00464F4C /* AVLog.swift */; };
 		A4C07BB921E9D118001929DE /* encode_audio.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4C07BB621E9D118001929DE /* encode_audio.swift */; };
 		A4C07BBA21E9D118001929DE /* encode_video.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4C07BB721E9D118001929DE /* encode_video.swift */; };
 		A4C07BBB21E9D118001929DE /* metadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4C07BB821E9D118001929DE /* metadata.swift */; };
@@ -89,6 +91,8 @@
 
 /* Begin PBXFileReference section */
 		A44924FC21E9A6AA0062BC77 /* demuxing_decoding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = demuxing_decoding.swift; sourceTree = "<group>"; };
+		A4BF513021EB1BEB00464F4C /* http_multiclient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = http_multiclient.swift; sourceTree = "<group>"; };
+		A4BF513421EB2ADF00464F4C /* AVLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVLog.swift; sourceTree = "<group>"; };
 		A4C07BB621E9D118001929DE /* encode_audio.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = encode_audio.swift; sourceTree = "<group>"; };
 		A4C07BB721E9D118001929DE /* encode_video.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = encode_video.swift; sourceTree = "<group>"; };
 		A4C07BB821E9D118001929DE /* metadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = metadata.swift; sourceTree = "<group>"; };
@@ -193,6 +197,7 @@
 				OBJ_37 /* Timestamp.swift */,
 				OBJ_38 /* Util.swift */,
 				OBJ_39 /* VideoUtil.swift */,
+				A4BF513421EB2ADF00464F4C /* AVLog.swift */,
 			);
 			name = SwiftFFmpeg;
 			path = Sources/SwiftFFmpeg;
@@ -259,6 +264,7 @@
 				A4C07BB621E9D118001929DE /* encode_audio.swift */,
 				A4C07BB721E9D118001929DE /* encode_video.swift */,
 				A4C07BB821E9D118001929DE /* metadata.swift */,
+				A4BF513021EB1BEB00464F4C /* http_multiclient.swift */,
 				OBJ_13 /* main.swift */,
 			);
 			name = SwiftFFmpegExamples;
@@ -392,6 +398,7 @@
 				OBJ_67 /* AVPacket.swift in Sources */,
 				OBJ_68 /* AVSamples.swift in Sources */,
 				OBJ_69 /* AVStream.swift in Sources */,
+				A4BF513521EB2ADF00464F4C /* AVLog.swift in Sources */,
 				OBJ_70 /* AudioUtil.swift in Sources */,
 				OBJ_71 /* CType.swift in Sources */,
 				OBJ_72 /* Math.swift in Sources */,
@@ -412,6 +419,7 @@
 				A4C07BBA21E9D118001929DE /* encode_video.swift in Sources */,
 				OBJ_85 /* avio_dir_cmd.swift in Sources */,
 				OBJ_86 /* avio_reading.swift in Sources */,
+				A4BF513121EB1BEB00464F4C /* http_multiclient.swift in Sources */,
 				OBJ_87 /* decode_audio.swift in Sources */,
 				A44924FD21E9A6AA0062BC77 /* demuxing_decoding.swift in Sources */,
 				A4C07BBB21E9D118001929DE /* metadata.swift in Sources */,

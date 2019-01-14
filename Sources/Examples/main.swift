@@ -23,6 +23,7 @@ if CommandLine.argc < 2 {
                           audio frames to a rawaudio file named audio_output_file.
       encode_video        video encoding with libavcodec API example
       encode_audio        audio encoding with libavcodec API example.
+      http_multiclient    API example program to serve http to multiple clients.
       metadata            example program to demonstrate the use of the libavformat metadata API.
     """)
     exit(1)
@@ -46,6 +47,8 @@ case "encode_audio":
     try encode_audio()
 case "metadata":
     try metadata()
+case "http_multiclient":
+    try http_multiclient()
 default:
     ()
 }
