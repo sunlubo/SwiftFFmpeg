@@ -6,6 +6,7 @@
 #include <libavutil/error.h>
 #include <libavutil/opt.h>
 #include <libavutil/file.h>
+#include <libavutil/log.h>
 #include <libavutil/timestamp.h>
 #include <libavutil/pixdesc.h>
 #include <libavutil/imgutils.h>
@@ -86,3 +87,7 @@ const int swift_AVERROR_HTTP_FORBIDDEN     = AVERROR_HTTP_FORBIDDEN;
 const int swift_AVERROR_HTTP_NOT_FOUND     = AVERROR_HTTP_NOT_FOUND;
 const int swift_AVERROR_HTTP_OTHER_4XX     = AVERROR_HTTP_OTHER_4XX;
 const int swift_AVERROR_HTTP_SERVER_ERROR  = AVERROR_HTTP_SERVER_ERROR;
+
+static inline void swift_log(void *avcl, int level, const char *msg) {
+    av_log(avcl, level, msg);
+}

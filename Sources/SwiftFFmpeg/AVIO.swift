@@ -366,7 +366,7 @@ public final class AVIOContext {
             seek
         )
         guard let ctxPtr = ptr else {
-            fatalError("avio_alloc_context")
+            abort("avio_alloc_context")
         }
         self.init(cContextPtr: ctxPtr)
         self.opaque = box

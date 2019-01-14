@@ -99,6 +99,11 @@ func throwIfFail(_ condition: @autoclosure () -> Int32) throws {
 func abortIfFail(_ condition: @autoclosure () -> Int32) {
     let code = condition()
     if code < 0 {
-        fatalError(AVError(code: code).description)
+        abort("error: \(AVError(code: code))")
     }
+}
+
+func abort(_ message: String) -> Never {
+    AVLog.log(level: .fatal, message: message)
+    fatalError(message)
 }

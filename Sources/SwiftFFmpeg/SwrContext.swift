@@ -16,7 +16,7 @@ public final class SwrContext {
     /// before calling `initialize`.
     public init() {
         guard let ctxPtr = swr_alloc() else {
-            fatalError("swr_alloc")
+            abort("swr_alloc")
         }
         self.cContextPtr = ctxPtr
     }

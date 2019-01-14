@@ -291,7 +291,7 @@ public final class AVFormatContext {
     /// Allocate an `AVFormatContext`.
     public init() {
         guard let ctxPtr = avformat_alloc_context() else {
-            fatalError("avformat_alloc_context")
+            abort("avformat_alloc_context")
         }
         self.cContextPtr = ctxPtr
     }

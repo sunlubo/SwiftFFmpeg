@@ -15,7 +15,7 @@ public final class SwsContext {
     /// Create an empty `SwsContext`.
     public init() {
         guard let ctxPtr = sws_alloc_context() else {
-            fatalError("sws_alloc_context")
+            abort("sws_alloc_context")
         }
         self.cContextPtr = ctxPtr
     }

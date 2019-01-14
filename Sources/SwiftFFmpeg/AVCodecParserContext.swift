@@ -22,7 +22,7 @@ public final class AVCodecParserContext {
 
     public init(codecContext: AVCodecContext) {
         guard let ctxPtr = av_parser_init(Int32(codecContext.codec.id.rawValue)) else {
-            fatalError("av_parser_init")
+            abort("av_parser_init")
         }
         self.codecContext = codecContext
         self.cContextPtr = ctxPtr

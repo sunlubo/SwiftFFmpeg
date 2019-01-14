@@ -25,7 +25,7 @@ public final class AVBuffer {
     /// - Parameter size: size of the buffer
     convenience init(size: Int) {
         guard let bufPtr = av_buffer_alloc(Int32(size)) else {
-            fatalError("av_buffer_alloc")
+            abort("av_buffer_alloc")
         }
         self.init(cBufferPtr: bufPtr)
     }

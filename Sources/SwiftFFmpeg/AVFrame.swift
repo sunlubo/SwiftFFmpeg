@@ -43,7 +43,7 @@ public final class AVFrame {
     ///   Those must be allocated through other means, e.g. with `allocBuffer` or manually.
     public init() {
         guard let framePtr = av_frame_alloc() else {
-            fatalError("av_frame_alloc")
+            abort("av_frame_alloc")
         }
         self.cFramePtr = framePtr
     }

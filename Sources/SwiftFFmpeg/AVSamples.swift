@@ -35,7 +35,7 @@ public final class AVSamples {
         var linesize = 0 as Int32
         let ret = av_samples_alloc(data, &linesize, Int32(channelCount), Int32(sampleCount), sampleFormat, Int32(align))
         guard ret >= 0 else {
-            fatalError("av_samples_alloc: \(AVError(code: ret))")
+            abort("av_samples_alloc: \(AVError(code: ret))")
         }
         self.data = data
         self.size = Int(ret)

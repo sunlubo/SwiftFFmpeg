@@ -21,7 +21,7 @@ public final class AVCodecContext {
     /// - Parameter codec: codec
     public init(codec: AVCodec) {
         guard let ctxPtr = avcodec_alloc_context3(codec.cCodecPtr) else {
-            fatalError("avcodec_alloc_context3")
+            abort("avcodec_alloc_context3")
         }
         self.codec = codec
         self.cContextPtr = ctxPtr

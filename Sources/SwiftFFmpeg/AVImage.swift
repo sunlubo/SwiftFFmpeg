@@ -33,7 +33,7 @@ public final class AVImage {
 
         let ret = av_image_alloc(data, linesizes, Int32(width), Int32(height), pixelFormat, Int32(align))
         guard ret >= 0 else {
-            fatalError("av_image_alloc: \(AVError(code: ret))")
+            abort("av_image_alloc: \(AVError(code: ret))")
         }
 
         self.data = UnsafeMutableBufferPointer(start: data, count: 4)

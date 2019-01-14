@@ -40,7 +40,7 @@ public func networkDeinit() -> Int32 {
 func dumpUnrecognizedOptions(_ dict: OpaquePointer?) {
     var prev: UnsafeMutablePointer<AVDictionaryEntry>?
     while let tag = av_dict_get(dict, "", prev, AV_DICT_IGNORE_SUFFIX) {
-        print("Warning: Option '\(String(cString: tag.pointee.key!))' not recognized.")
+        AVLog.log(level: .warning, message: "Option '\(String(cString: tag.pointee.key!))' not found.")
         prev = tag
     }
 }

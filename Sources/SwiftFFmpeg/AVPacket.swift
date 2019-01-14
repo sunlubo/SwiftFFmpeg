@@ -41,7 +41,7 @@ public final class AVPacket {
     ///   Those must be allocated through other means such as `av_new_packet`.
     public init() {
         guard let packetPtr = av_packet_alloc() else {
-            fatalError("av_packet_alloc")
+            abort("av_packet_alloc")
         }
         self.cPacketPtr = packetPtr
     }
