@@ -99,25 +99,20 @@ public final class AVImage {
 
     /// Reformat image using the given `SwsContext`.
     ///
+    /// - Returns: the height of the output slice
     /// - Throws: AVError
-    public func reformat(context: SwsContext) throws -> AVImage {
-        let dstWidth  = try context.integer(forKey: "dstw") as Int
-        let dstHeight = try context.integer(forKey: "dsth") as Int
-        let dstFormat = try context.pixelFormat(forKey: "dst_format")
-        let image = AVImage(width: dstWidth, height: dstHeight, pixelFormat: dstFormat)
-        var srcLinesizes = linesizes.map({ Int32($0) })
-        var dstLinesizes = linesizes.map({ Int32($0) })
-        data.withMemoryRebound(to: UnsafePointer<UInt8>?.self) { bufPtr -> Void in
-            context.scale(
+    @discardableResult
+    public func reformat(using context: SwsContext, to image: AVImage) throws -> Int {
+        return try data.withMemoryRebound(to: UnsafePointer<UInt8>?.self) { bufPtr in
+            return try context.scale(
                 src: bufPtr.baseAddress!,
-                srcStride: &srcLinesizes,
+                srcStride: linesizes.baseAddress!,
                 srcSliceY: 0,
                 srcSliceHeight: height,
                 dst: image.data.baseAddress!,
-                dstStride: &dstLinesizes
+                dstStride: image.linesizes.baseAddress!
             )
         }
-        return image
     }
 
     /// Compute the size of an image line with format and width for the plane.
