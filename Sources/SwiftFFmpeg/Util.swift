@@ -28,11 +28,14 @@ final class Box<T> {
 /// This function will be deprecated once support for older GnuTLS and
 /// OpenSSL libraries is removed, and this function has no purpose
 /// anymore.
+@discardableResult
 public func networkInit() -> Int32 {
     return avformat_network_init()
 }
 
-/// Undo the initialization done by `networkInit`. Call it only once for each time you called `networkInit`.
+/// Undo the initialization done by `networkInit`.
+/// Call it only once for each time you called `networkInit`.
+@discardableResult
 public func networkDeinit() -> Int32 {
     return avformat_network_deinit()
 }
