@@ -92,7 +92,7 @@ extension AVRounding {
     ///     //     => AV_NOPTS_VALUE
     public static let passMinMax = AV_ROUND_PASS_MINMAX
 
-    func union(_ other: AVRounding) -> AVRounding {
+    public func union(_ other: AVRounding) -> AVRounding {
         if other != .passMinMax { return self }
         return AVRounding(rawValue | other.rawValue)
     }
