@@ -11,8 +11,6 @@ import Darwin.C
 typealias CAVCodecContext = CFFmpeg.AVCodecContext
 
 public final class AVCodecContext {
-    public static let `class` = AVClass(cClassPtr: avcodec_get_class())
-
     public let codec: AVCodec
 
     let cContextPtr: UnsafeMutablePointer<CAVCodecContext>
@@ -382,7 +380,7 @@ extension AVCodecContext {
         set { cContextPtr.pointee.height = Int32(newValue) }
     }
 
-    /// Bitstream width, may be different from `width` e.g. when the decoded frame is cropped before 
+    /// Bitstream width, may be different from `width` e.g. when the decoded frame is cropped before
     /// being output or lowres is enabled.
     ///
     /// - encoding: Unused.
@@ -393,7 +391,7 @@ extension AVCodecContext {
         set { cContextPtr.pointee.coded_width = Int32(newValue) }
     }
 
-    /// Bitstream height, may be different from `height` e.g. when the decoded frame is cropped before 
+    /// Bitstream height, may be different from `height` e.g. when the decoded frame is cropped before
     /// being output or lowres is enabled.
     ///
     /// - encoding: Unused.
@@ -511,6 +509,14 @@ extension AVCodecContext {
     public var channelLayout: AVChannelLayout {
         get { return AVChannelLayout(rawValue: cContext.channel_layout) }
         set { cContextPtr.pointee.channel_layout = newValue.rawValue }
+    }
+}
+
+extension AVCodecContext: AVClassSupport {
+    public static let `class` = AVClass(cClassPtr: avcodec_get_class())
+
+    public func withUnsafeClassObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T {
+        return try body(cContextPtr)
     }
 }
 

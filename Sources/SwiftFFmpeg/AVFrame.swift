@@ -30,8 +30,6 @@ typealias CAVFrame = CFFmpeg.AVFrame
 /// Fields can be accessed through `AVOption`s, the name string used, matches the
 /// C structure field name for fields accessible through `AVOption`s.
 public final class AVFrame {
-    public static let `class` = AVClass(cClassPtr: avcodec_get_frame_class())
-
     let cFramePtr: UnsafeMutablePointer<CAVFrame>
     var cFrame: CAVFrame { return cFramePtr.pointee }
 
@@ -434,5 +432,13 @@ extension AVFrame {
     public var channelCount: Int {
         get { return Int(cFrame.channels) }
         set { cFramePtr.pointee.channels = Int32(newValue) }
+    }
+}
+
+extension AVFrame: AVClassSupport {
+    public static let `class` = AVClass(cClassPtr: avcodec_get_frame_class())
+
+    public func withUnsafeClassObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T {
+        return try body(cFramePtr)
     }
 }

@@ -279,8 +279,6 @@ typealias CAVFormatContext = CFFmpeg.AVFormatContext
 
 /// Format I/O context.
 public final class AVFormatContext {
-    public static let `class` = AVClass(cClassPtr: avformat_get_class())
-
     var cContextPtr: UnsafeMutablePointer<CAVFormatContext>!
     var cContext: CAVFormatContext { return cContextPtr.pointee }
 
@@ -863,6 +861,14 @@ extension AVFormatContext {
     /// - Throws: AVError
     public func writeTrailer() throws {
         try throwIfFail(av_write_trailer(cContextPtr))
+    }
+}
+
+extension AVFormatContext: AVClassSupport {
+    public static let `class` = AVClass(cClassPtr: avformat_get_class())
+
+    public func withUnsafeClassObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T {
+        return try body(cContextPtr)
     }
 }
 

@@ -94,3 +94,9 @@ public struct AVClass {
         self.options = values(cClassPtr.pointee.option, until: { $0.name == nil })?.map(AVOption.init(cOption:))
     }
 }
+
+public protocol AVClassSupport {
+    static var `class`: AVClass { get }
+
+    func withUnsafeClassObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T
+}

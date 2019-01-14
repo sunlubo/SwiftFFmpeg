@@ -10,8 +10,6 @@ import CFFmpeg
 // MARK: - SwsContext
 
 public final class SwsContext {
-    public static let `class` = AVClass(cClassPtr: sws_get_class())
-
     let cContextPtr: OpaquePointer
 
     /// Create an empty `SwsContext`.
@@ -176,6 +174,14 @@ extension SwsContext.Flag: CustomStringConvertible {
         }
         str += "]"
         return str
+    }
+}
+
+extension SwsContext: AVClassSupport {
+    public static let `class` = AVClass(cClassPtr: sws_get_class())
+
+    public func withUnsafeClassObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T {
+        return try body(UnsafeMutableRawPointer(cContextPtr))
     }
 }
 

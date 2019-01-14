@@ -8,8 +8,6 @@
 import CFFmpeg
 
 public final class SwrContext {
-    public static let `class` = AVClass(cClassPtr: swr_get_class())
-
     let cContextPtr: OpaquePointer
 
     /// Create `SwrContext`.
@@ -224,6 +222,14 @@ public final class SwrContext {
     deinit {
         var ptr: OpaquePointer? = cContextPtr
         swr_free(&ptr)
+    }
+}
+
+extension SwrContext: AVClassSupport {
+    public static let `class` = AVClass(cClassPtr: swr_get_class())
+
+    public func withUnsafeClassObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T {
+        return try body(UnsafeMutableRawPointer(cContextPtr))
     }
 }
 
