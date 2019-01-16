@@ -198,7 +198,7 @@ extension AVFrame {
     /// `dst` may be "clean" (i.e. with data/buf pointers unset), in which case the
     /// data buffers will be allocated by this function using `av_frame_get_buffer()`.
     /// If `dst->format` is set, then this format will be used, otherwise (when
-    /// `dst->format` is `AVPixelFormat.NONE`) the first acceptable format will be chosen.
+    /// `dst->format` is `AVPixelFormat.none`) the first acceptable format will be chosen.
     ///
     /// The two frames must have matching allocated dimensions (i.e. equal to
     /// `AVHWFramesContext.width/height`), since not all device types support

@@ -13,7 +13,7 @@ public typealias AVPictureType = CFFmpeg.AVPictureType
 
 extension AVPictureType {
     /// Undefined
-    public static let NONE = AV_PICTURE_TYPE_NONE
+    public static let none = AV_PICTURE_TYPE_NONE
     /// Intra
     public static let I = AV_PICTURE_TYPE_I
     /// Predicted
@@ -44,7 +44,7 @@ extension AVPictureType: CustomStringConvertible {
 public typealias AVPixelFormat = CFFmpeg.AVPixelFormat
 
 extension AVPixelFormat {
-    public static let NONE = AV_PIX_FMT_NONE
+    public static let none = AV_PIX_FMT_NONE
     /// planar YUV 4:2:0, 12bpp, (1 Cr & Cb sample per 2x2 Y samples)
     public static let YUV420P = AV_PIX_FMT_YUV420P
     /// packed YUV 4:2:2, 16bpp, Y0 Cb Y1 Cr
@@ -169,12 +169,12 @@ extension AVPixelFormat {
     /// packed RGB 16:16:16, 48bpp, 16B, 16G, 16R, the 2-byte value for each R/G/B component is stored as little-endian
     public static let BGR48LE = AV_PIX_FMT_BGR48LE
 
-    /// hardware decoding through Videotoolbox
-    public static let VIDEOTOOLBOX = AV_PIX_FMT_VIDEOTOOLBOX
+    /// hardware decoding through VideoToolbox
+    public static let videoToolbox = AV_PIX_FMT_VIDEOTOOLBOX
 
     /// number of pixel formats, DO NOT USE THIS if you want to link with shared libav* because the number of formats
     /// might differ between versions
-    public static let NB = AV_PIX_FMT_NB
+    public static let nb = AV_PIX_FMT_NB
 
     /// Return the pixel format corresponding to name.
     ///
@@ -182,7 +182,7 @@ extension AVPixelFormat {
     /// corresponding to the native endian format of name.
     /// For example in a little-endian system, first looks for "gray16", then for "gray16le".
     ///
-    /// Finally if no pixel format has been found, returns `AVPixelFormat.NONE`.
+    /// Finally if no pixel format has been found, returns `AVPixelFormat.none`.
     public init(name: String) {
         self = av_get_pix_fmt(name)
     }

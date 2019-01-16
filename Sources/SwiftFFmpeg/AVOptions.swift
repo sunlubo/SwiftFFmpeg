@@ -400,7 +400,7 @@ extension AVOptionAccessor {
         forKey key: String, searchFlags: AVOptionSearchFlag = .children
     ) throws -> AVPixelFormat {
         return try withUnsafeObjectPointer { objPtr in
-            var outVal = AVPixelFormat.NONE
+            var outVal = AVPixelFormat.none
             try throwIfFail(av_opt_get_pixel_fmt(objPtr, key, searchFlags.rawValue, &outVal))
             return outVal
         }

@@ -47,7 +47,7 @@ public final class AVImage {
 
     /// Create an image from the given frame.
     public init(frame: AVFrame) {
-        precondition(frame.pixelFormat != .NONE)
+        precondition(frame.pixelFormat != .none)
 
         let data = UnsafeMutablePointer<UnsafeMutablePointer<UInt8>?>.allocate(capacity: 4)
         data.initialize(to: nil)

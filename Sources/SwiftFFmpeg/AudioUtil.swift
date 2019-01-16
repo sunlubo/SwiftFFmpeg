@@ -148,7 +148,7 @@ extension AVChannel: CustomStringConvertible {
 // MARK: - Audio Channel Layout
 
 public struct AVChannelLayout: Equatable {
-    public static let CHL_NONE = AVChannelLayout(rawValue: 0)
+    public static let none = AVChannelLayout(rawValue: 0)
     /// Channel mask value used for AVCodecContext.request_channel_layout to indicate that
     /// the user requests the channel order of the decoder output to be the native codec channel order.
     public static let CHL_NATIVE = AVChannelLayout(rawValue: swift_AV_CH_LAYOUT_NATIVE)

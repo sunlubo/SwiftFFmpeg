@@ -516,7 +516,7 @@ extension AVCodecContext {
                         .takeUnretainedValue()
                         .value
                         .getFormat!
-                    let list = values(fmts, until: AVPixelFormat.NONE) ?? []
+                    let list = values(fmts, until: AVPixelFormat.none) ?? []
                     return handler(AVCodecContext(cContextPtr: ctx!), list)
                 }
             }

@@ -75,7 +75,7 @@ func hw_decode() throws {
 
     let decoder = AVCodec.findDecoderById(stream.codecParameters.codecId)!
     var i = 0
-    var hwPixFmt = AVPixelFormat.NONE
+    var hwPixFmt = AVPixelFormat.none
     while true {
         guard let config = decoder.hwConfig(at: i) else {
             fatalError("Decoder \(decoder.name) does not support device type \(deviceTypeName).")
@@ -95,7 +95,7 @@ func hw_decode() throws {
             return hwPixFmt
         }
         print("Failed to get HW surface format.")
-        return .NONE
+        return .none
     }
 
     let deviceCtx = try AVHWDeviceContext(deviceType: deviceType)

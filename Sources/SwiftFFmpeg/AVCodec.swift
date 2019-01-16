@@ -12,7 +12,7 @@ import CFFmpeg
 public typealias AVCodecID = CFFmpeg.AVCodecID
 
 extension AVCodecID {
-    public static let NONE = AV_CODEC_ID_NONE
+    public static let none = AV_CODEC_ID_NONE
 
     // MARK: - Video Codecs
 
@@ -196,7 +196,7 @@ public struct AVCodec {
 
     /// Returns an array of the pixel formats supported by the codec.
     public var supportedPixelFormats: [AVPixelFormat]? {
-        return values(cCodec.pix_fmts, until: .NONE)
+        return values(cCodec.pix_fmts, until: .none)
     }
 
     /// Returns an array of the audio samplerates supported by the codec.
