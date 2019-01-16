@@ -7,6 +7,8 @@
 
 import CFFmpeg
 
+// MARK: - AVClassCategory
+
 public typealias AVClassCategory = CFFmpeg.AVClassCategory
 
 extension AVClassCategory {
@@ -76,6 +78,8 @@ extension AVClassCategory: CustomStringConvertible {
     }
 }
 
+// MARK: - AVClass
+
 typealias CAVClass = CFFmpeg.AVClass
 
 public struct AVClass {
@@ -94,6 +98,8 @@ public struct AVClass {
         self.options = values(cClassPtr.pointee.option, until: { $0.name == nil })?.map(AVOption.init(cOption:))
     }
 }
+
+// MARK: - AVClassSupport
 
 public protocol AVClassSupport {
     static var `class`: AVClass { get }

@@ -252,7 +252,7 @@ public struct AVCodec {
     }
 }
 
-// MARK: - Cap
+// MARK: - AVCodec.Cap
 
 extension AVCodec {
 
