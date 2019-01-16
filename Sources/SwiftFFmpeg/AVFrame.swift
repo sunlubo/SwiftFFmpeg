@@ -53,7 +53,7 @@ public final class AVFrame {
         get {
             return withUnsafeBytes(of: &cFramePtr.pointee.data) { rawPtr in
                 let start = rawPtr.baseAddress!.assumingMemoryBound(to: UnsafeMutablePointer<UInt8>?.self).mutable
-                return UnsafeMutableBufferPointer(start: start, count: 8)
+                return UnsafeMutableBufferPointer(start: start, count: AVConstant.dataPointersNumber)
             }
         }
         set {
@@ -79,7 +79,7 @@ public final class AVFrame {
         get {
             return withUnsafeBytes(of: &cFramePtr.pointee.linesize) { rawPtr in
                 let start = rawPtr.baseAddress!.assumingMemoryBound(to: Int32.self).mutable
-                return UnsafeMutableBufferPointer(start: start, count: 8)
+                return UnsafeMutableBufferPointer(start: start, count: AVConstant.dataPointersNumber)
             }
         }
         set {
