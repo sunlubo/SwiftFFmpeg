@@ -21,6 +21,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		A4197E2321EEDB960063BE2B /* AVFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4197E2221EEDB960063BE2B /* AVFormat.swift */; };
 		A43008AA21ECE08200B2E978 /* AVHWContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A43008A921ECE08200B2E978 /* AVHWContext.swift */; };
 		A43008AC21ECE1B500B2E978 /* hw_decode.swift in Sources */ = {isa = PBXBuildFile; fileRef = A43008AB21ECE1B500B2E978 /* hw_decode.swift */; };
 		A44924FD21E9A6AA0062BC77 /* demuxing_decoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = A44924FC21E9A6AA0062BC77 /* demuxing_decoding.swift */; };
@@ -95,6 +96,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A4197E2221EEDB960063BE2B /* AVFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVFormat.swift; sourceTree = "<group>"; };
 		A43008A921ECE08200B2E978 /* AVHWContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AVHWContext.swift; sourceTree = "<group>"; };
 		A43008AB21ECE1B500B2E978 /* hw_decode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = hw_decode.swift; sourceTree = "<group>"; };
 		A44924FC21E9A6AA0062BC77 /* demuxing_decoding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = demuxing_decoding.swift; sourceTree = "<group>"; };
@@ -190,7 +192,7 @@
 				OBJ_19 /* AVCodecContext.swift */,
 				OBJ_20 /* AVCodecParserContext.swift */,
 				OBJ_21 /* AVConstant.swift */,
-				OBJ_22 /* AVError.swift */,
+				A4197E2221EEDB960063BE2B /* AVFormat.swift */,
 				OBJ_23 /* AVFormatContext.swift */,
 				OBJ_24 /* AVFrame.swift */,
 				OBJ_25 /* AVIO.swift */,
@@ -205,6 +207,7 @@
 				OBJ_34 /* StdlibExt.swift */,
 				OBJ_35 /* SwrContext.swift */,
 				OBJ_36 /* SwsContext.swift */,
+				OBJ_22 /* AVError.swift */,
 				OBJ_37 /* Timestamp.swift */,
 				OBJ_38 /* Util.swift */,
 				OBJ_39 /* VideoUtil.swift */,
@@ -408,6 +411,7 @@
 				OBJ_61 /* AVError.swift in Sources */,
 				OBJ_62 /* AVFormatContext.swift in Sources */,
 				OBJ_63 /* AVFrame.swift in Sources */,
+				A4197E2321EEDB960063BE2B /* AVFormat.swift in Sources */,
 				OBJ_64 /* AVIO.swift in Sources */,
 				OBJ_65 /* AVImage.swift in Sources */,
 				OBJ_66 /* AVOptions.swift in Sources */,
