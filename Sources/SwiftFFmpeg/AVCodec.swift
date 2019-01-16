@@ -229,6 +229,18 @@ public struct AVCodec {
         return av_codec_is_encoder(cCodecPtr) != 0
     }
 
+    /// Retrieve supported hardware configurations for a codec.
+    ///
+    /// Values of index from zero to some maximum return the indexed configuration descriptor;
+    /// all other values return `nil`.
+    /// If the codec does not support any hardware configurations then it will always return `nil`.
+    public func hwConfig(at index: Int) -> AVCodecHWConfig? {
+        if let ptr = avcodec_get_hw_config(cCodecPtr, Int32(index)) {
+            return AVCodecHWConfig(cConfigPtr: ptr)
+        }
+        return nil
+    }
+
     /// Get all registered codecs.
     public static var supportedCodecs: [AVCodec] {
         var list = [AVCodec]()

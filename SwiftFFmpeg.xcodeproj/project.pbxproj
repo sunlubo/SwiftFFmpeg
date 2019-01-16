@@ -21,6 +21,8 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		A43008AA21ECE08200B2E978 /* AVHWContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A43008A921ECE08200B2E978 /* AVHWContext.swift */; };
+		A43008AC21ECE1B500B2E978 /* hw_decode.swift in Sources */ = {isa = PBXBuildFile; fileRef = A43008AB21ECE1B500B2E978 /* hw_decode.swift */; };
 		A44924FD21E9A6AA0062BC77 /* demuxing_decoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = A44924FC21E9A6AA0062BC77 /* demuxing_decoding.swift */; };
 		A4BF513121EB1BEB00464F4C /* http_multiclient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4BF513021EB1BEB00464F4C /* http_multiclient.swift */; };
 		A4BF513521EB2ADF00464F4C /* AVLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4BF513421EB2ADF00464F4C /* AVLog.swift */; };
@@ -93,6 +95,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A43008A921ECE08200B2E978 /* AVHWContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AVHWContext.swift; sourceTree = "<group>"; };
+		A43008AB21ECE1B500B2E978 /* hw_decode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = hw_decode.swift; sourceTree = "<group>"; };
 		A44924FC21E9A6AA0062BC77 /* demuxing_decoding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = demuxing_decoding.swift; sourceTree = "<group>"; };
 		A4BF513021EB1BEB00464F4C /* http_multiclient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = http_multiclient.swift; sourceTree = "<group>"; };
 		A4BF513421EB2ADF00464F4C /* AVLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVLog.swift; sourceTree = "<group>"; };
@@ -179,6 +183,7 @@
 		OBJ_15 /* SwiftFFmpeg */ = {
 			isa = PBXGroup;
 			children = (
+				A43008A921ECE08200B2E978 /* AVHWContext.swift */,
 				OBJ_16 /* AVBuffer.swift */,
 				OBJ_17 /* AVClass.swift */,
 				OBJ_18 /* AVCodec.swift */,
@@ -274,6 +279,7 @@
 				A4FB882E21EC401600C241AF /* resampling_audio.swift */,
 				A4FB882F21EC401700C241AF /* scaling_video.swift */,
 				A4FB883221EC405100C241AF /* remuxing.swift */,
+				A43008AB21ECE1B500B2E978 /* hw_decode.swift */,
 				OBJ_13 /* main.swift */,
 			);
 			name = SwiftFFmpegExamples;
@@ -393,6 +399,7 @@
 			buildActionMask = 0;
 			files = (
 				OBJ_55 /* AVBuffer.swift in Sources */,
+				A43008AA21ECE08200B2E978 /* AVHWContext.swift in Sources */,
 				OBJ_56 /* AVClass.swift in Sources */,
 				OBJ_57 /* AVCodec.swift in Sources */,
 				OBJ_58 /* AVCodecContext.swift in Sources */,
@@ -426,6 +433,7 @@
 			files = (
 				A4C07BB921E9D118001929DE /* encode_audio.swift in Sources */,
 				A4C07BBA21E9D118001929DE /* encode_video.swift in Sources */,
+				A43008AC21ECE1B500B2E978 /* hw_decode.swift in Sources */,
 				OBJ_85 /* avio_dir_cmd.swift in Sources */,
 				A4FB883321EC405100C241AF /* remuxing.swift in Sources */,
 				A4FB883021EC401700C241AF /* resampling_audio.swift in Sources */,

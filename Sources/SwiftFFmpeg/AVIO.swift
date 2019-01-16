@@ -544,9 +544,9 @@ public final class AVIOContext {
     ///
     /// - Throws: AVError
     public func accept() throws -> AVIOContext {
-        var clientCtxPtr: UnsafeMutablePointer<CAVIOContext>!
-        try throwIfFail(avio_accept(cContextPtr, &clientCtxPtr))
-        return AVIOContext(cContextPtr: clientCtxPtr)
+        var ctxPtr: UnsafeMutablePointer<CAVIOContext>!
+        try throwIfFail(avio_accept(cContextPtr, &ctxPtr))
+        return AVIOContext(cContextPtr: ctxPtr)
     }
 
     /// Perform one step of the protocol handshake to accept a new client.

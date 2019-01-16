@@ -114,6 +114,9 @@ public final class AVImage {
             )
         }
     }
+}
+
+extension AVImage {
 
     /// Compute the size of an image line with format and width for the plane.
     ///
@@ -177,5 +180,60 @@ public final class AVImage {
         let ret = av_image_get_buffer_size(pixelFormat, Int32(width), Int32(height), Int32(align))
         try throwIfFail(ret)
         return Int(ret)
+    }
+
+    /// Copy image data from an frame into a buffer.
+    ///
+    /// - Parameters:
+    ///   - frame: the source frame
+    ///   - buffer: a buffer into which picture data will be copied
+    ///   - size: the size in bytes of dst
+    ///   - align: the assumed linesize alignment for dst
+    /// - Returns: the number of bytes written to dst
+    /// - Throws: AVError
+    @discardableResult
+    public static func copyImageData(
+        from frame: AVFrame,
+        to buffer: UnsafeMutablePointer<UInt8>,
+        size: Int,
+        align: Int = 1
+    ) throws -> Int {
+        return try frame.data.withMemoryRebound(to: UnsafePointer<UInt8>?.self) { ptr -> Int in
+            let ret = av_image_copy_to_buffer(
+                buffer,
+                Int32(size),
+                ptr.baseAddress,
+                frame.linesize.baseAddress!,
+                frame.pixelFormat,
+                Int32(frame.width),
+                Int32(frame.height),
+                Int32(align)
+            )
+            try throwIfFail(ret)
+            return Int(ret)
+        }
+    }
+
+    /// Create a pixel buffer and copy image data from an frame into the buffer.
+    ///
+    /// - Parameters:
+    ///   - frame: the source frame
+    ///   - align: the assumed linesize alignment for dst
+    /// - Returns: a buffer into which picture data will be copied
+    /// - Throws: AVError
+    public static func makePixelBuffer(
+        from frame: AVFrame,
+        align: Int = 1
+    ) throws -> UnsafeMutableBufferPointer<UInt8> {
+        let size = try getBufferSize(
+            pixelFormat: frame.pixelFormat,
+            width: frame.width,
+            height: frame.height,
+            align: align
+        )
+        let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: size)
+        buffer.initialize(to: 0)
+        let written = try copyImageData(from: frame, to: buffer, size: size, align: align)
+        return UnsafeMutableBufferPointer(start: buffer, count: written)
     }
 }

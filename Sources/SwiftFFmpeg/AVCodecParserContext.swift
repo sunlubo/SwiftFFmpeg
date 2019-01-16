@@ -21,7 +21,8 @@ public final class AVCodecParserContext {
     private var cContext: CAVCodecParserContext { return cContextPtr.pointee }
 
     public init(codecContext: AVCodecContext) {
-        guard let ctxPtr = av_parser_init(Int32(codecContext.codec.id.rawValue)) else {
+        precondition(codecContext.codec != nil, "'AVCodecContext.codec' must not be nil.")
+        guard let ctxPtr = av_parser_init(Int32(codecContext.codec!.id.rawValue)) else {
             abort("av_parser_init")
         }
         self.codecContext = codecContext

@@ -8,28 +8,66 @@
 import CFFmpeg
 import Darwin.C
 
+public typealias AVGetFormatHandler = (AVCodecContext, [AVPixelFormat]) -> AVPixelFormat
+
+typealias CodecContextBoxValue = (
+    opaque: UnsafeMutableRawPointer?,
+    getFormat: AVGetFormatHandler?
+)
+typealias CodecContextBox = Box<CodecContextBoxValue>
+
 typealias CAVCodecContext = CFFmpeg.AVCodecContext
 
 public final class AVCodecContext {
-    public let codec: AVCodec
-
     let cContextPtr: UnsafeMutablePointer<CAVCodecContext>
     var cContext: CAVCodecContext { return cContextPtr.pointee }
+
+    fileprivate var opaqueBox: CodecContextBox? {
+        didSet {
+            if let box = opaqueBox {
+                cContextPtr.pointee.opaque = Unmanaged.passUnretained(box).toOpaque()
+            } else {
+                cContextPtr.pointee.opaque = nil
+            }
+        }
+    }
+    private var freeWhenDone: Bool = false
+
+    init(cContextPtr: UnsafeMutablePointer<CAVCodecContext>) {
+        self.cContextPtr = cContextPtr
+    }
 
     /// Creates an `AVCodecContext` and set its fields to default values.
     ///
     /// - Parameter codec: codec
-    public init(codec: AVCodec) {
-        guard let ctxPtr = avcodec_alloc_context3(codec.cCodecPtr) else {
+    public init(codec: AVCodec? = nil) {
+        guard let ctxPtr = avcodec_alloc_context3(codec?.cCodecPtr) else {
             abort("avcodec_alloc_context3")
         }
-        self.codec = codec
         self.cContextPtr = ctxPtr
+        self.freeWhenDone = true
+    }
+
+    deinit {
+        if freeWhenDone {
+            var ps: UnsafeMutablePointer<CAVCodecContext>? = cContextPtr
+            avcodec_free_context(&ps)
+        }
     }
 
     /// The codec's media type.
     public var mediaType: AVMediaType {
         return cContext.codec_type
+    }
+
+    public var codec: AVCodec? {
+        get {
+            if let ptr = cContext.codec {
+                return AVCodec(cCodecPtr: ptr.mutable)
+            }
+            return nil
+        }
+        set { cContextPtr.pointee.codec = UnsafePointer(newValue?.cCodecPtr) }
     }
 
     /// The codec's id.
@@ -54,6 +92,15 @@ public final class AVCodecContext {
     public var codecTag: UInt32 {
         get { return cContext.codec_tag }
         set { cContextPtr.pointee.codec_tag = newValue }
+    }
+
+    /// Private data of the user, can be used to carry app specific stuff.
+    ///
+    /// - encoding: Set by user.
+    /// - decoding: Set by user.
+    public var opaque: UnsafeMutableRawPointer? {
+        get { return opaqueBox?.value.opaque }
+        set { opaqueBox = CodecContextBox((opaque: newValue, getFormat: opaqueBox?.value.getFormat)) }
     }
 
     /// The average bitrate.
@@ -120,6 +167,34 @@ public final class AVCodecContext {
         return Int(cContext.frame_number)
     }
 
+    /// A reference to the `AVHWDeviceContext` describing the device which will
+    /// be used by a hardware encoder/decoder. The reference is set by the caller
+    /// and afterwards owned (and freed) by libavcodec.
+    ///
+    /// This should be used if either the codec device does not require
+    /// hardware frames or any that are used are to be allocated internally by
+    /// libavcodec. If the user wishes to supply any of the frames used as
+    /// encoder input or decoder output then `hw_frames_ctx` should be used
+    /// instead. When `hw_frames_ctx` is set in `get_format()` for a decoder, this
+    /// field will be ignored while decoding the associated stream segment, but
+    /// may again be used on a following one after another `get_format()` call.
+    ///
+    /// For both encoders and decoders this field should be set before
+    /// `openCodec(options:)` is called and must not be written to thereafter.
+    ///
+    /// Note that some decoders may require this field to be set initially in
+    /// order to support `hw_frames_ctx` at all - in that case, all frames
+    /// contexts used must be created on the same device.
+    public var hwDeviceContext: AVHWDeviceContext? {
+        get {
+            if let ctxPtr = cContext.hw_device_ctx {
+                return AVHWDeviceContext(cContextPtr: ctxPtr)
+            }
+            return nil
+        }
+        set { cContextPtr.pointee.hw_device_ctx = av_buffer_ref(newValue?.cContextPtr) }
+    }
+
     /// A Boolean value indicating whether the codec is open.
     public var isOpen: Bool {
         return avcodec_is_open(cContextPtr) > 0
@@ -135,13 +210,16 @@ public final class AVCodecContext {
     /// Initialize the `AVCodecContext`.
     ///
     /// - Parameters:
+    ///   - codec: The codec to open this context for. If a non-NULL codec has been previously
+    ///     passed to avcodec_alloc_context3() or for this context, then this parameter MUST be
+    ///     either `nil` or equal to the previously passed codec.
     ///   - options: A dictionary filled with `AVCodecContext` and codec-private options.
     /// - Throws: AVError
-    public func openCodec(options: [String: String]? = nil) throws {
+    public func openCodec(_ codec: AVCodec? = nil, options: [String: String]? = nil) throws {
         var pm: OpaquePointer? = options?.toAVDict()
         defer { av_dict_free(&pm) }
 
-        try throwIfFail(avcodec_open2(cContextPtr, codec.cCodecPtr, &pm))
+        try throwIfFail(avcodec_open2(cContextPtr, codec?.cCodecPtr ?? self.codec?.cCodecPtr, &pm))
 
         dumpUnrecognizedOptions(pm)
     }
@@ -208,11 +286,6 @@ public final class AVCodecContext {
     ///     - legitimate decoding errors
     public func receivePacket(_ packet: AVPacket) throws {
         try throwIfFail(avcodec_receive_packet(cContextPtr, packet.cPacketPtr))
-    }
-
-    deinit {
-        var ps: UnsafeMutablePointer<CAVCodecContext>? = cContextPtr
-        avcodec_free_context(&ps)
     }
 }
 
@@ -418,6 +491,37 @@ extension AVCodecContext {
     public var pixelFormat: AVPixelFormat {
         get { return cContext.pix_fmt }
         set { cContextPtr.pointee.pix_fmt = newValue }
+    }
+
+    /// The callback used to negotiate the pixel format.
+    ///
+    /// - Note: The callback may be called again immediately if initialization for
+    ///   the selected (hardware-accelerated) pixel format failed.
+    ///
+    /// - Warning: Behavior is undefined if the callback returns a value not
+    ///   in the fmt list of formats.
+    ///
+    /// - encoding: unused
+    /// - decoding: Set by user, if not set the native format will be chosen.
+    public var getFormat: AVGetFormatHandler? {
+        get { return opaqueBox?.value.getFormat }
+        set {
+            opaqueBox = CodecContextBox((opaque: opaqueBox?.value.opaque, getFormat: newValue))
+
+            var handler: (@convention(c) (
+                UnsafeMutablePointer<CAVCodecContext>?, UnsafePointer<AVPixelFormat>?) -> AVPixelFormat)!
+            if newValue != nil {
+                handler = { ctx, fmts in
+                    let handler = Unmanaged<CodecContextBox>.fromOpaque(UnsafeRawPointer(ctx!.pointee.opaque!))
+                        .takeUnretainedValue()
+                        .value
+                        .getFormat!
+                    let list = values(fmts, until: AVPixelFormat.NONE) ?? []
+                    return handler(AVCodecContext(cContextPtr: ctx!), list)
+                }
+            }
+            cContextPtr.pointee.get_format = handler
+        }
     }
 
     /// Maximum number of B-frames between non-B-frames.

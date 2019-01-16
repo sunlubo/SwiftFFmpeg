@@ -24,6 +24,7 @@ if CommandLine.argc < 2 {
       encode_video        video encoding with libavcodec API example
       encode_audio        audio encoding with libavcodec API example.
       http_multiclient    API example program to serve http to multiple clients.
+      hw_decode           This example shows how to do HW-accelerated decoding with output frames from the HW video surfaces.
       metadata            example program to demonstrate the use of the libavformat metadata API.
       remuxing            API example program to remux a media file with libavformat and libavcodec.
                           The output format is guessed according to the file extension.
@@ -55,6 +56,8 @@ case "encode_audio":
     try encode_audio()
 case "http_multiclient":
     try http_multiclient()
+case "hw_decode":
+    try hw_decode()
 case "metadata":
     try metadata()
 case "remuxing":
