@@ -43,7 +43,7 @@ extension AVSampleFormat {
     /// Return a sample format corresponding to name, or `nil` on error.
     ///
     /// - Parameter name: the name of the sample format
-    public init(named name: String) {
+    public init(name: String) {
         self = av_get_sample_fmt(name)
     }
 

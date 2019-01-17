@@ -427,6 +427,7 @@ extension AVCodecContext.Flag2: CustomStringConvertible {
         return str
     }
 }
+
 // MARK: - Video
 
 extension AVCodecContext {
