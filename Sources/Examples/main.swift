@@ -23,6 +23,10 @@ if CommandLine.argc < 2 {
                           audio frames to a rawaudio file named audio_output_file.
       encode_video        video encoding with libavcodec API example
       encode_audio        audio encoding with libavcodec API example.
+      filter_audio        This example will generate a sine wave audio, pass it through a simple filter chain,
+                          and then compute the MD5 checksum of the output data.
+      filtering_video     API example for decoding and filtering.
+      filtering_audio     API example for audio decoding and filtering.
       http_multiclient    API example program to serve http to multiple clients.
       hw_decode           This example shows how to do HW-accelerated decoding with output frames from the HW video surfaces.
       metadata            example program to demonstrate the use of the libavformat metadata API.
@@ -54,6 +58,12 @@ case "encode_video":
     try encode_video()
 case "encode_audio":
     try encode_audio()
+case "filter_audio":
+    try filter_audio()
+case "filtering_video":
+    try filtering_video()
+case "filtering_audio":
+    try filtering_audio()
 case "http_multiclient":
     try http_multiclient()
 case "hw_decode":

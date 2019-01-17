@@ -21,7 +21,10 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		A401EEA421EF2B56001B6DB9 /* filtering_audio.swift in Sources */ = {isa = PBXBuildFile; fileRef = A401EEA321EF2B56001B6DB9 /* filtering_audio.swift */; };
 		A4197E2321EEDB960063BE2B /* AVFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4197E2221EEDB960063BE2B /* AVFormat.swift */; };
+		A4197E2621EEE3490063BE2B /* AVFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4197E2421EEE3480063BE2B /* AVFilter.swift */; };
+		A4197E2921EF07020063BE2B /* filtering_video.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4197E2821EF07020063BE2B /* filtering_video.swift */; };
 		A43008AA21ECE08200B2E978 /* AVHWContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A43008A921ECE08200B2E978 /* AVHWContext.swift */; };
 		A43008AC21ECE1B500B2E978 /* hw_decode.swift in Sources */ = {isa = PBXBuildFile; fileRef = A43008AB21ECE1B500B2E978 /* hw_decode.swift */; };
 		A44924FD21E9A6AA0062BC77 /* demuxing_decoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = A44924FC21E9A6AA0062BC77 /* demuxing_decoding.swift */; };
@@ -30,6 +33,8 @@
 		A4C07BB921E9D118001929DE /* encode_audio.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4C07BB621E9D118001929DE /* encode_audio.swift */; };
 		A4C07BBA21E9D118001929DE /* encode_video.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4C07BB721E9D118001929DE /* encode_video.swift */; };
 		A4C07BBB21E9D118001929DE /* metadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4C07BB821E9D118001929DE /* metadata.swift */; };
+		A4E16A3F21F024E500DC91A3 /* filter_audio.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4E16A3E21F024E500DC91A3 /* filter_audio.swift */; };
+		A4E16A4121F0280000DC91A3 /* Hash.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4E16A4021F0280000DC91A3 /* Hash.swift */; };
 		A4FB883021EC401700C241AF /* resampling_audio.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4FB882E21EC401600C241AF /* resampling_audio.swift */; };
 		A4FB883121EC401700C241AF /* scaling_video.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4FB882F21EC401700C241AF /* scaling_video.swift */; };
 		A4FB883321EC405100C241AF /* remuxing.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4FB883221EC405100C241AF /* remuxing.swift */; };
@@ -96,7 +101,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A401EEA321EF2B56001B6DB9 /* filtering_audio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = filtering_audio.swift; sourceTree = "<group>"; };
 		A4197E2221EEDB960063BE2B /* AVFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVFormat.swift; sourceTree = "<group>"; };
+		A4197E2421EEE3480063BE2B /* AVFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AVFilter.swift; sourceTree = "<group>"; };
+		A4197E2821EF07020063BE2B /* filtering_video.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = filtering_video.swift; sourceTree = "<group>"; };
 		A43008A921ECE08200B2E978 /* AVHWContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AVHWContext.swift; sourceTree = "<group>"; };
 		A43008AB21ECE1B500B2E978 /* hw_decode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = hw_decode.swift; sourceTree = "<group>"; };
 		A44924FC21E9A6AA0062BC77 /* demuxing_decoding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = demuxing_decoding.swift; sourceTree = "<group>"; };
@@ -105,6 +113,8 @@
 		A4C07BB621E9D118001929DE /* encode_audio.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = encode_audio.swift; sourceTree = "<group>"; };
 		A4C07BB721E9D118001929DE /* encode_video.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = encode_video.swift; sourceTree = "<group>"; };
 		A4C07BB821E9D118001929DE /* metadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = metadata.swift; sourceTree = "<group>"; };
+		A4E16A3E21F024E500DC91A3 /* filter_audio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = filter_audio.swift; sourceTree = "<group>"; };
+		A4E16A4021F0280000DC91A3 /* Hash.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hash.swift; sourceTree = "<group>"; };
 		A4FB882E21EC401600C241AF /* resampling_audio.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = resampling_audio.swift; sourceTree = "<group>"; };
 		A4FB882F21EC401700C241AF /* scaling_video.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = scaling_video.swift; sourceTree = "<group>"; };
 		A4FB883221EC405100C241AF /* remuxing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = remuxing.swift; sourceTree = "<group>"; };
@@ -194,6 +204,7 @@
 				OBJ_21 /* AVConstant.swift */,
 				A4197E2221EEDB960063BE2B /* AVFormat.swift */,
 				OBJ_23 /* AVFormatContext.swift */,
+				A4197E2421EEE3480063BE2B /* AVFilter.swift */,
 				OBJ_24 /* AVFrame.swift */,
 				OBJ_25 /* AVIO.swift */,
 				OBJ_26 /* AVImage.swift */,
@@ -212,6 +223,7 @@
 				OBJ_38 /* Util.swift */,
 				OBJ_39 /* VideoUtil.swift */,
 				A4BF513421EB2ADF00464F4C /* AVLog.swift */,
+				A4E16A4021F0280000DC91A3 /* Hash.swift */,
 			);
 			name = SwiftFFmpeg;
 			path = Sources/SwiftFFmpeg;
@@ -283,6 +295,9 @@
 				A4FB882F21EC401700C241AF /* scaling_video.swift */,
 				A4FB883221EC405100C241AF /* remuxing.swift */,
 				A43008AB21ECE1B500B2E978 /* hw_decode.swift */,
+				A4197E2821EF07020063BE2B /* filtering_video.swift */,
+				A401EEA321EF2B56001B6DB9 /* filtering_audio.swift */,
+				A4E16A3E21F024E500DC91A3 /* filter_audio.swift */,
 				OBJ_13 /* main.swift */,
 			);
 			name = SwiftFFmpegExamples;
@@ -425,8 +440,10 @@
 				OBJ_73 /* StdlibExt.swift in Sources */,
 				OBJ_74 /* SwrContext.swift in Sources */,
 				OBJ_75 /* SwsContext.swift in Sources */,
+				A4E16A4121F0280000DC91A3 /* Hash.swift in Sources */,
 				OBJ_76 /* Timestamp.swift in Sources */,
 				OBJ_77 /* Util.swift in Sources */,
+				A4197E2621EEE3490063BE2B /* AVFilter.swift in Sources */,
 				OBJ_78 /* VideoUtil.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -440,8 +457,11 @@
 				A43008AC21ECE1B500B2E978 /* hw_decode.swift in Sources */,
 				OBJ_85 /* avio_dir_cmd.swift in Sources */,
 				A4FB883321EC405100C241AF /* remuxing.swift in Sources */,
+				A401EEA421EF2B56001B6DB9 /* filtering_audio.swift in Sources */,
+				A4E16A3F21F024E500DC91A3 /* filter_audio.swift in Sources */,
 				A4FB883021EC401700C241AF /* resampling_audio.swift in Sources */,
 				OBJ_86 /* avio_reading.swift in Sources */,
+				A4197E2921EF07020063BE2B /* filtering_video.swift in Sources */,
 				A4BF513121EB1BEB00464F4C /* http_multiclient.swift in Sources */,
 				OBJ_87 /* decode_audio.swift in Sources */,
 				A44924FD21E9A6AA0062BC77 /* demuxing_decoding.swift in Sources */,
