@@ -272,10 +272,10 @@ extension AVOptionAccessor {
 
     /// `av_opt_set_bin`
     public func set(
-        _ value: UnsafePointer<UInt8>, forKey key: String, searchFlags: AVOptionSearchFlag = .children
+        _ value: UnsafeBufferPointer<UInt8>, forKey key: String, searchFlags: AVOptionSearchFlag = .children
     ) throws {
         try withUnsafeObjectPointer { objPtr in
-            try throwIfFail(av_opt_set_bin(objPtr, key, value, 0, searchFlags.rawValue))
+            try throwIfFail(av_opt_set_bin(objPtr, key, value.baseAddress, Int32(value.count), searchFlags.rawValue))
         }
     }
 
@@ -323,6 +323,22 @@ extension AVOptionAccessor {
     ) throws {
         try withUnsafeObjectPointer { objPtr in
             try throwIfFail(av_opt_set_channel_layout(objPtr, key, Int64(value.rawValue), searchFlags.rawValue))
+        }
+    }
+
+    /// Set a binary option to an integer list.
+    ///
+    /// `av_opt_set_int_list`
+    public func set<T: FixedWidthInteger>(
+        _ value: [T], forKey key: String, searchFlags: AVOptionSearchFlag = .children
+    ) throws {
+        precondition(value.last == 0 || value.last == -1, "The list must be terminated by 0 or -1.")
+        try value.withUnsafeBytes { rawPtr in
+            let bufPtr = rawPtr.bindMemory(to: UInt8.self)
+            try set(
+                UnsafeBufferPointer(start: bufPtr.baseAddress, count: MemoryLayout<T>.size * (value.count - 1)),
+                forKey: key
+            )
         }
     }
 }
