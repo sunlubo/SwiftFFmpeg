@@ -38,6 +38,7 @@ if CommandLine.argc < 2 {
       resampling_audio    API example program to show how to resample an audio stream with libswresample.
                           This program generates a series of audio frames, resamples them to a specified
                           output format and rate and saves them to an output file named output_file.
+     device_list          API example for libavdevice.
     """)
     exit(1)
 }
@@ -76,6 +77,8 @@ case "scaling_video":
     try scaling_video()
 case "resampling_audio":
     try resampling_audio()
+case "device_list":
+    try device_list()
 default:
     ()
 }

@@ -18,6 +18,8 @@ public struct AVError: Error, Equatable {
     public static let outOfRange = AVError(code: swift_AVERROR(Darwin.ERANGE))
     /// The value is not valid
     public static let invalidValue = AVError(code: swift_AVERROR(Darwin.EINVAL))
+    /// Function not implemented
+    public static let noSystem = AVError(code: swift_AVERROR(Darwin.ENOSYS))
 
     /// Bitstream filter not found
     public static let bsfNotFound = AVError(code: swift_AVERROR_BSF_NOT_FOUND)

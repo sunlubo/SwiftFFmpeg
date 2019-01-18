@@ -1,4 +1,9 @@
 module CFFmpeg [system] {
+    module AVUtil {
+        header "avutil_shim.h"
+        link "avutil"
+        export *
+    }
     module AVFormat {
         header "avformat_shim.h"
         link "avformat"
@@ -9,14 +14,14 @@ module CFFmpeg [system] {
         link "avcodec"
         export *
     }
-    module AVUtil {
-        header "avutil_shim.h"
-        link "avutil"
-        export *
-    }
     module AVFilter {
         header "avfilter_shim.h"
         link "avfilter"
+        export *
+    }
+    module AVDevice {
+        header "avdevice_shim.h"
+        link "avdevice"
         export *
     }
     module Swscale {

@@ -55,6 +55,14 @@ public struct AVInputFormat {
         return String(cString: cFormat.mime_type)
     }
 
+    /// `AVClass` for the private context.
+    public var privClass: AVClass? {
+        if let classPtr = cFormat.priv_class {
+            return AVClass(cClassPtr: classPtr)
+        }
+        return nil
+    }
+
     /// Get all registered demuxers.
     public static var supportedFormats: [AVInputFormat] {
         var list = [AVInputFormat]()
@@ -191,6 +199,14 @@ public struct AVOutputFormat {
     public var flags: Flag {
         get { return Flag(rawValue: cFormat.flags) }
         set { cFormatPtr.pointee.flags = newValue.rawValue }
+    }
+
+    /// `AVClass` for the private context.
+    public var privClass: AVClass? {
+        if let classPtr = cFormat.priv_class {
+            return AVClass(cClassPtr: classPtr)
+        }
+        return nil
     }
 
     /// Get all registered muxers.
