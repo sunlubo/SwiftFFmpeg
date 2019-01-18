@@ -364,26 +364,18 @@ extension AVFilterContext {
 
     /// Add a frame to the buffer source.
     ///
-    /// - Parameter frame: frame to be added. If the frame is reference counted, this function will
-    ///   take ownership of the reference(s) and reset the frame. Otherwise the frame data will be copied.
-    ///   If this function throws an error, the input frame is not touched.
-    /// - Throws: AVError
-    public func addFrame(_ frame: AVFrame) throws {
-        try throwIfFail(av_buffersrc_add_frame(cContextPtr, frame.cFramePtr))
-    }
-
-    /// Add a frame to the buffer source.
+    /// By default, if the frame is reference-counted, this function will take ownership of
+    /// the reference(s) and reset the frame. Otherwise the frame data will be copied.
+    /// This can be controlled using the flags.
     ///
-    /// By default, if the frame is reference-counted, this function will take ownership of the reference(s)
-    /// and reset the frame. This can be controlled using the flags.
     /// If this function throws an error, the input frame is not touched.
     ///
     /// - Parameters:
     ///   - frame: a frame, or `nil` to mark EOF
     ///   - flags: a combination of `AVBufferSourceFlag` flags
     /// - Throws: AVError
-    public func addFrame(_ frame: AVFrame, flags: AVBufferSourceFlag) throws {
-        try throwIfFail(av_buffersrc_add_frame_flags(cContextPtr, frame.cFramePtr, flags.rawValue))
+    public func addFrame(_ frame: AVFrame?, flags: AVBufferSourceFlag = .init(rawValue: 0)) throws {
+        try throwIfFail(av_buffersrc_add_frame_flags(cContextPtr, frame?.cFramePtr, flags.rawValue))
     }
 }
 
@@ -424,27 +416,73 @@ extension AVBufferSinkFlag: CustomStringConvertible {
 
 extension AVFilterContext {
 
-    /// Get a frame with filtered data from sink and put it in frame.
-    ///
-    /// - Parameter frame: pointer to an allocated frame that will be filled with data.
-    ///   The data must be freed using `AVFrame.unref()`.
-    /// - Throws:
-    ///     - `AVError.tryAgain` if no frames are available at this point;
-    ///       more input frames must be added to the filtergraph to get more output.
-    ///     - `AVError.eof` if there will be no more output frames on this sink.
-    ///     - A different `AVError` in other failure cases.
-    public func getFrame(_ frame: AVFrame) throws {
-        try throwIfFail(av_buffersink_get_frame(cContextPtr, frame.cFramePtr))
+    /// The media type of the buffer sink.
+    public var mediaType: AVMediaType {
+        return av_buffersink_get_type(cContextPtr)
+    }
+
+    /// The timebase of the buffer sink.
+    public var timebase: AVRational {
+        return av_buffersink_get_time_base(cContextPtr)
+    }
+
+    /// The pixel format of the video buffer sink.
+    public var pixelFormat: AVPixelFormat {
+        return AVPixelFormat(rawValue: av_buffersink_get_format(cContextPtr))
+    }
+
+    /// The frame rate of the video buffer sink.
+    public var frameRate: AVRational {
+        return av_buffersink_get_frame_rate(cContextPtr)
+    }
+
+    /// The width of the video buffer sink.
+    public var width: Int {
+        return Int(av_buffersink_get_w(cContextPtr))
+    }
+
+    /// The height of the video buffer sink.
+    public var height: Int {
+        return Int(av_buffersink_get_h(cContextPtr))
+    }
+
+    /// The sample aspect ratio of the video buffer sink.
+    public var sampleAspectRatio: AVRational {
+        return av_buffersink_get_sample_aspect_ratio(cContextPtr)
+    }
+
+    /// The sample format of the audio buffer sink.
+    public var sampleFormat: AVSampleFormat {
+        return AVSampleFormat(rawValue: av_buffersink_get_format(cContextPtr))
+    }
+
+    /// The sample rate of the audio buffer sink.
+    public var sampleRate: Int {
+        return Int(av_buffersink_get_sample_rate(cContextPtr))
+    }
+
+    /// The number of channels in the audio buffer sink.
+    public var channelCount: Int {
+        return Int(av_buffersink_get_channels(cContextPtr))
+    }
+
+    /// The channel layout of the audio buffer sink.
+    public var channelLayout: AVChannelLayout {
+        return AVChannelLayout(rawValue: av_buffersink_get_channel_layout(cContextPtr))
     }
 
     /// Get a frame with filtered data from sink and put it in frame.
     ///
     /// - Parameters:
     ///   - frame: pointer to an allocated frame that will be filled with data.
-    ///     The data must be freed using `AVFrame.unref()`.
+    ///     The data must be freed using `av_frame_unref() / av_frame_free()`.
     ///   - flags: a combination of `AVBufferSinkFlag` flags
-    /// - Throws: AVError
-    func getFrame(_ frame: AVFrame, flags: AVBufferSinkFlag) throws {
+    /// - Throws:
+    ///     - `AVError.tryAgain` if no frames are available at this point;
+    ///       more input frames must be added to the filtergraph to get more output.
+    ///     - `AVError.eof` if there will be no more output frames on this sink.
+    ///     - A different `AVError` in other failure cases.
+    public func getFrame(_ frame: AVFrame, flags: AVBufferSinkFlag = .init(rawValue: 0)) throws {
         try throwIfFail(av_buffersink_get_frame_flags(cContextPtr, frame.cFramePtr, flags.rawValue))
     }
 }
