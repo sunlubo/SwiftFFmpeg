@@ -39,6 +39,7 @@ if CommandLine.argc < 2 {
                           This program generates a series of audio frames, resamples them to a specified
                           output format and rate and saves them to an output file named output_file.
      device_list          API example for libavdevice.
+     bsf                  API example about how to use bitstream filter.
     """)
     exit(1)
 }
@@ -79,6 +80,8 @@ case "resampling_audio":
     try resampling_audio()
 case "device_list":
     try device_list()
+case "bsf":
+    try bsf()
 default:
     ()
 }
