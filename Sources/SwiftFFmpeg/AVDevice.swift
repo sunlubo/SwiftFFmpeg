@@ -13,7 +13,7 @@ public typealias AVDeviceRect = CFFmpeg.AVDeviceRect
 
 // MARK: - AVAppToDevMessageType
 
-/// Message types used by avdevice_app_to_dev_control_message().
+/// Message types used by `AVFormatContext.sendMessageToDevice(type:data:)`.
 public typealias AVAppToDevMessageType = CFFmpeg.AVAppToDevMessageType
 
 extension AVAppToDevMessageType {
@@ -40,7 +40,7 @@ extension AVAppToDevMessageType {
     /// Mostly usable with devices that have internal buffer.
     /// By default devices are not paused.
     ///
-    /// data: `nil`
+    /// data: `nil`.
     public static let pause = AV_APP_TO_DEV_PAUSE
     public static let togglePause = AV_APP_TO_DEV_TOGGLE_PAUSE
     /// Volume control message.
@@ -49,7 +49,7 @@ extension AVAppToDevMessageType {
     /// is changed per stream or system wide. Per stream volume
     /// change is expected when possible.
     ///
-    /// data: `double`: new volume with range of __0.0 - 1.0__.
+    /// data: `Double`: new volume with range of __0.0 - 1.0__.
     public static let setVolume = AV_APP_TO_DEV_SET_VOLUME
     /// Mute control messages.
     ///
@@ -63,8 +63,8 @@ extension AVAppToDevMessageType {
     public static let toggleMute = AV_APP_TO_DEV_TOGGLE_MUTE
     /// Get volume/mute messages.
     ///
-    /// Force the device to send AV_DEV_TO_APP_VOLUME_LEVEL_CHANGED or
-    /// AV_DEV_TO_APP_MUTE_STATE_CHANGED command respectively.
+    /// Force the device to send `AVDevToAppMessageType.volumeLevelChanged` or
+    /// `AVDevToAppMessageType.muteStateChanged` command respectively.
     ///
     /// data: `nil`.
     public static let getVolume = AV_APP_TO_DEV_GET_VOLUME
@@ -73,7 +73,7 @@ extension AVAppToDevMessageType {
 
 // MARK: - AVDevToAppMessageType
 
-/// Message types used by avdevice_dev_to_app_control_message().
+/// Message types used by `AVFormatContext.sendMessageToApplication(type:data:)`.
 public typealias AVDevToAppMessageType = CFFmpeg.AVDevToAppMessageType
 
 extension AVDevToAppMessageType {
@@ -87,7 +87,7 @@ extension AVDevToAppMessageType {
     /// Application is allowed to ignore preferred window buffer size.
     ///
     /// - Note: Application is obligated to inform about window buffer size
-    ///   with AV_APP_TO_DEV_WINDOW_SIZE message.
+    ///   with `AVAppToDevMessageType.windowSize` message.
     ///
     /// data: `AVDeviceRect`: preferred size of the window buffer.
     ///       `nil`: no preferred size of the window buffer.
@@ -130,7 +130,7 @@ extension AVDevToAppMessageType {
     ///
     /// - Warning: Device may not inform when number of bytes than can be read/write changes.
     ///
-    /// data: `int64_t`: amount of bytes available to read/write.
+    /// data: `Int64`: amount of bytes available to read/write.
     ///       `nil`: amount of bytes available to read/write is not known.
     public static let bufferReadable = AV_DEV_TO_APP_BUFFER_READABLE
     public static let bufferWritable = AV_DEV_TO_APP_BUFFER_WRITABLE
@@ -138,13 +138,13 @@ extension AVDevToAppMessageType {
     ///
     /// Device informs that mute state has changed.
     ///
-    /// data: `int`: 0 for not muted state, non-zero for muted state.
+    /// data: `Int32`: 0 for not muted state, non-zero for muted state.
     public static let muteStateChanged = AV_DEV_TO_APP_MUTE_STATE_CHANGED
     /// Volume level change message.
     ///
     /// Device informs that volume level has changed.
     ///
-    /// data: `double`: new volume with range of __0.0 - 1.0__.
+    /// data: `Double`: new volume with range of __0.0 - 1.0__.
     public static let volumeLevelChanged = AV_DEV_TO_APP_VOLUME_LEVEL_CHANGED
 }
 
@@ -245,8 +245,8 @@ typealias CAVDeviceCapabilitiesQuery = CFFmpeg.AVDeviceCapabilitiesQuery
 
 /// Structure describes device capabilities.
 ///
-/// It is used by devices in conjunction with av_device_capabilities AVOption table
-/// to implement capabilities probing API based on AVOption API. Should not be used directly.
+/// It is used by devices in conjunction with `av_device_capabilities` `AVOption` table
+/// to implement capabilities probing API based on `AVOption` API. Should not be used directly.
 public final class AVDeviceCapabilitiesQuery {
     private let formatContext: AVFormatContext
     private let cQueryPtr: UnsafeMutablePointer<CAVDeviceCapabilitiesQuery>
@@ -413,8 +413,8 @@ public final class AVDeviceInfoList {
     /// - Note: device argument takes precedence over device_name when both are set.
     ///
     /// - Parameters:
-    ///   - device: device format. May be NULL if device name is set.
-    ///   - deviceName: device name. May be NULL if device format is set.
+    ///   - device: device format. May be `nil` if device name is set.
+    ///   - deviceName: device name. May be `nil` if device format is set.
     ///   - options: An dictionary filled with device-private options.
     ///     The same options must be passed later to `AVFormatContext.writeHeader(options:)`
     ///     for output devices or `AVFormatContext.openInput(_:format:options:)` for input devices,

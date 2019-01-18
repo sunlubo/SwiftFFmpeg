@@ -74,15 +74,14 @@ func encode_audio() throws {
         // make sure the frame is writable -- makes a copy if the encoder kept a reference internally
         try frame.makeWritable()
         
-        let capacity = frame.buffer[0]!.size / 2
-        frame.data[0]!.withMemoryRebound(to: UInt16.self, capacity: capacity) { samples in
-            for i in 0..<frame.sampleCount {
-                let sample = UInt16(truncatingIfNeeded: Int32((sin(Double(t)) * 10000).rounded(.towardZero)))
-                for j in 0..<codecCtx.channelCount {
-                    samples[i * 2 + j] = sample
-                }
-                t += tincr
+        let capacity = frame.sampleCount * frame.channelCount
+        let samples = UnsafeMutableRawPointer(frame.data[0]!).bindMemory(to: UInt16.self, capacity: capacity)
+        for i in 0..<frame.sampleCount {
+            let sample = UInt16(truncatingIfNeeded: Int32((sin(Double(t)) * 10000).rounded(.towardZero)))
+            for j in 0..<frame.channelCount {
+                samples[i * 2 + j] = sample
             }
+            t += tincr
         }
         try encode(codecCtx: codecCtx, frame: frame, pkt: pkt, file: file)
     }

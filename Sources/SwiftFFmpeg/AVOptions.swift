@@ -333,12 +333,10 @@ extension AVOptionAccessor {
         _ value: [T], forKey key: String, searchFlags: AVOptionSearchFlag = .children
     ) throws {
         precondition(value.last == 0 || value.last == -1, "The list must be terminated by 0 or -1.")
-        try value.withUnsafeBytes { rawPtr in
-            let bufPtr = rawPtr.bindMemory(to: UInt8.self)
-            try set(
-                UnsafeBufferPointer(start: bufPtr.baseAddress, count: MemoryLayout<T>.size * (value.count - 1)),
-                forKey: key
-            )
+        try value.withUnsafeBytes { ptr in
+            let ptr = ptr.bindMemory(to: UInt8.self).baseAddress
+            let count = MemoryLayout<T>.size * (value.count - 1)
+            try set(UnsafeBufferPointer(start: ptr, count: count), forKey: key)
         }
     }
 }

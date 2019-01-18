@@ -14,6 +14,13 @@ extension UnsafePointer {
     }
 }
 
+extension UnsafeBufferPointer {
+
+    var mutable: UnsafeMutableBufferPointer<Element> {
+        return UnsafeMutableBufferPointer(mutating: self)
+    }
+}
+
 extension String {
 
     init?(cString: UnsafePointer<CChar>?) {

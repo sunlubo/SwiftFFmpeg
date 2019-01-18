@@ -108,6 +108,13 @@ extension AVCodecID {
     }
 }
 
+extension AVCodecID: CustomStringConvertible {
+
+    public var description: String {
+        return name
+    }
+}
+
 // MARK: - AVCodec
 
 typealias CAVCodec = CFFmpeg.AVCodec

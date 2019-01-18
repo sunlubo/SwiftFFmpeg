@@ -27,7 +27,7 @@ private func get_input(frame: AVFrame, index: Int) throws {
     
     // Fill the data for each channel.
     for i in 0 ..< 5 {
-        let data = UnsafeMutableRawPointer(frame.extendedData[0])!.bindMemory(to: CFloat.self, capacity: frame.sampleCount)
+        let data = UnsafeMutableRawPointer(frame.extendedData[0]!).bindMemory(to: CFloat.self, capacity: frame.sampleCount)
         for j in 0 ..< frame.sampleCount {
             data[j] = sin(2 * Float.pi * Float(index + j) * Float(i + 1) / Float(frameSize))
         }
@@ -86,7 +86,7 @@ func filter_audio() throws {
     let abufferCtx = AVFilterContext(graph: filterGraph, filter: abuffer, name: "src")
     // Set the filter options through the AVOptions API.
     try abufferCtx.set(channelLayout.description, forKey: "channel_layout")
-    try abufferCtx.set(sampleFormat.name, forKey: "sample_fmt")
+    try abufferCtx.set(sampleFormat.name!, forKey: "sample_fmt")
     try abufferCtx.set(AVRational(num: 1, den: Int32(sampleRate)), forKey: "time_base")
     try abufferCtx.set(sampleRate, forKey: "sample_rate")
     // Now initialize the filter; we pass NULL options, since we have already set all the options above.
@@ -103,7 +103,7 @@ func filter_audio() throws {
     let aformat = AVFilter(name: "aformat")!
     let aformatCtx = AVFilterContext(graph: filterGraph, filter: aformat, name: "aformat")
     // A third way of passing the options is in a string of the form key1=value1:key2=value2...
-    let args = "sample_fmts=\(AVSampleFormat.s16.name):sample_rates=44100:channel_layouts=0x\(AVChannelLayout.CHL_STEREO.rawValue)"
+    let args = "sample_fmts=\(AVSampleFormat.s16.name!):sample_rates=44100:channel_layouts=0x\(AVChannelLayout.CHL_STEREO.rawValue)"
     try aformatCtx.initialize(args: args)
     
     // Finally create the abuffersink filter;

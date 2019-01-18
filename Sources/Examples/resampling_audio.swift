@@ -14,14 +14,14 @@ private func fill_samples(_ samples: AVSamples, _ sampleRate: Int64, _ t: Double
     let c = 2 * Double.pi * 440.0
 
     // generate sin tone with 440Hz frequency and duplicated channels
-    samples.data[0]!.withMemoryRebound(to: Double.self, capacity: samples.sampleCount * samples.channelCount) { p in
-        for i in 0..<samples.sampleCount {
-            let sample = sin(c * t)
-            for j in 0..<samples.channelCount {
-                p[i * samples.channelCount + j] = sample
-            }
-            t += tincr
+    let capacity = samples.sampleCount * samples.channelCount
+    let ptr = UnsafeMutableRawPointer(samples.data[0]!).bindMemory(to: Double.self, capacity: capacity)
+    for i in 0..<samples.sampleCount {
+        let sample = sin(c * t)
+        for j in 0..<samples.channelCount {
+            ptr[i * samples.channelCount + j] = sample
         }
+        t += tincr
     }
     return t
 }

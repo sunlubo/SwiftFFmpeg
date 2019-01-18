@@ -59,7 +59,7 @@ func filtering_audio() throws {
     let args = """
     time_base=\(stram.timebase.num)/\(stram.timebase.den):\
     sample_rate=\(decoderCtx.sampleRate):\
-    sample_fmt=\(decoderCtx.sampleFormat.name):\
+    sample_fmt=\(decoderCtx.sampleFormat.name!):\
     channel_layout=0x\(decoderCtx.channelLayout.rawValue)
     """
     let buffersrcCtx = try filterGraph.addFilter(buffersrc, name: "in", args: args)

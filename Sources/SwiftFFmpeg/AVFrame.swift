@@ -51,14 +51,13 @@ public final class AVFrame {
     /// Pointer to the picture/channel planes.
     public var data: UnsafeMutableBufferPointer<UnsafeMutablePointer<UInt8>?> {
         get {
-            return withUnsafeBytes(of: &cFramePtr.pointee.data) { rawPtr in
-                let start = rawPtr.baseAddress!.assumingMemoryBound(to: UnsafeMutablePointer<UInt8>?.self).mutable
-                return UnsafeMutableBufferPointer(start: start, count: AVConstant.dataPointersNumber)
+            return withUnsafeMutableBytes(of: &cFramePtr.pointee.data) { ptr in
+                return ptr.bindMemory(to: UnsafeMutablePointer<UInt8>?.self)
             }
         }
         set {
-            withUnsafeMutableBytes(of: &cFramePtr.pointee.data) { rawPtr -> Void in
-                rawPtr.copyMemory(from: UnsafeRawBufferPointer(newValue))
+            withUnsafeMutableBytes(of: &cFramePtr.pointee.data) { ptr in
+                ptr.copyMemory(from: UnsafeRawBufferPointer(newValue))
             }
         }
     }
@@ -77,14 +76,13 @@ public final class AVFrame {
     ///   for performance reasons.
     public var linesize: UnsafeMutableBufferPointer<Int32> {
         get {
-            return withUnsafeBytes(of: &cFramePtr.pointee.linesize) { rawPtr in
-                let start = rawPtr.baseAddress!.assumingMemoryBound(to: Int32.self).mutable
-                return UnsafeMutableBufferPointer(start: start, count: AVConstant.dataPointersNumber)
+            return withUnsafeMutableBytes(of: &cFramePtr.pointee.linesize) { ptr in
+                return ptr.bindMemory(to: Int32.self)
             }
         }
         set {
-            withUnsafeMutableBytes(of: &cFramePtr.pointee.linesize) { rawPtr -> Void in
-                rawPtr.copyMemory(from: UnsafeRawBufferPointer(newValue))
+            withUnsafeMutableBytes(of: &cFramePtr.pointee.linesize) { ptr in
+                ptr.copyMemory(from: UnsafeRawBufferPointer(newValue))
             }
         }
     }
@@ -192,7 +190,7 @@ public final class AVFrame {
         return cFrame.pkt_duration
     }
 
-    /// Size of the corresponding packet containing the compressed frame. 
+    /// Size of the corresponding packet containing the compressed frame.
     /// It is set to a negative value if unknown.
     ///
     /// - encoding: Unused.
@@ -231,8 +229,8 @@ public final class AVFrame {
     ///   - `width` and `height` for video
     ///   - `sampleCount` and `channelLayout` for audio
     ///
-    /// This function will fill `AVFrame.data` and `AVFrame.buffer` arrays and, if necessary, 
-    /// allocate and fill `AVFrame.extendedData` and `AVFrame.extendedBuffer`. For planar formats, 
+    /// This function will fill `AVFrame.data` and `AVFrame.buffer` arrays and, if necessary,
+    /// allocate and fill `AVFrame.extendedData` and `AVFrame.extendedBuffer`. For planar formats,
     /// one buffer will be allocated for each plane.
     ///
     /// - Warning: If frame already has been allocated, calling this function will leak memory.

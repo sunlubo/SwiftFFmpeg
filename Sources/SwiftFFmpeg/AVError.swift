@@ -97,7 +97,7 @@ func throwIfFail(_ condition: @autoclosure () -> Int32) throws {
     }
 }
 
-// ENOMEM
+// e.g. ENOMEM
 func abortIfFail(_ condition: @autoclosure () -> Int32) {
     let code = condition()
     if code < 0 {

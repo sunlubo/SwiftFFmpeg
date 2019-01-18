@@ -20,7 +20,7 @@ public final class AVBuffer {
         self.cBufferPtr = cBufferPtr
     }
 
-    /// Create an `AVBuffer` of the given size. (for test)
+    /// Create an `AVBuffer` of the given size. (only for test)
     ///
     /// - Parameter size: size of the buffer
     convenience init(size: Int) {
@@ -55,7 +55,7 @@ public final class AVBuffer {
 
     /// Check if the buffer is writable.
     ///
-    /// - Returns: True if and only if this is the only reference to the underlying buffer.
+    /// - Returns: `true` if and only if this is the only reference to the underlying buffer.
     public func isWritable() -> Bool {
         precondition(cBufferPtr != nil, "buffer has been freed")
         return av_buffer_is_writable(cBufferPtr) > 0
