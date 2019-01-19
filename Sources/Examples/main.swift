@@ -40,6 +40,7 @@ if CommandLine.argc < 2 {
                           output format and rate and saves them to an output file named output_file.
      device_list          API example for libavdevice.
      bsf                  API example about how to use bitstream filter.
+     split_stream         API example about how to split stream from a container format.
     """)
     exit(1)
 }
@@ -82,6 +83,8 @@ case "device_list":
     try device_list()
 case "bsf":
     try bsf()
+case "split_stream":
+    try split_stream()
 default:
     ()
 }
