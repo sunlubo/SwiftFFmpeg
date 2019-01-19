@@ -12,9 +12,12 @@ import CFFmpeg
 public typealias AVHWDeviceType = CFFmpeg.AVHWDeviceType
 
 extension AVHWDeviceType {
+    /// Do not use any hardware acceleration (the default).
     public static let none = AV_HWDEVICE_TYPE_NONE
+    /// Use VDPAU (Video Decode and Presentation API for Unix) hardware acceleration.
     public static let vdpau = AV_HWDEVICE_TYPE_VDPAU
     public static let cuda = AV_HWDEVICE_TYPE_CUDA
+    /// Use DXVA2 (DirectX Video Acceleration) hardware acceleration.
     public static let dxva2 = AV_HWDEVICE_TYPE_DXVA2
     public static let qsv = AV_HWDEVICE_TYPE_QSV
     public static let videoToolbox = AV_HWDEVICE_TYPE_VIDEOTOOLBOX
