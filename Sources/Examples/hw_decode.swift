@@ -53,8 +53,7 @@ func hw_decode() throws {
     let input = CommandLine.arguments[3]
     let output = CommandLine.arguments[4]
 
-    let deviceType = AVHWDeviceType(name: deviceTypeName)
-    if deviceType == .none {
+    guard let deviceType = AVHWDeviceType(name: deviceTypeName) else {
         print("Device type \(deviceTypeName) is not supported.")
         print(AVHWDeviceType.supportedDeviceTypes())
         fatalError()

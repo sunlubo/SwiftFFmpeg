@@ -40,11 +40,15 @@ extension AVSampleFormat {
     /// Number of sample formats. __DO NOT USE__ if linking dynamically.
     public static let nb = AV_SAMPLE_FMT_NB
 
-    /// Return a sample format corresponding to name, or `none` on error.
+    /// Return a sample format corresponding to name, or `nil` on error.
     ///
     /// - Parameter name: The name of the sample format.
-    public init(name: String) {
-        self = av_get_sample_fmt(name)
+    public init?(name: String) {
+        let type = av_get_sample_fmt(name)
+        if type == .none {
+            return nil
+        }
+        self = type
     }
 
     /// The name of the sample format, or `nil` if sample format is not recognized.

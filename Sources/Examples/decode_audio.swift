@@ -58,7 +58,7 @@ func decode_audio() throws {
     let codecCtx = AVCodecContext(codec: codec)
     try codecCtx.openCodec()
     
-    let parser = AVCodecParserContext(codecContext: codecCtx)
+    let parser = AVCodecParserContext(codecContext: codecCtx)!
     
     let pkt = AVPacket()
     let frame = AVFrame()

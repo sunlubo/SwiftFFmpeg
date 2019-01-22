@@ -20,10 +20,11 @@ public final class AVCodecParserContext {
     private let cContextPtr: UnsafeMutablePointer<CAVCodecParserContext>
     private var cContext: CAVCodecParserContext { return cContextPtr.pointee }
 
-    public init(codecContext: AVCodecContext) {
+    public init?(codecContext: AVCodecContext) {
         precondition(codecContext.codec != nil, "'AVCodecContext.codec' must not be nil.")
+
         guard let ctxPtr = av_parser_init(Int32(codecContext.codec!.id.rawValue)) else {
-            abort("av_parser_init")
+            return nil
         }
         self.codecContext = codecContext
         self.cContextPtr = ctxPtr

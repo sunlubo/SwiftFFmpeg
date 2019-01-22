@@ -172,8 +172,8 @@ extension AVPixelFormat {
     /// hardware decoding through VideoToolbox
     public static let videoToolbox = AV_PIX_FMT_VIDEOTOOLBOX
 
-    /// number of pixel formats, DO NOT USE THIS if you want to link with shared libav* because the number of formats
-    /// might differ between versions
+    /// number of pixel formats, __DO NOT USE THIS__ if you want to link with shared `libav*`
+    /// because the number of formats might differ between versions
     public static let nb = AV_PIX_FMT_NB
 
     /// Return the pixel format corresponding to name.
@@ -182,9 +182,13 @@ extension AVPixelFormat {
     /// corresponding to the native endian format of name.
     /// For example in a little-endian system, first looks for "gray16", then for "gray16le".
     ///
-    /// Finally if no pixel format has been found, returns `AVPixelFormat.none`.
-    public init(name: String) {
-        self = av_get_pix_fmt(name)
+    /// Finally if no pixel format has been found, returns `nil`.
+    public init?(name: String) {
+        let type = av_get_pix_fmt(name)
+        if type == .none {
+            return nil
+        }
+        self = type
     }
 
     // The name of the pixel format.

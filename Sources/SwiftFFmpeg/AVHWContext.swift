@@ -29,9 +29,13 @@ extension AVHWDeviceType {
     /// Look up an `AVHWDeviceType` by name.
     ///
     /// - Parameter name: String name of the device type (case-insensitive).
-    /// - Returns: The requested device type, or `none` if not found.
-    public init(name: String) {
-        self = av_hwdevice_find_type_by_name(name)
+    /// - Returns: The requested device type, or `nil` if not found.
+    public init?(name: String) {
+        let type = av_hwdevice_find_type_by_name(name)
+        if type == .none {
+            return nil
+        }
+        self = type
     }
 
     /// Get the string name of an `AVHWDeviceType`.
