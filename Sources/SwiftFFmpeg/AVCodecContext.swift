@@ -140,6 +140,30 @@ public final class AVCodecContext {
         set { cContextPtr.pointee.flags2 = newValue.rawValue }
     }
 
+    /// Some codecs need / can use extradata like Huffman tables.
+    ///
+    /// - MJPEG: Huffman tables
+    /// - rv10: additional flags
+    /// - MPEG-4: global headers (they can be in the bitstream or here)
+    ///
+    /// The allocated memory should be `AV_INPUT_BUFFER_PADDING_SIZE` bytes larger
+    /// than `extradata_size` to avoid problems if it is read with the bitstream reader.
+    /// The bytewise contents of extradata must not depend on the architecture or CPU endianness.
+    /// Must be allocated with the `av_malloc()` family of functions.
+    ///
+    /// - encoding: Set/allocated/freed by libavcodec.
+    /// - decoding: Set/allocated/freed by user.
+    public var extraData: UnsafeMutablePointer<UInt8>? {
+        get { return cContext.extradata }
+        set { cContextPtr.pointee.extradata = newValue }
+    }
+
+    /// The size of the extradata content in bytes.
+    public var extraDataSize: Int {
+        get { return Int(cContext.extradata_size) }
+        set { cContextPtr.pointee.extradata_size = Int32(newValue) }
+    }
+
     /// This is the fundamental unit of time (in seconds) in terms of which frame timestamps
     /// are represented. For fixed-fps content, timebase should be 1/framerate and timestamp
     /// increments should be identically 1.
@@ -167,6 +191,34 @@ public final class AVCodecContext {
         return Int(cContext.frame_number)
     }
 
+    /// A reference to the `AVHWFramesContext` describing the input (for encoding)
+    /// or output (decoding) frames. The reference is set by the caller and
+    /// afterwards owned (and freed) by libavcodec - it should never be read by
+    /// the caller after being set.
+    ///
+    /// - encoding: For hardware encoders configured to use a hwaccel pixel
+    ///   format, this field should be set by the caller to a reference
+    ///   to the `AVHWFramesContext` describing input frames.
+    ///   `AVHWFramesContext.pixelFormat` must be equal to `AVCodecContext.pixelFormat`.
+    ///
+    ///   This field should be set before `openCodec(_:options:)` is called.
+    ///
+    /// - decoding: This field should be set by the caller from the `getFormat`
+    ///   callback. The previous reference (if any) will always be
+    ///   unreffed by libavcodec before the `getFormat` call.
+    ///
+    ///   If the default `get_buffer2()` is used with a hwaccel pixel format,
+    ///   then this `AVHWFramesContext` will be used for allocating the frame buffers.
+    public var hwFramesContext: AVHWFramesContext? {
+        get {
+            if let ctxPtr = cContext.hw_frames_ctx {
+                return AVHWFramesContext(cBufferPtr: ctxPtr)
+            }
+            return nil
+        }
+        set { cContextPtr.pointee.hw_frames_ctx = av_buffer_ref(newValue?.cBufferPtr) }
+    }
+
     /// A reference to the `AVHWDeviceContext` describing the device which will
     /// be used by a hardware encoder/decoder. The reference is set by the caller
     /// and afterwards owned (and freed) by libavcodec.
@@ -174,25 +226,25 @@ public final class AVCodecContext {
     /// This should be used if either the codec device does not require
     /// hardware frames or any that are used are to be allocated internally by
     /// libavcodec. If the user wishes to supply any of the frames used as
-    /// encoder input or decoder output then `hw_frames_ctx` should be used
-    /// instead. When `hw_frames_ctx` is set in `get_format()` for a decoder, this
+    /// encoder input or decoder output then `hwFramesContext` should be used
+    /// instead. When `hwFramesContext` is set in `getFormat` for a decoder, this
     /// field will be ignored while decoding the associated stream segment, but
-    /// may again be used on a following one after another `get_format()` call.
+    /// may again be used on a following one after another `getFormat` call.
     ///
     /// For both encoders and decoders this field should be set before
-    /// `openCodec(options:)` is called and must not be written to thereafter.
+    /// `openCodec(_:options:)` is called and must not be written to thereafter.
     ///
     /// Note that some decoders may require this field to be set initially in
-    /// order to support `hw_frames_ctx` at all - in that case, all frames
+    /// order to support `hwFramesContext` at all - in that case, all frames
     /// contexts used must be created on the same device.
     public var hwDeviceContext: AVHWDeviceContext? {
         get {
             if let ctxPtr = cContext.hw_device_ctx {
-                return AVHWDeviceContext(cContextPtr: ctxPtr)
+                return AVHWDeviceContext(cBufferPtr: ctxPtr)
             }
             return nil
         }
-        set { cContextPtr.pointee.hw_device_ctx = av_buffer_ref(newValue?.cContextPtr) }
+        set { cContextPtr.pointee.hw_device_ctx = av_buffer_ref(newValue?.cBufferPtr) }
     }
 
     /// A Boolean value indicating whether the codec is open.

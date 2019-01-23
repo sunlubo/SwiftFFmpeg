@@ -66,7 +66,7 @@ extension AVHWDeviceType: CustomStringConvertible {
 
 typealias CAVCodecHWConfig = CFFmpeg.AVCodecHWConfig
 
-public final class AVCodecHWConfig {
+public struct AVCodecHWConfig {
     let cConfigPtr: UnsafePointer<CAVCodecHWConfig>
     var cConfig: CAVCodecHWConfig { return cConfigPtr.pointee }
 
@@ -154,18 +154,15 @@ extension AVCodecHWConfig.Method: CustomStringConvertible {
 // MARK: - AVHWDeviceContext
 
 public final class AVHWDeviceContext {
-    let cContextPtr: UnsafeMutablePointer<CAVBuffer>
+    let cBufferPtr: UnsafeMutablePointer<CAVBuffer>
 
-    init(cContextPtr: UnsafeMutablePointer<CAVBuffer>) {
-        self.cContextPtr = cContextPtr
+    private var freeWhenDone: Bool = false
+
+    init(cBufferPtr: UnsafeMutablePointer<CAVBuffer>) {
+        self.cBufferPtr = cBufferPtr
     }
 
     /// Open a device of the specified type and create an `AVHWDeviceContext` for it.
-    ///
-    /// The returned context is already initialized and ready for use, the caller
-    /// should not call `av_hwdevice_ctx_init()` on it. The user_opaque/free fields of
-    /// the created `AVHWDeviceContext` are set by this function and should not be
-    /// touched by the caller.
     ///
     /// - Parameters:
     ///   - deviceType: The type of the device to create.
@@ -178,15 +175,160 @@ public final class AVHWDeviceContext {
     ) throws {
         var pm: OpaquePointer? = options?.toAVDict()
         defer { av_dict_free(&pm) }
-        var ctxPtr: UnsafeMutablePointer<AVBufferRef>?
-        let ret = av_hwdevice_ctx_create(&ctxPtr, deviceType, device, pm, 0)
-        try throwIfFail(ret)
-        self.cContextPtr = ctxPtr!
+
+        var ptr: UnsafeMutablePointer<AVBufferRef>!
+        try throwIfFail(av_hwdevice_ctx_create(&ptr, deviceType, device, pm, 0))
+        self.cBufferPtr = ptr
+        self.freeWhenDone = true
+    }
+
+    /// Create a new device of the specified type from an existing device.
+    ///
+    /// If the source device is a device of the target type or was originally
+    /// derived from such a device (possibly through one or more intermediate
+    /// devices of other types), then this will return a reference to the
+    /// existing device of the same type as is requested.
+    ///
+    /// Otherwise, it will attempt to derive a new device from the given source
+    /// device. If direct derivation to the new type is not implemented, it will
+    /// attempt the same derivation from each ancestor of the source device in
+    /// turn looking for an implemented derivation method.
+    ///
+    /// - Parameters:
+    ///   - deviceType: The type of the new device to create.
+    ///   - deviceContext: An existing `AVHWDeviceContext` which will be used to create the new device.
+    /// - Throws: AVError
+    public init(deviceType: AVHWDeviceType, deviceContext: AVHWDeviceContext) throws {
+        var ptr: UnsafeMutablePointer<AVBufferRef>!
+        try throwIfFail(av_hwdevice_ctx_create_derived(&ptr, deviceType, deviceContext.cBufferPtr, 0))
+        self.cBufferPtr = ptr
+        self.freeWhenDone = true
     }
 
     deinit {
-        var ptr: UnsafeMutablePointer<AVBufferRef>? = cContextPtr
-        av_buffer_unref(&ptr)
+        if freeWhenDone {
+            var ptr: UnsafeMutablePointer<AVBufferRef>? = cBufferPtr
+            av_buffer_unref(&ptr)
+        }
+    }
+}
+
+// MARK: - AVHWFramesContext
+
+typealias CAVHWFramesContext = CFFmpeg.AVHWFramesContext
+
+/// This struct describes a set or pool of "hardware" frames (i.e. those with
+/// data not located in normal system memory). All the frames in the pool are
+/// assumed to be allocated in the same way and interchangeable.
+///
+/// This struct is reference-counted with the `AVBuffer` mechanism and tied to a
+/// given `AVHWDeviceContext` instance. The `init(deviceContext:)` constructor
+/// yields a reference, whose data field points to the actual `AVHWFramesContext`
+/// struct.
+public final class AVHWFramesContext {
+    let cBufferPtr: UnsafeMutablePointer<CAVBuffer>
+    let cContextPtr: UnsafeMutablePointer<CAVHWFramesContext>
+    var cContext: CAVHWFramesContext { return cContextPtr.pointee }
+
+    private var freeWhenDone: Bool = false
+
+    init(cBufferPtr: UnsafeMutablePointer<CAVBuffer>) {
+        self.cBufferPtr = cBufferPtr
+        self.cContextPtr = UnsafeMutableRawPointer(cBufferPtr.pointee.data)!
+            .bindMemory(to: CAVHWFramesContext.self, capacity: 1)
+    }
+
+    /// Create an `AVHWFramesContext` tied to a given device context.
+    ///
+    /// - Parameter deviceContext: a `AVHWDeviceContext` instance.
+    public init(deviceContext: AVHWDeviceContext) {
+        guard let ptr = av_hwframe_ctx_alloc(deviceContext.cBufferPtr) else {
+            abort("av_hwframe_ctx_alloc")
+        }
+        self.cBufferPtr = ptr
+        self.cContextPtr = UnsafeMutableRawPointer(ptr.pointee.data)!
+            .bindMemory(to: CAVHWFramesContext.self, capacity: 1)
+        self.freeWhenDone = true
+    }
+
+    /// A reference to the parent `AVHWDeviceContext`.
+    public var deviceContext: AVHWDeviceContext {
+        return AVHWDeviceContext(cBufferPtr: cContext.device_ref)
+    }
+
+    /// The pixel format identifying the underlying HW surface type.
+    /// Must be a hwaccel format, i.e. the corresponding descriptor must have the
+    /// `AV_PIX_FMT_FLAG_HWACCEL` flag set.
+    ///
+    /// Must be set by the user before calling `initialize()`.
+    public var pixelFormat: AVPixelFormat {
+        get { return cContext.format }
+        set { cContextPtr.pointee.format = newValue }
+    }
+
+    /// The pixel format identifying the actual data layout of the hardware
+    /// frames.
+    ///
+    /// Must be set by the caller before calling `initialize()`.
+    ///
+    /// - Note: When the underlying API does not provide the exact data layout, but
+    /// only the colorspace/bit depth, this field should be set to the fully
+    /// planar version of that format (e.g. for 8-bit 420 YUV it should be
+    /// `AVPixelFormat.YUV420P`, not `AVPixelFormat.NV12` or anything else).
+    public var swPixelFormat: AVPixelFormat {
+        get { return cContext.sw_format }
+        set { cContextPtr.pointee.sw_format = newValue }
+    }
+
+    /// The width of the frames in this pool.
+    ///
+    /// Must be set by the user before calling `initialize()`.
+    public var width: Int {
+        get { return Int(cContext.width) }
+        set { cContextPtr.pointee.width = Int32(newValue) }
+    }
+
+    /// The height of the frames in this pool.
+    ///
+    /// Must be set by the user before calling `initialize()`.
+    public var height: Int {
+        get { return Int(cContext.height) }
+        set { cContextPtr.pointee.height = Int32(newValue) }
+    }
+
+    /// Initial size of the frame pool. If a device type does not support
+    /// dynamically resizing the pool, then this is also the maximum pool size.
+    ///
+    /// May be set by the caller before calling `initialize()`.
+    /// Must be set if pool is `nil` and the device type does not support dynamic pools.
+    public var initialPoolSize: Int {
+        get { return Int(cContext.initial_pool_size) }
+        set { cContextPtr.pointee.initial_pool_size = Int32(newValue) }
+    }
+
+    /// Finalize the context before use. This function must be called after the
+    /// context is filled with all the required information and before it is attached
+    /// to any frames.
+    ///
+    /// - Throws: AVError
+    public func initialize() throws {
+        try throwIfFail(av_hwframe_ctx_init(cBufferPtr))
+    }
+
+    /// Allocate a new frame attached to the given `AVHWFramesContext`.
+    ///
+    /// - Parameter frame: an empty (freshly allocated or unreffed) frame to be filled with
+    ///   newly allocated buffers.
+    /// - Throws: AVError
+    public func allocBuffer(frame: AVFrame) throws {
+        try throwIfFail(av_hwframe_get_buffer(cBufferPtr, frame.cFramePtr, 0))
+    }
+
+    deinit {
+        if freeWhenDone {
+            var ptr: UnsafeMutablePointer<AVBufferRef>? = cBufferPtr
+            av_buffer_unref(&ptr)
+        }
     }
 }
 

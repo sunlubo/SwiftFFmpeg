@@ -77,6 +77,23 @@ public final class AVCodecParameters {
         set { cParametersPtr.pointee.codec_tag = newValue }
     }
 
+    /// Extra binary data needed for initializing the decoder, codec-dependent.
+    ///
+    /// Must be allocated with `av_malloc()` and will be freed by
+    /// `avcodec_parameters_free()`. The allocated size of extradata must be at
+    /// least `extradata_size + AV_INPUT_BUFFER_PADDING_SIZE`, with the padding
+    /// bytes zeroed.
+    public var extraData: UnsafeMutablePointer<UInt8>? {
+        get { return cParameters.extradata }
+        set { cParametersPtr.pointee.extradata = newValue }
+    }
+
+    /// The size of the extradata content in bytes.
+    public var extraDataSize: Int {
+        get { return Int(cParameters.extradata_size) }
+        set { cParametersPtr.pointee.extradata_size = Int32(newValue) }
+    }
+
     /// The average bitrate of the encoded data (in bits per second).
     public var bitRate: Int64 {
         get { return cParameters.bit_rate }
