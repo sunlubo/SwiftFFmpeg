@@ -22,6 +22,10 @@ dependencies: [
 ]
 ```
 
+## Documentation
+
+- [API documentation](https://sunlubo.github.io/SwiftFFmpeg)
+
 ## Usage
 
 ```swift
@@ -40,10 +44,10 @@ try fmtCtx.findStreamInfo()
 fmtCtx.dumpFormat(isOutput: false)
 
 guard let stream = fmtCtx.videoStream else {
-    fatalError("No video stream")
+    fatalError("No video stream.")
 }
 guard let codec = AVCodec.findDecoderById(stream.codecParameters.codecId) else {
-    fatalError("Codec not found")
+    fatalError("Codec not found.")
 }
 let codecCtx = AVCodecContext(codec: codec)
 codecCtx.setParameters(stream.codecParameters)
@@ -69,13 +73,12 @@ while let _ = try? fmtCtx.readFrame(into: pkt) {
         }
 
         let str = String(
-            format: "Frame %3d (type=%@, size=%5d bytes) pts %4lld key_frame %d [DTS %3lld]",
+            format: "Frame %3d (type=%@, size=%5d bytes) pts %4lld key_frame %d",
             codecCtx.frameNumber,
             frame.pictureType.description,
             frame.pktSize,
             frame.pts,
-            frame.isKeyFrame,
-            frame.dts
+            frame.isKeyFrame
         )
         print(str)
 
