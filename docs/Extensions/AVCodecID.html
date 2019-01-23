@@ -1,0 +1,2402 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>AVCodecID Extension Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset="utf-8">
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
+  </head>
+  <body>
+
+    <a name="//apple_ref/swift/Extension/AVCodecID" class="dashAnchor"></a>
+
+    <a title="AVCodecID Extension Reference"></a>
+
+    <header class="header">
+      <p class="header-col header-col--primary">
+        <a class="header-link" href="../index.html">
+          SwiftFFmpeg Docs
+        </a>
+         (73% documented)
+      </p>
+    
+      <p class="header-col--secondary">
+        <form role="search" action="../search.json">
+          <input type="text" placeholder="Search documentation" data-typeahead>
+        </form>
+      </p>
+    
+        <p class="header-col header-col--secondary">
+          <a class="header-link" href="https://github.com/sunlubo/SwiftFFmpeg">
+            <img class="header-icon" src="../img/gh.png"/>
+            View on GitHub
+          </a>
+        </p>
+    
+        <p class="header-col header-col--secondary">
+          <a class="header-link" href="dash-feed://https%3A%2F%2Fsunlubo%2Egithub%2Eio%2FSwiftFFmpeg%2Fdocsets%2FSwiftFFmpeg%2Exml">
+            <img class="header-icon" src="../img/dash.png"/>
+            Install in Dash
+          </a>
+        </p>
+    </header>
+
+    <p class="breadcrumbs">
+      <a class="breadcrumb" href="../index.html">SwiftFFmpeg Reference</a>
+      <img class="carat" src="../img/carat.png" />
+      AVCodecID Extension Reference
+    </p>
+
+    <div class="content-wrapper">
+      <nav class="navigation">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVBSFContext.html">AVBSFContext</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVBSFList.html">AVBSFList</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVBuffer.html">AVBuffer</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVCodecContext.html">AVCodecContext</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVCodecContext/Flag.html">– Flag</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVCodecContext/Flag2.html">– Flag2</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVCodecParameters.html">AVCodecParameters</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVCodecParserContext.html">AVCodecParserContext</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVDeviceCapabilitiesQuery.html">AVDeviceCapabilitiesQuery</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVDeviceInfoList.html">AVDeviceInfoList</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVFilterContext.html">AVFilterContext</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVFilterGraph.html">AVFilterGraph</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVFilterInOut.html">AVFilterInOut</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVFormatContext.html">AVFormatContext</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVFormatContext/Flag.html">– Flag</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVFormatContext/SeekFlag.html">– SeekFlag</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVFrame.html">AVFrame</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVHWDeviceContext.html">AVHWDeviceContext</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVHWFramesContext.html">AVHWFramesContext</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVHash.html">AVHash</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVIOContext.html">AVIOContext</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVIOContext/Flag.html">– Flag</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVIOContext/SeekWhence.html">– SeekWhence</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVIODirContext.html">AVIODirContext</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVIODirContext/Iterator.html">– Iterator</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVIODirEntry.html">AVIODirEntry</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVImage.html">AVImage</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVPacket.html">AVPacket</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVPacket/Flag.html">– Flag</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVSamples.html">AVSamples</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVStream.html">AVStream</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/SwrContext.html">SwrContext</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/SwsContext.html">SwsContext</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/SwsContext/Flag.html">– Flag</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/AVConstant.html">AVConstant</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/AVDevice.html">AVDevice</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/AVIO.html">AVIO</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/AVLog.html">AVLog</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/AVLog/Level.html">– Level</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/AVMath.html">AVMath</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/AVOptionSearchFlag.html">AVOptionSearchFlag</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/AVTimestamp.html">AVTimestamp</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/AVAppToDevMessageType.html">AVAppToDevMessageType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/AVClassCategory.html">AVClassCategory</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/AVCodecID.html">AVCodecID</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/AVDevToAppMessageType.html">AVDevToAppMessageType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/AVDiscard.html">AVDiscard</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/AVHWDeviceType.html">AVHWDeviceType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/AVIODirEntryType.html">AVIODirEntryType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/AVMediaType.html">AVMediaType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/AVOptionType.html">AVOptionType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/AVPictureType.html">AVPictureType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/AVPixelFormat.html">AVPixelFormat</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/AVRational.html">AVRational</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/AVRounding.html">AVRounding</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/AVSampleFormat.html">AVSampleFormat</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Functions.html">Functions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftFFmpeg13networkDeinits5Int32VyF">networkDeinit()</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftFFmpeg11networkInits5Int32VyF">networkInit()</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/AVClassSupport.html">AVClassSupport</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/AVOptionAccessor.html">AVOptionAccessor</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVBitStreamFilter.html">AVBitStreamFilter</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVBufferSinkFlag.html">AVBufferSinkFlag</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVBufferSourceFlag.html">AVBufferSourceFlag</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVChannel.html">AVChannel</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVChannelLayout.html">AVChannelLayout</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVClass.html">AVClass</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVCodec.html">AVCodec</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVCodec/Cap.html">– Cap</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVCodecHWConfig.html">AVCodecHWConfig</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVCodecHWConfig/Method.html">– Method</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVDeviceInfo.html">AVDeviceInfo</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVError.html">AVError</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVFilter.html">AVFilter</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVFilter/Flag.html">– Flag</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVFilterLink.html">AVFilterLink</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVFilterPad.html">AVFilterPad</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVInputFormat.html">AVInputFormat</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVInputFormat/Flag.html">– Flag</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVOption.html">AVOption</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVOption/Flag.html">– Flag</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVOutputFormat.html">AVOutputFormat</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVOutputFormat/Flag.html">– Flag</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Typealiases.html">Type Aliases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg21AVAppToDevMessageTypea">AVAppToDevMessageType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg15AVClassCategorya">AVClassCategory</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg19AVCodecParserResulta">AVCodecParserResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg21AVDevToAppMessageTypea">AVDevToAppMessageType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg12AVDeviceRecta">AVDeviceRect</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg9AVDiscarda">AVDiscard</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg18AVGetFormatHandlera">AVGetFormatHandler</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg14AVHWDeviceTypea">AVHWDeviceType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg16AVIODirEntryTypea">AVIODirEntryType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg21AVIOInterruptCallbacka">AVIOInterruptCallback</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg15AVIOReadHandlera">AVIOReadHandler</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg15AVIOSeekHandlera">AVIOSeekHandler</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg16AVIOWriteHandlera">AVIOWriteHandler</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg11AVMediaTypea">AVMediaType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg12AVOptionTypea">AVOptionType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg13AVPictureTypea">AVPictureType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg10AVRationala">AVRational</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg10AVRoundinga">AVRounding</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg14AVSampleFormata">AVSampleFormat</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+
+        <section class="section">
+          <div class="section-content">
+            <h1>AVCodecID</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">typealias</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span> <span class="o">=</span> <span class="kt">CFFmpeg</span><span class="o">.</span><span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                </div>
+              </div>
+            <p>Undocumented</p>
+
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-content">
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE4noneABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/none" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE4noneABvpZ">none</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">none</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Video%20Codecs"></a>
+                <a name="//apple_ref/swift/Section/Video Codecs" class="dashAnchor"></a>
+                <a href="#/Video%20Codecs">
+                  <h3 class="section-name">Video Codecs</h3>
+                </a>
+              </div>
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE10MPEG1VIDEOABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/MPEG1VIDEO" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE10MPEG1VIDEOABvpZ">MPEG1VIDEO</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">MPEG1VIDEO</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE10MPEG2VIDEOABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/MPEG2VIDEO" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE10MPEG2VIDEOABvpZ">MPEG2VIDEO</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>preferred ID for MPEG-&frac12; video decoding</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">MPEG2VIDEO</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE4H261ABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/H261" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE4H261ABvpZ">H261</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">H261</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE4H263ABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/H263" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE4H263ABvpZ">H263</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">H263</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE5MPEG4ABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/MPEG4" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE5MPEG4ABvpZ">MPEG4</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">MPEG4</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE4H264ABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/H264" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE4H264ABvpZ">H264</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">H264</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE3VP3ABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/VP3" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE3VP3ABvpZ">VP3</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">VP3</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE3PNGABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/PNG" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE3PNGABvpZ">PNG</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">PNG</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE3PGMABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/PGM" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE3PGMABvpZ">PGM</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">PGM</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE3BMPABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/BMP" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE3BMPABvpZ">BMP</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">BMP</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE8JPEG2000ABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/JPEG2000" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE8JPEG2000ABvpZ">JPEG2000</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">JPEG2000</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE3VP5ABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/VP5" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE3VP5ABvpZ">VP5</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">VP5</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE3VP6ABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/VP6" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE3VP6ABvpZ">VP6</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">VP6</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE4TIFFABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/TIFF" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE4TIFFABvpZ">TIFF</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">TIFF</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE3GIFABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/GIF" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE3GIFABvpZ">GIF</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">GIF</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE3VP8ABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/VP8" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE3VP8ABvpZ">VP8</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">VP8</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE3VP9ABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/VP9" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE3VP9ABvpZ">VP9</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">VP9</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE4WEBPABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/WEBP" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE4WEBPABvpZ">WEBP</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">WEBP</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE4HEVCABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/HEVC" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE4HEVCABvpZ">HEVC</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">HEVC</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE3VP7ABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/VP7" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE3VP7ABvpZ">VP7</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">VP7</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE4APNGABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/APNG" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE4APNGABvpZ">APNG</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">APNG</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE3AV1ABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/AV1" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE3AV1ABvpZ">AV1</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">AV1</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE3SVGABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/SVG" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE3SVGABvpZ">SVG</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">SVG</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/various%20PCM%20%22codecs%22"></a>
+                <a name="//apple_ref/swift/Section/various PCM &quot;codecs&quot;" class="dashAnchor"></a>
+                <a href="#/various%20PCM%20%22codecs%22">
+                  <h3 class="section-name">various PCM &quot;codecs&quot;</h3>
+                </a>
+              </div>
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE11FIRST_AUDIOABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/FIRST_AUDIO" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE11FIRST_AUDIOABvpZ">FIRST_AUDIO</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A dummy id pointing at the start of audio codecs</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">FIRST_AUDIO</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE9PCM_S16LEABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/PCM_S16LE" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE9PCM_S16LEABvpZ">PCM_S16LE</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">PCM_S16LE</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE9PCM_S16BEABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/PCM_S16BE" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE9PCM_S16BEABvpZ">PCM_S16BE</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">PCM_S16BE</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE9PCM_U16LEABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/PCM_U16LE" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE9PCM_U16LEABvpZ">PCM_U16LE</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">PCM_U16LE</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE9PCM_U16BEABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/PCM_U16BE" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE9PCM_U16BEABvpZ">PCM_U16BE</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">PCM_U16BE</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE6PCM_S8ABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/PCM_S8" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE6PCM_S8ABvpZ">PCM_S8</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">PCM_S8</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE6PCM_U8ABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/PCM_U8" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE6PCM_U8ABvpZ">PCM_U8</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">PCM_U8</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE9PCM_MULAWABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/PCM_MULAW" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE9PCM_MULAWABvpZ">PCM_MULAW</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">PCM_MULAW</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE8PCM_ALAWABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/PCM_ALAW" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE8PCM_ALAWABvpZ">PCM_ALAW</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">PCM_ALAW</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE9PCM_S32LEABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/PCM_S32LE" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE9PCM_S32LEABvpZ">PCM_S32LE</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">PCM_S32LE</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE9PCM_S32BEABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/PCM_S32BE" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE9PCM_S32BEABvpZ">PCM_S32BE</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">PCM_S32BE</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE9PCM_U32LEABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/PCM_U32LE" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE9PCM_U32LEABvpZ">PCM_U32LE</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">PCM_U32LE</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE9PCM_U32BEABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/PCM_U32BE" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE9PCM_U32BEABvpZ">PCM_U32BE</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">PCM_U32BE</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE9PCM_S24LEABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/PCM_S24LE" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE9PCM_S24LEABvpZ">PCM_S24LE</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">PCM_S24LE</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE9PCM_S24BEABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/PCM_S24BE" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE9PCM_S24BEABvpZ">PCM_S24BE</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">PCM_S24BE</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE9PCM_U24LEABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/PCM_U24LE" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE9PCM_U24LEABvpZ">PCM_U24LE</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">PCM_U24LE</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE9PCM_U24BEABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/PCM_U24BE" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE9PCM_U24BEABvpZ">PCM_U24BE</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">PCM_U24BE</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE11PCM_S24DAUDABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/PCM_S24DAUD" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE11PCM_S24DAUDABvpZ">PCM_S24DAUD</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">PCM_S24DAUD</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE8PCM_ZORKABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/PCM_ZORK" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE8PCM_ZORKABvpZ">PCM_ZORK</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">PCM_ZORK</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE16PCM_S16LE_PLANARABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/PCM_S16LE_PLANAR" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE16PCM_S16LE_PLANARABvpZ">PCM_S16LE_PLANAR</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">PCM_S16LE_PLANAR</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE7PCM_DVDABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/PCM_DVD" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE7PCM_DVDABvpZ">PCM_DVD</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">PCM_DVD</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE9PCM_F32BEABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/PCM_F32BE" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE9PCM_F32BEABvpZ">PCM_F32BE</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">PCM_F32BE</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE9PCM_F32LEABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/PCM_F32LE" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE9PCM_F32LEABvpZ">PCM_F32LE</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">PCM_F32LE</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE9PCM_F64BEABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/PCM_F64BE" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE9PCM_F64BEABvpZ">PCM_F64BE</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">PCM_F64BE</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE9PCM_F64LEABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/PCM_F64LE" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE9PCM_F64LEABvpZ">PCM_F64LE</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">PCM_F64LE</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE10PCM_BLURAYABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/PCM_BLURAY" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE10PCM_BLURAYABvpZ">PCM_BLURAY</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">PCM_BLURAY</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE7PCM_LXFABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/PCM_LXF" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE7PCM_LXFABvpZ">PCM_LXF</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">PCM_LXF</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE5S302MABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/S302M" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE5S302MABvpZ">S302M</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">S302M</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE13PCM_S8_PLANARABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/PCM_S8_PLANAR" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE13PCM_S8_PLANARABvpZ">PCM_S8_PLANAR</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">PCM_S8_PLANAR</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE16PCM_S24LE_PLANARABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/PCM_S24LE_PLANAR" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE16PCM_S24LE_PLANARABvpZ">PCM_S24LE_PLANAR</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">PCM_S24LE_PLANAR</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE16PCM_S32LE_PLANARABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/PCM_S32LE_PLANAR" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE16PCM_S32LE_PLANARABvpZ">PCM_S32LE_PLANAR</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">PCM_S32LE_PLANAR</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE16PCM_S16BE_PLANARABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/PCM_S16BE_PLANAR" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE16PCM_S16BE_PLANARABvpZ">PCM_S16BE_PLANAR</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">PCM_S16BE_PLANAR</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE9PCM_S64LEABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/PCM_S64LE" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE9PCM_S64LEABvpZ">PCM_S64LE</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">PCM_S64LE</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE9PCM_S64BEABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/PCM_S64BE" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE9PCM_S64BEABvpZ">PCM_S64BE</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">PCM_S64BE</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE9PCM_F16LEABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/PCM_F16LE" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE9PCM_F16LEABvpZ">PCM_F16LE</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">PCM_F16LE</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE9PCM_F24LEABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/PCM_F24LE" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE9PCM_F24LEABvpZ">PCM_F24LE</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">PCM_F24LE</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/AMR"></a>
+                <a name="//apple_ref/swift/Section/AMR" class="dashAnchor"></a>
+                <a href="#/AMR">
+                  <h3 class="section-name">AMR</h3>
+                </a>
+              </div>
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE6AMR_NBABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/AMR_NB" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE6AMR_NBABvpZ">AMR_NB</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">AMR_NB</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE6AMR_WBABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/AMR_WB" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE6AMR_WBABvpZ">AMR_WB</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">AMR_WB</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Audio%20Codecs"></a>
+                <a name="//apple_ref/swift/Section/Audio Codecs" class="dashAnchor"></a>
+                <a href="#/Audio%20Codecs">
+                  <h3 class="section-name">Audio Codecs</h3>
+                </a>
+              </div>
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE3MP2ABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/MP2" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE3MP2ABvpZ">MP2</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">MP2</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE3MP3ABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/MP3" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE3MP3ABvpZ">MP3</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>preferred ID for decoding MPEG audio layer 1, 2 or 3</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">MP3</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE3AACABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/AAC" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE3AACABvpZ">AAC</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">AAC</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE4FLACABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/FLAC" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE4FLACABvpZ">FLAC</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">FLAC</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE3APEABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/APE" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE3APEABvpZ">APE</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">APE</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE3MP1ABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/MP1" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE3MP1ABvpZ">MP1</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">MP1</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE4nameSSvp"></a>
+                    <a name="//apple_ref/swift/Property/name" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE4nameSSvp">name</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The codec&rsquo;s name.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">name</span><span class="p">:</span> <span class="kt">String</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So9AVCodecIDV11SwiftFFmpegE9mediaTypeSo07AVMediaF0Vvp"></a>
+                    <a name="//apple_ref/swift/Property/mediaType" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So9AVCodecIDV11SwiftFFmpegE9mediaTypeSo07AVMediaF0Vvp">mediaType</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The codec&rsquo;s media type.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">mediaType</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg11AVMediaTypea">AVMediaType</a></span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:s23CustomStringConvertibleP11descriptionSSvp"></a>
+                    <a name="//apple_ref/swift/Property/description" class="dashAnchor"></a>
+                    <a class="token" href="#/s:s23CustomStringConvertibleP11descriptionSSvp">description</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">description</span><span class="p">:</span> <span class="kt">String</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+      </article>
+    </div>
+    <section class="footer">
+      <p>&copy; 2019 <a class="link" href="https://github.com/sunlubo" target="_blank" rel="external">sunlubo</a>. All rights reserved. (Last updated: 2019-01-23)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+    </section>
+  </body>
+</div>
+</html>

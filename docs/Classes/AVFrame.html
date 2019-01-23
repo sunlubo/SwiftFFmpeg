@@ -1,0 +1,1960 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>AVFrame Class Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset="utf-8">
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
+  </head>
+  <body>
+
+    <a name="//apple_ref/swift/Class/AVFrame" class="dashAnchor"></a>
+
+    <a title="AVFrame Class Reference"></a>
+
+    <header class="header">
+      <p class="header-col header-col--primary">
+        <a class="header-link" href="../index.html">
+          SwiftFFmpeg Docs
+        </a>
+         (73% documented)
+      </p>
+    
+      <p class="header-col--secondary">
+        <form role="search" action="../search.json">
+          <input type="text" placeholder="Search documentation" data-typeahead>
+        </form>
+      </p>
+    
+        <p class="header-col header-col--secondary">
+          <a class="header-link" href="https://github.com/sunlubo/SwiftFFmpeg">
+            <img class="header-icon" src="../img/gh.png"/>
+            View on GitHub
+          </a>
+        </p>
+    
+        <p class="header-col header-col--secondary">
+          <a class="header-link" href="dash-feed://https%3A%2F%2Fsunlubo%2Egithub%2Eio%2FSwiftFFmpeg%2Fdocsets%2FSwiftFFmpeg%2Exml">
+            <img class="header-icon" src="../img/dash.png"/>
+            Install in Dash
+          </a>
+        </p>
+    </header>
+
+    <p class="breadcrumbs">
+      <a class="breadcrumb" href="../index.html">SwiftFFmpeg Reference</a>
+      <img class="carat" src="../img/carat.png" />
+      AVFrame Class Reference
+    </p>
+
+    <div class="content-wrapper">
+      <nav class="navigation">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVBSFContext.html">AVBSFContext</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVBSFList.html">AVBSFList</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVBuffer.html">AVBuffer</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVCodecContext.html">AVCodecContext</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVCodecContext/Flag.html">– Flag</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVCodecContext/Flag2.html">– Flag2</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVCodecParameters.html">AVCodecParameters</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVCodecParserContext.html">AVCodecParserContext</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVDeviceCapabilitiesQuery.html">AVDeviceCapabilitiesQuery</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVDeviceInfoList.html">AVDeviceInfoList</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVFilterContext.html">AVFilterContext</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVFilterGraph.html">AVFilterGraph</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVFilterInOut.html">AVFilterInOut</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVFormatContext.html">AVFormatContext</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVFormatContext/Flag.html">– Flag</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVFormatContext/SeekFlag.html">– SeekFlag</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVFrame.html">AVFrame</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVHWDeviceContext.html">AVHWDeviceContext</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVHWFramesContext.html">AVHWFramesContext</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVHash.html">AVHash</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVIOContext.html">AVIOContext</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVIOContext/Flag.html">– Flag</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVIOContext/SeekWhence.html">– SeekWhence</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVIODirContext.html">AVIODirContext</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVIODirContext/Iterator.html">– Iterator</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVIODirEntry.html">AVIODirEntry</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVImage.html">AVImage</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVPacket.html">AVPacket</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVPacket/Flag.html">– Flag</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVSamples.html">AVSamples</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVStream.html">AVStream</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/SwrContext.html">SwrContext</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/SwsContext.html">SwsContext</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/SwsContext/Flag.html">– Flag</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/AVConstant.html">AVConstant</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/AVDevice.html">AVDevice</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/AVIO.html">AVIO</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/AVLog.html">AVLog</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/AVLog/Level.html">– Level</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/AVMath.html">AVMath</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/AVOptionSearchFlag.html">AVOptionSearchFlag</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/AVTimestamp.html">AVTimestamp</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/AVAppToDevMessageType.html">AVAppToDevMessageType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/AVClassCategory.html">AVClassCategory</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/AVCodecID.html">AVCodecID</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/AVDevToAppMessageType.html">AVDevToAppMessageType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/AVDiscard.html">AVDiscard</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/AVHWDeviceType.html">AVHWDeviceType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/AVIODirEntryType.html">AVIODirEntryType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/AVMediaType.html">AVMediaType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/AVOptionType.html">AVOptionType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/AVPictureType.html">AVPictureType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/AVPixelFormat.html">AVPixelFormat</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/AVRational.html">AVRational</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/AVRounding.html">AVRounding</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/AVSampleFormat.html">AVSampleFormat</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Functions.html">Functions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftFFmpeg13networkDeinits5Int32VyF">networkDeinit()</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftFFmpeg11networkInits5Int32VyF">networkInit()</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/AVClassSupport.html">AVClassSupport</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/AVOptionAccessor.html">AVOptionAccessor</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVBitStreamFilter.html">AVBitStreamFilter</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVBufferSinkFlag.html">AVBufferSinkFlag</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVBufferSourceFlag.html">AVBufferSourceFlag</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVChannel.html">AVChannel</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVChannelLayout.html">AVChannelLayout</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVClass.html">AVClass</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVCodec.html">AVCodec</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVCodec/Cap.html">– Cap</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVCodecHWConfig.html">AVCodecHWConfig</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVCodecHWConfig/Method.html">– Method</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVDeviceInfo.html">AVDeviceInfo</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVError.html">AVError</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVFilter.html">AVFilter</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVFilter/Flag.html">– Flag</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVFilterLink.html">AVFilterLink</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVFilterPad.html">AVFilterPad</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVInputFormat.html">AVInputFormat</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVInputFormat/Flag.html">– Flag</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVOption.html">AVOption</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVOption/Flag.html">– Flag</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVOutputFormat.html">AVOutputFormat</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVOutputFormat/Flag.html">– Flag</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Typealiases.html">Type Aliases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg21AVAppToDevMessageTypea">AVAppToDevMessageType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg15AVClassCategorya">AVClassCategory</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg19AVCodecParserResulta">AVCodecParserResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg21AVDevToAppMessageTypea">AVDevToAppMessageType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg12AVDeviceRecta">AVDeviceRect</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg9AVDiscarda">AVDiscard</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg18AVGetFormatHandlera">AVGetFormatHandler</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg14AVHWDeviceTypea">AVHWDeviceType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg16AVIODirEntryTypea">AVIODirEntryType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg21AVIOInterruptCallbacka">AVIOInterruptCallback</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg15AVIOReadHandlera">AVIOReadHandler</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg15AVIOSeekHandlera">AVIOSeekHandler</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg16AVIOWriteHandlera">AVIOWriteHandler</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg11AVMediaTypea">AVMediaType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg12AVOptionTypea">AVOptionType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg13AVPictureTypea">AVPictureType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg10AVRationala">AVRational</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg10AVRoundinga">AVRounding</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg14AVSampleFormata">AVSampleFormat</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+
+        <section class="section">
+          <div class="section-content">
+            <h1>AVFrame</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="kt">AVFrame</span></code></pre>
+
+                </div>
+              </div>
+            <p>This structure describes decoded (raw) audio or video data.</p>
+
+<p><code>AVFrame</code> is typically allocated once and then reused multiple times to hold
+different data (e.g. a single <code>AVFrame</code> to hold frames received from a decoder).
+In such a case, <code>unref</code> will free any references held by the frame and reset it
+to its original clean state before it is reused again.</p>
+
+<p>The data described by an <code>AVFrame</code> is usually reference counted through the
+<code><a href="../Classes/AVBuffer.html">AVBuffer</a></code> API. The underlying buffer references are stored in <code><a href="../Classes/AVFrame.html#/s:11SwiftFFmpeg7AVFrameC6bufferSayAA8AVBufferCSgGvp">AVFrame.buffer</a></code> /
+<code><a href="../Classes/AVFrame.html#/s:11SwiftFFmpeg7AVFrameC14extendedBufferSayAA8AVBufferCGvp">AVFrame.extendedBuffer</a></code>. An <code>AVFrame</code> is considered to be reference counted if at
+least one reference is set, i.e. if <code>AVFrame.buffer[0] != nil</code>. In such a case,
+every single data plane must be contained in one of the buffers in <code><a href="../Classes/AVFrame.html#/s:11SwiftFFmpeg7AVFrameC6bufferSayAA8AVBufferCSgGvp">AVFrame.buffer</a></code>
+or <code><a href="../Classes/AVFrame.html#/s:11SwiftFFmpeg7AVFrameC14extendedBufferSayAA8AVBufferCGvp">AVFrame.extendedBuffer</a></code>.
+There may be a single buffer for all the data, or one separate buffer for
+each plane, or anything in between.</p>
+
+<p>Fields can be accessed through <code><a href="../Structs/AVOption.html">AVOption</a></code>s, the name string used, matches the
+C structure field name for fields accessible through <code><a href="../Structs/AVOption.html">AVOption</a></code>s.</p>
+
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-content">
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftFFmpeg7AVFrameCACycfc"></a>
+                    <a name="//apple_ref/swift/Method/init()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftFFmpeg7AVFrameCACycfc">init()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates an <code>AVFrame</code> and set its fields to default values.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    This only allocates the <code>AVFrame</code> itself, not the data buffers.
+Those must be allocated through other means, e.g. with <code>allocBuffer</code> or manually.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftFFmpeg7AVFrameC4dataSrySpys5UInt8VGSgGvp"></a>
+                    <a name="//apple_ref/swift/Property/data" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftFFmpeg7AVFrameC4dataSrySpys5UInt8VGSgGvp">data</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Pointer to the picture/channel planes.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">data</span><span class="p">:</span> <span class="kt">UnsafeMutableBufferPointer</span><span class="o">&lt;</span><span class="kt">UnsafeMutablePointer</span><span class="o">&lt;</span><span class="kt">UInt8</span><span class="o">&gt;</span><span class="p">?</span><span class="o">&gt;</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftFFmpeg7AVFrameC8linesizeSrys5Int32VGvp"></a>
+                    <a name="//apple_ref/swift/Property/linesize" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftFFmpeg7AVFrameC8linesizeSrys5Int32VGvp">linesize</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>For video, size in bytes of each picture line.
+For audio, size in bytes of each plane.</p>
+
+<p>For audio, only linesize[0] may be set.
+For planar audio, each channel plane must be the same size.</p>
+
+<p>For video the linesizes should be multiples of the CPUs alignment preference, this is 16 or 32
+for modern desktop CPUs. Some code requires such alignment other code can be slower without correct
+alignment, for yet other it makes no difference.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    The linesize may be larger than the size of usable data &ndash; there may be extra padding present
+for performance reasons.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">linesize</span><span class="p">:</span> <span class="kt">UnsafeMutableBufferPointer</span><span class="o">&lt;</span><span class="kt">Int32</span><span class="o">&gt;</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftFFmpeg7AVFrameC12extendedDataSrySpys5UInt8VGSgGvp"></a>
+                    <a name="//apple_ref/swift/Property/extendedData" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftFFmpeg7AVFrameC12extendedDataSrySpys5UInt8VGSgGvp">extendedData</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>pointers to the data planes/channels.</p>
+
+<p>For video, this should simply point to <code><a href="../Classes/AVFrame.html#/s:11SwiftFFmpeg7AVFrameC4dataSrySpys5UInt8VGSgGvp">data</a></code>.</p>
+
+<p>For planar audio, each channel has a separate data pointer, and <code>linesize[0]</code> contains
+the size of each channel buffer.
+For packed audio, there is just one data pointer, and <code>linesize[0]</code> contains
+the total size of the buffer for all channels.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    Both <code><a href="../Classes/AVFrame.html#/s:11SwiftFFmpeg7AVFrameC4dataSrySpys5UInt8VGSgGvp">data</a></code> and <code>extendedData</code> should always be set in a valid frame,
+but for planar audio with more channels that can fit in <code><a href="../Classes/AVFrame.html#/s:11SwiftFFmpeg7AVFrameC4dataSrySpys5UInt8VGSgGvp">data</a></code>,
+<code>extendedData</code> must be used in order to access all channels.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">extendedData</span><span class="p">:</span> <span class="kt">UnsafeMutableBufferPointer</span><span class="o">&lt;</span><span class="kt">UnsafeMutablePointer</span><span class="o">&lt;</span><span class="kt">UInt8</span><span class="o">&gt;</span><span class="p">?</span><span class="o">&gt;</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftFFmpeg7AVFrameC3ptss5Int64Vvp"></a>
+                    <a name="//apple_ref/swift/Property/pts" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftFFmpeg7AVFrameC3ptss5Int64Vvp">pts</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Presentation timestamp in timebase units (time when frame should be shown to user).</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">pts</span><span class="p">:</span> <span class="kt">Int64</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftFFmpeg7AVFrameC3dtss5Int64Vvp"></a>
+                    <a name="//apple_ref/swift/Property/dts" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftFFmpeg7AVFrameC3dtss5Int64Vvp">dts</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>DTS copied from the <code><a href="../Classes/AVPacket.html">AVPacket</a></code> that triggered returning this frame. (if frame threading isn&rsquo;t used)
+This is also the presentation time of this <code>AVFrame</code> calculated from only <code><a href="../Classes/AVPacket.html#/s:11SwiftFFmpeg8AVPacketC3dtss5Int64Vvp">AVPacket.dts</a></code> values
+without pts values.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">dts</span><span class="p">:</span> <span class="kt">Int64</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftFFmpeg7AVFrameC18codedPictureNumberSivp"></a>
+                    <a name="//apple_ref/swift/Property/codedPictureNumber" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftFFmpeg7AVFrameC18codedPictureNumberSivp">codedPictureNumber</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Picture number in bitstream order.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">codedPictureNumber</span><span class="p">:</span> <span class="kt">Int</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftFFmpeg7AVFrameC20displayPictureNumberSivp"></a>
+                    <a name="//apple_ref/swift/Property/displayPictureNumber" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftFFmpeg7AVFrameC20displayPictureNumberSivp">displayPictureNumber</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Picture number in display order.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">displayPictureNumber</span><span class="p">:</span> <span class="kt">Int</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftFFmpeg7AVFrameC6bufferSayAA8AVBufferCSgGvp"></a>
+                    <a name="//apple_ref/swift/Property/buffer" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftFFmpeg7AVFrameC6bufferSayAA8AVBufferCSgGvp">buffer</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code><a href="../Classes/AVBuffer.html">AVBuffer</a></code> references backing the data for this frame.</p>
+
+<p>If all elements of this array are <code>nil</code>, then this frame is not reference counted.
+This array must be filled contiguously &ndash; if <code>buffer[i]</code> is non-nil then <code>buffer[j]</code> must
+also be non-nil for all <code>j &lt; i</code>.</p>
+
+<p>There may be at most one <code><a href="../Classes/AVBuffer.html">AVBuffer</a></code> per data plane, so for video this array always
+contains all the references. For planar audio with more than <code><a href="../Enums/AVConstant.html#/s:11SwiftFFmpeg10AVConstantO18dataPointersNumberSivpZ">AVConstant.dataPointersNumber</a></code>
+channels, there may be more buffers than can fit in this array. Then the extra
+<code><a href="../Classes/AVBuffer.html">AVBuffer</a></code> are stored in the <code><a href="../Classes/AVFrame.html#/s:11SwiftFFmpeg7AVFrameC14extendedBufferSayAA8AVBufferCGvp">extendedBuffer</a></code> array.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">buffer</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Classes/AVBuffer.html">AVBuffer</a></span><span class="p">?]</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftFFmpeg7AVFrameC14extendedBufferSayAA8AVBufferCGvp"></a>
+                    <a name="//apple_ref/swift/Property/extendedBuffer" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftFFmpeg7AVFrameC14extendedBufferSayAA8AVBufferCGvp">extendedBuffer</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>For planar audio which requires more than <code><a href="../Enums/AVConstant.html#/s:11SwiftFFmpeg10AVConstantO18dataPointersNumberSivpZ">AVConstant.dataPointersNumber</a></code> <code><a href="../Classes/AVBuffer.html">AVBuffer</a></code>,
+this array will hold all the references which cannot fit into <code><a href="../Classes/AVFrame.html#/s:11SwiftFFmpeg7AVFrameC6bufferSayAA8AVBufferCSgGvp">AVFrame.buffer</a></code>.</p>
+
+<p>Note that this is different from <code><a href="../Classes/AVFrame.html#/s:11SwiftFFmpeg7AVFrameC12extendedDataSrySpys5UInt8VGSgGvp">AVFrame.extendedData</a></code>, which always contains all the pointers.
+This array only contains the extra pointers, which cannot fit into <code><a href="../Classes/AVFrame.html#/s:11SwiftFFmpeg7AVFrameC6bufferSayAA8AVBufferCSgGvp">AVFrame.buffer</a></code>.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">extendedBuffer</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Classes/AVBuffer.html">AVBuffer</a></span><span class="p">]</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftFFmpeg7AVFrameC19extendedBufferCountSivp"></a>
+                    <a name="//apple_ref/swift/Property/extendedBufferCount" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftFFmpeg7AVFrameC19extendedBufferCountSivp">extendedBufferCount</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The number of elements in <code><a href="../Classes/AVFrame.html#/s:11SwiftFFmpeg7AVFrameC14extendedBufferSayAA8AVBufferCGvp">extendedBuffer</a></code>.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">extendedBufferCount</span><span class="p">:</span> <span class="kt">Int</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftFFmpeg7AVFrameC19bestEffortTimestamps5Int64Vvp"></a>
+                    <a name="//apple_ref/swift/Property/bestEffortTimestamp" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftFFmpeg7AVFrameC19bestEffortTimestamps5Int64Vvp">bestEffortTimestamp</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The frame timestamp estimated using various heuristics, in stream time base.</p>
+
+<ul>
+<li>encoding: Unused.</li>
+<li>decoding: Set by libavcodec, read by user.</li>
+</ul>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">bestEffortTimestamp</span><span class="p">:</span> <span class="kt">Int64</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftFFmpeg7AVFrameC11pktPositions5Int64Vvp"></a>
+                    <a name="//apple_ref/swift/Property/pktPosition" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftFFmpeg7AVFrameC11pktPositions5Int64Vvp">pktPosition</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Reordered pos from the last <code><a href="../Classes/AVPacket.html">AVPacket</a></code> that has been input into the decoder.</p>
+
+<ul>
+<li>encoding: Unused.</li>
+<li>decoding: Set by libavcodec, read by user.</li>
+</ul>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">pktPosition</span><span class="p">:</span> <span class="kt">Int64</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftFFmpeg7AVFrameC11pktDurations5Int64Vvp"></a>
+                    <a name="//apple_ref/swift/Property/pktDuration" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftFFmpeg7AVFrameC11pktDurations5Int64Vvp">pktDuration</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Duration of the corresponding packet, expressed in <code><a href="../Classes/AVStream.html#/s:11SwiftFFmpeg8AVStreamC8timebaseSo10AVRationalVvp">AVStream.timebase</a></code> units, 0 if unknown.</p>
+
+<ul>
+<li>encoding: Unused.</li>
+<li>decoding: Set by libavcodec, read by user.</li>
+</ul>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">pktDuration</span><span class="p">:</span> <span class="kt">Int64</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftFFmpeg7AVFrameC7pktSizeSivp"></a>
+                    <a name="//apple_ref/swift/Property/pktSize" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftFFmpeg7AVFrameC7pktSizeSivp">pktSize</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Size of the corresponding packet containing the compressed frame.
+It is set to a negative value if unknown.</p>
+
+<ul>
+<li>encoding: Unused.</li>
+<li>decoding: Set by libavcodec, read by user.</li>
+</ul>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">pktSize</span><span class="p">:</span> <span class="kt">Int</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftFFmpeg7AVFrameC8metadataSDyS2SGvp"></a>
+                    <a name="//apple_ref/swift/Property/metadata" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftFFmpeg7AVFrameC8metadataSDyS2SGvp">metadata</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The metadata of the frame.</p>
+
+<ul>
+<li>encoding: Set by user.</li>
+<li>decoding: Set by libavcodec.</li>
+</ul>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">metadata</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span> <span class="p">:</span> <span class="kt">String</span><span class="p">]</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftFFmpeg7AVFrameC11allocBuffer5alignySi_tKF"></a>
+                    <a name="//apple_ref/swift/Method/allocBuffer(align:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftFFmpeg7AVFrameC11allocBuffer5alignySi_tKF">allocBuffer(align:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Allocate new buffer(s) for audio or video data.</p>
+
+<p>The following fields must be set on frame before calling this function:</p>
+
+<ul>
+<li><code><a href="../Classes/AVFrame.html#/s:11SwiftFFmpeg7AVFrameC11pixelFormatSo07AVPixelE0Vvp">pixelFormat</a></code> for video, <code><a href="../Classes/AVFrame.html#/s:11SwiftFFmpeg7AVFrameC12sampleFormatSo08AVSampleE0Vvp">sampleFormat</a></code> for audio</li>
+<li><code><a href="../Classes/AVFrame.html#/s:11SwiftFFmpeg7AVFrameC5widthSivp">width</a></code> and <code><a href="../Classes/AVFrame.html#/s:11SwiftFFmpeg7AVFrameC6heightSivp">height</a></code> for video</li>
+<li><code><a href="../Classes/AVFrame.html#/s:11SwiftFFmpeg7AVFrameC11sampleCountSivp">sampleCount</a></code> and <code><a href="../Classes/AVFrame.html#/s:11SwiftFFmpeg7AVFrameC13channelLayoutAA09AVChannelE0Vvp">channelLayout</a></code> for audio</li>
+</ul>
+
+<p>This function will fill <code><a href="../Classes/AVFrame.html#/s:11SwiftFFmpeg7AVFrameC4dataSrySpys5UInt8VGSgGvp">AVFrame.data</a></code> and <code><a href="../Classes/AVFrame.html#/s:11SwiftFFmpeg7AVFrameC6bufferSayAA8AVBufferCSgGvp">AVFrame.buffer</a></code> arrays and, if necessary,
+allocate and fill <code><a href="../Classes/AVFrame.html#/s:11SwiftFFmpeg7AVFrameC12extendedDataSrySpys5UInt8VGSgGvp">AVFrame.extendedData</a></code> and <code><a href="../Classes/AVFrame.html#/s:11SwiftFFmpeg7AVFrameC14extendedBufferSayAA8AVBufferCGvp">AVFrame.extendedBuffer</a></code>. For planar formats,
+one buffer will be allocated for each plane.</p>
+<div class="aside aside-warning">
+    <p class="aside-title">Warning</p>
+    <p>If frame already has been allocated, calling this function will leak memory.
+In addition, undefined behavior can occur in certain cases.</p>
+
+</div>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    <p>AVError</p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">allocBuffer</span><span class="p">(</span><span class="nv">align</span><span class="p">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="k">throws</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>align</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Required buffer size alignment. If equal to 0, alignment will be chosen automatically
+for the current CPU. It is highly recommended to pass 0 here unless you know what you are doing.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftFFmpeg7AVFrameC3ref4fromyAC_tKF"></a>
+                    <a name="//apple_ref/swift/Method/ref(from:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftFFmpeg7AVFrameC3ref4fromyAC_tKF">ref(from:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Set up a new reference to the data described by the source frame.</p>
+
+<p>Copy frame properties from src to dst and create a new reference for each <code><a href="../Classes/AVBuffer.html">AVBuffer</a></code> from src.
+If <code>src</code> is not reference counted, new buffers are allocated and the data is copied.</p>
+<div class="aside aside-warning">
+    <p class="aside-title">Warning</p>
+    <p>dst <strong>must</strong> have been either unreferenced with <code>unref</code>, or newly allocated before
+calling this function, or undefined behavior will occur.</p>
+
+</div>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    <p>AVError</p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">ref</span><span class="p">(</span><span class="n">from</span> <span class="nv">src</span><span class="p">:</span> <span class="kt">AVFrame</span><span class="p">)</span> <span class="k">throws</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>src</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>the source frame</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftFFmpeg7AVFrameC5unrefyyF"></a>
+                    <a name="//apple_ref/swift/Method/unref()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftFFmpeg7AVFrameC5unrefyyF">unref()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Unreference all the buffers referenced by frame and reset the frame fields.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">unref</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftFFmpeg7AVFrameC7moveRef4fromyAC_tF"></a>
+                    <a name="//apple_ref/swift/Method/moveRef(from:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftFFmpeg7AVFrameC7moveRef4fromyAC_tF">moveRef(from:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Move everything contained in src to dst and reset src.</p>
+<div class="aside aside-warning">
+    <p class="aside-title">Warning</p>
+    <p>dst is not unreferenced, but directly overwritten without reading or deallocating its contents.
+Call <code>dst.unref()</code> manually before calling this function to ensure that no memory is leaked.</p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">moveRef</span><span class="p">(</span><span class="n">from</span> <span class="nv">src</span><span class="p">:</span> <span class="kt">AVFrame</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>src</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>the source frame</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftFFmpeg7AVFrameC5cloneACSgyF"></a>
+                    <a name="//apple_ref/swift/Method/clone()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftFFmpeg7AVFrameC5cloneACSgyF">clone()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Create a new frame that references the same data as src.</p>
+
+<p>This is a shortcut for <code>av_frame_alloc() + av_frame_ref()</code>.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">clone</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">AVFrame</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>newly created <code>AVFrame</code> on success, nil on error.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftFFmpeg7AVFrameC10isWritableSbyF"></a>
+                    <a name="//apple_ref/swift/Method/isWritable()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftFFmpeg7AVFrameC10isWritableSbyF">isWritable()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Check if the frame data is writable.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">isWritable</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p><code>true</code> if the frame data is writable (which is true if and only if each of the underlying buffers
+has only one reference, namely the one stored in this frame).</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftFFmpeg7AVFrameC12makeWritableyyKF"></a>
+                    <a name="//apple_ref/swift/Method/makeWritable()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftFFmpeg7AVFrameC12makeWritableyyKF">makeWritable()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Ensure that the frame data is writable, avoiding data copy if possible.</p>
+
+<p>Do nothing if the frame is writable, allocate new buffers and copy the data if it is not.</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    AVError
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">makeWritable</span><span class="p">()</span> <span class="k">throws</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftFFmpeg7AVFrameC4copy4fromyAC_tKF"></a>
+                    <a name="//apple_ref/swift/Method/copy(from:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftFFmpeg7AVFrameC4copy4fromyAC_tKF">copy(from:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Copy the frame data from src to dst.</p>
+
+<p>This function does not allocate anything, dst must be already initialized and
+allocated with the same parameters as src.</p>
+
+<p>This function only copies the frame data (i.e. the contents of the data /
+extended data arrays), not any other properties.</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    AVError
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">copy</span><span class="p">(</span><span class="n">from</span> <span class="nv">src</span><span class="p">:</span> <span class="kt">AVFrame</span><span class="p">)</span> <span class="k">throws</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>src</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>the source frame</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftFFmpeg7AVFrameC14copyProperties4fromyAC_tKF"></a>
+                    <a name="//apple_ref/swift/Method/copyProperties(from:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftFFmpeg7AVFrameC14copyProperties4fromyAC_tKF">copyProperties(from:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Copy only <q>metadata</q> fields from src to dst.</p>
+
+<p>Metadata for the purpose of this function are those fields that do not affect
+the data layout in the buffers. E.g. pts, sample rate (for audio) or sample
+aspect ratio (for video), but not width/height or channel layout.
+Side data is also copied.</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    AVError
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">copyProperties</span><span class="p">(</span><span class="n">from</span> <span class="nv">src</span><span class="p">:</span> <span class="kt">AVFrame</span><span class="p">)</span> <span class="k">throws</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>src</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>the source frame</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftFFmpeg7AVFrameC11planeBuffer2atAA8AVBufferCSgSi_tF"></a>
+                    <a name="//apple_ref/swift/Method/planeBuffer(at:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftFFmpeg7AVFrameC11planeBuffer2atAA8AVBufferCSgSi_tF">planeBuffer(at:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Get the buffer reference a given data plane is stored in.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">planeBuffer</span><span class="p">(</span><span class="n">at</span> <span class="nv">plane</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/AVBuffer.html">AVBuffer</a></span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>plane</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>index of the data plane of interest in <code><a href="../Classes/AVFrame.html#/s:11SwiftFFmpeg7AVFrameC12extendedDataSrySpys5UInt8VGSgGvp">extendedData</a></code>.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>the buffer reference that contains the plane or <code>nil</code> if the input frame is not valid.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Video"></a>
+                <a name="//apple_ref/swift/Section/Video" class="dashAnchor"></a>
+                <a href="#/Video">
+                  <h3 class="section-name">Video</h3>
+                </a>
+              </div>
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftFFmpeg7AVFrameC11pixelFormatSo07AVPixelE0Vvp"></a>
+                    <a name="//apple_ref/swift/Property/pixelFormat" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftFFmpeg7AVFrameC11pixelFormatSo07AVPixelE0Vvp">pixelFormat</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The pixel format of the picture.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">pixelFormat</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftFFmpeg7AVFrameC5widthSivp"></a>
+                    <a name="//apple_ref/swift/Property/width" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftFFmpeg7AVFrameC5widthSivp">width</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The width of the picture, in pixels.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">width</span><span class="p">:</span> <span class="kt">Int</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftFFmpeg7AVFrameC6heightSivp"></a>
+                    <a name="//apple_ref/swift/Property/height" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftFFmpeg7AVFrameC6heightSivp">height</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The height of the picture, in pixels.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">height</span><span class="p">:</span> <span class="kt">Int</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftFFmpeg7AVFrameC10isKeyFrameSbvp"></a>
+                    <a name="//apple_ref/swift/Property/isKeyFrame" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftFFmpeg7AVFrameC10isKeyFrameSbvp">isKeyFrame</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A Boolean value indicating whether this frame is key frame.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">isKeyFrame</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftFFmpeg7AVFrameC17isInterlacedFrameSbvp"></a>
+                    <a name="//apple_ref/swift/Property/isInterlacedFrame" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftFFmpeg7AVFrameC17isInterlacedFrameSbvp">isInterlacedFrame</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A Boolean value indicating whether this frame is interlaced or progressive frame.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">isInterlacedFrame</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftFFmpeg7AVFrameC11pictureTypeSo09AVPictureE0Vvp"></a>
+                    <a name="//apple_ref/swift/Property/pictureType" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftFFmpeg7AVFrameC11pictureTypeSo09AVPictureE0Vvp">pictureType</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The picture type of the frame.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">pictureType</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPictureTypea">AVPictureType</a></span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftFFmpeg7AVFrameC17sampleAspectRatioSo10AVRationalVvp"></a>
+                    <a name="//apple_ref/swift/Property/sampleAspectRatio" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftFFmpeg7AVFrameC17sampleAspectRatioSo10AVRationalVvp">sampleAspectRatio</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The sample aspect ratio for the video frame, 0/1 if unknown/unspecified.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">sampleAspectRatio</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg10AVRationala">AVRational</a></span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftFFmpeg7AVFrameC13repeatPictureSivp"></a>
+                    <a name="//apple_ref/swift/Property/repeatPicture" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftFFmpeg7AVFrameC13repeatPictureSivp">repeatPicture</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>When decoding, this signals how much the picture must be delayed.
+<code>extra_delay = repeat_pict / (2*fps)</code></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">repeatPicture</span><span class="p">:</span> <span class="kt">Int</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Audio"></a>
+                <a name="//apple_ref/swift/Section/Audio" class="dashAnchor"></a>
+                <a href="#/Audio">
+                  <h3 class="section-name">Audio</h3>
+                </a>
+              </div>
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftFFmpeg7AVFrameC12sampleFormatSo08AVSampleE0Vvp"></a>
+                    <a name="//apple_ref/swift/Property/sampleFormat" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftFFmpeg7AVFrameC12sampleFormatSo08AVSampleE0Vvp">sampleFormat</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The sample format of the audio data.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">sampleFormat</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg14AVSampleFormata">AVSampleFormat</a></span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftFFmpeg7AVFrameC10sampleRateSivp"></a>
+                    <a name="//apple_ref/swift/Property/sampleRate" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftFFmpeg7AVFrameC10sampleRateSivp">sampleRate</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The sample rate of the audio data.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">sampleRate</span><span class="p">:</span> <span class="kt">Int</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftFFmpeg7AVFrameC13channelLayoutAA09AVChannelE0Vvp"></a>
+                    <a name="//apple_ref/swift/Property/channelLayout" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftFFmpeg7AVFrameC13channelLayoutAA09AVChannelE0Vvp">channelLayout</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The channel layout of the audio data.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">channelLayout</span><span class="p">:</span> <span class="kt"><a href="../Structs/AVChannelLayout.html">AVChannelLayout</a></span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftFFmpeg7AVFrameC11sampleCountSivp"></a>
+                    <a name="//apple_ref/swift/Property/sampleCount" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftFFmpeg7AVFrameC11sampleCountSivp">sampleCount</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The number of audio samples (per channel) described by this frame.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">sampleCount</span><span class="p">:</span> <span class="kt">Int</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftFFmpeg7AVFrameC12channelCountSivp"></a>
+                    <a name="//apple_ref/swift/Property/channelCount" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftFFmpeg7AVFrameC12channelCountSivp">channelCount</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The number of audio channels.</p>
+
+<ul>
+<li>encoding: Unused.</li>
+<li>decoding: Read by user.</li>
+</ul>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">channelCount</span><span class="p">:</span> <span class="kt">Int</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Audio2"></a>
+                <a name="//apple_ref/swift/Section/Audio" class="dashAnchor"></a>
+                <a href="#/Audio2">
+                  <h3 class="section-name">Audio</h3>
+                </a>
+              </div>
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftFFmpeg7AVFrameC5classAA7AVClassVvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/class" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftFFmpeg7AVFrameC5classAA7AVClassVvpZ">class</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">let</span> <span class="p">`</span><span class="nv">class</span><span class="p">`:</span> <span class="kt"><a href="../Structs/AVClass.html">AVClass</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftFFmpeg7AVFrameC28withUnsafeClassObjectPointeryxxSvKXEKlF"></a>
+                    <a name="//apple_ref/swift/Method/withUnsafeClassObjectPointer(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftFFmpeg7AVFrameC28withUnsafeClassObjectPointeryxxSvKXEKlF">withUnsafeClassObjectPointer(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">withUnsafeClassObjectPointer</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">_</span> <span class="nv">body</span><span class="p">:</span> <span class="p">(</span><span class="kt">UnsafeMutableRawPointer</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">T</span><span class="p">)</span> <span class="k">rethrows</span> <span class="o">-&gt;</span> <span class="kt">T</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/AVHWFramesContext"></a>
+                <a name="//apple_ref/swift/Section/AVHWFramesContext" class="dashAnchor"></a>
+                <a href="#/AVHWFramesContext">
+                  <h3 class="section-name">AVHWFramesContext</h3>
+                </a>
+              </div>
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftFFmpeg7AVFrameC12transferData4fromyAC_tKF"></a>
+                    <a name="//apple_ref/swift/Method/transferData(from:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftFFmpeg7AVFrameC12transferData4fromyAC_tKF">transferData(from:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Copy data to or from a hw surface. At least one of <code>dst</code>/<code>src</code> must have an
+<code><a href="../Classes/AVHWFramesContext.html">AVHWFramesContext</a></code> attached.</p>
+
+<p>If <code>src</code> has an <code><a href="../Classes/AVHWFramesContext.html">AVHWFramesContext</a></code> attached, then the format of <code>dst</code> (if set)
+must use one of the formats returned by <code>av_hwframe_transfer_get_formats(src,
+AV_HWFRAME_TRANSFER_DIRECTION_FROM)</code>.
+If <code>dst</code> has an <code><a href="../Classes/AVHWFramesContext.html">AVHWFramesContext</a></code> attached, then the format of <code>src</code> must use one
+of the formats returned by <code>av_hwframe_transfer_get_formats(dst,
+AV_HWFRAME_TRANSFER_DIRECTION_TO)</code>.</p>
+
+<p><code>dst</code> may be <q>clean</q> (i.e. with data/buf pointers unset), in which case the
+data buffers will be allocated by this function using <code>av_frame_get_buffer()</code>.
+If <code>dst-&gt;format</code> is set, then this format will be used, otherwise (when
+<code>dst-&gt;format</code> is <code>AVPixelFormat.none</code>) the first acceptable format will be chosen.</p>
+
+<p>The two frames must have matching allocated dimensions (i.e. equal to
+<code>AVHWFramesContext.width/height</code>), since not all device types support
+transferring a sub-rectangle of the whole surface. The display dimensions
+(i.e. <code>AVFrame.width/height</code>) may be smaller than the allocated dimensions, but
+also have to be equal for both frames. When the display dimensions are
+smaller than the allocated dimensions, the content of the padding in the
+destination frame is unspecified.</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    AVError
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">transferData</span><span class="p">(</span><span class="n">from</span> <span class="nv">frame</span><span class="p">:</span> <span class="kt">AVFrame</span><span class="p">)</span> <span class="k">throws</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>frame</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>the source frame</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+      </article>
+    </div>
+    <section class="footer">
+      <p>&copy; 2019 <a class="link" href="https://github.com/sunlubo" target="_blank" rel="external">sunlubo</a>. All rights reserved. (Last updated: 2019-01-23)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+    </section>
+  </body>
+</div>
+</html>

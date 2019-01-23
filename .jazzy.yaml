@@ -1,0 +1,8 @@
+author: sunlubo
+author_url: https://github.com/sunlubo
+github_url: https://github.com/sunlubo/SwiftFFmpeg
+root_url: https://sunlubo.github.io/SwiftFFmpeg/
+module: SwiftFFmpeg
+output: docs
+theme: fullwidth
+xcodebuild_arguments: [-project, 'SwiftFFmpeg.xcodeproj', -scheme, 'SwiftFFmpeg-Package']

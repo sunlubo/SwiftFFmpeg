@@ -1,0 +1,2153 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>AVPixelFormat Extension Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset="utf-8">
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
+  </head>
+  <body>
+
+    <a name="//apple_ref/swift/Extension/AVPixelFormat" class="dashAnchor"></a>
+
+    <a title="AVPixelFormat Extension Reference"></a>
+
+    <header class="header">
+      <p class="header-col header-col--primary">
+        <a class="header-link" href="../index.html">
+          SwiftFFmpeg Docs
+        </a>
+         (73% documented)
+      </p>
+    
+      <p class="header-col--secondary">
+        <form role="search" action="../search.json">
+          <input type="text" placeholder="Search documentation" data-typeahead>
+        </form>
+      </p>
+    
+        <p class="header-col header-col--secondary">
+          <a class="header-link" href="https://github.com/sunlubo/SwiftFFmpeg">
+            <img class="header-icon" src="../img/gh.png"/>
+            View on GitHub
+          </a>
+        </p>
+    
+        <p class="header-col header-col--secondary">
+          <a class="header-link" href="dash-feed://https%3A%2F%2Fsunlubo%2Egithub%2Eio%2FSwiftFFmpeg%2Fdocsets%2FSwiftFFmpeg%2Exml">
+            <img class="header-icon" src="../img/dash.png"/>
+            Install in Dash
+          </a>
+        </p>
+    </header>
+
+    <p class="breadcrumbs">
+      <a class="breadcrumb" href="../index.html">SwiftFFmpeg Reference</a>
+      <img class="carat" src="../img/carat.png" />
+      AVPixelFormat Extension Reference
+    </p>
+
+    <div class="content-wrapper">
+      <nav class="navigation">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVBSFContext.html">AVBSFContext</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVBSFList.html">AVBSFList</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVBuffer.html">AVBuffer</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVCodecContext.html">AVCodecContext</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVCodecContext/Flag.html">– Flag</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVCodecContext/Flag2.html">– Flag2</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVCodecParameters.html">AVCodecParameters</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVCodecParserContext.html">AVCodecParserContext</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVDeviceCapabilitiesQuery.html">AVDeviceCapabilitiesQuery</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVDeviceInfoList.html">AVDeviceInfoList</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVFilterContext.html">AVFilterContext</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVFilterGraph.html">AVFilterGraph</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVFilterInOut.html">AVFilterInOut</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVFormatContext.html">AVFormatContext</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVFormatContext/Flag.html">– Flag</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVFormatContext/SeekFlag.html">– SeekFlag</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVFrame.html">AVFrame</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVHWDeviceContext.html">AVHWDeviceContext</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVHWFramesContext.html">AVHWFramesContext</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVHash.html">AVHash</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVIOContext.html">AVIOContext</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVIOContext/Flag.html">– Flag</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVIOContext/SeekWhence.html">– SeekWhence</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVIODirContext.html">AVIODirContext</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVIODirContext/Iterator.html">– Iterator</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVIODirEntry.html">AVIODirEntry</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVImage.html">AVImage</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVPacket.html">AVPacket</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVPacket/Flag.html">– Flag</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVSamples.html">AVSamples</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AVStream.html">AVStream</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/SwrContext.html">SwrContext</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/SwsContext.html">SwsContext</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/SwsContext/Flag.html">– Flag</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/AVConstant.html">AVConstant</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/AVDevice.html">AVDevice</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/AVIO.html">AVIO</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/AVLog.html">AVLog</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/AVLog/Level.html">– Level</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/AVMath.html">AVMath</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/AVOptionSearchFlag.html">AVOptionSearchFlag</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/AVTimestamp.html">AVTimestamp</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/AVAppToDevMessageType.html">AVAppToDevMessageType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/AVClassCategory.html">AVClassCategory</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/AVCodecID.html">AVCodecID</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/AVDevToAppMessageType.html">AVDevToAppMessageType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/AVDiscard.html">AVDiscard</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/AVHWDeviceType.html">AVHWDeviceType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/AVIODirEntryType.html">AVIODirEntryType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/AVMediaType.html">AVMediaType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/AVOptionType.html">AVOptionType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/AVPictureType.html">AVPictureType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/AVPixelFormat.html">AVPixelFormat</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/AVRational.html">AVRational</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/AVRounding.html">AVRounding</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/AVSampleFormat.html">AVSampleFormat</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Functions.html">Functions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftFFmpeg13networkDeinits5Int32VyF">networkDeinit()</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftFFmpeg11networkInits5Int32VyF">networkInit()</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/AVClassSupport.html">AVClassSupport</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/AVOptionAccessor.html">AVOptionAccessor</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVBitStreamFilter.html">AVBitStreamFilter</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVBufferSinkFlag.html">AVBufferSinkFlag</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVBufferSourceFlag.html">AVBufferSourceFlag</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVChannel.html">AVChannel</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVChannelLayout.html">AVChannelLayout</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVClass.html">AVClass</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVCodec.html">AVCodec</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVCodec/Cap.html">– Cap</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVCodecHWConfig.html">AVCodecHWConfig</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVCodecHWConfig/Method.html">– Method</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVDeviceInfo.html">AVDeviceInfo</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVError.html">AVError</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVFilter.html">AVFilter</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVFilter/Flag.html">– Flag</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVFilterLink.html">AVFilterLink</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVFilterPad.html">AVFilterPad</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVInputFormat.html">AVInputFormat</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVInputFormat/Flag.html">– Flag</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVOption.html">AVOption</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVOption/Flag.html">– Flag</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVOutputFormat.html">AVOutputFormat</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/AVOutputFormat/Flag.html">– Flag</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Typealiases.html">Type Aliases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg21AVAppToDevMessageTypea">AVAppToDevMessageType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg15AVClassCategorya">AVClassCategory</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg9AVCodecIDa">AVCodecID</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg19AVCodecParserResulta">AVCodecParserResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg21AVDevToAppMessageTypea">AVDevToAppMessageType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg12AVDeviceRecta">AVDeviceRect</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg9AVDiscarda">AVDiscard</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg18AVGetFormatHandlera">AVGetFormatHandler</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg14AVHWDeviceTypea">AVHWDeviceType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg16AVIODirEntryTypea">AVIODirEntryType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg21AVIOInterruptCallbacka">AVIOInterruptCallback</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg15AVIOReadHandlera">AVIOReadHandler</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg15AVIOSeekHandlera">AVIOSeekHandler</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg16AVIOWriteHandlera">AVIOWriteHandler</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg11AVMediaTypea">AVMediaType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg12AVOptionTypea">AVOptionType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg13AVPictureTypea">AVPictureType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg10AVRationala">AVRational</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg10AVRoundinga">AVRounding</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg14AVSampleFormata">AVSampleFormat</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+
+        <section class="section">
+          <div class="section-content">
+            <h1>AVPixelFormat</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">typealias</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span> <span class="o">=</span> <span class="kt">CFFmpeg</span><span class="o">.</span><span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span></code></pre>
+
+                </div>
+              </div>
+            <p>Undocumented</p>
+
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-content">
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE4noneABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/none" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE4noneABvpZ">none</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">none</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE7YUV420PABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/YUV420P" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE7YUV420PABvpZ">YUV420P</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>planar YUV 4:2:0, 12bpp, (1 Cr &amp; Cb sample per 2x2 Y samples)</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">YUV420P</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE7YUYV422ABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/YUYV422" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE7YUYV422ABvpZ">YUYV422</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>packed YUV 4:2:2, 16bpp, Y0 Cb Y1 Cr</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">YUYV422</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE5RGB24ABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/RGB24" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE5RGB24ABvpZ">RGB24</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>packed RGB 8:8:8, 24bpp, RGBRGB&hellip;</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">RGB24</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE5BGR24ABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/BGR24" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE5BGR24ABvpZ">BGR24</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>packed RGB 8:8:8, 24bpp, BGRBGR&hellip;</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">BGR24</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE7YUV422PABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/YUV422P" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE7YUV422PABvpZ">YUV422P</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>planar YUV 4:2:2, 16bpp, (1 Cr &amp; Cb sample per 2x1 Y samples)</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">YUV422P</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE7YUV444PABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/YUV444P" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE7YUV444PABvpZ">YUV444P</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>planar YUV 4:4:4, 24bpp, (1 Cr &amp; Cb sample per 1x1 Y samples)</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">YUV444P</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE7YUV410PABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/YUV410P" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE7YUV410PABvpZ">YUV410P</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>planar YUV 4:1:0,  9bpp, (1 Cr &amp; Cb sample per 4x4 Y samples)</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">YUV410P</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE7YUV411PABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/YUV411P" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE7YUV411PABvpZ">YUV411P</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>planar YUV 4:1:1, 12bpp, (1 Cr &amp; Cb sample per 4x1 Y samples)</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">YUV411P</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE5GRAY8ABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/GRAY8" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE5GRAY8ABvpZ">GRAY8</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Y        ,  8bpp</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">GRAY8</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE9MONOWHITEABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/MONOWHITE" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE9MONOWHITEABvpZ">MONOWHITE</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Y        ,  1bpp, 0 is white, 1 is black, in each byte pixels are ordered from the msb to the lsb</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">MONOWHITE</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE9MONOBLACKABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/MONOBLACK" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE9MONOBLACKABvpZ">MONOBLACK</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Y        ,  1bpp, 0 is black, 1 is white, in each byte pixels are ordered from the msb to the lsb</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">MONOBLACK</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE4PAL8ABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/PAL8" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE4PAL8ABvpZ">PAL8</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>8 bits with AV_PIX_FMT_RGB32 palette</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">PAL8</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE7UYVY422ABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/UYVY422" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE7UYVY422ABvpZ">UYVY422</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>packed YUV 4:2:2, 16bpp, Cb Y0 Cr Y1</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">UYVY422</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE9UYYVYY411ABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/UYYVYY411" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE9UYYVYY411ABvpZ">UYYVYY411</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>packed YUV 4:1:1, 12bpp, Cb Y0 Y1 Cr Y2 Y3</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">UYYVYY411</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE4BGR8ABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/BGR8" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE4BGR8ABvpZ">BGR8</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>packed RGB 3:3:2,  8bpp, (msb)2B 3G 3R(lsb)</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">BGR8</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE4BGR4ABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/BGR4" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE4BGR4ABvpZ">BGR4</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>packed RGB 1:2:1 bitstream,  4bpp, (msb)1B 2G 1R(lsb), a byte contains two pixels, the first pixel in the byte
+is the one composed by the 4 msb bits</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">BGR4</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE9BGR4_BYTEABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/BGR4_BYTE" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE9BGR4_BYTEABvpZ">BGR4_BYTE</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>packed RGB 1:2:1,  8bpp, (msb)1B 2G 1R(lsb)</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">BGR4_BYTE</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE4RGB8ABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/RGB8" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE4RGB8ABvpZ">RGB8</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>packed RGB 3:3:2,  8bpp, (msb)2R 3G 3B(lsb)</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">RGB8</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE4RGB4ABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/RGB4" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE4RGB4ABvpZ">RGB4</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>packed RGB 1:2:1 bitstream,  4bpp, (msb)1R 2G 1B(lsb), a byte contains two pixels, the first pixel in the byte
+is the one composed by the 4 msb bits</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">RGB4</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE9RGB4_BYTEABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/RGB4_BYTE" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE9RGB4_BYTEABvpZ">RGB4_BYTE</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>packed RGB 1:2:1,  8bpp, (msb)1R 2G 1B(lsb)</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">RGB4_BYTE</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE4NV12ABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/NV12" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE4NV12ABvpZ">NV12</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>planar YUV 4:2:0, 12bpp, 1 plane for Y and 1 plane for the UV components, which are interleaved
+(first byte U and the following byte V)</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">NV12</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE4NV21ABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/NV21" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE4NV21ABvpZ">NV21</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>as above, but U and V bytes are swapped</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">NV21</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE4ARGBABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/ARGB" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE4ARGBABvpZ">ARGB</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>packed ARGB 8:8:8:8, 32bpp, ARGBARGB&hellip;</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">ARGB</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE4RGBAABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/RGBA" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE4RGBAABvpZ">RGBA</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>packed RGBA 8:8:8:8, 32bpp, RGBARGBA&hellip;</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">RGBA</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE4ABGRABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/ABGR" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE4ABGRABvpZ">ABGR</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>packed ABGR 8:8:8:8, 32bpp, ABGRABGR&hellip;</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">ABGR</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE4BGRAABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/BGRA" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE4BGRAABvpZ">BGRA</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>packed BGRA 8:8:8:8, 32bpp, BGRABGRA&hellip;</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">BGRA</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE8GRAY16BEABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/GRAY16BE" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE8GRAY16BEABvpZ">GRAY16BE</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Y        , 16bpp, big-endian</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">GRAY16BE</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE8GRAY16LEABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/GRAY16LE" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE8GRAY16LEABvpZ">GRAY16LE</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Y        , 16bpp, little-endian</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">GRAY16LE</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE7YUV440PABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/YUV440P" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE7YUV440PABvpZ">YUV440P</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>planar YUV 4:4:0 (1 Cr &amp; Cb sample per 1x2 Y samples)</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">YUV440P</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE8YUVA420PABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/YUVA420P" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE8YUVA420PABvpZ">YUVA420P</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>planar YUV 4:2:0, 20bpp, (1 Cr &amp; Cb sample per 2x2 Y &amp; A samples)</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">YUVA420P</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE7RGB48BEABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/RGB48BE" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE7RGB48BEABvpZ">RGB48BE</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>packed RGB 16:16:16, 48bpp, 16R, 16G, 16B, the 2-byte value for each R/G/B component is stored as big-endian</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">RGB48BE</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE7RGB48LEABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/RGB48LE" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE7RGB48LEABvpZ">RGB48LE</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>packed RGB 16:16:16, 48bpp, 16R, 16G, 16B, the 2-byte value for each R/G/B component is stored as little-endian</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">RGB48LE</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE8RGB565BEABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/RGB565BE" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE8RGB565BEABvpZ">RGB565BE</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>packed RGB 5:6:5, 16bpp, (msb)   5R 6G 5B(lsb), big-endian</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">RGB565BE</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE8RGB565LEABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/RGB565LE" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE8RGB565LEABvpZ">RGB565LE</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>packed RGB 5:6:5, 16bpp, (msb)   5R 6G 5B(lsb), little-endian</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">RGB565LE</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE8RGB555BEABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/RGB555BE" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE8RGB555BEABvpZ">RGB555BE</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>packed RGB 5:5:5, 16bpp, (msb)1X 5R 5G 5B(lsb), big-endian   , X=unused/undefined</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">RGB555BE</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE8RGB555LEABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/RGB555LE" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE8RGB555LEABvpZ">RGB555LE</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>packed RGB 5:5:5, 16bpp, (msb)1X 5R 5G 5B(lsb), little-endian, X=unused/undefined</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">RGB555LE</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE8BGR565BEABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/BGR565BE" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE8BGR565BEABvpZ">BGR565BE</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>packed BGR 5:6:5, 16bpp, (msb)   5B 6G 5R(lsb), big-endian</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">BGR565BE</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE8BGR565LEABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/BGR565LE" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE8BGR565LEABvpZ">BGR565LE</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>packed BGR 5:6:5, 16bpp, (msb)   5B 6G 5R(lsb), little-endian</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">BGR565LE</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE8BGR555BEABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/BGR555BE" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE8BGR555BEABvpZ">BGR555BE</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>packed BGR 5:5:5, 16bpp, (msb)1X 5B 5G 5R(lsb), big-endian   , X=unused/undefined</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">BGR555BE</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE8BGR555LEABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/BGR555LE" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE8BGR555LEABvpZ">BGR555LE</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>packed BGR 5:5:5, 16bpp, (msb)1X 5B 5G 5R(lsb), little-endian, X=unused/undefined</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">BGR555LE</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE11YUV420P16LEABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/YUV420P16LE" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE11YUV420P16LEABvpZ">YUV420P16LE</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>planar YUV 4:2:0, 24bpp, (1 Cr &amp; Cb sample per 2x2 Y samples), little-endian</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">YUV420P16LE</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE11YUV420P16BEABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/YUV420P16BE" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE11YUV420P16BEABvpZ">YUV420P16BE</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>&lt;
+planar YUV 4:2:0, 24bpp, (1 Cr &amp; Cb sample per 2x2 Y samples), big-endian</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">YUV420P16BE</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE11YUV422P16LEABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/YUV422P16LE" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE11YUV422P16LEABvpZ">YUV422P16LE</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>planar YUV 4:2:2, 32bpp, (1 Cr &amp; Cb sample per 2x1 Y samples), little-endian</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">YUV422P16LE</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE11YUV422P16BEABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/YUV422P16BE" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE11YUV422P16BEABvpZ">YUV422P16BE</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>planar YUV 4:2:2, 32bpp, (1 Cr &amp; Cb sample per 2x1 Y samples), big-endian</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">YUV422P16BE</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE11YUV444P16LEABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/YUV444P16LE" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE11YUV444P16LEABvpZ">YUV444P16LE</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>planar YUV 4:4:4, 48bpp, (1 Cr &amp; Cb sample per 1x1 Y samples), little-endian</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">YUV444P16LE</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE11YUV444P16BEABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/YUV444P16BE" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE11YUV444P16BEABvpZ">YUV444P16BE</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>planar YUV 4:4:4, 48bpp, (1 Cr &amp; Cb sample per 1x1 Y samples), big-endian</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">YUV444P16BE</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE9DXVA2_VLDABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/DXVA2_VLD" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE9DXVA2_VLDABvpZ">DXVA2_VLD</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>HW decoding through DXVA2, Picture.data[3] contains a LPDIRECT3DSURFACE9 pointer</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">DXVA2_VLD</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE8RGB444LEABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/RGB444LE" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE8RGB444LEABvpZ">RGB444LE</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>packed RGB 4:4:4, 16bpp, (msb)4X 4R 4G 4B(lsb), little-endian, X=unused/undefined</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">RGB444LE</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE8RGB444BEABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/RGB444BE" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE8RGB444BEABvpZ">RGB444BE</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>packed RGB 4:4:4, 16bpp, (msb)4X 4R 4G 4B(lsb), big-endian,    X=unused/undefined</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">RGB444BE</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE8BGR444LEABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/BGR444LE" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE8BGR444LEABvpZ">BGR444LE</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>packed BGR 4:4:4, 16bpp, (msb)4X 4B 4G 4R(lsb), little-endian, X=unused/undefined</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">BGR444LE</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE8BGR444BEABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/BGR444BE" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE8BGR444BEABvpZ">BGR444BE</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>packed BGR 4:4:4, 16bpp, (msb)4X 4B 4G 4R(lsb), big-endian,    X=unused/undefined</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">BGR444BE</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE3YA8ABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/YA8" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE3YA8ABvpZ">YA8</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>8 bits gray, 8 bits alpha</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">YA8</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE5Y400AABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/Y400A" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE5Y400AABvpZ">Y400A</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>alias for AV_PIX_FMT_YA8</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">Y400A</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE6GRAY8AABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/GRAY8A" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE6GRAY8AABvpZ">GRAY8A</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>alias for AV_PIX_FMT_YA8</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">GRAY8A</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE7BGR48BEABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/BGR48BE" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE7BGR48BEABvpZ">BGR48BE</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>packed RGB 16:16:16, 48bpp, 16B, 16G, 16R, the 2-byte value for each R/G/B component is stored as big-endian</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">BGR48BE</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE7BGR48LEABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/BGR48LE" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE7BGR48LEABvpZ">BGR48LE</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>packed RGB 16:16:16, 48bpp, 16B, 16G, 16R, the 2-byte value for each R/G/B component is stored as little-endian</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">BGR48LE</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE12videoToolboxABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/videoToolbox" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE12videoToolboxABvpZ">videoToolbox</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>hardware decoding through VideoToolbox</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">videoToolbox</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE2nbABvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/nb" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE2nbABvpZ">nb</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>number of pixel formats, <strong>DO NOT USE THIS</strong> if you want to link with shared <code>libav*</code>
+because the number of formats might differ between versions</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">nb</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg13AVPixelFormata">AVPixelFormat</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE4nameABSgSS_tcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(name:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE4nameABSgSS_tcfc">init(name:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Return the pixel format corresponding to name.</p>
+
+<p>If there is no pixel format with name name, then looks for a pixel format with the name
+corresponding to the native endian format of name.
+For example in a little-endian system, first looks for <q>gray16</q>, then for <q>gray16le</q>.</p>
+
+<p>Finally if no pixel format has been found, returns <code>nil</code>.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">?(</span><span class="nv">name</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE4nameSSvp"></a>
+                    <a name="//apple_ref/swift/Property/name" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE4nameSSvp">name</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">name</span><span class="p">:</span> <span class="kt">String</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So13AVPixelFormatV11SwiftFFmpegE10planeCountSivp"></a>
+                    <a name="//apple_ref/swift/Property/planeCount" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So13AVPixelFormatV11SwiftFFmpegE10planeCountSivp">planeCount</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The number of planes in the pixel format.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">planeCount</span><span class="p">:</span> <span class="kt">Int</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:s23CustomStringConvertibleP11descriptionSSvp"></a>
+                    <a name="//apple_ref/swift/Property/description" class="dashAnchor"></a>
+                    <a class="token" href="#/s:s23CustomStringConvertibleP11descriptionSSvp">description</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">description</span><span class="p">:</span> <span class="kt">String</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+      </article>
+    </div>
+    <section class="footer">
+      <p>&copy; 2019 <a class="link" href="https://github.com/sunlubo" target="_blank" rel="external">sunlubo</a>. All rights reserved. (Last updated: 2019-01-23)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+    </section>
+  </body>
+</div>
+</html>

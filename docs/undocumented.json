@@ -1,0 +1,2364 @@
+{
+  "warnings": [
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVBitStreamFilter.swift",
+      "line": null,
+      "symbol": "AVBitStreamFilter",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVBitStreamFilter.swift",
+      "line": 14,
+      "symbol": "AVBitStreamFilter",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVBitStreamFilter.swift",
+      "line": 161,
+      "symbol": "AVBSFContext.class",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVBitStreamFilter.swift",
+      "line": 163,
+      "symbol": "AVBSFContext.withUnsafeClassObjectPointer(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVBitStreamFilter.swift",
+      "line": 170,
+      "symbol": "AVBSFContext.withUnsafeObjectPointer(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVBuffer.swift",
+      "line": 12,
+      "symbol": "AVBuffer",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVBuffer.swift",
+      "line": 43,
+      "symbol": "AVBuffer.refCount",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVClass.swift",
+      "line": null,
+      "symbol": "AVClassCategory",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVClass.swift",
+      "line": null,
+      "symbol": "AVClassCategory",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVClass.swift",
+      "line": 12,
+      "symbol": "AVClassCategory",
+      "symbol_kind": "source.lang.swift.decl.typealias",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVClass.swift",
+      "line": 15,
+      "symbol": "AVClassCategory.na",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVClass.swift",
+      "line": 16,
+      "symbol": "AVClassCategory.input",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVClass.swift",
+      "line": 17,
+      "symbol": "AVClassCategory.output",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVClass.swift",
+      "line": 18,
+      "symbol": "AVClassCategory.muxer",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVClass.swift",
+      "line": 19,
+      "symbol": "AVClassCategory.demuxer",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVClass.swift",
+      "line": 20,
+      "symbol": "AVClassCategory.encoder",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVClass.swift",
+      "line": 21,
+      "symbol": "AVClassCategory.decoder",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVClass.swift",
+      "line": 22,
+      "symbol": "AVClassCategory.filter",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVClass.swift",
+      "line": 23,
+      "symbol": "AVClassCategory.bitStreamFilter",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVClass.swift",
+      "line": 24,
+      "symbol": "AVClassCategory.swscaler",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVClass.swift",
+      "line": 25,
+      "symbol": "AVClassCategory.swresampler",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVClass.swift",
+      "line": 26,
+      "symbol": "AVClassCategory.deviceVideoOutput",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVClass.swift",
+      "line": 27,
+      "symbol": "AVClassCategory.deviceVideoInput",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVClass.swift",
+      "line": 28,
+      "symbol": "AVClassCategory.deviceAudioOutput",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVClass.swift",
+      "line": 29,
+      "symbol": "AVClassCategory.deviceAudioInput",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVClass.swift",
+      "line": 30,
+      "symbol": "AVClassCategory.deviceOutput",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVClass.swift",
+      "line": 31,
+      "symbol": "AVClassCategory.deviceInput",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVClass.swift",
+      "line": 32,
+      "symbol": "AVClassCategory.nb",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVClass.swift",
+      "line": 85,
+      "symbol": "AVClass",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVClass.swift",
+      "line": 104,
+      "symbol": "AVClassSupport",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVClass.swift",
+      "line": 105,
+      "symbol": "AVClassSupport.class",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVClass.swift",
+      "line": 107,
+      "symbol": "AVClassSupport.withUnsafeClassObjectPointer(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": null,
+      "symbol": "AVCodec",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": null,
+      "symbol": "AVCodec",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": null,
+      "symbol": "AVCodecID",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": null,
+      "symbol": "AVCodecID",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 12,
+      "symbol": "AVCodecID",
+      "symbol_kind": "source.lang.swift.decl.typealias",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 15,
+      "symbol": "AVCodecID.none",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 19,
+      "symbol": "AVCodecID.MPEG1VIDEO",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 22,
+      "symbol": "AVCodecID.H261",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 23,
+      "symbol": "AVCodecID.H263",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 24,
+      "symbol": "AVCodecID.MPEG4",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 25,
+      "symbol": "AVCodecID.H264",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 26,
+      "symbol": "AVCodecID.VP3",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 27,
+      "symbol": "AVCodecID.PNG",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 28,
+      "symbol": "AVCodecID.PGM",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 29,
+      "symbol": "AVCodecID.BMP",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 30,
+      "symbol": "AVCodecID.JPEG2000",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 31,
+      "symbol": "AVCodecID.VP5",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 32,
+      "symbol": "AVCodecID.VP6",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 33,
+      "symbol": "AVCodecID.TIFF",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 34,
+      "symbol": "AVCodecID.GIF",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 35,
+      "symbol": "AVCodecID.VP8",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 36,
+      "symbol": "AVCodecID.VP9",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 37,
+      "symbol": "AVCodecID.WEBP",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 38,
+      "symbol": "AVCodecID.HEVC",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 39,
+      "symbol": "AVCodecID.VP7",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 40,
+      "symbol": "AVCodecID.APNG",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 41,
+      "symbol": "AVCodecID.AV1",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 42,
+      "symbol": "AVCodecID.SVG",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 48,
+      "symbol": "AVCodecID.PCM_S16LE",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 49,
+      "symbol": "AVCodecID.PCM_S16BE",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 50,
+      "symbol": "AVCodecID.PCM_U16LE",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 51,
+      "symbol": "AVCodecID.PCM_U16BE",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 52,
+      "symbol": "AVCodecID.PCM_S8",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 53,
+      "symbol": "AVCodecID.PCM_U8",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 54,
+      "symbol": "AVCodecID.PCM_MULAW",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 55,
+      "symbol": "AVCodecID.PCM_ALAW",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 56,
+      "symbol": "AVCodecID.PCM_S32LE",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 57,
+      "symbol": "AVCodecID.PCM_S32BE",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 58,
+      "symbol": "AVCodecID.PCM_U32LE",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 59,
+      "symbol": "AVCodecID.PCM_U32BE",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 60,
+      "symbol": "AVCodecID.PCM_S24LE",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 61,
+      "symbol": "AVCodecID.PCM_S24BE",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 62,
+      "symbol": "AVCodecID.PCM_U24LE",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 63,
+      "symbol": "AVCodecID.PCM_U24BE",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 64,
+      "symbol": "AVCodecID.PCM_S24DAUD",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 65,
+      "symbol": "AVCodecID.PCM_ZORK",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 66,
+      "symbol": "AVCodecID.PCM_S16LE_PLANAR",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 67,
+      "symbol": "AVCodecID.PCM_DVD",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 68,
+      "symbol": "AVCodecID.PCM_F32BE",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 69,
+      "symbol": "AVCodecID.PCM_F32LE",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 70,
+      "symbol": "AVCodecID.PCM_F64BE",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 71,
+      "symbol": "AVCodecID.PCM_F64LE",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 72,
+      "symbol": "AVCodecID.PCM_BLURAY",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 73,
+      "symbol": "AVCodecID.PCM_LXF",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 74,
+      "symbol": "AVCodecID.S302M",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 75,
+      "symbol": "AVCodecID.PCM_S8_PLANAR",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 76,
+      "symbol": "AVCodecID.PCM_S24LE_PLANAR",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 77,
+      "symbol": "AVCodecID.PCM_S32LE_PLANAR",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 78,
+      "symbol": "AVCodecID.PCM_S16BE_PLANAR",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 80,
+      "symbol": "AVCodecID.PCM_S64LE",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 81,
+      "symbol": "AVCodecID.PCM_S64BE",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 82,
+      "symbol": "AVCodecID.PCM_F16LE",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 83,
+      "symbol": "AVCodecID.PCM_F24LE",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 87,
+      "symbol": "AVCodecID.AMR_NB",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 88,
+      "symbol": "AVCodecID.AMR_WB",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 92,
+      "symbol": "AVCodecID.MP2",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 95,
+      "symbol": "AVCodecID.AAC",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 96,
+      "symbol": "AVCodecID.FLAC",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 97,
+      "symbol": "AVCodecID.APE",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 98,
+      "symbol": "AVCodecID.MP1",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 122,
+      "symbol": "AVCodec",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 274,
+      "symbol": "AVCodec.Cap.truncated",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodec.swift",
+      "line": 389,
+      "symbol": "AVCodec.withUnsafeObjectPointer(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodecContext.swift",
+      "line": null,
+      "symbol": "AVCodecContext",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodecContext.swift",
+      "line": null,
+      "symbol": "AVCodecContext",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodecContext.swift",
+      "line": null,
+      "symbol": "AVCodecContext",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodecContext.swift",
+      "line": null,
+      "symbol": "AVCodecContext",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodecContext.swift",
+      "line": null,
+      "symbol": "AVCodecContext",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodecContext.swift",
+      "line": null,
+      "symbol": "AVCodecContext",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodecContext.swift",
+      "line": 11,
+      "symbol": "AVGetFormatHandler",
+      "symbol_kind": "source.lang.swift.decl.typealias",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodecContext.swift",
+      "line": 21,
+      "symbol": "AVCodecContext",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodecContext.swift",
+      "line": 63,
+      "symbol": "AVCodecContext.codec",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodecContext.swift",
+      "line": 387,
+      "symbol": "AVCodecContext.Flag.closedGOP",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodecContext.swift",
+      "line": 673,
+      "symbol": "AVCodecContext.class",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodecContext.swift",
+      "line": 675,
+      "symbol": "AVCodecContext.withUnsafeClassObjectPointer(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodecContext.swift",
+      "line": 682,
+      "symbol": "AVCodecContext.withUnsafeObjectPointer(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodecParserContext.swift",
+      "line": 10,
+      "symbol": "AVCodecParserResult",
+      "symbol_kind": "source.lang.swift.decl.typealias",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodecParserContext.swift",
+      "line": 18,
+      "symbol": "AVCodecParserContext",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVCodecParserContext.swift",
+      "line": 23,
+      "symbol": "AVCodecParserContext.init(codecContext:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVConstant.swift",
+      "line": 10,
+      "symbol": "AVConstant",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVConstant.swift",
+      "line": 11,
+      "symbol": "AVConstant.inputBufferPaddingSize",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVConstant.swift",
+      "line": 12,
+      "symbol": "AVConstant.dataPointersNumber",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVDevice.swift",
+      "line": 12,
+      "symbol": "AVDeviceRect",
+      "symbol_kind": "source.lang.swift.decl.typealias",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVDevice.swift",
+      "line": 45,
+      "symbol": "AVAppToDevMessageType.togglePause",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVDevice.swift",
+      "line": 62,
+      "symbol": "AVAppToDevMessageType.unmute",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVDevice.swift",
+      "line": 63,
+      "symbol": "AVAppToDevMessageType.toggleMute",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVDevice.swift",
+      "line": 71,
+      "symbol": "AVAppToDevMessageType.getMute",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVDevice.swift",
+      "line": 125,
+      "symbol": "AVDevToAppMessageType.bufferUnderflow",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVDevice.swift",
+      "line": 136,
+      "symbol": "AVDevToAppMessageType.bufferWritable",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVDevice.swift",
+      "line": 153,
+      "symbol": "AVDevice",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVDevice.swift",
+      "line": 275,
+      "symbol": "AVDeviceCapabilitiesQuery.codec",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVDevice.swift",
+      "line": 279,
+      "symbol": "AVDeviceCapabilitiesQuery.sampleFormat",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVDevice.swift",
+      "line": 283,
+      "symbol": "AVDeviceCapabilitiesQuery.sampleRate",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVDevice.swift",
+      "line": 287,
+      "symbol": "AVDeviceCapabilitiesQuery.channelCount",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVDevice.swift",
+      "line": 291,
+      "symbol": "AVDeviceCapabilitiesQuery.channelLayout",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVDevice.swift",
+      "line": 295,
+      "symbol": "AVDeviceCapabilitiesQuery.pixelFormat",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVDevice.swift",
+      "line": 299,
+      "symbol": "AVDeviceCapabilitiesQuery.windowWidth",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVDevice.swift",
+      "line": 303,
+      "symbol": "AVDeviceCapabilitiesQuery.windowHeight",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVDevice.swift",
+      "line": 307,
+      "symbol": "AVDeviceCapabilitiesQuery.frameWidth",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVDevice.swift",
+      "line": 311,
+      "symbol": "AVDeviceCapabilitiesQuery.frameHeight",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVDevice.swift",
+      "line": 315,
+      "symbol": "AVDeviceCapabilitiesQuery.fps",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVDevice.swift",
+      "line": 438,
+      "symbol": "AVDeviceInfoList.listInputSinks(device:deviceName:options:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVError.swift",
+      "line": null,
+      "symbol": "AVError",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVError.swift",
+      "line": 10,
+      "symbol": "AVError",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVError.swift",
+      "line": 69,
+      "symbol": "AVError.httpBadRequest",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVError.swift",
+      "line": 70,
+      "symbol": "AVError.httpUnauthorized",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVError.swift",
+      "line": 71,
+      "symbol": "AVError.httpForbidden",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVError.swift",
+      "line": 72,
+      "symbol": "AVError.httpNotFound",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVError.swift",
+      "line": 73,
+      "symbol": "AVError.httpOther4xx",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVError.swift",
+      "line": 74,
+      "symbol": "AVError.httpServerError",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVError.swift",
+      "line": 76,
+      "symbol": "AVError.code",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVError.swift",
+      "line": 78,
+      "symbol": "AVError.init(code:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVFilter.swift",
+      "line": null,
+      "symbol": "AVBufferSinkFlag",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVFilter.swift",
+      "line": null,
+      "symbol": "AVBufferSourceFlag",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVFilter.swift",
+      "line": null,
+      "symbol": "AVFilter",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVFilter.swift",
+      "line": null,
+      "symbol": "AVFilter",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVFilter.swift",
+      "line": null,
+      "symbol": "AVFilter",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVFilter.swift",
+      "line": null,
+      "symbol": "AVFilter.Flag",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVFilter.swift",
+      "line": null,
+      "symbol": "AVFilterGraph",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVFilter.swift",
+      "line": null,
+      "symbol": "AVFilterGraph",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVFilter.swift",
+      "line": null,
+      "symbol": "AVFilterPad",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVFilter.swift",
+      "line": 14,
+      "symbol": "AVFilterPad",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVFilter.swift",
+      "line": 45,
+      "symbol": "AVFilter",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVFilter.swift",
+      "line": 124,
+      "symbol": "AVFilter.Flag",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVFilter.swift",
+      "line": 181,
+      "symbol": "AVFilter.withUnsafeObjectPointer(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVFilter.swift",
+      "line": 314,
+      "symbol": "AVFilterContext.class",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVFilter.swift",
+      "line": 316,
+      "symbol": "AVFilterContext.withUnsafeClassObjectPointer(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVFilter.swift",
+      "line": 323,
+      "symbol": "AVFilterContext.withUnsafeObjectPointer(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVFilter.swift",
+      "line": 330,
+      "symbol": "AVBufferSourceFlag",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVFilter.swift",
+      "line": 334,
+      "symbol": "AVBufferSourceFlag.push",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVFilter.swift",
+      "line": 384,
+      "symbol": "AVBufferSinkFlag",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVFilter.swift",
+      "line": 577,
+      "symbol": "AVFilterGraph",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVFilter.swift",
+      "line": 674,
+      "symbol": "AVFilterGraph.withUnsafeObjectPointer(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVFormat.swift",
+      "line": null,
+      "symbol": "AVInputFormat",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVFormat.swift",
+      "line": null,
+      "symbol": "AVInputFormat",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVFormat.swift",
+      "line": null,
+      "symbol": "AVOutputFormat",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVFormat.swift",
+      "line": null,
+      "symbol": "AVOutputFormat",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVFormat.swift",
+      "line": 14,
+      "symbol": "AVInputFormat",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVFormat.swift",
+      "line": 42,
+      "symbol": "AVInputFormat.flags",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVFormat.swift",
+      "line": 133,
+      "symbol": "AVInputFormat.withUnsafeObjectPointer(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVFormat.swift",
+      "line": 145,
+      "symbol": "AVOutputFormat",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVFormat.swift",
+      "line": 199,
+      "symbol": "AVOutputFormat.flags",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVFormat.swift",
+      "line": 284,
+      "symbol": "AVOutputFormat.withUnsafeObjectPointer(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVFormatContext.swift",
+      "line": 444,
+      "symbol": "AVFormatContext.SeekFlag",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVFormatContext.swift",
+      "line": 454,
+      "symbol": "AVFormatContext.SeekFlag.rawValue",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVFormatContext.swift",
+      "line": 456,
+      "symbol": "AVFormatContext.SeekFlag.init(rawValue:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVFormatContext.swift",
+      "line": 605,
+      "symbol": "AVFormatContext.class",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVFormatContext.swift",
+      "line": 607,
+      "symbol": "AVFormatContext.withUnsafeClassObjectPointer(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVFormatContext.swift",
+      "line": 614,
+      "symbol": "AVFormatContext.withUnsafeObjectPointer(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVFrame.swift",
+      "line": 437,
+      "symbol": "AVFrame.class",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVFrame.swift",
+      "line": 439,
+      "symbol": "AVFrame.withUnsafeClassObjectPointer(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVHWContext.swift",
+      "line": null,
+      "symbol": "AVCodecHWConfig",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVHWContext.swift",
+      "line": null,
+      "symbol": "AVHWDeviceType",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVHWContext.swift",
+      "line": null,
+      "symbol": "AVHWDeviceType",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVHWContext.swift",
+      "line": 12,
+      "symbol": "AVHWDeviceType",
+      "symbol_kind": "source.lang.swift.decl.typealias",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVHWContext.swift",
+      "line": 19,
+      "symbol": "AVHWDeviceType.cuda",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVHWContext.swift",
+      "line": 22,
+      "symbol": "AVHWDeviceType.qsv",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVHWContext.swift",
+      "line": 23,
+      "symbol": "AVHWDeviceType.videoToolbox",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVHWContext.swift",
+      "line": 24,
+      "symbol": "AVHWDeviceType.d3d11va",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVHWContext.swift",
+      "line": 25,
+      "symbol": "AVHWDeviceType.drm",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVHWContext.swift",
+      "line": 26,
+      "symbol": "AVHWDeviceType.openCL",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVHWContext.swift",
+      "line": 27,
+      "symbol": "AVHWDeviceType.mediaCodec",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVHWContext.swift",
+      "line": 69,
+      "symbol": "AVCodecHWConfig",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVHWContext.swift",
+      "line": 156,
+      "symbol": "AVHWDeviceContext",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVIO.swift",
+      "line": null,
+      "symbol": "AVIODirContext",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVIO.swift",
+      "line": 12,
+      "symbol": "AVIO",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVIO.swift",
+      "line": 117,
+      "symbol": "AVIODirEntryType.unknown",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVIO.swift",
+      "line": 118,
+      "symbol": "AVIODirEntryType.blockDevice",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVIO.swift",
+      "line": 119,
+      "symbol": "AVIODirEntryType.characterDevice",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVIO.swift",
+      "line": 120,
+      "symbol": "AVIODirEntryType.directory",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVIO.swift",
+      "line": 121,
+      "symbol": "AVIODirEntryType.namedPipe",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVIO.swift",
+      "line": 122,
+      "symbol": "AVIODirEntryType.symbolicLink",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVIO.swift",
+      "line": 123,
+      "symbol": "AVIODirEntryType.socket",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVIO.swift",
+      "line": 124,
+      "symbol": "AVIODirEntryType.file",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVIO.swift",
+      "line": 125,
+      "symbol": "AVIODirEntryType.server",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVIO.swift",
+      "line": 126,
+      "symbol": "AVIODirEntryType.share",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVIO.swift",
+      "line": 127,
+      "symbol": "AVIODirEntryType.workgroup",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVIO.swift",
+      "line": 212,
+      "symbol": "AVIODirContext",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVIO.swift",
+      "line": 287,
+      "symbol": "AVIOReadHandler",
+      "symbol_kind": "source.lang.swift.decl.typealias",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVIO.swift",
+      "line": 288,
+      "symbol": "AVIOWriteHandler",
+      "symbol_kind": "source.lang.swift.decl.typealias",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVIO.swift",
+      "line": 289,
+      "symbol": "AVIOSeekHandler",
+      "symbol_kind": "source.lang.swift.decl.typealias",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVIO.swift",
+      "line": 609,
+      "symbol": "AVIOContext.withUnsafeObjectPointer(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVIO.swift",
+      "line": 673,
+      "symbol": "AVIOContext.SeekWhence",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVIO.swift",
+      "line": 684,
+      "symbol": "AVIOContext.SeekWhence.rawValue",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVIO.swift",
+      "line": 686,
+      "symbol": "AVIOContext.SeekWhence.init(rawValue:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVImage.swift",
+      "line": null,
+      "symbol": "AVImage",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVImage.swift",
+      "line": 10,
+      "symbol": "AVImage",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVImage.swift",
+      "line": 11,
+      "symbol": "AVImage.data",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVImage.swift",
+      "line": 12,
+      "symbol": "AVImage.size",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVImage.swift",
+      "line": 13,
+      "symbol": "AVImage.linesizes",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVImage.swift",
+      "line": 14,
+      "symbol": "AVImage.width",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVImage.swift",
+      "line": 15,
+      "symbol": "AVImage.height",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVImage.swift",
+      "line": 16,
+      "symbol": "AVImage.pixelFormat",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVLog.swift",
+      "line": null,
+      "symbol": "AVLog",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVLog.swift",
+      "line": 12,
+      "symbol": "AVLog",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVLog.swift",
+      "line": 43,
+      "symbol": "AVLog.Level",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVLog.swift",
+      "line": 47,
+      "symbol": "AVLog.Level.panic",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVOptions.swift",
+      "line": null,
+      "symbol": "AVOption",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVOptions.swift",
+      "line": null,
+      "symbol": "AVOption.Flag",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVOptions.swift",
+      "line": null,
+      "symbol": "AVOptionAccessor",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVOptions.swift",
+      "line": null,
+      "symbol": "AVOptionAccessor",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVOptions.swift",
+      "line": null,
+      "symbol": "AVOptionType",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVOptions.swift",
+      "line": null,
+      "symbol": "AVOptionType",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVOptions.swift",
+      "line": 12,
+      "symbol": "AVOptionType",
+      "symbol_kind": "source.lang.swift.decl.typealias",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVOptions.swift",
+      "line": 15,
+      "symbol": "AVOptionType.flags",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVOptions.swift",
+      "line": 16,
+      "symbol": "AVOptionType.int",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVOptions.swift",
+      "line": 17,
+      "symbol": "AVOptionType.int64",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVOptions.swift",
+      "line": 18,
+      "symbol": "AVOptionType.double",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVOptions.swift",
+      "line": 19,
+      "symbol": "AVOptionType.float",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVOptions.swift",
+      "line": 20,
+      "symbol": "AVOptionType.string",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVOptions.swift",
+      "line": 21,
+      "symbol": "AVOptionType.rational",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVOptions.swift",
+      "line": 24,
+      "symbol": "AVOptionType.dict",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVOptions.swift",
+      "line": 25,
+      "symbol": "AVOptionType.uint64",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVOptions.swift",
+      "line": 26,
+      "symbol": "AVOptionType.const",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVOptions.swift",
+      "line": 29,
+      "symbol": "AVOptionType.pixelFormat",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVOptions.swift",
+      "line": 30,
+      "symbol": "AVOptionType.sampleFormat",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVOptions.swift",
+      "line": 33,
+      "symbol": "AVOptionType.duration",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVOptions.swift",
+      "line": 34,
+      "symbol": "AVOptionType.color",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVOptions.swift",
+      "line": 35,
+      "symbol": "AVOptionType.channelLayout",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVOptions.swift",
+      "line": 36,
+      "symbol": "AVOptionType.bool",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVOptions.swift",
+      "line": 85,
+      "symbol": "AVOption",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVOptions.swift",
+      "line": 86,
+      "symbol": "AVOption.name",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVOptions.swift",
+      "line": 92,
+      "symbol": "AVOption.type",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVOptions.swift",
+      "line": 99,
+      "symbol": "AVOption.flags",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVOptions.swift",
+      "line": 159,
+      "symbol": "AVOption.Flag",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVOptions.swift",
+      "line": 164,
+      "symbol": "AVOption.Flag.audio",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVOptions.swift",
+      "line": 165,
+      "symbol": "AVOption.Flag.video",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVOptions.swift",
+      "line": 166,
+      "symbol": "AVOption.Flag.subtitle",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVOptions.swift",
+      "line": 210,
+      "symbol": "AVOptionSearchFlag",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVOptions.swift",
+      "line": 221,
+      "symbol": "AVOptionAccessor",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVOptions.swift",
+      "line": 222,
+      "symbol": "AVOptionAccessor.withUnsafeObjectPointer(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVPacket.swift",
+      "line": null,
+      "symbol": "AVPacket.Flag",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVPacket.swift",
+      "line": 78,
+      "symbol": "AVPacket.data",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVPacket.swift",
+      "line": 83,
+      "symbol": "AVPacket.size",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVPacket.swift",
+      "line": 88,
+      "symbol": "AVPacket.streamIndex",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVPacket.swift",
+      "line": 93,
+      "symbol": "AVPacket.flags",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVPacket.swift",
+      "line": 178,
+      "symbol": "AVPacket.Flag",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVSamples.swift",
+      "line": 10,
+      "symbol": "AVSamples",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVSamples.swift",
+      "line": 11,
+      "symbol": "AVSamples.data",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVSamples.swift",
+      "line": 12,
+      "symbol": "AVSamples.size",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVSamples.swift",
+      "line": 13,
+      "symbol": "AVSamples.linesize",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVSamples.swift",
+      "line": 14,
+      "symbol": "AVSamples.channelCount",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVSamples.swift",
+      "line": 15,
+      "symbol": "AVSamples.sampleCount",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVSamples.swift",
+      "line": 16,
+      "symbol": "AVSamples.sampleFormat",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVStream.swift",
+      "line": null,
+      "symbol": "AVDiscard",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVStream.swift",
+      "line": 12,
+      "symbol": "AVDiscard",
+      "symbol_kind": "source.lang.swift.decl.typealias",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVStream.swift",
+      "line": 232,
+      "symbol": "AVStream.duration",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AudioUtil.swift",
+      "line": null,
+      "symbol": "AVChannel",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AudioUtil.swift",
+      "line": null,
+      "symbol": "AVChannelLayout",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AudioUtil.swift",
+      "line": null,
+      "symbol": "AVSampleFormat",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AudioUtil.swift",
+      "line": null,
+      "symbol": "AVSampleFormat",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AudioUtil.swift",
+      "line": 12,
+      "symbol": "AVSampleFormat",
+      "symbol_kind": "source.lang.swift.decl.typealias",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AudioUtil.swift",
+      "line": 15,
+      "symbol": "AVSampleFormat.none",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AudioUtil.swift",
+      "line": 105,
+      "symbol": "AVChannel",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AudioUtil.swift",
+      "line": 161,
+      "symbol": "AVChannel.rawValue",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AudioUtil.swift",
+      "line": 163,
+      "symbol": "AVChannel.init(rawValue:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AudioUtil.swift",
+      "line": 167,
+      "symbol": "AVChannel.name",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AudioUtil.swift",
+      "line": 181,
+      "symbol": "AVChannelLayout",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AudioUtil.swift",
+      "line": 182,
+      "symbol": "AVChannelLayout.none",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AudioUtil.swift",
+      "line": 243,
+      "symbol": "AVChannelLayout.rawValue",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AudioUtil.swift",
+      "line": 245,
+      "symbol": "AVChannelLayout.init(rawValue:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/CType.swift",
+      "line": null,
+      "symbol": "AVMediaType",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/CType.swift",
+      "line": null,
+      "symbol": "AVMediaType",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/CType.swift",
+      "line": 12,
+      "symbol": "AVMediaType",
+      "symbol_kind": "source.lang.swift.decl.typealias",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/CType.swift",
+      "line": 17,
+      "symbol": "AVMediaType.video",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/CType.swift",
+      "line": 18,
+      "symbol": "AVMediaType.audio",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/CType.swift",
+      "line": 21,
+      "symbol": "AVMediaType.subtitle",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/CType.swift",
+      "line": 24,
+      "symbol": "AVMediaType.nb",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/Hash.swift",
+      "line": 10,
+      "symbol": "AVHash",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/Math.swift",
+      "line": 95,
+      "symbol": "AVRounding.union(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/Math.swift",
+      "line": 101,
+      "symbol": "AVMath",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/SwrContext.swift",
+      "line": null,
+      "symbol": "SwrContext",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/SwrContext.swift",
+      "line": null,
+      "symbol": "SwrContext",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/SwrContext.swift",
+      "line": 10,
+      "symbol": "SwrContext",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/SwrContext.swift",
+      "line": 229,
+      "symbol": "SwrContext.class",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/SwrContext.swift",
+      "line": 231,
+      "symbol": "SwrContext.withUnsafeClassObjectPointer(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/SwrContext.swift",
+      "line": 238,
+      "symbol": "SwrContext.withUnsafeObjectPointer(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/SwsContext.swift",
+      "line": null,
+      "symbol": "SwsContext",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/SwsContext.swift",
+      "line": null,
+      "symbol": "SwsContext",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/SwsContext.swift",
+      "line": null,
+      "symbol": "SwsContext",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/SwsContext.swift",
+      "line": null,
+      "symbol": "SwsContext.Flag",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/SwsContext.swift",
+      "line": 12,
+      "symbol": "SwsContext",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/SwsContext.swift",
+      "line": 112,
+      "symbol": "SwsContext.Flag",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/SwsContext.swift",
+      "line": 184,
+      "symbol": "SwsContext.class",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/SwsContext.swift",
+      "line": 186,
+      "symbol": "SwsContext.withUnsafeClassObjectPointer(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/SwsContext.swift",
+      "line": 193,
+      "symbol": "SwsContext.withUnsafeObjectPointer(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/Timestamp.swift",
+      "line": 10,
+      "symbol": "AVTimestamp",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/VideoUtil.swift",
+      "line": null,
+      "symbol": "AVPictureType",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/VideoUtil.swift",
+      "line": null,
+      "symbol": "AVPictureType",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/VideoUtil.swift",
+      "line": null,
+      "symbol": "AVPixelFormat",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/VideoUtil.swift",
+      "line": null,
+      "symbol": "AVPixelFormat",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/VideoUtil.swift",
+      "line": 12,
+      "symbol": "AVPictureType",
+      "symbol_kind": "source.lang.swift.decl.typealias",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/VideoUtil.swift",
+      "line": 44,
+      "symbol": "AVPixelFormat",
+      "symbol_kind": "source.lang.swift.decl.typealias",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/VideoUtil.swift",
+      "line": 47,
+      "symbol": "AVPixelFormat.none",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/VideoUtil.swift",
+      "line": 195,
+      "symbol": "AVPixelFormat.name",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    }
+  ],
+  "source_directory": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg"
+}
