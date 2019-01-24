@@ -870,7 +870,7 @@ filter context and the pad index required for establishing a link.</p>
 
 <p><code>AVFrame</code> is typically allocated once and then reused multiple times to hold
 different data (e.g. a single <code>AVFrame</code> to hold frames received from a decoder).
-In such a case, <code>unref</code> will free any references held by the frame and reset it
+In such a case, <code>unref()</code> will free any references held by the frame and reset it
 to its original clean state before it is reused again.</p>
 
 <p>The data described by an <code>AVFrame</code> is usually reference counted through the
@@ -881,9 +881,6 @@ every single data plane must be contained in one of the buffers in <code>buffer<
 or <code>extendedBuffer</code>.
 There may be a single buffer for all the data, or one separate buffer for
 each plane, or anything in between.</p>
-
-<p>Fields can be accessed through <code><a href="Structs/AVOption.html">AVOption</a></code>s, the name string used, matches the
-C structure field name for fields accessible through <code><a href="Structs/AVOption.html">AVOption</a></code>s.</p>
 
                         <a href="Classes/AVFrame.html" class="slightly-smaller">See more</a>
                       </div>

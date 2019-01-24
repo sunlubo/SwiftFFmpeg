@@ -1290,56 +1290,56 @@
     },
     {
       "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVFormatContext.swift",
-      "line": 447,
+      "line": 455,
       "symbol": "AVFormatContext.SeekFlag",
       "symbol_kind": "source.lang.swift.decl.struct",
       "warning": "undocumented"
     },
     {
       "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVFormatContext.swift",
-      "line": 457,
+      "line": 465,
       "symbol": "AVFormatContext.SeekFlag.rawValue",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVFormatContext.swift",
-      "line": 459,
+      "line": 467,
       "symbol": "AVFormatContext.SeekFlag.init(rawValue:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVFormatContext.swift",
-      "line": 609,
+      "line": 617,
       "symbol": "AVFormatContext.class",
       "symbol_kind": "source.lang.swift.decl.var.static",
       "warning": "undocumented"
     },
     {
       "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVFormatContext.swift",
-      "line": 611,
+      "line": 619,
       "symbol": "AVFormatContext.withUnsafeClassObjectPointer(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVFormatContext.swift",
-      "line": 618,
+      "line": 626,
       "symbol": "AVFormatContext.withUnsafeObjectPointer(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVFrame.swift",
-      "line": 438,
+      "line": 435,
       "symbol": "AVFrame.class",
       "symbol_kind": "source.lang.swift.decl.var.static",
       "warning": "undocumented"
     },
     {
       "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVFrame.swift",
-      "line": 440,
+      "line": 437,
       "symbol": "AVFrame.withUnsafeClassObjectPointer(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"

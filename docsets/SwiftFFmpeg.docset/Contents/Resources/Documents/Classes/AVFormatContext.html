@@ -566,7 +566,7 @@ or set by <code>openInput(_ url:format:options:)</code>.</li>
 
 <ul>
 <li>demuxing: Streams are created by libavformat in <code>openInput(_ url:format:options:)</code>.
-If <code>AVFMTCTX_NOHEADER</code> is set in <code><a href="../Classes/AVFormatContext.html#/s:11SwiftFFmpeg15AVFormatContextC5flagsAC4FlagVvp">flags</a></code>, then new streams may also appear in <code><a href="../Classes/AVFormatContext.html#/s:11SwiftFFmpeg15AVFormatContextC9readFrame4intoyAA8AVPacketC_tKF">readFrame(into:)</a></code>.</li>
+If <code>AVFMTCTX_NOHEADER</code> is set in <code>ctx_flags</code>, then new streams may also appear in <code><a href="../Classes/AVFormatContext.html#/s:11SwiftFFmpeg15AVFormatContextC9readFrame4intoyAA8AVPacketC_tKF">readFrame(into:)</a></code>.</li>
 <li>muxing: Streams are created by the user before <code><a href="../Classes/AVFormatContext.html#/s:11SwiftFFmpeg15AVFormatContextC11writeHeader7optionsySDyS2SGSg_tKF">writeHeader(options:)</a></code>.</li>
 </ul>
 
@@ -1410,9 +1410,9 @@ will be filled with options that were not found.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:11SwiftFFmpeg15AVFormatContextC14findBestStream4type06wantedG5Index07relatedgJ0SiSo11AVMediaTypeV_S2itKF"></a>
+                    <a name="/s:11SwiftFFmpeg15AVFormatContextC14findBestStream4type06wantedG5Index07relatedgJ0SiSgSo11AVMediaTypeV_S2itF"></a>
                     <a name="//apple_ref/swift/Method/findBestStream(type:wantedStreamIndex:relatedStreamIndex:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftFFmpeg15AVFormatContextC14findBestStream4type06wantedG5Index07relatedgJ0SiSo11AVMediaTypeV_S2itKF">findBestStream(type:wantedStreamIndex:relatedStreamIndex:)</a>
+                    <a class="token" href="#/s:11SwiftFFmpeg15AVFormatContextC14findBestStream4type06wantedG5Index07relatedgJ0SiSgSo11AVMediaTypeV_S2itF">findBestStream(type:wantedStreamIndex:relatedStreamIndex:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1421,11 +1421,6 @@ will be filled with options that were not found.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Find the <q>best</q> stream in the file.</p>
-<div class="aside aside-throws">
-    <p class="aside-title">Throws</p>
-    AVError
-
-</div>
 
                       </div>
                       <div class="declaration">
@@ -1436,7 +1431,7 @@ will be filled with options that were not found.</p>
     <span class="nv">type</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg11AVMediaTypea">AVMediaType</a></span><span class="p">,</span>
     <span class="nv">wantedStreamIndex</span><span class="p">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
     <span class="nv">relatedStreamIndex</span><span class="p">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
-<span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">Int</span></code></pre>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Int</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -1485,7 +1480,7 @@ will be filled with options that were not found.</p>
                       </div>
                       <div>
                         <h4>Return Value</h4>
-                        <p>stream index</p>
+                        <p>stream index if it exists</p>
                       </div>
                     </section>
                   </div>
@@ -1518,7 +1513,7 @@ in the frames.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">guessSampleAspectRatio</span><span class="p">(</span><span class="nv">stream</span><span class="p">:</span> <span class="kt"><a href="../Classes/AVStream.html">AVStream</a></span><span class="p">?,</span> <span class="nv">frame</span><span class="p">:</span> <span class="kt"><a href="../Classes/AVFrame.html">AVFrame</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg10AVRationala">AVRational</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">guessSampleAspectRatio</span><span class="p">(</span><span class="nv">stream</span><span class="p">:</span> <span class="kt"><a href="../Classes/AVStream.html">AVStream</a></span><span class="p">?,</span> <span class="nv">frame</span><span class="p">:</span> <span class="kt"><a href="../Classes/AVFrame.html">AVFrame</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg10AVRationala">AVRational</a></span></code></pre>
 
                         </div>
                       </div>
@@ -1556,6 +1551,68 @@ in the frames.</p>
                       <div>
                         <h4>Return Value</h4>
                         <p>the guessed (valid) sample aspect ratio, 0/1 if no idea</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftFFmpeg15AVFormatContextC14guessFrameRate6stream5frameSo10AVRationalVAA8AVStreamC_AA7AVFrameCSgtF"></a>
+                    <a name="//apple_ref/swift/Method/guessFrameRate(stream:frame:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftFFmpeg15AVFormatContextC14guessFrameRate6stream5frameSo10AVRationalVAA8AVStreamC_AA7AVFrameCSgtF">guessFrameRate(stream:frame:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Guess the frame rate, based on both the container and codec information.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">guessFrameRate</span><span class="p">(</span><span class="nv">stream</span><span class="p">:</span> <span class="kt"><a href="../Classes/AVStream.html">AVStream</a></span><span class="p">,</span> <span class="nv">frame</span><span class="p">:</span> <span class="kt"><a href="../Classes/AVFrame.html">AVFrame</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg10AVRationala">AVRational</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>stream</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>the stream which the frame is part of</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>frame</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>the frame for which the frame rate should be determined</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>the guessed (valid) frame rate, 0/1 if no idea</p>
                       </div>
                     </section>
                   </div>
