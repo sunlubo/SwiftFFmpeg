@@ -36,7 +36,7 @@ func filtering_audio() throws {
     try fmtCtx.findStreamInfo()
     
     // select the audio stream
-    let streamIndex = try fmtCtx.findBestStream(type: .audio)
+    let streamIndex = fmtCtx.findBestStream(type: .audio)!
     let stram = fmtCtx.streams[streamIndex]
     
     // create decoding context

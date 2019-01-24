@@ -81,15 +81,15 @@ public final class AVCodecParameters {
     ///
     /// Must be allocated with `AVIO.malloc(size:)` and will be freed by
     /// `avcodec_parameters_free()`. The allocated size of extradata must be at
-    /// least `extraDataSize + AVConstant.inputBufferPaddingSize`, with the padding
+    /// least `extradataSize + AVConstant.inputBufferPaddingSize`, with the padding
     /// bytes zeroed.
-    public var extraData: UnsafeMutablePointer<UInt8>? {
+    public var extradata: UnsafeMutablePointer<UInt8>? {
         get { return cParameters.extradata }
         set { cParametersPtr.pointee.extradata = newValue }
     }
 
     /// The size of the extradata content in bytes.
-    public var extraDataSize: Int {
+    public var extradataSize: Int {
         get { return Int(cParameters.extradata_size) }
         set { cParametersPtr.pointee.extradata_size = Int32(newValue) }
     }

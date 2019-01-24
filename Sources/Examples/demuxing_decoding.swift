@@ -9,7 +9,7 @@ import Foundation
 import SwiftFFmpeg
 
 private func openCodecContext(fmtCtx: AVFormatContext, mediaType: AVMediaType) throws -> (AVCodecContext, Int) {
-    let streamIndex = try fmtCtx.findBestStream(type: mediaType)
+    let streamIndex = fmtCtx.findBestStream(type: mediaType)!
     let stream = fmtCtx.streams[streamIndex]
     // find decoder for the stream
     let decoder = AVCodec.findDecoderById(stream.codecParameters.codecId)!

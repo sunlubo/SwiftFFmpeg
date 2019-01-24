@@ -69,7 +69,7 @@ func hw_decode() throws {
     try fmtCtx.findStreamInfo()
 
     // find the video stream information
-    let streamIndex = try fmtCtx.findBestStream(type: .video)
+    let streamIndex = fmtCtx.findBestStream(type: .video)!
     let stream = fmtCtx.streams[streamIndex]
 
     let decoder = AVCodec.findDecoderById(stream.codecParameters.codecId)!

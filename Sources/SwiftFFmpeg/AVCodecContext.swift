@@ -149,19 +149,19 @@ public final class AVCodecContext {
     /// - MPEG-4: global headers (they can be in the bitstream or here)
     ///
     /// The allocated memory should be `AVConstant.inputBufferPaddingSize` bytes larger
-    /// than `extraDataSize` to avoid problems if it is read with the bitstream reader.
+    /// than `extradataSize` to avoid problems if it is read with the bitstream reader.
     /// The bytewise contents of extradata must not depend on the architecture or CPU endianness.
     /// Must be allocated with the `AVIO.malloc(size:)` family of functions.
     ///
     /// - encoding: Set/allocated/freed by libavcodec.
     /// - decoding: Set/allocated/freed by user.
-    public var extraData: UnsafeMutablePointer<UInt8>? {
+    public var extradata: UnsafeMutablePointer<UInt8>? {
         get { return cContext.extradata }
         set { cContextPtr.pointee.extradata = newValue }
     }
 
-    /// The size of the extra data content in bytes.
-    public var extraDataSize: Int {
+    /// The size of the extradata content in bytes.
+    public var extradataSize: Int {
         get { return Int(cContext.extradata_size) }
         set { cContextPtr.pointee.extradata_size = Int32(newValue) }
     }

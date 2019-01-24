@@ -48,7 +48,7 @@ func filtering_video() throws {
     try fmtCtx.findStreamInfo()
     
     // select the video stream
-    let streamIndex = try fmtCtx.findBestStream(type: .video)
+    let streamIndex = fmtCtx.findBestStream(type: .video)!
     let stram = fmtCtx.streams[streamIndex]
     
     // create decoding context

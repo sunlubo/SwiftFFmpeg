@@ -219,7 +219,7 @@ public final class AVHWDeviceContext {
     }
 }
 
-// MARK: - AVHWFramesContext
+// MARK: - AVHWFrameTransferDirection
 
 public typealias AVHWFrameTransferDirection = CFFmpeg.AVHWFrameTransferDirection
 

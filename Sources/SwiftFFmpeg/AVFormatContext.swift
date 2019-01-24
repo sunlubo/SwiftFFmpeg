@@ -67,7 +67,7 @@ public final class AVFormatContext {
     /// A list of all streams in the file. New streams are created with `addStream(codec:)`.
     ///
     /// - demuxing: Streams are created by libavformat in `openInput(_ url:format:options:)`.
-    ///   If `AVFMTCTX_NOHEADER` is set in `flags`, then new streams may also appear in `readFrame(into:)`.
+    ///   If `AVFMTCTX_NOHEADER` is set in `ctx_flags`, then new streams may also appear in `readFrame(into:)`.
     /// - muxing: Streams are created by the user before `writeHeader(options:)`.
     public var streams: [AVStream] {
         var list = [AVStream]()
@@ -171,7 +171,7 @@ extension AVFormatContext {
         public static let ignDTS = Flag(rawValue: AVFMT_FLAG_IGNDTS)
         /// Do not infer any values from other values, just return what is stored in the container.
         public static let noFillIn = Flag(rawValue: AVFMT_FLAG_NOFILLIN)
-        /// Do not use AVParsers, you also must set AVFMT_FLAG_NOFILLIN as the fillin code works on frames and
+        /// Do not use AVParsers, you also must set `noFillIn` as the fillin code works on frames and
         /// no parsing -> no frames. Also seeking to frames can not work if parsing to find frame boundaries has
         /// been disabled.
         public static let noParse = Flag(rawValue: AVFMT_FLAG_NOPARSE)
@@ -181,7 +181,7 @@ extension AVFormatContext {
         public static let customIO = Flag(rawValue: AVFMT_FLAG_CUSTOM_IO)
         /// Discard frames marked corrupted.
         public static let discardCorrupt = Flag(rawValue: AVFMT_FLAG_DISCARD_CORRUPT)
-        /// Flush the AVIOContext every packet.
+        /// Flush the `AVIOContext` every packet.
         public static let flushPackets = Flag(rawValue: AVFMT_FLAG_FLUSH_PACKETS)
         /// When muxing, try to avoid writing any random/volatile data to the output.
         /// This includes any random IDs, real-time timestamps/dates, muxer version, etc.
@@ -352,15 +352,13 @@ extension AVFormatContext {
     ///   - type: stream type
     ///   - wantedStreamIndex: user-requested stream index, or -1 for automatic selection
     ///   - relatedStreamIndex: try to find a stream related (eg. in the same program) to this one, or -1 if none
-    /// - Returns: stream index
-    /// - Throws: AVError
+    /// - Returns: stream index if it exists
     public func findBestStream(
         type: AVMediaType,
         wantedStreamIndex: Int = -1,
         relatedStreamIndex: Int = -1
-    ) throws -> Int {
+    ) -> Int? {
         let ret = av_find_best_stream(cContextPtr, type, Int32(wantedStreamIndex), Int32(relatedStreamIndex), nil, 0)
-        try throwIfFail(ret)
         return Int(ret)
     }
 
