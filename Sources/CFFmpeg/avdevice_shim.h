@@ -1,1 +1,0 @@
-#include <libavdevice/avdevice.h>
