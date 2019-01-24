@@ -34,7 +34,7 @@ public struct AVBitStreamFilter {
         return String(cString: cFilter.name)
     }
 
-    /// A list of codec ids supported by the filter.
+    /// A list of codec ids supported by the bitstream filter.
     /// May be `nil`, in that case the bitstream filter works with any codec id.
     public var codecIds: [AVCodecID]? {
         return values(cFilter.codec_ids, until: .none)
@@ -112,7 +112,7 @@ public final class AVBSFContext {
     ///
     /// - Parameter packet: the packet to filter. The bitstream filter will take ownership of
     ///   the packet and reset the contents of pkt. pkt is not touched if an error occurs.
-    ///   This parameter may be NULL, which signals the end of the stream (i.e. no more
+    ///   This parameter may be `nil`, which signals the end of the stream (i.e. no more
     ///   packets will be sent). That will cause the filter to output any packets it
     ///   may have buffered internally.
     /// - Throws: AVError
@@ -128,18 +128,15 @@ public final class AVBSFContext {
     /// output fewer packets than were sent to it, so this function may return
     /// `AVError.tryAgain` immediately after a successful `sendPacket(_:)` call.
     ///
-    /// - Parameter packet: this struct will be filled with the contents of the filtered
-    ///   packet. It is owned by the caller and must be freed using
-    ///   av_packet_unref() when it is no longer needed.
-    ///   This parameter should be "clean" (i.e. freshly allocated
-    ///   with av_packet_alloc() or unreffed with av_packet_unref())
-    ///   when this function is called. If this function returns
-    ///   successfully, the contents of pkt will be completely
-    ///   overwritten by the returned data. On failure, pkt is not
-    ///   touched.
+    /// - Parameter packet: this struct will be filled with the contents of the filtered packet.
+    ///   It is owned by the caller and must be freed using `AVPacket.unref()` when it is no longer needed.
+    ///   This parameter should be "clean" (i.e. freshly allocated with `AVPacket.init()` or unreffed with
+    ///   `AVPacket.unref()`) when this function is called.
+    ///   If this function returns successfully, the contents of pkt will be completely overwritten by the
+    ///   returned data. On failure, pkt is not touched.
     /// - Throws: AVError
     /// - Throws:
-    ///   - `AVError.tryAgain` if more packets need to be sent to the filter (using av_bsf_send_packet()) to get more output.
+    ///   - `AVError.tryAgain` if more packets need to be sent to the filter (using `sendPacket(_:)`) to get more output.
     ///   - `AVError.eof` if there will be no further output from the filter.
     ///   - othrer errors.
     public func receivePacket(_ packet: AVPacket) throws {
@@ -178,7 +175,7 @@ extension AVBSFContext: AVOptionAccessor {
 public final class AVBSFList {
     var cListPtr: OpaquePointer?
 
-    /// Allocate empty list of bitstream filters.
+    /// Create an empty list of bitstream filters.
     public init() {
         guard let ptr = av_bsf_list_alloc() else {
             abort("av_bsf_list_alloc")
@@ -193,12 +190,11 @@ public final class AVBSFList {
         abortIfFail(av_bsf_list_append(cListPtr, bsf.cContextPtr))
     }
 
-    /// Construct new bitstream filter context given it's name and options
-    /// and append it to the list of bitstream filters.
+    /// Create a new bitstream filter context with the given name and options, and append it to the list of bitstream filters.
     ///
     /// - Parameters:
-    ///   - bsfName: Name of the bitstream filter
-    ///   - options: Options for the bitstream filter, can be set to NULL.
+    ///   - bsfName: The name of the bitstream filter.
+    ///   - options: The options for the bitstream filter.
     public func append(_ bsfName: String, options: [String: String]? = nil) {
         var pm: OpaquePointer? = options?.toAVDict()
         defer { av_dict_free(&pm) }
@@ -210,9 +206,8 @@ public final class AVBSFList {
 
     /// Finalize list of bitstream filters.
     ///
-    /// This function will transform `AVBSFList` to single `AVBSFContext`,
-    /// so the whole chain of bitstream filters can be treated as single filter
-    /// freshly allocated by `av_bsf_alloc()`.
+    /// This function will transform `AVBSFList` to single `AVBSFContext`, so the whole chain of bitstream filters
+    /// can be treated as single filter freshly created by `AVBSFContext.init(filter:)`.
     ///
     /// - Returns: The newly created `AVBSFContext` representing the chain of bitstream filters.
     public func finalize() -> AVBSFContext {

@@ -214,6 +214,9 @@
                 <a class="nav-group-task-link" href="../Extensions/AVHWDeviceType.html">AVHWDeviceType</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/AVHWFrameTransferDirection.html">AVHWFrameTransferDirection</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Extensions/AVIODirEntryType.html">AVIODirEntryType</a>
               </li>
               <li class="nav-group-task">
@@ -361,6 +364,9 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg14AVHWDeviceTypea">AVHWDeviceType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg26AVHWFrameTransferDirectiona">AVHWFrameTransferDirection</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg16AVIODirEntryTypea">AVIODirEntryType</a>
@@ -574,7 +580,7 @@ extra_codec_tag + size could be added but for this a clear advantage must be dem
 first.</p>
 
 <ul>
-<li>encoding: Set by user, if not then the default based on codec_id will be used.</li>
+<li>encoding: Set by user, if not then the default based on <code><a href="../Classes/AVCodecContext.html#/s:11SwiftFFmpeg14AVCodecContextC7codecIdSo0C2IDVvp">codecId</a></code> will be used.</li>
 <li>decoding: Set by user, will be converted to uppercase by libavcodec during init.</li>
 </ul>
 
@@ -668,7 +674,7 @@ first.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Number of bits the bitstream is allowed to diverge from the reference.
-the reference can be CBR (for CBR pass1) or VBR (for pass2)</p>
+The reference can be CBR (for CBR pass1) or VBR (for pass2).</p>
 
 <ul>
 <li>encoding: Set by user, unused for constant quantizer encoding.</li>
@@ -700,7 +706,7 @@ the reference can be CBR (for CBR pass1) or VBR (for pass2)</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>AVCodecContext.Flag</p>
+                        <p><code><a href="../Classes/AVCodecContext/Flag.html">AVCodecContext.Flag</a></code></p>
 
 <ul>
 <li>encoding: Set by user.</li>
@@ -732,7 +738,7 @@ the reference can be CBR (for CBR pass1) or VBR (for pass2)</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>AVCodecContext.Flag2</p>
+                        <p><code><a href="../Classes/AVCodecContext/Flag2.html">AVCodecContext.Flag2</a></code></p>
 
 <ul>
 <li>encoding: Set by user.</li>
@@ -772,10 +778,10 @@ the reference can be CBR (for CBR pass1) or VBR (for pass2)</p>
 <li>MPEG-4: global headers (they can be in the bitstream or here)</li>
 </ul>
 
-<p>The allocated memory should be <code>AV_INPUT_BUFFER_PADDING_SIZE</code> bytes larger
-than <code>extradata_size</code> to avoid problems if it is read with the bitstream reader.
+<p>The allocated memory should be <code><a href="../Enums/AVConstant.html#/s:11SwiftFFmpeg10AVConstantO22inputBufferPaddingSizeSivpZ">AVConstant.inputBufferPaddingSize</a></code> bytes larger
+than <code><a href="../Classes/AVCodecContext.html#/s:11SwiftFFmpeg14AVCodecContextC13extraDataSizeSivp">extraDataSize</a></code> to avoid problems if it is read with the bitstream reader.
 The bytewise contents of extradata must not depend on the architecture or CPU endianness.
-Must be allocated with the <code>av_malloc()</code> family of functions.</p>
+Must be allocated with the <code><a href="../Enums/AVIO.html#/s:11SwiftFFmpeg4AVIOO6malloc4sizeSvSgSi_tFZ">AVIO.malloc(size:)</a></code> family of functions.</p>
 
 <ul>
 <li>encoding: Set/allocated/freed by libavcodec.</li>
@@ -807,7 +813,7 @@ Must be allocated with the <code>av_malloc()</code> family of functions.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The size of the extradata content in bytes.</p>
+                        <p>The size of the extra data content in bytes.</p>
 
                       </div>
                       <div class="declaration">
@@ -842,7 +848,7 @@ This often, but not always is the inverse of the frame rate or field rate for vi
 
 <p>Like containers, elementary streams also can store timestamps, 1/timebase
 is the unit in which these timestamps are specified.
-As example of such codec time base see ISO/IEC 14496-2:2001(E)
+As example of such codec timebase see ISO/IEC 14496-2:2001(E)
 vop_time_increment_resolution and fixed_vop_rate
 (fixed_vop_rate == 0 implies that it is different from the framerate)</p>
 
@@ -1102,8 +1108,8 @@ contexts used must be created on the same device.</p>
                               <td>
                                 <div>
                                   <p>The codec to open this context for. If a non-NULL codec has been previously
-passed to avcodec_alloc_context3() or for this context, then this parameter MUST be
-either <code>nil</code> or equal to the previously passed codec.</p>
+passed to <code><a href="../Classes/AVCodecContext.html#/s:11SwiftFFmpeg14AVCodecContextC5codecAcA0C0VSg_tcfc">init(codec:)</a></code> or for this context, then this parameter <em>MUST</em> be either <code>nil</code>
+or equal to the previously passed codec.</p>
                                 </div>
                               </td>
                             </tr>
@@ -1142,8 +1148,9 @@ either <code>nil</code> or equal to the previously passed codec.</p>
 <div class="aside aside-throws">
     <p class="aside-title">Throws</p>
     <ul>
-<li><code><a href="../Structs/AVError.html#/s:11SwiftFFmpeg7AVErrorV8tryAgainACvpZ">AVError.tryAgain</a></code> if input is not accepted in the current state - user must read output with <code>receiveFrame</code>.
-(once all output is read, the packet should be resent, and the call will not fail with <code><a href="../Structs/AVError.html#/s:11SwiftFFmpeg7AVErrorV8tryAgainACvpZ">AVError.tryAgain</a></code>).</li>
+<li><code><a href="../Structs/AVError.html#/s:11SwiftFFmpeg7AVErrorV8tryAgainACvpZ">AVError.tryAgain</a></code> if input is not accepted in the current state - user must read output
+with <code>receiveFrame</code>. (once all output is read, the packet should be resent, and the call
+will not fail with <code><a href="../Structs/AVError.html#/s:11SwiftFFmpeg7AVErrorV8tryAgainACvpZ">AVError.tryAgain</a></code>).</li>
 <li><code><a href="../Structs/AVError.html#/s:11SwiftFFmpeg7AVErrorV3eofACvpZ">AVError.eof</a></code> if the decoder has been flushed, and no new packets can be sent to it.
 (also returned if more than 1 flush packet is sent)</li>
 <li><code><a href="../Structs/AVError.html#/s:11SwiftFFmpeg7AVErrorV15invalidArgumentACvpZ">AVError.invalidArgument</a></code> if codec not opened, it is an encoder, or requires flush</li>
@@ -1264,10 +1271,12 @@ the decoder type) allocated by the decoder.</p>
 <div class="aside aside-throws">
     <p class="aside-title">Throws</p>
     <ul>
-<li><code><a href="../Structs/AVError.html#/s:11SwiftFFmpeg7AVErrorV8tryAgainACvpZ">AVError.tryAgain</a></code> if input is not accepted in the current state - user must read output with <code>receivePacket</code>.
-(once all output is read, the packet should be resent, and the call will not fail with <code><a href="../Structs/AVError.html#/s:11SwiftFFmpeg7AVErrorV8tryAgainACvpZ">AVError.tryAgain</a></code>).</li>
+<li><code><a href="../Structs/AVError.html#/s:11SwiftFFmpeg7AVErrorV8tryAgainACvpZ">AVError.tryAgain</a></code> if input is not accepted in the current state - user must read output
+with <code>receivePacket</code>. (once all output is read, the packet should be resent, and the call
+will not fail with <code><a href="../Structs/AVError.html#/s:11SwiftFFmpeg7AVErrorV8tryAgainACvpZ">AVError.tryAgain</a></code>).</li>
 <li><code><a href="../Structs/AVError.html#/s:11SwiftFFmpeg7AVErrorV3eofACvpZ">AVError.eof</a></code> if the encoder has been flushed, and no new frames can be sent to it.</li>
-<li><code><a href="../Structs/AVError.html#/s:11SwiftFFmpeg7AVErrorV15invalidArgumentACvpZ">AVError.invalidArgument</a></code> if codec not opened, refcounted_frames not set, it is a decoder, or requires flush.</li>
+<li><code><a href="../Structs/AVError.html#/s:11SwiftFFmpeg7AVErrorV15invalidArgumentACvpZ">AVError.invalidArgument</a></code> if codec not opened, refcounted_frames not set, it is a decoder,
+or requires flush.</li>
 <li><code><a href="../Structs/AVError.html#/s:11SwiftFFmpeg7AVErrorV11outOfMemoryACvpZ">AVError.outOfMemory</a></code> if failed to add packet to internal queue, or similar.</li>
 <li>legitimate decoding errors</li>
 </ul>
@@ -1361,6 +1370,42 @@ will return <code><a href="../Structs/AVError.html#/s:11SwiftFFmpeg7AVErrorV3eof
                             </tr>
                           </tbody>
                         </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftFFmpeg14AVCodecContextC5flushyyF"></a>
+                    <a name="//apple_ref/swift/Method/flush()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftFFmpeg14AVCodecContextC5flushyyF">flush()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Reset the internal decoder state / flush internal buffers. Should be called
+e.g. when seeking or when switching to a different stream.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    when refcounted frames are not used (i.e. avctx-&gt;refcounted_frames is 0),
+this invalidates the frames previously returned from the decoder. When
+refcounted frames are used, the decoder just releases any references it might
+keep internally, but the caller&rsquo;s reference remains valid.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">flush</span><span class="p">()</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -1684,7 +1729,7 @@ the selected (hardware-accelerated) pixel format failed.</p>
 in the fmt list of formats.</p>
 
 </div>
-<li><p>encoding: unused</p></li>
+<li><p>encoding: Unused.</p></li>
 <li><p>decoding: Set by user, if not set the native format will be chosen.</p></li>
 
                       </div>
@@ -2132,7 +2177,7 @@ the decoder may export it here. 0/1 when unknown.</li>
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2019 <a class="link" href="https://github.com/sunlubo" target="_blank" rel="external">sunlubo</a>. All rights reserved. (Last updated: 2019-01-23)</p>
+      <p>&copy; 2019 <a class="link" href="https://github.com/sunlubo" target="_blank" rel="external">sunlubo</a>. All rights reserved. (Last updated: 2019-01-24)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>

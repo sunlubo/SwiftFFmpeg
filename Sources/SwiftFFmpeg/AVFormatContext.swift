@@ -22,7 +22,7 @@ public final class AVFormatContext {
         self.cContextPtr = cContextPtr
     }
 
-    /// Allocate an `AVFormatContext`.
+    /// Create an `AVFormatContext`.
     public init() {
         guard let ctxPtr = avformat_alloc_context() else {
             abort("avformat_alloc_context")
@@ -32,9 +32,10 @@ public final class AVFormatContext {
 
     /// Input or output URL.
     ///
-    /// - demuxing: Set by `openInput`, initialized to an empty string if `url` parameter was `nil` in `openInput`.
-    /// - muxing: May be set by the caller before calling `writeHeader` to a string. Set to an empty string if
-    ///   it was `nil` in `writeHeader`.
+    /// - demuxing: Set by `openInput(_ url:format:options:)`, initialized to an empty string if `url` parameter
+    ///   was `nil` in `openInput(_ url:format:options:)`.
+    /// - muxing: May be set by the caller before calling `writeHeader(options:)` to a string. Set to an empty string if
+    ///   it was `nil` in `writeHeader(options:)`.
     public var url: String? {
         get { return String(cString: cContext.url) }
         set { cContextPtr.pointee.url = av_strdup(newValue) }
@@ -42,8 +43,9 @@ public final class AVFormatContext {
 
     /// I/O context.
     ///
-    /// - demuxing: Either set by the user before `openInput` (then the user must close it manually) or set by `openInput`.
-    /// - muxing: Set by the user before `writeHeader`. The caller must take care of closing the IO context.
+    /// - demuxing: Either set by the user before `openInput(_ url:format:options:)` (then the user must close it manually)
+    ///   or set by `openInput(_ url:format:options:)`.
+    /// - muxing: Set by the user before `writeHeader(options:)`. The caller must take care of closing the IO context.
     public var pb: AVIOContext? {
         get {
             if let ctxPtr = cContext.pb {
@@ -62,11 +64,11 @@ public final class AVFormatContext {
         return Int(cContext.nb_streams)
     }
 
-    /// A list of all streams in the file. New streams are created with `addStream`.
+    /// A list of all streams in the file. New streams are created with `addStream(codec:)`.
     ///
-    /// - demuxing: Streams are created by libavformat in `openInput`. If `noHeader` is set in `flags`,
-    ///   then new streams may also appear in `readFrame`.
-    /// - muxing: Streams are created by the user before `writeHeader`.
+    /// - demuxing: Streams are created by libavformat in `openInput(_ url:format:options:)`.
+    ///   If `AVFMTCTX_NOHEADER` is set in `flags`, then new streams may also appear in `readFrame(into:)`.
+    /// - muxing: Streams are created by the user before `writeHeader(options:)`.
     public var streams: [AVStream] {
         var list = [AVStream]()
         for i in 0..<streamCount {
@@ -93,8 +95,8 @@ public final class AVFormatContext {
 
     /// The flags used to modify the (de)muxer behaviour.
     ///
-    /// - demuxing: Set by the caller before `openInput`.
-    /// - muxing: Set by the caller before `writeHeader`.
+    /// - demuxing: Set by the caller before `openInput(_ url:format:options:)`.
+    /// - muxing: Set by the caller before `writeHeader(options:)`.
     public var flags: Flag {
         get { return Flag(rawValue: cContext.flags) }
         set { cContextPtr.pointee.flags = newValue.rawValue }
@@ -102,8 +104,8 @@ public final class AVFormatContext {
 
     /// Metadata that applies to the whole file.
     ///
-    /// - demuxing: Set by libavformat in `openInput`.
-    /// - muxing: May be set by the caller before `writeHeader`.
+    /// - demuxing: Set by libavformat in `openInput(_ url:format:options:)`.
+    /// - muxing: May be set by the caller before `writeHeader(options:)`.
     public var metadata: [String: String] {
         get {
             var dict = [String: String]()
@@ -119,9 +121,9 @@ public final class AVFormatContext {
 
     /// Custom interrupt callbacks for the I/O layer.
     ///
-    /// - demuxing: Set by the user before `openInput`.
-    /// - muxing: Set by the user before `writeHeader` (mainly useful for `AVOutputFormat.Flag.noFile` formats).
-    ///   The callback should also be passed to avio_open2() if it's used to open the file.
+    /// - demuxing: Set by the user before `openInput(_ url:format:options:)`.
+    /// - muxing: Set by the user before `writeHeader(options:)` (mainly useful for `AVOutputFormat.Flag.noFile` formats).
+    ///   The callback should also be passed to `avio_open2()` if it's used to open the file.
     public var interruptCallback: AVIOInterruptCallback {
         get { return cContext.interrupt_callback }
         set { cContextPtr.pointee.interrupt_callback = newValue }
@@ -139,12 +141,12 @@ public final class AVFormatContext {
     }
 
     /// Print detailed information about the input or output format, such as duration, bitrate, streams,
-    /// container, programs, metadata, side data, codec and time base.
+    /// container, programs, metadata, side data, codec and timebase.
     ///
     /// - Parameters:
     ///   - url: the URL to print, such as source or destination file
     ///   - isOutput: Select whether the specified context is an input(false) or output(true).
-    public func dumpFormat(url: String? = nil, isOutput: Bool) {
+    public func dumpFormat(url: String? = nil, isOutput: Bool = false) {
         av_dump_format(cContextPtr, 0, url ?? self.url, isOutput ? 1 : 0)
     }
 
@@ -413,9 +415,10 @@ extension AVFormatContext {
     ///
     /// The set of streams, the detected duration, stream parameters and codecs do
     /// not change when calling this function. If you want a complete reset, it's
-    /// better to open a new AVFormatContext.
+    /// better to open a new `AVFormatContext`.
     ///
-    /// This does not flush the AVIOContext (`pb`). If necessary, call `pb.flush` before calling this function.
+    /// This does not flush the `AVIOContext` (`pb`). If necessary, call `pb.flush`
+    /// before calling this function.
     public func flush() {
         avformat_flush(cContextPtr)
     }
@@ -534,18 +537,19 @@ extension AVFormatContext {
     ///
     /// This function passes the packet directly to the muxer, without any buffering or reordering.
     /// The caller is responsible for correctly interleaving the packets if the format requires it.
-    /// Callers that want libavformat to handle the interleaving should call `interleavedWriteFrame`
-    /// instead of this function.
+    /// Callers that want libavformat to handle the interleaving should call
+    /// `AVFormatContext.interleavedWriteFrame(_:)` instead of this function.
     ///
     /// - Parameter pkt: The packet containing the data to be written. Note that unlike
-    ///   `interleavedWriteFrame`, this function does not take ownership of the packet passed to it
-    ///   (though some muxers may make an internal reference to the input packet).
+    ///   `AVFormatContext.interleavedWriteFrame(_:)`, this function does not take ownership of the
+    ///   packet passed to it (though some muxers may make an internal reference to the input packet).
     ///
     ///   This parameter can be `nil` (at any time, not just at the end), in order to immediately flush
     ///   data buffered within the muxer, for muxers that buffer up data internally before writing it
     ///   to the output.
     ///
-    ///   Packet's `streamIndex` field must be set to the index of the corresponding stream in `streams`.
+    ///   Packet's `AVPacket.streamIndex` field must be set to the index of the corresponding stream in
+    ///   `streams`.
     ///
     ///   The timestamps (`AVPacket.pts`, `AVPacket.dts`) must be set to correct values in the stream's
     ///   timebase (unless the output format is flagged with the `AVOutputFormat.Flag.noTimestamps` flag,
@@ -563,10 +567,10 @@ extension AVFormatContext {
     ///
     /// This function will buffer the packets internally as needed to make sure the packets in the output file
     /// are properly interleaved in the order of increasing dts.
-    /// Callers doing their own interleaving should call `writeFrame` instead of this function.
+    /// Callers doing their own interleaving should call `AVFormatContext.writeFrame(_:)` instead of this function.
     ///
-    /// Using this function instead of `writeFrame` can give muxers advance knowledge of future packets,
-    /// improving e.g. the behaviour of the mp4 muxer for VFR content in fragmenting mode.
+    /// Using this function instead of `AVFormatContext.writeFrame(_:)` can give muxers advance knowledge of
+    /// future packets, improving e.g. the behaviour of the mp4 muxer for VFR content in fragmenting mode.
     ///
     /// - Parameter pkt: The packet containing the data to be written.
     ///
@@ -577,7 +581,7 @@ extension AVFormatContext {
     ///
     ///   This parameter can be `nil` (at any time, not just at the end), to flush the interleaving queues.
     ///
-    ///   Packet's `streamIndex` field must be set to the index of the corresponding stream in `streams`.
+    ///   Packet's `AVPacket.streamIndex` field must be set to the index of the corresponding stream in `streams`.
     ///
     ///   The timestamps (`AVPacket.pts`, `AVPacket.dts`) must be set to correct values in the stream's timebase
     ///   (unless the output format is flagged with the `AVOutputFormat.Flag.noTimestamps` flag, then they can be
@@ -593,7 +597,7 @@ extension AVFormatContext {
 
     /// Write the stream trailer to an output media file and free the file private data.
     ///
-    /// May only be called after a successful call to `writeHeader`.
+    /// May only be called after a successful call to `writeHeader(options:)`.
     ///
     /// - Throws: AVError
     public func writeTrailer() throws {

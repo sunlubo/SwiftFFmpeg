@@ -1913,13 +1913,6 @@
     },
     {
       "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVSamples.swift",
-      "line": null,
-      "symbol": "AVSamples",
-      "symbol_kind": "source.lang.swift.decl.extension",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/AVSamples.swift",
       "line": 10,
       "symbol": "AVSamples",
       "symbol_kind": "source.lang.swift.decl.class",
@@ -2172,21 +2165,21 @@
     },
     {
       "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/SwrContext.swift",
-      "line": 181,
+      "line": 229,
       "symbol": "SwrContext.class",
       "symbol_kind": "source.lang.swift.decl.var.static",
       "warning": "undocumented"
     },
     {
       "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/SwrContext.swift",
-      "line": 183,
+      "line": 231,
       "symbol": "SwrContext.withUnsafeClassObjectPointer(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/sun/Development/GitHub/Swift/SwiftFFmpeg/SwiftFFmpeg/Sources/SwiftFFmpeg/SwrContext.swift",
-      "line": 190,
+      "line": 238,
       "symbol": "SwrContext.withUnsafeObjectPointer(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"

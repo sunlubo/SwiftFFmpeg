@@ -16,6 +16,8 @@ typealias CodecContextBoxValue = (
 )
 typealias CodecContextBox = Box<CodecContextBoxValue>
 
+// MARK: - AVCodecContext
+
 typealias CAVCodecContext = CFFmpeg.AVCodecContext
 
 public final class AVCodecContext {
@@ -87,7 +89,7 @@ public final class AVCodecContext {
     /// extra_codec_tag + size could be added but for this a clear advantage must be demonstrated
     /// first.
     ///
-    /// - encoding: Set by user, if not then the default based on codec_id will be used.
+    /// - encoding: Set by user, if not then the default based on `codecId` will be used.
     /// - decoding: Set by user, will be converted to uppercase by libavcodec during init.
     public var codecTag: UInt32 {
         get { return cContext.codec_tag }
@@ -113,7 +115,7 @@ public final class AVCodecContext {
     }
 
     /// Number of bits the bitstream is allowed to diverge from the reference.
-    /// the reference can be CBR (for CBR pass1) or VBR (for pass2)
+    /// The reference can be CBR (for CBR pass1) or VBR (for pass2).
     ///
     /// - encoding: Set by user, unused for constant quantizer encoding.
     /// - decoding: Unused.
@@ -122,7 +124,7 @@ public final class AVCodecContext {
         set { cContextPtr.pointee.bit_rate_tolerance = Int32(newValue) }
     }
 
-    /// AVCodecContext.Flag
+    /// `AVCodecContext.Flag`
     ///
     /// - encoding: Set by user.
     /// - decoding: Set by user.
@@ -131,7 +133,7 @@ public final class AVCodecContext {
         set { cContextPtr.pointee.flags = Int32(newValue.rawValue) }
     }
 
-    /// AVCodecContext.Flag2
+    /// `AVCodecContext.Flag2`
     ///
     /// - encoding: Set by user.
     /// - decoding: Set by user.
@@ -146,10 +148,10 @@ public final class AVCodecContext {
     /// - rv10: additional flags
     /// - MPEG-4: global headers (they can be in the bitstream or here)
     ///
-    /// The allocated memory should be `AV_INPUT_BUFFER_PADDING_SIZE` bytes larger
-    /// than `extradata_size` to avoid problems if it is read with the bitstream reader.
+    /// The allocated memory should be `AVConstant.inputBufferPaddingSize` bytes larger
+    /// than `extraDataSize` to avoid problems if it is read with the bitstream reader.
     /// The bytewise contents of extradata must not depend on the architecture or CPU endianness.
-    /// Must be allocated with the `av_malloc()` family of functions.
+    /// Must be allocated with the `AVIO.malloc(size:)` family of functions.
     ///
     /// - encoding: Set/allocated/freed by libavcodec.
     /// - decoding: Set/allocated/freed by user.
@@ -158,7 +160,7 @@ public final class AVCodecContext {
         set { cContextPtr.pointee.extradata = newValue }
     }
 
-    /// The size of the extradata content in bytes.
+    /// The size of the extra data content in bytes.
     public var extraDataSize: Int {
         get { return Int(cContext.extradata_size) }
         set { cContextPtr.pointee.extradata_size = Int32(newValue) }
@@ -172,7 +174,7 @@ public final class AVCodecContext {
     ///
     /// Like containers, elementary streams also can store timestamps, 1/timebase
     /// is the unit in which these timestamps are specified.
-    /// As example of such codec time base see ISO/IEC 14496-2:2001(E)
+    /// As example of such codec timebase see ISO/IEC 14496-2:2001(E)
     /// vop_time_increment_resolution and fixed_vop_rate
     /// (fixed_vop_rate == 0 implies that it is different from the framerate)
     ///
@@ -263,8 +265,8 @@ public final class AVCodecContext {
     ///
     /// - Parameters:
     ///   - codec: The codec to open this context for. If a non-NULL codec has been previously
-    ///     passed to avcodec_alloc_context3() or for this context, then this parameter MUST be
-    ///     either `nil` or equal to the previously passed codec.
+    ///     passed to `init(codec:)` or for this context, then this parameter _MUST_ be either `nil`
+    ///     or equal to the previously passed codec.
     ///   - options: A dictionary filled with `AVCodecContext` and codec-private options.
     /// - Throws: AVError
     public func openCodec(_ codec: AVCodec? = nil, options: [String: String]? = nil) throws {
@@ -286,8 +288,9 @@ public final class AVCodecContext {
     ///   and will throw `AVError.eof`. If the decoder still has frames buffered, it will
     ///   return them after sending a flush packet.
     /// - Throws:
-    ///     - `AVError.tryAgain` if input is not accepted in the current state - user must read output with `receiveFrame`.
-    ///       (once all output is read, the packet should be resent, and the call will not fail with `AVError.tryAgain`).
+    ///     - `AVError.tryAgain` if input is not accepted in the current state - user must read output
+    ///       with `receiveFrame`. (once all output is read, the packet should be resent, and the call
+    ///       will not fail with `AVError.tryAgain`).
     ///     - `AVError.eof` if the decoder has been flushed, and no new packets can be sent to it.
     ///       (also returned if more than 1 flush packet is sent)
     ///     - `AVError.invalidArgument` if codec not opened, it is an encoder, or requires flush
@@ -318,10 +321,12 @@ public final class AVCodecContext {
     ///   Once flushing mode has been entered, additional flush packets are ignored, and sending frames
     ///   will return `AVError.eof`.
     /// - Throws:
-    ///     - `AVError.tryAgain` if input is not accepted in the current state - user must read output with `receivePacket`.
-    ///       (once all output is read, the packet should be resent, and the call will not fail with `AVError.tryAgain`).
+    ///     - `AVError.tryAgain` if input is not accepted in the current state - user must read output
+    ///       with `receivePacket`. (once all output is read, the packet should be resent, and the call
+    ///       will not fail with `AVError.tryAgain`).
     ///     - `AVError.eof` if the encoder has been flushed, and no new frames can be sent to it.
-    ///     - `AVError.invalidArgument` if codec not opened, refcounted_frames not set, it is a decoder, or requires flush.
+    ///     - `AVError.invalidArgument` if codec not opened, refcounted_frames not set, it is a decoder,
+    ///       or requires flush.
     ///     - `AVError.outOfMemory` if failed to add packet to internal queue, or similar.
     ///     - legitimate decoding errors
     public func sendFrame(_ frame: AVFrame?) throws {
@@ -338,6 +343,17 @@ public final class AVCodecContext {
     ///     - legitimate decoding errors
     public func receivePacket(_ packet: AVPacket) throws {
         try throwIfFail(avcodec_receive_packet(cContextPtr, packet.cPacketPtr))
+    }
+
+    /// Reset the internal decoder state / flush internal buffers. Should be called
+    /// e.g. when seeking or when switching to a different stream.
+    ///
+    /// - Note: when refcounted frames are not used (i.e. avctx->refcounted_frames is 0),
+    ///   this invalidates the frames previously returned from the decoder. When
+    ///   refcounted frames are used, the decoder just releases any references it might
+    ///   keep internally, but the caller's reference remains valid.
+    public func flush() {
+        avcodec_flush_buffers(cContextPtr)
     }
 }
 
@@ -554,7 +570,7 @@ extension AVCodecContext {
     /// - Warning: Behavior is undefined if the callback returns a value not
     ///   in the fmt list of formats.
     ///
-    /// - encoding: unused
+    /// - encoding: Unused.
     /// - decoding: Set by user, if not set the native format will be chosen.
     public var getFormat: AVGetFormatHandler? {
         get { return opaqueBox?.value.getFormat }

@@ -79,9 +79,9 @@ public final class AVCodecParameters {
 
     /// Extra binary data needed for initializing the decoder, codec-dependent.
     ///
-    /// Must be allocated with `av_malloc()` and will be freed by
+    /// Must be allocated with `AVIO.malloc(size:)` and will be freed by
     /// `avcodec_parameters_free()`. The allocated size of extradata must be at
-    /// least `extradata_size + AV_INPUT_BUFFER_PADDING_SIZE`, with the padding
+    /// least `extraDataSize + AVConstant.inputBufferPaddingSize`, with the padding
     /// bytes zeroed.
     public var extraData: UnsafeMutablePointer<UInt8>? {
         get { return cParameters.extradata }
@@ -198,6 +198,11 @@ public final class AVStream {
         self.cStreamPtr = cStreamPtr
     }
 
+    /// Stream index in `AVFormatContext`.
+    public var index: Int {
+        return Int(cStream.index)
+    }
+
     /// Format-specific stream ID.
     ///
     /// - encoding: Set by the user, replaced by libavformat if left unset.
@@ -207,17 +212,12 @@ public final class AVStream {
         set { cStreamPtr.pointee.id = newValue }
     }
 
-    /// Stream index in `AVFormatContext`.
-    public var index: Int {
-        return Int(cStream.index)
-    }
-
     /// This is the fundamental unit of time (in seconds) in terms of which frame timestamps are represented.
     ///
-    /// - encoding: May be set by the caller before `writeHeader` to provide a hint to the muxer about
-    ///   the desired timebase. In `writeHeader`, the muxer will overwrite this field with the timebase
-    ///   that will actually be used for the timestamps written into the file (which may or may not be related to
-    ///   the user-provided one, depending on the format).
+    /// - encoding: May be set by the caller before `AVFormatContext.writeHeader(options:)` to provide a hint
+    ///   to the muxer about the desired timebase. In `AVFormatContext.writeHeader(options:)`, the muxer will
+    ///   overwrite this field with the timebase that will actually be used for the timestamps written into the
+    ///   file (which may or may not be related to the user-provided one, depending on the format).
     /// - decoding: Set by libavformat.
     public var timebase: AVRational {
         get { return cStream.time_base }
@@ -254,27 +254,32 @@ public final class AVStream {
 
     /// The metadata of the stream.
     public var metadata: [String: String] {
-        var dict = [String: String]()
-        var tag: UnsafeMutablePointer<AVDictionaryEntry>?
-        while let next = av_dict_get(cStream.metadata, "", tag, AV_DICT_IGNORE_SUFFIX) {
-            dict[String(cString: next.pointee.key)] = String(cString: next.pointee.value)
-            tag = next
+        get {
+            var dict = [String: String]()
+            var prev: UnsafeMutablePointer<AVDictionaryEntry>?
+            while let tag = av_dict_get(cStream.metadata, "", prev, AV_DICT_IGNORE_SUFFIX) {
+                dict[String(cString: tag.pointee.key)] = String(cString: tag.pointee.value)
+                prev = tag
+            }
+            return dict
         }
-        return dict
+        set { cStreamPtr.pointee.metadata = newValue.toAVDict() }
     }
 
     /// Average framerate.
     ///
-    /// - demuxing: May be set by libavformat when creating the stream or in `findStreamInfo`.
-    /// - muxing: May be set by the caller before `writeHeader`.
+    /// - demuxing: May be set by libavformat when creating the stream or in
+    ///   `AVFormatContext.findStreamInfo(options:)`.
+    /// - muxing: May be set by the caller before `AVFormatContext.writeHeader(options:)`.
     public var averageFramerate: AVRational {
-        return cStream.avg_frame_rate
+        get { return cStream.avg_frame_rate }
+        set { cStreamPtr.pointee.avg_frame_rate = newValue }
     }
 
     /// Real base framerate of the stream.
     /// This is the lowest framerate with which all timestamps can be represented accurately
     /// (it is the least common multiple of all framerates in the stream). Note, this value is just a guess!
-    /// For example, if the time base is 1/90000 and all frames have either approximately 3600 or 1800 timer ticks,
+    /// For example, if the timebase is 1/90000 and all frames have either approximately 3600 or 1800 timer ticks,
     /// then realFramerate will be 50/1.
     public var realFramerate: AVRational {
         return cStream.r_frame_rate
@@ -282,8 +287,8 @@ public final class AVStream {
 
     /// Codec parameters associated with this stream.
     ///
-    /// - demuxing: Filled by libavformat on stream creation or in `findStreamInfo`.
-    /// - muxing: Filled by the caller before `writeHeader`.
+    /// - demuxing: Filled by libavformat on stream creation or in `AVFormatContext.findStreamInfo(options:)`.
+    /// - muxing: Filled by the caller before `AVFormatContext.writeHeader(options:)`.
     public var codecParameters: AVCodecParameters {
         return AVCodecParameters(cParametersPtr: cStream.codecpar)
     }

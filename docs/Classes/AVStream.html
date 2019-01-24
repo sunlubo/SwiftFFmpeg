@@ -214,6 +214,9 @@
                 <a class="nav-group-task-link" href="../Extensions/AVHWDeviceType.html">AVHWDeviceType</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/AVHWFrameTransferDirection.html">AVHWFrameTransferDirection</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Extensions/AVIODirEntryType.html">AVIODirEntryType</a>
               </li>
               <li class="nav-group-task">
@@ -363,6 +366,9 @@
                 <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg14AVHWDeviceTypea">AVHWDeviceType</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg26AVHWFrameTransferDirectiona">AVHWFrameTransferDirection</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg16AVIODirEntryTypea">AVIODirEntryType</a>
               </li>
               <li class="nav-group-task">
@@ -425,6 +431,33 @@
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:11SwiftFFmpeg8AVStreamC5indexSivp"></a>
+                    <a name="//apple_ref/swift/Property/index" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftFFmpeg8AVStreamC5indexSivp">index</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Stream index in <code><a href="../Classes/AVFormatContext.html">AVFormatContext</a></code>.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">index</span><span class="p">:</span> <span class="kt">Int</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:11SwiftFFmpeg8AVStreamC2ids5Int32Vvp"></a>
                     <a name="//apple_ref/swift/Property/id" class="dashAnchor"></a>
                     <a class="token" href="#/s:11SwiftFFmpeg8AVStreamC2ids5Int32Vvp">id</a>
@@ -457,33 +490,6 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:11SwiftFFmpeg8AVStreamC5indexSivp"></a>
-                    <a name="//apple_ref/swift/Property/index" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftFFmpeg8AVStreamC5indexSivp">index</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Stream index in <code><a href="../Classes/AVFormatContext.html">AVFormatContext</a></code>.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">index</span><span class="p">:</span> <span class="kt">Int</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
                     <a name="/s:11SwiftFFmpeg8AVStreamC8timebaseSo10AVRationalVvp"></a>
                     <a name="//apple_ref/swift/Property/timebase" class="dashAnchor"></a>
                     <a class="token" href="#/s:11SwiftFFmpeg8AVStreamC8timebaseSo10AVRationalVvp">timebase</a>
@@ -497,10 +503,10 @@
                         <p>This is the fundamental unit of time (in seconds) in terms of which frame timestamps are represented.</p>
 
 <ul>
-<li>encoding: May be set by the caller before <code>writeHeader</code> to provide a hint to the muxer about
-the desired timebase. In <code>writeHeader</code>, the muxer will overwrite this field with the timebase
-that will actually be used for the timestamps written into the file (which may or may not be related to
-the user-provided one, depending on the format).</li>
+<li>encoding: May be set by the caller before <code><a href="../Classes/AVFormatContext.html#/s:11SwiftFFmpeg15AVFormatContextC11writeHeader7optionsySDyS2SGSg_tKF">AVFormatContext.writeHeader(options:)</a></code> to provide a hint
+to the muxer about the desired timebase. In <code><a href="../Classes/AVFormatContext.html#/s:11SwiftFFmpeg15AVFormatContextC11writeHeader7optionsySDyS2SGSg_tKF">AVFormatContext.writeHeader(options:)</a></code>, the muxer will
+overwrite this field with the timebase that will actually be used for the timestamps written into the
+file (which may or may not be related to the user-provided one, depending on the format).</li>
 <li>decoding: Set by libavformat.</li>
 </ul>
 
@@ -676,7 +682,7 @@ the user-provided one, depending on the format).</li>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">metadata</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span> <span class="p">:</span> <span class="kt">String</span><span class="p">]</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">metadata</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span> <span class="p">:</span> <span class="kt">String</span><span class="p">]</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -699,8 +705,9 @@ the user-provided one, depending on the format).</li>
                         <p>Average framerate.</p>
 
 <ul>
-<li>demuxing: May be set by libavformat when creating the stream or in <code>findStreamInfo</code>.</li>
-<li>muxing: May be set by the caller before <code>writeHeader</code>.</li>
+<li>demuxing: May be set by libavformat when creating the stream or in
+<code><a href="../Classes/AVFormatContext.html#/s:11SwiftFFmpeg15AVFormatContextC14findStreamInfo7optionsySaySDyS2SGGSg_tKF">AVFormatContext.findStreamInfo(options:)</a></code>.</li>
+<li>muxing: May be set by the caller before <code><a href="../Classes/AVFormatContext.html#/s:11SwiftFFmpeg15AVFormatContextC11writeHeader7optionsySDyS2SGSg_tKF">AVFormatContext.writeHeader(options:)</a></code>.</li>
 </ul>
 
                       </div>
@@ -708,7 +715,7 @@ the user-provided one, depending on the format).</li>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">averageFramerate</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg10AVRationala">AVRational</a></span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">averageFramerate</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg10AVRationala">AVRational</a></span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -731,7 +738,7 @@ the user-provided one, depending on the format).</li>
                         <p>Real base framerate of the stream.
 This is the lowest framerate with which all timestamps can be represented accurately
 (it is the least common multiple of all framerates in the stream). Note, this value is just a guess!
-For example, if the time base is 1/90000 and all frames have either approximately 3600 or 1800 timer ticks,
+For example, if the timebase is 1/90000 and all frames have either approximately 3600 or 1800 timer ticks,
 then realFramerate will be 50/1.</p>
 
                       </div>
@@ -762,8 +769,8 @@ then realFramerate will be 50/1.</p>
                         <p>Codec parameters associated with this stream.</p>
 
 <ul>
-<li>demuxing: Filled by libavformat on stream creation or in <code>findStreamInfo</code>.</li>
-<li>muxing: Filled by the caller before <code>writeHeader</code>.</li>
+<li>demuxing: Filled by libavformat on stream creation or in <code><a href="../Classes/AVFormatContext.html#/s:11SwiftFFmpeg15AVFormatContextC14findStreamInfo7optionsySaySDyS2SGGSg_tKF">AVFormatContext.findStreamInfo(options:)</a></code>.</li>
+<li>muxing: Filled by the caller before <code><a href="../Classes/AVFormatContext.html#/s:11SwiftFFmpeg15AVFormatContextC11writeHeader7optionsySDyS2SGSg_tKF">AVFormatContext.writeHeader(options:)</a></code>.</li>
 </ul>
 
                       </div>
@@ -813,7 +820,7 @@ then realFramerate will be 50/1.</p>
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2019 <a class="link" href="https://github.com/sunlubo" target="_blank" rel="external">sunlubo</a>. All rights reserved. (Last updated: 2019-01-23)</p>
+      <p>&copy; 2019 <a class="link" href="https://github.com/sunlubo" target="_blank" rel="external">sunlubo</a>. All rights reserved. (Last updated: 2019-01-24)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>

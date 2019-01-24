@@ -35,10 +35,10 @@ public enum AVIO {
     /// free the memory block pointed to by `ptr`. Otherwise, expand or shrink that
     /// block of memory according to `size`.
     ///
-    /// - Warning: Unlike `malloc`, the returned pointer is not guaranteed to be correctly aligned.
+    /// - Warning: Unlike `malloc(size:)`, the returned pointer is not guaranteed to be correctly aligned.
     ///
     /// - Parameters:
-    ///   - ptr: Pointer to a memory block already allocated with `realloc` or `nil`
+    ///   - ptr: Pointer to a memory block already allocated with `realloc(_:size:)` or `nil`
     ///   - size: Size in bytes of the memory block to be allocated or reallocated
     /// - Returns: Pointer to a newly-reallocated block or `nil` if the block cannot be reallocated
     ///   or the function is used to free the memory block
@@ -46,17 +46,17 @@ public enum AVIO {
         return av_realloc(ptr, size)
     }
 
-    /// Free a memory block which has been allocated with a function of `malloc` or `realloc` family.
+    /// Free a memory block which has been allocated with a function of `malloc(size:)` or `realloc(_:size:)` family.
     ///
     /// - Note: `ptr = nil` is explicitly allowed.
-    /// - Note: It is recommended that you use `freep` instead, to prevent leaving behind dangling pointers.
+    /// - Note: It is recommended that you use `freep(_:)` instead, to prevent leaving behind dangling pointers.
     ///
     /// - Parameter ptr: Pointer to the memory block which should be freed.
     public static func free(_ ptr: UnsafeMutableRawPointer?) {
         av_free(ptr)
     }
 
-    /// Free a memory block which has been allocated with a function of `malloc` or `realloc` family,
+    /// Free a memory block which has been allocated with a function of `malloc(size:)` or `realloc(_:size:)` family,
     /// and set the pointer pointing to it to `nil`.
     ///
     /// - Note: `*ptr = NULL` is safe and leads to no action.
@@ -66,12 +66,11 @@ public enum AVIO {
         av_freep(ptr)
     }
 
-    /// Read the file with name, and put its content in a newly allocated buffer or
-    /// map it with `mmap()` when available.
+    /// Read the file with name, and put its content in a newly allocated buffer or map it with `mmap()` when available.
     /// In case of success set `buffer` to the read or mmapped buffer, and `size` to the size in bytes of the buffer.
     /// Unlike mmap this function succeeds with zero sized files, in this case `*bufptr` will be set to `nil`
     /// and `*size` will be set to 0.
-    /// The returned buffer must be released with `fileUnmap`.
+    /// The returned buffer must be released with `fileUnmap(buffer:size:)`.
     ///
     /// - Throws: AVError
     public static func fileMap(
@@ -82,7 +81,7 @@ public enum AVIO {
         try throwIfFail(av_file_map(filename, buffer, size, 0, nil))
     }
 
-    /// Unmap or free the buffer bufptr created by `fileMap`.
+    /// Unmap or free the buffer bufptr created by `fileMap(filename:buffer:size)`.
     public static func fileUnmap(buffer: UnsafeMutablePointer<UInt8>, size: Int) {
         av_file_unmap(buffer, size)
     }
@@ -284,9 +283,9 @@ public typealias AVIOInterruptCallback = AVIOInterruptCB
 
 typealias CAVIOContext = CFFmpeg.AVIOContext
 
-public typealias AVIOReadHandler  = (UnsafeMutableRawPointer?, UnsafeMutablePointer<UInt8>?, Int) -> Int
+public typealias AVIOReadHandler = (UnsafeMutableRawPointer?, UnsafeMutablePointer<UInt8>?, Int) -> Int
 public typealias AVIOWriteHandler = (UnsafeMutableRawPointer?, UnsafeMutablePointer<UInt8>?, Int) -> Int
-public typealias AVIOSeekHandler  = (UnsafeMutableRawPointer?, Int64, Int) -> Int64
+public typealias AVIOSeekHandler = (UnsafeMutableRawPointer?, Int64, Int) -> Int64
 
 typealias IOBoxValue = (
     opaque: UnsafeMutableRawPointer,
@@ -484,8 +483,8 @@ public final class AVIOContext {
         return Int(ret)
     }
 
-    /// Read size bytes from `AVIOContext` into buffer. Unlike `read`, this is allowed to read
-    /// fewer bytes than requested.
+    /// Read size bytes from `AVIOContext` into buffer. Unlike `read(_:size:)`, this is allowed to
+    /// read fewer bytes than requested.
     /// The missing bytes can be read in the next call. This always tries to read at least 1 byte.
     /// Useful to reduce latency in certain cases.
     ///
@@ -551,13 +550,13 @@ public final class AVIOContext {
 
     /// Perform one step of the protocol handshake to accept a new client.
     ///
-    /// This function must be called on a client returned by `accept` before using it as a read/write context.
-    /// It is separate from `accept` because it may block.
+    /// This function must be called on a client returned by `accept()` before using it as a read/write context.
+    /// It is separate from `accept()` because it may block.
     /// A step of the handshake is defined by places where the application may decide to change the proceedings.
     /// For example, on a protocol with a request header and a reply header, each one can constitute a step
     /// because the application may use the parameters from the request to change parameters in the reply;
     /// or each individual chunk of the request can constitute a step. If the handshake is already finished,
-    /// `handshake` does nothing and returns 0 immediately.
+    /// `handshake()` does nothing and returns 0 immediately.
     ///
     /// - Returns: `true` on a complete and successful handshake, `false` if the handshake progressed,
     ///   but is not complete.
@@ -637,8 +636,8 @@ extension AVIOContext {
         public static let nonBlock = Flag(rawValue: AVIO_FLAG_NONBLOCK)
         /// Use direct mode.
         ///
-        /// avio_read and avio_write should if possible be satisfied directly instead of going through a buffer,
-        /// and avio_seek will always call the underlying seek function directly.
+        /// `read(_:size:)` and `write(_:size:)` should if possible be satisfied directly instead of going through
+        /// a buffer, and `seek(to:whence:)` will always call the underlying seek function directly.
         public static let direct = Flag(rawValue: AVIO_FLAG_DIRECT)
 
         public let rawValue: Int32

@@ -213,6 +213,9 @@
                 <a class="nav-group-task-link" href="Extensions/AVHWDeviceType.html">AVHWDeviceType</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Extensions/AVHWFrameTransferDirection.html">AVHWFrameTransferDirection</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Extensions/AVIODirEntryType.html">AVIODirEntryType</a>
               </li>
               <li class="nav-group-task">
@@ -362,6 +365,9 @@
                 <a class="nav-group-task-link" href="Typealiases.html#/s:11SwiftFFmpeg14AVHWDeviceTypea">AVHWDeviceType</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Typealiases.html#/s:11SwiftFFmpeg26AVHWFrameTransferDirectiona">AVHWFrameTransferDirection</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Typealiases.html#/s:11SwiftFFmpeg16AVIODirEntryTypea">AVIODirEntryType</a>
               </li>
               <li class="nav-group-task">
@@ -425,6 +431,11 @@
     <span class="o">.</span><span class="nf">package</span><span class="p">(</span><span class="nv">url</span><span class="p">:</span> <span class="s">"https://github.com/sunlubo/SwiftFFmpeg.git"</span><span class="p">,</span> <span class="nv">from</span><span class="p">:</span> <span class="s">"1.0.0"</span><span class="p">)</span>
 <span class="p">]</span>
 </code></pre>
+<h2 id='documentation' class='heading'>Documentation</h2>
+
+<ul>
+<li><a href="https://sunlubo.github.io/SwiftFFmpeg">API documentation</a></li>
+</ul>
 <h2 id='usage' class='heading'>Usage</h2>
 <pre class="highlight swift"><code><span class="kd">import</span> <span class="kt">Foundation</span>
 <span class="kd">import</span> <span class="kt">SwiftFFmpeg</span>
@@ -441,10 +452,10 @@
 <span class="n">fmtCtx</span><span class="o">.</span><span class="nf">dumpFormat</span><span class="p">(</span><span class="nv">isOutput</span><span class="p">:</span> <span class="kc">false</span><span class="p">)</span>
 
 <span class="k">guard</span> <span class="k">let</span> <span class="nv">stream</span> <span class="o">=</span> <span class="n">fmtCtx</span><span class="o">.</span><span class="n">videoStream</span> <span class="k">else</span> <span class="p">{</span>
-    <span class="nf">fatalError</span><span class="p">(</span><span class="s">"No video stream"</span><span class="p">)</span>
+    <span class="nf">fatalError</span><span class="p">(</span><span class="s">"No video stream."</span><span class="p">)</span>
 <span class="p">}</span>
 <span class="k">guard</span> <span class="k">let</span> <span class="nv">codec</span> <span class="o">=</span> <span class="kt">AVCodec</span><span class="o">.</span><span class="nf">findDecoderById</span><span class="p">(</span><span class="n">stream</span><span class="o">.</span><span class="n">codecParameters</span><span class="o">.</span><span class="n">codecId</span><span class="p">)</span> <span class="k">else</span> <span class="p">{</span>
-    <span class="nf">fatalError</span><span class="p">(</span><span class="s">"Codec not found"</span><span class="p">)</span>
+    <span class="nf">fatalError</span><span class="p">(</span><span class="s">"Codec not found."</span><span class="p">)</span>
 <span class="p">}</span>
 <span class="k">let</span> <span class="nv">codecCtx</span> <span class="o">=</span> <span class="kt">AVCodecContext</span><span class="p">(</span><span class="nv">codec</span><span class="p">:</span> <span class="n">codec</span><span class="p">)</span>
 <span class="n">codecCtx</span><span class="o">.</span><span class="nf">setParameters</span><span class="p">(</span><span class="n">stream</span><span class="o">.</span><span class="n">codecParameters</span><span class="p">)</span>
@@ -470,13 +481,12 @@
         <span class="p">}</span>
 
         <span class="k">let</span> <span class="nv">str</span> <span class="o">=</span> <span class="kt">String</span><span class="p">(</span>
-            <span class="nv">format</span><span class="p">:</span> <span class="s">"Frame %3d (type=%@, size=%5d bytes) pts %4lld key_frame %d [DTS %3lld]"</span><span class="p">,</span>
+            <span class="nv">format</span><span class="p">:</span> <span class="s">"Frame %3d (type=%@, size=%5d bytes) pts %4lld key_frame %d"</span><span class="p">,</span>
             <span class="n">codecCtx</span><span class="o">.</span><span class="n">frameNumber</span><span class="p">,</span>
             <span class="n">frame</span><span class="o">.</span><span class="n">pictureType</span><span class="o">.</span><span class="n">description</span><span class="p">,</span>
             <span class="n">frame</span><span class="o">.</span><span class="n">pktSize</span><span class="p">,</span>
             <span class="n">frame</span><span class="o">.</span><span class="n">pts</span><span class="p">,</span>
-            <span class="n">frame</span><span class="o">.</span><span class="n">isKeyFrame</span><span class="p">,</span>
-            <span class="n">frame</span><span class="o">.</span><span class="n">dts</span>
+            <span class="n">frame</span><span class="o">.</span><span class="n">isKeyFrame</span>
         <span class="p">)</span>
         <span class="nf">print</span><span class="p">(</span><span class="n">str</span><span class="p">)</span>
 
@@ -494,7 +504,7 @@
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2019 <a class="link" href="https://github.com/sunlubo" target="_blank" rel="external">sunlubo</a>. All rights reserved. (Last updated: 2019-01-23)</p>
+      <p>&copy; 2019 <a class="link" href="https://github.com/sunlubo" target="_blank" rel="external">sunlubo</a>. All rights reserved. (Last updated: 2019-01-24)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>

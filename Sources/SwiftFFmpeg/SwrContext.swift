@@ -12,8 +12,7 @@ public final class SwrContext {
 
     /// Create `SwrContext`.
     ///
-    /// If you use this function you will need to set the parameters (manually or with `setOptions`)
-    /// before calling `initialize`.
+    /// If you use this function you will need to set the parameters before calling `initialize()`.
     public init() {
         guard let ctxPtr = swr_alloc() else {
             abort("swr_alloc")
@@ -100,8 +99,8 @@ public final class SwrContext {
 
     /// Closes the context so that `isInitialized` returns `false`.
     ///
-    /// The context can be brought back to life by running `initialize`,
-    /// `initialize` can also be used without `close`.
+    /// The context can be brought back to life by running `initialize()`,
+    /// `initialize()` can also be used without `close()`.
     /// This function is mainly provided for simplifying the usecase
     /// where one tries to support libavresample and libswresample.
     public func close() {
@@ -122,22 +121,22 @@ public final class SwrContext {
         return Int(swr_get_delay(cContextPtr, timebase))
     }
 
-    /// Find an upper bound on the number of samples that the next `convert` call will output,
-    /// if called with `sampleCount` of input samples.
+    /// Find an upper bound on the number of samples that the next `convert(dst:dstCount:src:srcCount:)`
+    /// call will output, if called with `sampleCount` of input samples.
     /// This depends on the internal state, and anything changing the internal state
-    /// (like further `convert` calls) will may change the number of samples
-    /// `getOutSamples` returns for the same number of input samples.
+    /// (like further `convert(dst:dstCount:src:srcCount:)` calls) will may change the number of samples
+    /// `getOutSamples(_:)` returns for the same number of input samples.
     ///
     /// - Note: any call to swr_inject_silence(), swr_convert(), swr_next_pts()
     ///   or swr_set_compensation() invalidates this limit
     ///
-    /// - Note: it is recommended to pass the correct available buffer size to all functions
-    ///   like `convert` even if `getOutSamples` indicates that less would be used.
+    /// - Note: it is recommended to pass the correct available buffer size to all functions like
+    ///   `convert(dst:dstCount:src:srcCount:)` even if `getOutSamples(_:)` indicates that less  would be used.
     ///
     /// - Parameter sampleCount: number of input samples
-    /// - Returns: an upper bound on the number of samples that the next `convert`
-    ///   will output or a negative value to indicate an error
-    ////
+    /// - Returns: an upper bound on the number of samples that the next `convert(dst:dstCount:src:srcCount:)`
+    ///   will output
+    /// - Throws: AVError
     public func getOutSamples(_ sampleCount: Int64) throws -> Int {
         let ret = swr_get_out_samples(cContextPtr, Int32(sampleCount))
         try throwIfFail(ret)
@@ -149,7 +148,7 @@ public final class SwrContext {
     /// `dst` and `dstCount` can be set to 0 to flush the last few samples out at the end.
     ///
     /// If more input is provided than output space, then the input will be buffered.
-    /// You can avoid this buffering by using `getOutSamples` to retrieve an upper bound
+    /// You can avoid this buffering by using `getOutSamples(_:)` to retrieve an upper bound
     /// on the required number of output samples for the given number of input samples.
     /// Conversion will run directly without copying whenever possible.
     ///
@@ -170,53 +169,6 @@ public final class SwrContext {
         let ret = swr_convert(cContextPtr, dst, Int32(dstCount), src, Int32(srcCount))
         try throwIfFail(ret)
         return Int(ret)
-    }
-
-    /// Configure or reconfigure the `SwrContext` using the information provided by the `AVFrame`s.
-    ///
-    /// The original resampling context is reset even on failure.
-    /// The function calls `close` internally if the context is open.
-    ///
-    /// - SeeAlso: `close`
-    ///
-    /// - Parameters:
-    ///   - output: output AVFrame
-    ///   - input: input AVFrame
-    /// - Throws: AVError
-    public func config(output: AVFrame, input: AVFrame) throws {
-        let ret = swr_config_frame(cContextPtr, output.cFramePtr, input.cFramePtr)
-        try throwIfFail(ret)
-    }
-
-    /// Convert the samples in the input `AVFrame` and write them to the output `AVFrame`.
-    ///
-    /// Input and output `AVFrame`s must have __channel layout__, __sample rate__ and
-    /// __format__ set.
-    ///
-    /// If the output `AVFrame` does not have the data pointers allocated the `nb_samples`
-    /// field will be set using av_frame_get_buffer() is called to allocate the frame.
-    ///
-    /// The output `AVFrame` can be `nil` or have fewer allocated samples than required.
-    /// In this case, any remaining samples not written to the output will be added
-    /// to an internal FIFO buffer, to be returned at the next call to this function
-    /// or to `convert`.
-    ///
-    /// If converting sample rate, there may be data remaining in the internal
-    /// resampling delay buffer. `getDelay` tells the number of remaining samples.
-    /// To get this data as output, call this function or `convert` with `nil` input.
-    ///
-    /// If the `SwrContext` configuration does not match the output and
-    /// input `AVFrame` settings the conversion does not take place and depending on
-    /// which `AVFrame` is not matching `AVError.outputChanged`, `AVError.inputChanged`
-    /// or the result of a bitwise-OR of them is returned.
-    ///
-    /// - Parameters:
-    ///   - output: output AVFrame
-    ///   - input: input AVFrame
-    /// - Throws: AVError
-    public func convert(output: AVFrame, input: AVFrame) throws {
-        let ret = swr_convert_frame(cContextPtr, output.cFramePtr, input.cFramePtr)
-        try throwIfFail(ret)
     }
 
     deinit {

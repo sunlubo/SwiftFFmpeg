@@ -214,6 +214,9 @@
                 <a class="nav-group-task-link" href="../Extensions/AVHWDeviceType.html">AVHWDeviceType</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/AVHWFrameTransferDirection.html">AVHWFrameTransferDirection</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Extensions/AVIODirEntryType.html">AVIODirEntryType</a>
               </li>
               <li class="nav-group-task">
@@ -363,6 +366,9 @@
                 <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg14AVHWDeviceTypea">AVHWDeviceType</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg26AVHWFrameTransferDirectiona">AVHWFrameTransferDirection</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg16AVIODirEntryTypea">AVIODirEntryType</a>
               </li>
               <li class="nav-group-task">
@@ -435,7 +441,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Allocate an <code>AVFormatContext</code>.</p>
+                        <p>Create an <code>AVFormatContext</code>.</p>
 
                       </div>
                       <div class="declaration">
@@ -465,9 +471,10 @@
                         <p>Input or output URL.</p>
 
 <ul>
-<li>demuxing: Set by <code>openInput</code>, initialized to an empty string if <code>url</code> parameter was <code>nil</code> in <code>openInput</code>.</li>
-<li>muxing: May be set by the caller before calling <code>writeHeader</code> to a string. Set to an empty string if
-it was <code>nil</code> in <code>writeHeader</code>.</li>
+<li>demuxing: Set by <code>openInput(_ url:format:options:)</code>, initialized to an empty string if <code>url</code> parameter
+was <code>nil</code> in <code>openInput(_ url:format:options:)</code>.</li>
+<li>muxing: May be set by the caller before calling <code><a href="../Classes/AVFormatContext.html#/s:11SwiftFFmpeg15AVFormatContextC11writeHeader7optionsySDyS2SGSg_tKF">writeHeader(options:)</a></code> to a string. Set to an empty string if
+it was <code>nil</code> in <code><a href="../Classes/AVFormatContext.html#/s:11SwiftFFmpeg15AVFormatContextC11writeHeader7optionsySDyS2SGSg_tKF">writeHeader(options:)</a></code>.</li>
 </ul>
 
                       </div>
@@ -498,8 +505,9 @@ it was <code>nil</code> in <code>writeHeader</code>.</li>
                         <p>I/O context.</p>
 
 <ul>
-<li>demuxing: Either set by the user before <code>openInput</code> (then the user must close it manually) or set by <code>openInput</code>.</li>
-<li>muxing: Set by the user before <code>writeHeader</code>. The caller must take care of closing the IO context.</li>
+<li>demuxing: Either set by the user before <code>openInput(_ url:format:options:)</code> (then the user must close it manually)
+or set by <code>openInput(_ url:format:options:)</code>.</li>
+<li>muxing: Set by the user before <code><a href="../Classes/AVFormatContext.html#/s:11SwiftFFmpeg15AVFormatContextC11writeHeader7optionsySDyS2SGSg_tKF">writeHeader(options:)</a></code>. The caller must take care of closing the IO context.</li>
 </ul>
 
                       </div>
@@ -554,12 +562,12 @@ it was <code>nil</code> in <code>writeHeader</code>.</li>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>A list of all streams in the file. New streams are created with <code>addStream</code>.</p>
+                        <p>A list of all streams in the file. New streams are created with <code><a href="../Classes/AVFormatContext.html#/s:11SwiftFFmpeg15AVFormatContextC9addStream5codecAA8AVStreamCSgAA7AVCodecVSg_tF">addStream(codec:)</a></code>.</p>
 
 <ul>
-<li>demuxing: Streams are created by libavformat in <code>openInput</code>. If <code>noHeader</code> is set in <code><a href="../Classes/AVFormatContext.html#/s:11SwiftFFmpeg15AVFormatContextC5flagsAC4FlagVvp">flags</a></code>,
-then new streams may also appear in <code>readFrame</code>.</li>
-<li>muxing: Streams are created by the user before <code>writeHeader</code>.</li>
+<li>demuxing: Streams are created by libavformat in <code>openInput(_ url:format:options:)</code>.
+If <code>AVFMTCTX_NOHEADER</code> is set in <code><a href="../Classes/AVFormatContext.html#/s:11SwiftFFmpeg15AVFormatContextC5flagsAC4FlagVvp">flags</a></code>, then new streams may also appear in <code><a href="../Classes/AVFormatContext.html#/s:11SwiftFFmpeg15AVFormatContextC9readFrame4intoyAA8AVPacketC_tKF">readFrame(into:)</a></code>.</li>
+<li>muxing: Streams are created by the user before <code><a href="../Classes/AVFormatContext.html#/s:11SwiftFFmpeg15AVFormatContextC11writeHeader7optionsySDyS2SGSg_tKF">writeHeader(options:)</a></code>.</li>
 </ul>
 
                       </div>
@@ -671,8 +679,8 @@ then new streams may also appear in <code>readFrame</code>.</li>
                         <p>The flags used to modify the (de)muxer behaviour.</p>
 
 <ul>
-<li>demuxing: Set by the caller before <code>openInput</code>.</li>
-<li>muxing: Set by the caller before <code>writeHeader</code>.</li>
+<li>demuxing: Set by the caller before <code>openInput(_ url:format:options:)</code>.</li>
+<li>muxing: Set by the caller before <code><a href="../Classes/AVFormatContext.html#/s:11SwiftFFmpeg15AVFormatContextC11writeHeader7optionsySDyS2SGSg_tKF">writeHeader(options:)</a></code>.</li>
 </ul>
 
                       </div>
@@ -703,8 +711,8 @@ then new streams may also appear in <code>readFrame</code>.</li>
                         <p>Metadata that applies to the whole file.</p>
 
 <ul>
-<li>demuxing: Set by libavformat in <code>openInput</code>.</li>
-<li>muxing: May be set by the caller before <code>writeHeader</code>.</li>
+<li>demuxing: Set by libavformat in <code>openInput(_ url:format:options:)</code>.</li>
+<li>muxing: May be set by the caller before <code><a href="../Classes/AVFormatContext.html#/s:11SwiftFFmpeg15AVFormatContextC11writeHeader7optionsySDyS2SGSg_tKF">writeHeader(options:)</a></code>.</li>
 </ul>
 
                       </div>
@@ -735,9 +743,9 @@ then new streams may also appear in <code>readFrame</code>.</li>
                         <p>Custom interrupt callbacks for the I/O layer.</p>
 
 <ul>
-<li>demuxing: Set by the user before <code>openInput</code>.</li>
-<li>muxing: Set by the user before <code>writeHeader</code> (mainly useful for <code><a href="../Structs/AVOutputFormat/Flag.html#/s:11SwiftFFmpeg14AVOutputFormatV4FlagV6noFileAEvpZ">AVOutputFormat.Flag.noFile</a></code> formats).
-The callback should also be passed to avio_open2() if it&rsquo;s used to open the file.</li>
+<li>demuxing: Set by the user before <code>openInput(_ url:format:options:)</code>.</li>
+<li>muxing: Set by the user before <code><a href="../Classes/AVFormatContext.html#/s:11SwiftFFmpeg15AVFormatContextC11writeHeader7optionsySDyS2SGSg_tKF">writeHeader(options:)</a></code> (mainly useful for <code><a href="../Structs/AVOutputFormat/Flag.html#/s:11SwiftFFmpeg14AVOutputFormatV4FlagV6noFileAEvpZ">AVOutputFormat.Flag.noFile</a></code> formats).
+The callback should also be passed to <code>avio_open2()</code> if it&rsquo;s used to open the file.</li>
 </ul>
 
                       </div>
@@ -816,14 +824,14 @@ The callback should also be passed to avio_open2() if it&rsquo;s used to open th
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Print detailed information about the input or output format, such as duration, bitrate, streams,
-container, programs, metadata, side data, codec and time base.</p>
+container, programs, metadata, side data, codec and timebase.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">dumpFormat</span><span class="p">(</span><span class="nv">url</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">isOutput</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">dumpFormat</span><span class="p">(</span><span class="nv">url</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">isOutput</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -1705,9 +1713,10 @@ work with NUT, Ogg and in a limited way AVI for example.</p>
 
 <p>The set of streams, the detected duration, stream parameters and codecs do
 not change when calling this function. If you want a complete reset, it&rsquo;s
-better to open a new AVFormatContext.</p>
+better to open a new <code>AVFormatContext</code>.</p>
 
-<p>This does not flush the AVIOContext (<code><a href="../Classes/AVFormatContext.html#/s:11SwiftFFmpeg15AVFormatContextC2pbAA11AVIOContextCSgvp">pb</a></code>). If necessary, call <code>pb.flush</code> before calling this function.</p>
+<p>This does not flush the <code><a href="../Classes/AVIOContext.html">AVIOContext</a></code> (<code><a href="../Classes/AVFormatContext.html#/s:11SwiftFFmpeg15AVFormatContextC2pbAA11AVIOContextCSgvp">pb</a></code>). If necessary, call <code>pb.flush</code>
+before calling this function.</p>
 
                       </div>
                       <div class="declaration">
@@ -2132,14 +2141,15 @@ The <code><a href="../Classes/AVFormatContext.html#/s:11SwiftFFmpeg15AVFormatCon
 
 <p>This function passes the packet directly to the muxer, without any buffering or reordering.
 The caller is responsible for correctly interleaving the packets if the format requires it.
-Callers that want libavformat to handle the interleaving should call <code>interleavedWriteFrame</code>
-instead of this function.</p>
+Callers that want libavformat to handle the interleaving should call
+<code><a href="../Classes/AVFormatContext.html#/s:11SwiftFFmpeg15AVFormatContextC21interleavedWriteFrameyyAA8AVPacketCSgKF">AVFormatContext.interleavedWriteFrame(_:)</a></code> instead of this function.</p>
 
 <p>This parameter can be <code>nil</code> (at any time, not just at the end), in order to immediately flush
   data buffered within the muxer, for muxers that buffer up data internally before writing it
   to the output.</p>
 
-<p>Packet&rsquo;s <code>streamIndex</code> field must be set to the index of the corresponding stream in <code><a href="../Classes/AVFormatContext.html#/s:11SwiftFFmpeg15AVFormatContextC7streamsSayAA8AVStreamCGvp">streams</a></code>.</p>
+<p>Packet&rsquo;s <code><a href="../Classes/AVPacket.html#/s:11SwiftFFmpeg8AVPacketC11streamIndexSivp">AVPacket.streamIndex</a></code> field must be set to the index of the corresponding stream in
+  <code><a href="../Classes/AVFormatContext.html#/s:11SwiftFFmpeg15AVFormatContextC7streamsSayAA8AVStreamCGvp">streams</a></code>.</p>
 
 <p>The timestamps (<code><a href="../Classes/AVPacket.html#/s:11SwiftFFmpeg8AVPacketC3ptss5Int64Vvp">AVPacket.pts</a></code>, <code><a href="../Classes/AVPacket.html#/s:11SwiftFFmpeg8AVPacketC3dtss5Int64Vvp">AVPacket.dts</a></code>) must be set to correct values in the stream&rsquo;s
   timebase (unless the output format is flagged with the <code><a href="../Structs/AVOutputFormat/Flag.html#/s:11SwiftFFmpeg14AVOutputFormatV4FlagV12noTimestampsAEvpZ">AVOutputFormat.Flag.noTimestamps</a></code> flag,
@@ -2176,8 +2186,8 @@ instead of this function.</p>
                               <td>
                                 <div>
                                   <p>The packet containing the data to be written. Note that unlike
-<code>interleavedWriteFrame</code>, this function does not take ownership of the packet passed to it
-(though some muxers may make an internal reference to the input packet).</p>
+<code><a href="../Classes/AVFormatContext.html#/s:11SwiftFFmpeg15AVFormatContextC21interleavedWriteFrameyyAA8AVPacketCSgKF">AVFormatContext.interleavedWriteFrame(_:)</a></code>, this function does not take ownership of the
+packet passed to it (though some muxers may make an internal reference to the input packet).</p>
                                 </div>
                               </td>
                             </tr>
@@ -2204,10 +2214,10 @@ instead of this function.</p>
 
 <p>This function will buffer the packets internally as needed to make sure the packets in the output file
 are properly interleaved in the order of increasing dts.
-Callers doing their own interleaving should call <code>writeFrame</code> instead of this function.</p>
+Callers doing their own interleaving should call <code><a href="../Classes/AVFormatContext.html#/s:11SwiftFFmpeg15AVFormatContextC10writeFrameyyAA8AVPacketCSgKF">AVFormatContext.writeFrame(_:)</a></code> instead of this function.</p>
 
-<p>Using this function instead of <code>writeFrame</code> can give muxers advance knowledge of future packets,
-improving e.g. the behaviour of the mp4 muxer for VFR content in fragmenting mode.</p>
+<p>Using this function instead of <code><a href="../Classes/AVFormatContext.html#/s:11SwiftFFmpeg15AVFormatContextC10writeFrameyyAA8AVPacketCSgKF">AVFormatContext.writeFrame(_:)</a></code> can give muxers advance knowledge of
+future packets, improving e.g. the behaviour of the mp4 muxer for VFR content in fragmenting mode.</p>
 
 <p>If the packet is reference-counted, this function will take ownership of this reference and
   unreference it later when it sees fit.
@@ -2216,7 +2226,7 @@ improving e.g. the behaviour of the mp4 muxer for VFR content in fragmenting mod
 
 <p>This parameter can be <code>nil</code> (at any time, not just at the end), to flush the interleaving queues.</p>
 
-<p>Packet&rsquo;s <code>streamIndex</code> field must be set to the index of the corresponding stream in <code><a href="../Classes/AVFormatContext.html#/s:11SwiftFFmpeg15AVFormatContextC7streamsSayAA8AVStreamCGvp">streams</a></code>.</p>
+<p>Packet&rsquo;s <code><a href="../Classes/AVPacket.html#/s:11SwiftFFmpeg8AVPacketC11streamIndexSivp">AVPacket.streamIndex</a></code> field must be set to the index of the corresponding stream in <code><a href="../Classes/AVFormatContext.html#/s:11SwiftFFmpeg15AVFormatContextC7streamsSayAA8AVStreamCGvp">streams</a></code>.</p>
 
 <p>The timestamps (<code><a href="../Classes/AVPacket.html#/s:11SwiftFFmpeg8AVPacketC3ptss5Int64Vvp">AVPacket.pts</a></code>, <code><a href="../Classes/AVPacket.html#/s:11SwiftFFmpeg8AVPacketC3dtss5Int64Vvp">AVPacket.dts</a></code>) must be set to correct values in the stream&rsquo;s timebase
   (unless the output format is flagged with the <code><a href="../Structs/AVOutputFormat/Flag.html#/s:11SwiftFFmpeg14AVOutputFormatV4FlagV12noTimestampsAEvpZ">AVOutputFormat.Flag.noTimestamps</a></code> flag, then they can be
@@ -2281,7 +2291,7 @@ improving e.g. the behaviour of the mp4 muxer for VFR content in fragmenting mod
                       <div class="abstract">
                         <p>Write the stream trailer to an output media file and free the file private data.</p>
 
-<p>May only be called after a successful call to <code>writeHeader</code>.</p>
+<p>May only be called after a successful call to <code><a href="../Classes/AVFormatContext.html#/s:11SwiftFFmpeg15AVFormatContextC11writeHeader7optionsySDyS2SGSg_tKF">writeHeader(options:)</a></code>.</p>
 <div class="aside aside-throws">
     <p class="aside-title">Throws</p>
     AVError
@@ -2411,7 +2421,7 @@ improving e.g. the behaviour of the mp4 muxer for VFR content in fragmenting mod
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2019 <a class="link" href="https://github.com/sunlubo" target="_blank" rel="external">sunlubo</a>. All rights reserved. (Last updated: 2019-01-23)</p>
+      <p>&copy; 2019 <a class="link" href="https://github.com/sunlubo" target="_blank" rel="external">sunlubo</a>. All rights reserved. (Last updated: 2019-01-24)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>

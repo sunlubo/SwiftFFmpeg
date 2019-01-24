@@ -214,6 +214,9 @@
                 <a class="nav-group-task-link" href="../Extensions/AVHWDeviceType.html">AVHWDeviceType</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/AVHWFrameTransferDirection.html">AVHWFrameTransferDirection</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Extensions/AVIODirEntryType.html">AVIODirEntryType</a>
               </li>
               <li class="nav-group-task">
@@ -363,6 +366,9 @@
                 <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg14AVHWDeviceTypea">AVHWDeviceType</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg26AVHWFrameTransferDirectiona">AVHWFrameTransferDirection</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg16AVIODirEntryTypea">AVIODirEntryType</a>
               </li>
               <li class="nav-group-task">
@@ -421,11 +427,11 @@ In such a case, <code>unref</code> will free any references held by the frame an
 to its original clean state before it is reused again.</p>
 
 <p>The data described by an <code>AVFrame</code> is usually reference counted through the
-<code><a href="../Classes/AVBuffer.html">AVBuffer</a></code> API. The underlying buffer references are stored in <code><a href="../Classes/AVFrame.html#/s:11SwiftFFmpeg7AVFrameC6bufferSayAA8AVBufferCSgGvp">AVFrame.buffer</a></code> /
-<code><a href="../Classes/AVFrame.html#/s:11SwiftFFmpeg7AVFrameC14extendedBufferSayAA8AVBufferCGvp">AVFrame.extendedBuffer</a></code>. An <code>AVFrame</code> is considered to be reference counted if at
-least one reference is set, i.e. if <code>AVFrame.buffer[0] != nil</code>. In such a case,
-every single data plane must be contained in one of the buffers in <code><a href="../Classes/AVFrame.html#/s:11SwiftFFmpeg7AVFrameC6bufferSayAA8AVBufferCSgGvp">AVFrame.buffer</a></code>
-or <code><a href="../Classes/AVFrame.html#/s:11SwiftFFmpeg7AVFrameC14extendedBufferSayAA8AVBufferCGvp">AVFrame.extendedBuffer</a></code>.
+<code><a href="../Classes/AVBuffer.html">AVBuffer</a></code> API. The underlying buffer references are stored in <code>buffer</code> /
+<code>extendedBuffer</code>. An <code>AVFrame</code> is considered to be reference counted if at
+least one reference is set, i.e. if <code>buffer[0] != nil</code>. In such a case,
+every single data plane must be contained in one of the buffers in <code>buffer</code>
+or <code>extendedBuffer</code>.
 There may be a single buffer for all the data, or one separate buffer for
 each plane, or anything in between.</p>
 
@@ -456,7 +462,7 @@ C structure field name for fields accessible through <code><a href="../Structs/A
 <div class="aside aside-note">
     <p class="aside-title">Note</p>
     This only allocates the <code>AVFrame</code> itself, not the data buffers.
-Those must be allocated through other means, e.g. with <code>allocBuffer</code> or manually.
+Those must be allocated through other means, e.g. with <code><a href="../Classes/AVFrame.html#/s:11SwiftFFmpeg7AVFrameC11allocBuffer5alignySi_tKF">allocBuffer(align:)</a></code> or manually.
 
 </div>
 
@@ -515,7 +521,7 @@ Those must be allocated through other means, e.g. with <code>allocBuffer</code> 
                         <p>For video, size in bytes of each picture line.
 For audio, size in bytes of each plane.</p>
 
-<p>For audio, only linesize[0] may be set.
+<p>For audio, only <code>linesize[0]</code> may be set.
 For planar audio, each channel plane must be the same size.</p>
 
 <p>For video the linesizes should be multiples of the CPUs alignment preference, this is 16 or 32
@@ -741,10 +747,10 @@ channels, there may be more buffers than can fit in this array. Then the extra
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>For planar audio which requires more than <code><a href="../Enums/AVConstant.html#/s:11SwiftFFmpeg10AVConstantO18dataPointersNumberSivpZ">AVConstant.dataPointersNumber</a></code> <code><a href="../Classes/AVBuffer.html">AVBuffer</a></code>,
-this array will hold all the references which cannot fit into <code><a href="../Classes/AVFrame.html#/s:11SwiftFFmpeg7AVFrameC6bufferSayAA8AVBufferCSgGvp">AVFrame.buffer</a></code>.</p>
+this array will hold all the references which cannot fit into <code><a href="../Classes/AVFrame.html#/s:11SwiftFFmpeg7AVFrameC6bufferSayAA8AVBufferCSgGvp">buffer</a></code>.</p>
 
-<p>Note that this is different from <code><a href="../Classes/AVFrame.html#/s:11SwiftFFmpeg7AVFrameC12extendedDataSrySpys5UInt8VGSgGvp">AVFrame.extendedData</a></code>, which always contains all the pointers.
-This array only contains the extra pointers, which cannot fit into <code><a href="../Classes/AVFrame.html#/s:11SwiftFFmpeg7AVFrameC6bufferSayAA8AVBufferCSgGvp">AVFrame.buffer</a></code>.</p>
+<p>Note that this is different from <code><a href="../Classes/AVFrame.html#/s:11SwiftFFmpeg7AVFrameC12extendedDataSrySpys5UInt8VGSgGvp">extendedData</a></code>, which always contains all the pointers.
+This array only contains the extra pointers, which cannot fit into <code><a href="../Classes/AVFrame.html#/s:11SwiftFFmpeg7AVFrameC6bufferSayAA8AVBufferCSgGvp">buffer</a></code>.</p>
 
                       </div>
                       <div class="declaration">
@@ -798,7 +804,7 @@ This array only contains the extra pointers, which cannot fit into <code><a href
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The frame timestamp estimated using various heuristics, in stream time base.</p>
+                        <p>The frame timestamp estimated using various heuristics, in stream timebase.</p>
 
 <ul>
 <li>encoding: Unused.</li>
@@ -949,6 +955,36 @@ It is set to a negative value if unknown.</p>
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:11SwiftFFmpeg7AVFrameC10isWritableSbvp"></a>
+                    <a name="//apple_ref/swift/Property/isWritable" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftFFmpeg7AVFrameC10isWritableSbvp">isWritable</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A Boolean value indicating whether the frame data is writable.</p>
+
+<p><code>true</code> if the frame data is writable (which is <code>true</code> if and only if each of the
+underlying buffers has only one reference, namely the one stored in this frame).</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">isWritable</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:11SwiftFFmpeg7AVFrameC11allocBuffer5alignySi_tKF"></a>
                     <a name="//apple_ref/swift/Method/allocBuffer(align:)" class="dashAnchor"></a>
                     <a class="token" href="#/s:11SwiftFFmpeg7AVFrameC11allocBuffer5alignySi_tKF">allocBuffer(align:)</a>
@@ -969,8 +1005,8 @@ It is set to a negative value if unknown.</p>
 <li><code><a href="../Classes/AVFrame.html#/s:11SwiftFFmpeg7AVFrameC11sampleCountSivp">sampleCount</a></code> and <code><a href="../Classes/AVFrame.html#/s:11SwiftFFmpeg7AVFrameC13channelLayoutAA09AVChannelE0Vvp">channelLayout</a></code> for audio</li>
 </ul>
 
-<p>This function will fill <code><a href="../Classes/AVFrame.html#/s:11SwiftFFmpeg7AVFrameC4dataSrySpys5UInt8VGSgGvp">AVFrame.data</a></code> and <code><a href="../Classes/AVFrame.html#/s:11SwiftFFmpeg7AVFrameC6bufferSayAA8AVBufferCSgGvp">AVFrame.buffer</a></code> arrays and, if necessary,
-allocate and fill <code><a href="../Classes/AVFrame.html#/s:11SwiftFFmpeg7AVFrameC12extendedDataSrySpys5UInt8VGSgGvp">AVFrame.extendedData</a></code> and <code><a href="../Classes/AVFrame.html#/s:11SwiftFFmpeg7AVFrameC14extendedBufferSayAA8AVBufferCGvp">AVFrame.extendedBuffer</a></code>. For planar formats,
+<p>This function will fill <code><a href="../Classes/AVFrame.html#/s:11SwiftFFmpeg7AVFrameC4dataSrySpys5UInt8VGSgGvp">data</a></code> and <code><a href="../Classes/AVFrame.html#/s:11SwiftFFmpeg7AVFrameC6bufferSayAA8AVBufferCSgGvp">buffer</a></code> arrays and, if necessary,
+allocate and fill <code><a href="../Classes/AVFrame.html#/s:11SwiftFFmpeg7AVFrameC12extendedDataSrySpys5UInt8VGSgGvp">extendedData</a></code> and <code><a href="../Classes/AVFrame.html#/s:11SwiftFFmpeg7AVFrameC14extendedBufferSayAA8AVBufferCGvp">extendedBuffer</a></code>. For planar formats,
 one buffer will be allocated for each plane.</p>
 <div class="aside aside-warning">
     <p class="aside-title">Warning</p>
@@ -1005,8 +1041,9 @@ In addition, undefined behavior can occur in certain cases.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>Required buffer size alignment. If equal to 0, alignment will be chosen automatically
-for the current CPU. It is highly recommended to pass 0 here unless you know what you are doing.</p>
+                                  <p>Required buffer size alignment.
+If equal to 0, alignment will be chosen automatically for the current CPU.
+It is highly recommended to pass 0 here unless you know what you are doing.</p>
                                 </div>
                               </td>
                             </tr>
@@ -1032,10 +1069,10 @@ for the current CPU. It is highly recommended to pass 0 here unless you know wha
                         <p>Set up a new reference to the data described by the source frame.</p>
 
 <p>Copy frame properties from src to dst and create a new reference for each <code><a href="../Classes/AVBuffer.html">AVBuffer</a></code> from src.
-If <code>src</code> is not reference counted, new buffers are allocated and the data is copied.</p>
+If src is not reference counted, new buffers are allocated and the data is copied.</p>
 <div class="aside aside-warning">
     <p class="aside-title">Warning</p>
-    <p>dst <strong>must</strong> have been either unreferenced with <code>unref</code>, or newly allocated before
+    <p>dst <strong>must</strong> have been either unreferenced with <code><a href="../Classes/AVFrame.html#/s:11SwiftFFmpeg7AVFrameC5unrefyyF">unref()</a></code>, or newly created before
 calling this function, or undefined behavior will occur.</p>
 
 </div>
@@ -1170,7 +1207,7 @@ Call <code>dst.unref()</code> manually before calling this function to ensure th
                       <div class="abstract">
                         <p>Create a new frame that references the same data as src.</p>
 
-<p>This is a shortcut for <code>av_frame_alloc() + av_frame_ref()</code>.</p>
+<p>This is a shortcut for <code>init() + ref(from:)</code>.</p>
 
                       </div>
                       <div class="declaration">
@@ -1183,39 +1220,7 @@ Call <code>dst.unref()</code> manually before calling this function to ensure th
                       </div>
                       <div>
                         <h4>Return Value</h4>
-                        <p>newly created <code>AVFrame</code> on success, nil on error.</p>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:11SwiftFFmpeg7AVFrameC10isWritableSbyF"></a>
-                    <a name="//apple_ref/swift/Method/isWritable()" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftFFmpeg7AVFrameC10isWritableSbyF">isWritable()</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Check if the frame data is writable.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">isWritable</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p><code>true</code> if the frame data is writable (which is true if and only if each of the underlying buffers
-has only one reference, namely the one stored in this frame).</p>
+                        <p>newly created <code>AVFrame</code> on success, <code>nil</code> on error.</p>
                       </div>
                     </section>
                   </div>
@@ -1875,6 +1880,34 @@ Side data is also copied.</p>
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:11SwiftFFmpeg7AVFrameC15hwFramesContextAA010AVHWFramesF0CSgvp"></a>
+                    <a name="//apple_ref/swift/Property/hwFramesContext" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftFFmpeg7AVFrameC15hwFramesContextAA010AVHWFramesF0CSgvp">hwFramesContext</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>For hwaccel-format frames, this should be a reference to the <code><a href="../Classes/AVHWFramesContext.html">AVHWFramesContext</a></code>
+describing the frame.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">hwFramesContext</span><span class="p">:</span> <span class="kt"><a href="../Classes/AVHWFramesContext.html">AVHWFramesContext</a></span><span class="p">?</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:11SwiftFFmpeg7AVFrameC12transferData4fromyAC_tKF"></a>
                     <a name="//apple_ref/swift/Method/transferData(from:)" class="dashAnchor"></a>
                     <a class="token" href="#/s:11SwiftFFmpeg7AVFrameC12transferData4fromyAC_tKF">transferData(from:)</a>
@@ -1885,20 +1918,18 @@ Side data is also copied.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Copy data to or from a hw surface. At least one of <code>dst</code>/<code>src</code> must have an
+                        <p>Copy data to or from a hw surface. At least one of <code>dst/src</code> must have an
 <code><a href="../Classes/AVHWFramesContext.html">AVHWFramesContext</a></code> attached.</p>
 
 <p>If <code>src</code> has an <code><a href="../Classes/AVHWFramesContext.html">AVHWFramesContext</a></code> attached, then the format of <code>dst</code> (if set)
-must use one of the formats returned by <code>av_hwframe_transfer_get_formats(src,
-AV_HWFRAME_TRANSFER_DIRECTION_FROM)</code>.
+must use one of the formats returned by <code>AVHWFramesContext.getPixelFormats(.from)</code>.
 If <code>dst</code> has an <code><a href="../Classes/AVHWFramesContext.html">AVHWFramesContext</a></code> attached, then the format of <code>src</code> must use one
-of the formats returned by <code>av_hwframe_transfer_get_formats(dst,
-AV_HWFRAME_TRANSFER_DIRECTION_TO)</code>.</p>
+of the formats returned by <code>AVHWFramesContext.getPixelFormats(.to)</code>.</p>
 
-<p><code>dst</code> may be <q>clean</q> (i.e. with data/buf pointers unset), in which case the
-data buffers will be allocated by this function using <code>av_frame_get_buffer()</code>.
-If <code>dst-&gt;format</code> is set, then this format will be used, otherwise (when
-<code>dst-&gt;format</code> is <code>AVPixelFormat.none</code>) the first acceptable format will be chosen.</p>
+<p><code>dst</code> may be <q>clean</q> (i.e. with <code>data</code>/<code>buffer</code> pointers unset),
+in which case the data buffers will be allocated by this function using <code><a href="../Classes/AVFrame.html#/s:11SwiftFFmpeg7AVFrameC11allocBuffer5alignySi_tKF">allocBuffer(align:)</a></code>.
+If <code>dst.pixelFormat</code> is set, then this format will be used, otherwise (when
+<code>dst.pixelFormat</code> is <code>AVPixelFormat.none</code>) the first acceptable format will be chosen.</p>
 
 <p>The two frames must have matching allocated dimensions (i.e. equal to
 <code>AVHWFramesContext.width/height</code>), since not all device types support
@@ -1952,7 +1983,7 @@ destination frame is unspecified.</p>
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2019 <a class="link" href="https://github.com/sunlubo" target="_blank" rel="external">sunlubo</a>. All rights reserved. (Last updated: 2019-01-23)</p>
+      <p>&copy; 2019 <a class="link" href="https://github.com/sunlubo" target="_blank" rel="external">sunlubo</a>. All rights reserved. (Last updated: 2019-01-24)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>

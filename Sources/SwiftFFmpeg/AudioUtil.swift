@@ -40,15 +40,15 @@ extension AVSampleFormat {
     /// Number of sample formats. __DO NOT USE__ if linking dynamically.
     public static let nb = AV_SAMPLE_FMT_NB
 
-    /// Return a sample format corresponding to name, or `nil` on error.
+    /// Return a sample format corresponding to name, or `nil` if the sample format does not exist.
     ///
     /// - Parameter name: The name of the sample format.
     public init?(name: String) {
-        let type = av_get_sample_fmt(name)
-        if type == .none {
+        let fmt = av_get_sample_fmt(name)
+        if fmt == .none {
             return nil
         }
-        self = type
+        self = fmt
     }
 
     /// The name of the sample format, or `nil` if sample format is not recognized.
@@ -71,18 +71,26 @@ extension AVSampleFormat {
         return !isPlanar
     }
 
-    /// Return the planar alternative form of the given sample format or `none` on error.
+    /// Return the planar alternative form of the given sample format, or `nil` if the planar sample format does not exist.
     ///
     /// If the passed sample format is already in planar format, the format returned is the same as the input.
-    public func toPlanar() -> AVSampleFormat {
-        return av_get_planar_sample_fmt(self)
+    public func toPlanar() -> AVSampleFormat? {
+        let fmt = av_get_planar_sample_fmt(self)
+        if fmt == .none {
+            return nil
+        }
+        return fmt
     }
 
-    /// Return the packed alternative form of the given sample format or `none` on error.
+    /// Return the packed alternative form of the given sample format, or `nil` if the packed sample format does not exist.
     ///
     /// If the passed sample format is already in packed format, the format returned is the same as the input.
-    public func toPacked() -> AVSampleFormat {
-        return av_get_packed_sample_fmt(self)
+    public func toPacked() -> AVSampleFormat? {
+        let fmt = av_get_packed_sample_fmt(self)
+        if fmt == .none {
+            return nil
+        }
+        return fmt
     }
 }
 
@@ -164,6 +172,7 @@ public struct AVChannel: Equatable {
         self.rawValue = rawValue
     }
 
+    /// The name of the audio channel.
     public var name: String {
         return String(cString: av_get_channel_name(rawValue))
     }
@@ -246,7 +255,7 @@ public struct AVChannelLayout: Equatable {
         self.rawValue = rawValue
     }
 
-    /// Return a channel layout id that matches name, or `none` if no match is found.
+    /// Return a channel layout id that matches name, or `nil` if no match is found.
     ///
     /// - Parameter name: Name can be one or several of the following notations, separated by '+' or '|':
     ///   - the name of an usual channel layout (mono, stereo, 4.0, quad, 5.0, 5.0(side), 5.1, 5.1(side), 7.1,
@@ -258,11 +267,15 @@ public struct AVChannelLayout: Equatable {
     ///   - a channel layout mask, in hexadecimal starting with "0x" (see the AV_CH_* macros).
     ///
     ///     Example: "stereo+FC" = "2c+FC" = "2c+1c" = "0x7"
-    public init(name: String) {
-        self.init(rawValue: av_get_channel_layout(name))
+    public init?(name: String) {
+        let layout = av_get_channel_layout(name)
+        if layout == .none {
+            return nil
+        }
+        self.init(rawValue: layout)
     }
 
-    /// Return the number of channels in the channel layout.
+    /// The number of channels in the channel layout.
     public var channelCount: Int {
         return Int(av_get_channel_layout_nb_channels(rawValue))
     }
@@ -278,7 +291,7 @@ public struct AVChannelLayout: Equatable {
 
     /// Get the default channel layout for a given number of channels.
     ///
-    /// - Parameter count: number of channels
+    /// - Parameter count: The number of channels.
     /// - Returns: AVChannelLayout
     public static func `default`(for count: Int) -> AVChannelLayout {
         return AVChannelLayout(rawValue: UInt64(av_get_default_channel_layout(Int32(count))))

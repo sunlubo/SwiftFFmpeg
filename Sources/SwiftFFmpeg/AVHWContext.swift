@@ -16,20 +16,26 @@ extension AVHWDeviceType {
     public static let none = AV_HWDEVICE_TYPE_NONE
     /// Use VDPAU (Video Decode and Presentation API for Unix) hardware acceleration.
     public static let vdpau = AV_HWDEVICE_TYPE_VDPAU
+    /// Use CUDA (Compute Unified Device Architecture, NVIDIA) hardware acceleration.
     public static let cuda = AV_HWDEVICE_TYPE_CUDA
     /// Use DXVA2 (DirectX Video Acceleration) hardware acceleration.
     public static let dxva2 = AV_HWDEVICE_TYPE_DXVA2
+    /// Use QSV (Intel Quick Sync Video) hardware acceleration.
     public static let qsv = AV_HWDEVICE_TYPE_QSV
+    /// Use VideoToolbox (Apple) hardware acceleration.
     public static let videoToolbox = AV_HWDEVICE_TYPE_VIDEOTOOLBOX
+    /// Use D3D11VA (Direct3D 11 Graphics) hardware acceleration.
     public static let d3d11va = AV_HWDEVICE_TYPE_D3D11VA
+    /// Use DRM (Direct Rendering Manage) hardware acceleration.
     public static let drm = AV_HWDEVICE_TYPE_DRM
+    /// Use OpenCL hardware acceleration.
     public static let openCL = AV_HWDEVICE_TYPE_OPENCL
+    /// Use MediaCodec (Android) hardware acceleration.
     public static let mediaCodec = AV_HWDEVICE_TYPE_MEDIACODEC
 
-    /// Look up an `AVHWDeviceType` by name.
+    /// Return an `AVHWDeviceType` corresponding to name, or `nil` if the device type does not exist.
     ///
     /// - Parameter name: String name of the device type (case-insensitive).
-    /// - Returns: The requested device type, or `nil` if not found.
     public init?(name: String) {
         let type = av_hwdevice_find_type_by_name(name)
         if type == .none {
@@ -38,9 +44,9 @@ extension AVHWDeviceType {
         self = type
     }
 
-    /// Get the string name of an `AVHWDeviceType`.
-    public var name: String {
-        return String(cString: av_hwdevice_get_type_name(self)) ?? "unknown"
+    /// The name of the device type.
+    public var name: String? {
+        return String(cString: av_hwdevice_get_type_name(self))
     }
 
     /// Get all supported device types.
@@ -58,7 +64,7 @@ extension AVHWDeviceType {
 extension AVHWDeviceType: CustomStringConvertible {
 
     public var description: String {
-        return name
+        return name ?? "unknown"
     }
 }
 
@@ -87,7 +93,7 @@ public struct AVCodecHWConfig {
 
     /// The device type associated with the configuration.
     ///
-    /// Must be set for `AVCodecHWConfigMethod.hwDeviceContext` and `AVCodecHWConfigMethod.hwFramesContext`,
+    /// Must be set for `AVCodecHWConfig.Method.hwDeviceContext` and `AVCodecHWConfig.Method.hwFramesContext`,
     /// otherwise unused.
     public var deviceType: AVHWDeviceType {
         return cConfig.device_type
@@ -98,7 +104,7 @@ public struct AVCodecHWConfig {
 
 extension AVCodecHWConfig {
 
-    /// Flags used by `AVCodecHWConfig.methods`.
+    /// Flags used by `methods`.
     public struct Method: OptionSet {
         /// The codec supports this format via the `AVCodecContext.hwDeviceContext` interface.
         ///
@@ -107,10 +113,10 @@ extension AVCodecHWConfig {
         /// `AVCodecContext.openCodec(options:)`.
         public static let hwDeviceContext = Method(rawValue: Int32(AV_CODEC_HW_CONFIG_METHOD_HW_DEVICE_CTX))
 
-        /// The codec supports this format via the `hw_frames_ctx` interface.
+        /// The codec supports this format via the `AVCodecContext.hwFramesContext` interface.
         ///
-        /// When selecting this format for a decoder, `AVCodecContext.hw_frames_ctx`
-        /// should be set to a suitable frames context inside the `get_format()` callback.
+        /// When selecting this format for a decoder, `AVCodecContext.hwFramesContext`
+        /// should be set to a suitable frames context inside the `AVCodecContext.getFormat` callback.
         /// The frames context must have been created on a device of the specified type.
         public static let hwFramesContext = Method(rawValue: Int32(AV_CODEC_HW_CONFIG_METHOD_HW_FRAMES_CTX))
 
@@ -211,6 +217,17 @@ public final class AVHWDeviceContext {
             av_buffer_unref(&ptr)
         }
     }
+}
+
+// MARK: - AVHWFramesContext
+
+public typealias AVHWFrameTransferDirection = CFFmpeg.AVHWFrameTransferDirection
+
+extension AVHWFrameTransferDirection {
+    /// Transfer the data from the queried hw frame.
+    public static let from = AV_HWFRAME_TRANSFER_DIRECTION_FROM
+    /// Transfer the data to the queried hw frame.
+    public static let to = AV_HWFRAME_TRANSFER_DIRECTION_TO
 }
 
 // MARK: - AVHWFramesContext
@@ -324,6 +341,19 @@ public final class AVHWFramesContext {
         try throwIfFail(av_hwframe_get_buffer(cBufferPtr, frame.cFramePtr, 0))
     }
 
+    /// Get a list of possible source or target formats usable in `AVFrame.transferData(from:)`.
+    ///
+    /// - Parameter direction: the direction of the transfer
+    /// - Returns: supported pixel formats
+    public func getPixelFormats(_ direction: AVHWFrameTransferDirection) -> [AVPixelFormat]? {
+        var ptr: UnsafeMutablePointer<AVPixelFormat>?
+        defer { av_free(ptr) }
+        if av_hwframe_transfer_get_formats(cBufferPtr, direction, &ptr, 0) != 0 {
+            return nil
+        }
+        return values(ptr, until: .none)
+    }
+
     deinit {
         if freeWhenDone {
             var ptr: UnsafeMutablePointer<AVBufferRef>? = cBufferPtr
@@ -334,20 +364,27 @@ public final class AVHWFramesContext {
 
 extension AVFrame {
 
-    /// Copy data to or from a hw surface. At least one of `dst`/`src` must have an
+    /// For hwaccel-format frames, this should be a reference to the `AVHWFramesContext`
+    /// describing the frame.
+    public var hwFramesContext: AVHWFramesContext? {
+        if let ptr = cFrame.hw_frames_ctx {
+            return AVHWFramesContext(cBufferPtr: ptr)
+        }
+        return nil
+    }
+
+    /// Copy data to or from a hw surface. At least one of `dst/src` must have an
     /// `AVHWFramesContext` attached.
     ///
     /// If `src` has an `AVHWFramesContext` attached, then the format of `dst` (if set)
-    /// must use one of the formats returned by `av_hwframe_transfer_get_formats(src,
-    /// AV_HWFRAME_TRANSFER_DIRECTION_FROM)`.
+    /// must use one of the formats returned by `AVHWFramesContext.getPixelFormats(.from)`.
     /// If `dst` has an `AVHWFramesContext` attached, then the format of `src` must use one
-    /// of the formats returned by `av_hwframe_transfer_get_formats(dst,
-    /// AV_HWFRAME_TRANSFER_DIRECTION_TO)`.
+    /// of the formats returned by `AVHWFramesContext.getPixelFormats(.to)`.
     ///
-    /// `dst` may be "clean" (i.e. with data/buf pointers unset), in which case the
-    /// data buffers will be allocated by this function using `av_frame_get_buffer()`.
-    /// If `dst->format` is set, then this format will be used, otherwise (when
-    /// `dst->format` is `AVPixelFormat.none`) the first acceptable format will be chosen.
+    /// `dst` may be "clean" (i.e. with `data`/`buffer` pointers unset),
+    /// in which case the data buffers will be allocated by this function using `allocBuffer(align:)`.
+    /// If `dst.pixelFormat` is set, then this format will be used, otherwise (when
+    /// `dst.pixelFormat` is `AVPixelFormat.none`) the first acceptable format will be chosen.
     ///
     /// The two frames must have matching allocated dimensions (i.e. equal to
     /// `AVHWFramesContext.width/height`), since not all device types support

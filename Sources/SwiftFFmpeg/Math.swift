@@ -14,7 +14,7 @@ public typealias AVRational = CFFmpeg.AVRational
 
 extension AVRational {
 
-    /// Convert an AVRational to a `double`.
+    /// Convert an `AVRational` to a `Double`.
     public var toDouble: Double {
         return av_q2d(self)
     }

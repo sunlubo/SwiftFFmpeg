@@ -407,7 +407,7 @@ public final class AVDeviceInfoList {
     /// List devices.
     ///
     /// Returns available device names and their parameters.
-    /// These are convinient wrappers for `avdevice_list_devices()`.
+    /// These are convinient wrappers for `init(formatContext:)`.
     /// Device context is allocated and deallocated internally.
     ///
     /// - Note: device argument takes precedence over device_name when both are set.

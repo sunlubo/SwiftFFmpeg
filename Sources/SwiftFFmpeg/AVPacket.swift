@@ -22,11 +22,11 @@ typealias CAVPacket = CFFmpeg.AVPacket
 ///
 /// The semantics of data ownership depends on the `buffer` field.
 /// If it is set, the packet data is dynamically allocated and is valid indefinitely
-/// until a call to `unref` reduces the reference count to 0.
+/// until a call to `unref()` reduces the reference count to 0.
 ///
-/// If the `buffer` field is not set, `ref` would make a copy instead of increasing the reference count.
+/// If the `buffer` field is not set, `ref(from:)` would make a copy instead of increasing the reference count.
 ///
-/// The side data is always allocated with av_malloc(), copied by av_packet_ref() and freed by av_packet_unref().
+/// The side data is always allocated with `AVIO.malloc(size:)`, copied by `ref(from:)` and freed `unref()`.
 public final class AVPacket {
     let cPacketPtr: UnsafeMutablePointer<CAVPacket>
     var cPacket: CAVPacket { return cPacketPtr.pointee }
@@ -35,7 +35,7 @@ public final class AVPacket {
         self.cPacketPtr = cPacketPtr
     }
 
-    /// Allocate an `AVPacket` and set its fields to default values.
+    /// Create an `AVPacket` and set its fields to default values.
     ///
     /// - Note: This only allocates the `AVPacket` itself, not the data buffers.
     ///   Those must be allocated through other means such as `av_new_packet`.
@@ -148,7 +148,7 @@ public final class AVPacket {
 
     /// Create a new packet that references the same data as src.
     ///
-    /// This is a shortcut for `av_packet_alloc() + av_packet_ref()`.
+    /// This is a shortcut for `init() + ref(from:)`.
     ///
     /// - Returns: newly created `AVPacket` on success, `nil` on error.
     public func clone() -> AVPacket? {

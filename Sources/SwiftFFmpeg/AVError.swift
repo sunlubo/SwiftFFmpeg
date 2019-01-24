@@ -23,7 +23,7 @@ public struct AVError: Error, Equatable {
 
     /// Bitstream filter not found
     public static let bsfNotFound = AVError(code: swift_AVERROR_BSF_NOT_FOUND)
-    /// Internal bug, also see AVERROR_BUG2
+    /// Internal bug, also see `bug2`
     public static let bug = AVError(code: swift_AVERROR_BUG)
     /// Buffer too small
     public static let bufferTooSmall = AVError(code: swift_AVERROR_BUFFER_TOO_SMALL)
@@ -53,16 +53,16 @@ public struct AVError: Error, Equatable {
     public static let protocolNotFound = AVError(code: swift_AVERROR_PROTOCOL_NOT_FOUND)
     /// Stream not found
     public static let streamNotFound = AVError(code: swift_AVERROR_STREAM_NOT_FOUND)
-    /// This is semantically identical to AVERROR_BUG. It has been introduced in Libav after our `AVERROR_BUG` and
+    /// This is semantically identical to `bug`. It has been introduced in Libav after our `bug` and
     /// with a modified value.
     public static let bug2 = AVError(code: swift_AVERROR_BUG2)
     /// Unknown error, typically from an external library
     public static let unknown = AVError(code: swift_AVERROR_UNKNOWN)
     ///  Requested feature is flagged experimental. Set strict_std_compliance if you really want to use it.
     public static let experimental = AVError(code: swift_AVERROR_EXPERIMENTAL)
-    /// Input changed between calls. Reconfiguration is required. (can be OR-ed with AVERROR_OUTPUT_CHANGED)
+    /// Input changed between calls. Reconfiguration is required. (can be OR-ed with `outputChanged`)
     public static let inputChanged = AVError(code: swift_AVERROR_INPUT_CHANGED)
-    /// Output changed between calls. Reconfiguration is required. (can be OR-ed with AVERROR_INPUT_CHANGED)
+    /// Output changed between calls. Reconfiguration is required. (can be OR-ed with `inputChanged`)
     public static let outputChanged = AVError(code: swift_AVERROR_OUTPUT_CHANGED)
 
     /* HTTP & RTSP errors */

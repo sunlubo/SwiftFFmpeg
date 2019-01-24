@@ -33,8 +33,8 @@ public func networkInit() -> Int32 {
     return avformat_network_init()
 }
 
-/// Undo the initialization done by `networkInit`.
-/// Call it only once for each time you called `networkInit`.
+/// Undo the initialization done by `networkInit()`.
+/// Call it only once for each time you called `networkInit()`.
 @discardableResult
 public func networkDeinit() -> Int32 {
     return avformat_network_deinit()

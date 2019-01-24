@@ -23,11 +23,11 @@ public final class AVBuffer {
     /// Create an `AVBuffer` of the given size. (only for test)
     ///
     /// - Parameter size: size of the buffer
-    convenience init(size: Int) {
+    init(size: Int) {
         guard let bufPtr = av_buffer_alloc(Int32(size)) else {
             abort("av_buffer_alloc")
         }
-        self.init(cBufferPtr: bufPtr)
+        self.cBufferPtr = bufPtr
     }
 
     /// The data buffer.
@@ -35,14 +35,22 @@ public final class AVBuffer {
         return cBuffer.data
     }
 
-    /// Size of data in bytes.
+    /// The size of data in bytes.
     public var size: Int {
         return Int(cBuffer.size)
     }
 
+    /// The reference count held by the buffer.
     public var refCount: Int {
         precondition(cBufferPtr != nil, "buffer has been freed")
         return Int(av_buffer_get_ref_count(cBufferPtr))
+    }
+
+    /// A Boolean value indicating whether this buffer is writable.
+    /// `true` if and only if this is the only reference to the underlying buffer.
+    public var isWritable: Bool {
+        precondition(cBufferPtr != nil, "buffer has been freed")
+        return av_buffer_is_writable(cBufferPtr) > 0
     }
 
     /// Reallocate a given buffer.
@@ -51,14 +59,6 @@ public final class AVBuffer {
     public func realloc(size: Int) {
         precondition(cBufferPtr != nil, "buffer has been freed")
         abortIfFail(av_buffer_realloc(&cBufferPtr, Int32(size)))
-    }
-
-    /// Check if the buffer is writable.
-    ///
-    /// - Returns: `true` if and only if this is the only reference to the underlying buffer.
-    public func isWritable() -> Bool {
-        precondition(cBufferPtr != nil, "buffer has been freed")
-        return av_buffer_is_writable(cBufferPtr) > 0
     }
 
     /// Create a writable reference from a given buffer reference, avoiding data copy if possible.

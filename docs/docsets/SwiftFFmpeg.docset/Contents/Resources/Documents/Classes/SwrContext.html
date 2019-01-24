@@ -214,6 +214,9 @@
                 <a class="nav-group-task-link" href="../Extensions/AVHWDeviceType.html">AVHWDeviceType</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/AVHWFrameTransferDirection.html">AVHWFrameTransferDirection</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Extensions/AVIODirEntryType.html">AVIODirEntryType</a>
               </li>
               <li class="nav-group-task">
@@ -363,6 +366,9 @@
                 <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg14AVHWDeviceTypea">AVHWDeviceType</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg26AVHWFrameTransferDirectiona">AVHWFrameTransferDirection</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg16AVIODirEntryTypea">AVIODirEntryType</a>
               </li>
               <li class="nav-group-task">
@@ -437,8 +443,7 @@
                       <div class="abstract">
                         <p>Create <code>SwrContext</code>.</p>
 
-<p>If you use this function you will need to set the parameters (manually or with <code>setOptions</code>)
-before calling <code>initialize</code>.</p>
+<p>If you use this function you will need to set the parameters before calling <code><a href="../Classes/SwrContext.html#/s:11SwiftFFmpeg10SwrContextC10initializeyyKF">initialize()</a></code>.</p>
 
                       </div>
                       <div class="declaration">
@@ -757,8 +762,8 @@ before calling <code>initialize</code>.</p>
                       <div class="abstract">
                         <p>Closes the context so that <code><a href="../Classes/SwrContext.html#/s:11SwiftFFmpeg10SwrContextC13isInitializedSbvp">isInitialized</a></code> returns <code>false</code>.</p>
 
-<p>The context can be brought back to life by running <code>initialize</code>,
-<code>initialize</code> can also be used without <code>close</code>.
+<p>The context can be brought back to life by running <code><a href="../Classes/SwrContext.html#/s:11SwiftFFmpeg10SwrContextC10initializeyyKF">initialize()</a></code>,
+<code><a href="../Classes/SwrContext.html#/s:11SwiftFFmpeg10SwrContextC10initializeyyKF">initialize()</a></code> can also be used without <code>close()</code>.
 This function is mainly provided for simplifying the usecase
 where one tries to support libavresample and libswresample.</p>
 
@@ -846,11 +851,11 @@ where one tries to support libavresample and libswresample.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Find an upper bound on the number of samples that the next <code>convert</code> call will output,
- if called with <code>sampleCount</code> of input samples.
- This depends on the internal state, and anything changing the internal state
- (like further <code>convert</code> calls) will may change the number of samples
- <code>getOutSamples</code> returns for the same number of input samples.</p>
+                        <p>Find an upper bound on the number of samples that the next <code><a href="../Classes/SwrContext.html#/s:11SwiftFFmpeg10SwrContextC7convert3dst0F5Count3src0hG0SiSpySpys5UInt8VGSgG_SiSpySPyAJGSgGSitKF">convert(dst:dstCount:src:srcCount:)</a></code>
+call will output, if called with <code>sampleCount</code> of input samples.
+This depends on the internal state, and anything changing the internal state
+(like further <code><a href="../Classes/SwrContext.html#/s:11SwiftFFmpeg10SwrContextC7convert3dst0F5Count3src0hG0SiSpySpys5UInt8VGSgG_SiSpySPyAJGSgGSitKF">convert(dst:dstCount:src:srcCount:)</a></code> calls) will may change the number of samples
+<code>getOutSamples(_:)</code> returns for the same number of input samples.</p>
 <div class="aside aside-note">
     <p class="aside-title">Note</p>
     <p>any call to swr_inject_silence(), swr_convert(), swr_next_pts()
@@ -859,8 +864,13 @@ or swr_set_compensation() invalidates this limit</p>
 </div>
 <div class="aside aside-note">
     <p class="aside-title">Note</p>
-    <p>it is recommended to pass the correct available buffer size to all functions
-like <code>convert</code> even if <code>getOutSamples</code> indicates that less would be used.</p>
+    <p>it is recommended to pass the correct available buffer size to all functions like
+<code><a href="../Classes/SwrContext.html#/s:11SwiftFFmpeg10SwrContextC7convert3dst0F5Count3src0hG0SiSpySpys5UInt8VGSgG_SiSpySPyAJGSgGSitKF">convert(dst:dstCount:src:srcCount:)</a></code> even if <code>getOutSamples(_:)</code> indicates that less  would be used.</p>
+
+</div>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    <p>AVError</p>
 
 </div>
 
@@ -894,9 +904,8 @@ like <code>convert</code> even if <code>getOutSamples</code> indicates that less
                       </div>
                       <div>
                         <h4>Return Value</h4>
-                        <p>an upper bound on the number of samples that the next <code>convert</code>
-will output or a negative value to indicate an error
-/</p>
+                        <p>an upper bound on the number of samples that the next <code><a href="../Classes/SwrContext.html#/s:11SwiftFFmpeg10SwrContextC7convert3dst0F5Count3src0hG0SiSpySpys5UInt8VGSgG_SiSpySPyAJGSgGSitKF">convert(dst:dstCount:src:srcCount:)</a></code>
+will output</p>
                       </div>
                     </section>
                   </div>
@@ -919,7 +928,7 @@ will output or a negative value to indicate an error
 <p><code>dst</code> and <code>dstCount</code> can be set to 0 to flush the last few samples out at the end.</p>
 
 <p>If more input is provided than output space, then the input will be buffered.
-You can avoid this buffering by using <code>getOutSamples</code> to retrieve an upper bound
+You can avoid this buffering by using <code><a href="../Classes/SwrContext.html#/s:11SwiftFFmpeg10SwrContextC13getOutSamplesySis5Int64VKF">getOutSamples(_:)</a></code> to retrieve an upper bound
 on the required number of output samples for the given number of input samples.
 Conversion will run directly without copying whenever possible.</p>
 <div class="aside aside-throws">
@@ -1001,160 +1010,6 @@ Conversion will run directly without copying whenever possible.</p>
                       <div>
                         <h4>Return Value</h4>
                         <p>number of samples output per channel</p>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:11SwiftFFmpeg10SwrContextC6config6output5inputyAA7AVFrameC_AHtKF"></a>
-                    <a name="//apple_ref/swift/Method/config(output:input:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftFFmpeg10SwrContextC6config6output5inputyAA7AVFrameC_AHtKF">config(output:input:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Configure or reconfigure the <code>SwrContext</code> using the information provided by the <code><a href="../Classes/AVFrame.html">AVFrame</a></code>s.</p>
-
-<p>The original resampling context is reset even on failure.
-The function calls <code>close</code> internally if the context is open.</p>
-<div class="aside aside-see-also">
-    <p class="aside-title">See also</p>
-    <p><code>close</code></p>
-
-</div>
-<div class="aside aside-throws">
-    <p class="aside-title">Throws</p>
-    <p>AVError</p>
-
-</div>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">config</span><span class="p">(</span><span class="nv">output</span><span class="p">:</span> <span class="kt"><a href="../Classes/AVFrame.html">AVFrame</a></span><span class="p">,</span> <span class="nv">input</span><span class="p">:</span> <span class="kt"><a href="../Classes/AVFrame.html">AVFrame</a></span><span class="p">)</span> <span class="k">throws</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>output</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>output AVFrame</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>input</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>input AVFrame</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:11SwiftFFmpeg10SwrContextC7convert6output5inputyAA7AVFrameC_AHtKF"></a>
-                    <a name="//apple_ref/swift/Method/convert(output:input:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftFFmpeg10SwrContextC7convert6output5inputyAA7AVFrameC_AHtKF">convert(output:input:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Convert the samples in the input <code><a href="../Classes/AVFrame.html">AVFrame</a></code> and write them to the output <code><a href="../Classes/AVFrame.html">AVFrame</a></code>.</p>
-
-<p>Input and output <code><a href="../Classes/AVFrame.html">AVFrame</a></code>s must have <strong>channel layout</strong>, <strong>sample rate</strong> and
-<strong>format</strong> set.</p>
-
-<p>If the output <code><a href="../Classes/AVFrame.html">AVFrame</a></code> does not have the data pointers allocated the <code>nb_samples</code>
-field will be set using av_frame_get_buffer() is called to allocate the frame.</p>
-
-<p>The output <code><a href="../Classes/AVFrame.html">AVFrame</a></code> can be <code>nil</code> or have fewer allocated samples than required.
-In this case, any remaining samples not written to the output will be added
-to an internal FIFO buffer, to be returned at the next call to this function
-or to <code>convert</code>.</p>
-
-<p>If converting sample rate, there may be data remaining in the internal
-resampling delay buffer. <code>getDelay</code> tells the number of remaining samples.
-To get this data as output, call this function or <code>convert</code> with <code>nil</code> input.</p>
-
-<p>If the <code>SwrContext</code> configuration does not match the output and
-input <code><a href="../Classes/AVFrame.html">AVFrame</a></code> settings the conversion does not take place and depending on
-which <code><a href="../Classes/AVFrame.html">AVFrame</a></code> is not matching <code><a href="../Structs/AVError.html#/s:11SwiftFFmpeg7AVErrorV13outputChangedACvpZ">AVError.outputChanged</a></code>, <code><a href="../Structs/AVError.html#/s:11SwiftFFmpeg7AVErrorV12inputChangedACvpZ">AVError.inputChanged</a></code>
-or the result of a bitwise-OR of them is returned.</p>
-<div class="aside aside-throws">
-    <p class="aside-title">Throws</p>
-    AVError
-
-</div>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">convert</span><span class="p">(</span><span class="nv">output</span><span class="p">:</span> <span class="kt"><a href="../Classes/AVFrame.html">AVFrame</a></span><span class="p">,</span> <span class="nv">input</span><span class="p">:</span> <span class="kt"><a href="../Classes/AVFrame.html">AVFrame</a></span><span class="p">)</span> <span class="k">throws</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>output</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>output AVFrame</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>input</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>input AVFrame</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
                       </div>
                     </section>
                   </div>
@@ -1256,7 +1111,7 @@ or the result of a bitwise-OR of them is returned.</p>
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2019 <a class="link" href="https://github.com/sunlubo" target="_blank" rel="external">sunlubo</a>. All rights reserved. (Last updated: 2019-01-23)</p>
+      <p>&copy; 2019 <a class="link" href="https://github.com/sunlubo" target="_blank" rel="external">sunlubo</a>. All rights reserved. (Last updated: 2019-01-24)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>

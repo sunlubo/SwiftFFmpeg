@@ -18,7 +18,7 @@ public enum AVLog {
     }
 
     /// Send the specified message to the log if the level is less than or equal
-    /// to the current av_log_level. By default, all logging messages are sent to
+    /// to the current level. By default, all logging messages are sent to
     /// stderr. This behavior can be altered by setting a different logging callback
     /// function.
     public static func log(level: Level, message: String) {

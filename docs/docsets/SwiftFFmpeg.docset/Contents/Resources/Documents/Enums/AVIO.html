@@ -214,6 +214,9 @@
                 <a class="nav-group-task-link" href="../Extensions/AVHWDeviceType.html">AVHWDeviceType</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/AVHWFrameTransferDirection.html">AVHWFrameTransferDirection</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Extensions/AVIODirEntryType.html">AVIODirEntryType</a>
               </li>
               <li class="nav-group-task">
@@ -361,6 +364,9 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg14AVHWDeviceTypea">AVHWDeviceType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg26AVHWFrameTransferDirectiona">AVHWFrameTransferDirection</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg16AVIODirEntryTypea">AVIODirEntryType</a>
@@ -544,7 +550,7 @@ free the memory block pointed to by <code>ptr</code>. Otherwise, expand or shrin
 block of memory according to <code>size</code>.</p>
 <div class="aside aside-warning">
     <p class="aside-title">Warning</p>
-    <p>Unlike <code>malloc</code>, the returned pointer is not guaranteed to be correctly aligned.</p>
+    <p>Unlike <code><a href="../Enums/AVIO.html#/s:11SwiftFFmpeg4AVIOO6malloc4sizeSvSgSi_tFZ">malloc(size:)</a></code>, the returned pointer is not guaranteed to be correctly aligned.</p>
 
 </div>
 
@@ -569,7 +575,7 @@ block of memory according to <code>size</code>.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>Pointer to a memory block already allocated with <code>realloc</code> or <code>nil</code></p>
+                                  <p>Pointer to a memory block already allocated with <code>realloc(_:size:)</code> or <code>nil</code></p>
                                 </div>
                               </td>
                             </tr>
@@ -609,7 +615,7 @@ or the function is used to free the memory block</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Free a memory block which has been allocated with a function of <code>malloc</code> or <code>realloc</code> family.</p>
+                        <p>Free a memory block which has been allocated with a function of <code><a href="../Enums/AVIO.html#/s:11SwiftFFmpeg4AVIOO6malloc4sizeSvSgSi_tFZ">malloc(size:)</a></code> or <code><a href="../Enums/AVIO.html#/s:11SwiftFFmpeg4AVIOO7realloc_4sizeSvSgAF_SitFZ">realloc(_:size:)</a></code> family.</p>
 <div class="aside aside-note">
     <p class="aside-title">Note</p>
     <code>ptr = nil</code> is explicitly allowed.
@@ -617,7 +623,7 @@ or the function is used to free the memory block</p>
 </div>
 <div class="aside aside-note">
     <p class="aside-title">Note</p>
-    <p>It is recommended that you use <code>freep</code> instead, to prevent leaving behind dangling pointers.</p>
+    <p>It is recommended that you use <code><a href="../Enums/AVIO.html#/s:11SwiftFFmpeg4AVIOO5freepyySvSgFZ">freep(_:)</a></code> instead, to prevent leaving behind dangling pointers.</p>
 
 </div>
 
@@ -665,7 +671,7 @@ or the function is used to free the memory block</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Free a memory block which has been allocated with a function of <code>malloc</code> or <code>realloc</code> family,
+                        <p>Free a memory block which has been allocated with a function of <code><a href="../Enums/AVIO.html#/s:11SwiftFFmpeg4AVIOO6malloc4sizeSvSgSi_tFZ">malloc(size:)</a></code> or <code><a href="../Enums/AVIO.html#/s:11SwiftFFmpeg4AVIOO7realloc_4sizeSvSgAF_SitFZ">realloc(_:size:)</a></code> family,
 and set the pointer pointing to it to <code>nil</code>.</p>
 <div class="aside aside-note">
     <p class="aside-title">Note</p>
@@ -717,12 +723,11 @@ and set the pointer pointing to it to <code>nil</code>.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Read the file with name, and put its content in a newly allocated buffer or
-map it with <code>mmap()</code> when available.
+                        <p>Read the file with name, and put its content in a newly allocated buffer or map it with <code>mmap()</code> when available.
 In case of success set <code>buffer</code> to the read or mmapped buffer, and <code>size</code> to the size in bytes of the buffer.
 Unlike mmap this function succeeds with zero sized files, in this case <code>*bufptr</code> will be set to <code>nil</code>
 and <code>*size</code> will be set to 0.
-The returned buffer must be released with <code>fileUnmap</code>.</p>
+The returned buffer must be released with <code><a href="../Enums/AVIO.html#/s:11SwiftFFmpeg4AVIOO9fileUnmap6buffer4sizeySpys5UInt8VG_SitFZ">fileUnmap(buffer:size:)</a></code>.</p>
 <div class="aside aside-throws">
     <p class="aside-title">Throws</p>
     AVError
@@ -758,7 +763,7 @@ The returned buffer must be released with <code>fileUnmap</code>.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Unmap or free the buffer bufptr created by <code>fileMap</code>.</p>
+                        <p>Unmap or free the buffer bufptr created by <code>fileMap(filename:buffer:size)</code>.</p>
 
                       </div>
                       <div class="declaration">
@@ -899,7 +904,7 @@ The returned buffer must be released with <code>fileUnmap</code>.</p>
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2019 <a class="link" href="https://github.com/sunlubo" target="_blank" rel="external">sunlubo</a>. All rights reserved. (Last updated: 2019-01-23)</p>
+      <p>&copy; 2019 <a class="link" href="https://github.com/sunlubo" target="_blank" rel="external">sunlubo</a>. All rights reserved. (Last updated: 2019-01-24)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>

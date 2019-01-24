@@ -15,7 +15,7 @@ public final class AVSamples {
     public let sampleCount: Int
     public let sampleFormat: AVSampleFormat
 
-    /// Allocate a samples buffer for `sampleCount` samples, and fill data pointers and linesize accordingly.
+    /// Create a samples buffer for `sampleCount` samples, and fill data pointers and linesize accordingly.
     ///
     /// - Parameters:
     ///   - data: array to be filled with the pointer for each channel
@@ -70,6 +70,9 @@ public final class AVSamples {
             )
         }
     }
+}
+
+extension AVSamples {
 
     /// Get the required buffer size for the given audio parameters.
     ///
@@ -107,8 +110,9 @@ public final class AVSamples {
     /// The value pointed to by linesize is set to the aligned size of each channel's data buffer for
     /// planar layout, or to the aligned size of the buffer for all channels for packed layout.
     ///
-    /// The buffer in buf must be big enough to contain all the samples (use `getBufferSize` to
-    /// compute its minimum size), otherwise the data pointers will point to invalid data.
+    /// The buffer in buf must be big enough to contain all the samples (use
+    /// `getBufferSize(channelCount:sampleCount:sampleFormat:align:)` to compute its minimum size),
+    /// otherwise the data pointers will point to invalid data.
     ///
     /// - Parameters:
     ///   - data: array to be filled with the pointer for each channel

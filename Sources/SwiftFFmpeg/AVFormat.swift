@@ -44,8 +44,8 @@ public struct AVInputFormat {
         set { cFormatPtr.pointee.flags = newValue.rawValue }
     }
 
-    /// If extensions are defined, then no probe is done. You should usually not use extension format guessing
-    /// because it is not reliable enough.
+    /// If extensions are defined, then no probe is done.
+    /// You should usually not use extension format guessing because it is not reliable enough.
     public var extensions: String? {
         return String(cString: cFormat.extensions)
     }
@@ -226,7 +226,7 @@ extension AVOutputFormat {
 
     /// Flags used by `flags`.
     public struct Flag: OptionSet {
-        /// Demuxer will use avio_open, no opened file should be provided by the caller.
+        /// Muxer will use avio_open, no opened file should be provided by the caller.
         public static let noFile = Flag(rawValue: AVFMT_NOFILE)
         /// Needs '%d' in filename.
         public static let needNumber = Flag(rawValue: AVFMT_NEEDNUMBER)
@@ -240,7 +240,7 @@ extension AVOutputFormat {
         public static let noDimensions = Flag(rawValue: AVFMT_NODIMENSIONS)
         /// Format does not require any streams.
         public static let noStreams = Flag(rawValue: AVFMT_NOSTREAMS)
-        /// Format allows flushing. If not set, the muxer will not receive a nil packet in the write_packet function.
+        /// Format allows flushing. If not set, the muxer will not receive a NULL packet in the `write_packet` function.
         public static let allowFlush = Flag(rawValue: AVFMT_ALLOW_FLUSH)
         /// Format does not require strictly increasing timestamps, but they must still be monotonic.
         public static let tsNonstrict = Flag(rawValue: AVFMT_TS_NONSTRICT)

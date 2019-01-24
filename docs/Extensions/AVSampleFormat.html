@@ -214,6 +214,9 @@
                 <a class="nav-group-task-link" href="../Extensions/AVHWDeviceType.html">AVHWDeviceType</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/AVHWFrameTransferDirection.html">AVHWFrameTransferDirection</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Extensions/AVIODirEntryType.html">AVIODirEntryType</a>
               </li>
               <li class="nav-group-task">
@@ -361,6 +364,9 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg14AVHWDeviceTypea">AVHWDeviceType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg26AVHWFrameTransferDirectiona">AVHWFrameTransferDirection</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftFFmpeg16AVIODirEntryTypea">AVIODirEntryType</a>
@@ -813,7 +819,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Return a sample format corresponding to name, or <code>nil</code> on error.</p>
+                        <p>Return a sample format corresponding to name, or <code>nil</code> if the sample format does not exist.</p>
 
                       </div>
                       <div class="declaration">
@@ -957,9 +963,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:So14AVSampleFormatV11SwiftFFmpegE8toPlanarAByF"></a>
+                    <a name="/s:So14AVSampleFormatV11SwiftFFmpegE8toPlanarABSgyF"></a>
                     <a name="//apple_ref/swift/Method/toPlanar()" class="dashAnchor"></a>
-                    <a class="token" href="#/s:So14AVSampleFormatV11SwiftFFmpegE8toPlanarAByF">toPlanar()</a>
+                    <a class="token" href="#/s:So14AVSampleFormatV11SwiftFFmpegE8toPlanarABSgyF">toPlanar()</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -967,7 +973,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Return the planar alternative form of the given sample format or <code><a href="../Extensions/AVSampleFormat.html#/s:So14AVSampleFormatV11SwiftFFmpegE4noneABvpZ">none</a></code> on error.</p>
+                        <p>Return the planar alternative form of the given sample format, or <code>nil</code> if the planar sample format does not exist.</p>
 
 <p>If the passed sample format is already in planar format, the format returned is the same as the input.</p>
 
@@ -976,7 +982,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">toPlanar</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg14AVSampleFormata">AVSampleFormat</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">toPlanar</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg14AVSampleFormata">AVSampleFormat</a></span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -986,9 +992,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:So14AVSampleFormatV11SwiftFFmpegE8toPackedAByF"></a>
+                    <a name="/s:So14AVSampleFormatV11SwiftFFmpegE8toPackedABSgyF"></a>
                     <a name="//apple_ref/swift/Method/toPacked()" class="dashAnchor"></a>
-                    <a class="token" href="#/s:So14AVSampleFormatV11SwiftFFmpegE8toPackedAByF">toPacked()</a>
+                    <a class="token" href="#/s:So14AVSampleFormatV11SwiftFFmpegE8toPackedABSgyF">toPacked()</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -996,7 +1002,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Return the packed alternative form of the given sample format or <code><a href="../Extensions/AVSampleFormat.html#/s:So14AVSampleFormatV11SwiftFFmpegE4noneABvpZ">none</a></code> on error.</p>
+                        <p>Return the packed alternative form of the given sample format, or <code>nil</code> if the packed sample format does not exist.</p>
 
 <p>If the passed sample format is already in packed format, the format returned is the same as the input.</p>
 
@@ -1005,7 +1011,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">toPacked</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg14AVSampleFormata">AVSampleFormat</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">toPacked</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Typealiases.html#/s:11SwiftFFmpeg14AVSampleFormata">AVSampleFormat</a></span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -1050,7 +1056,7 @@
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2019 <a class="link" href="https://github.com/sunlubo" target="_blank" rel="external">sunlubo</a>. All rights reserved. (Last updated: 2019-01-23)</p>
+      <p>&copy; 2019 <a class="link" href="https://github.com/sunlubo" target="_blank" rel="external">sunlubo</a>. All rights reserved. (Last updated: 2019-01-24)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>

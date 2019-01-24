@@ -97,12 +97,12 @@ extension AVCodecID {
     public static let APE = AV_CODEC_ID_APE
     public static let MP1 = AV_CODEC_ID_MP1
 
-    /// The codec's name.
+    /// The name of the codec.
     public var name: String {
         return String(cString: avcodec_get_name(self))
     }
 
-    /// The codec's media type.
+    /// The media type of the codec.
     public var mediaType: AVMediaType {
         return avcodec_get_type(self)
     }
@@ -297,7 +297,7 @@ extension AVCodec {
         /// Codec can be fed a final frame with a smaller size.
         /// This can be used to prevent truncation of the last audio samples.
         public static let smallLastFrame = Cap(rawValue: UInt32(AV_CODEC_CAP_SMALL_LAST_FRAME))
-        /// Codec can output multiple frames per AVPacket.
+        /// Codec can output multiple frames per `AVPacket`.
         /// Normally demuxers return one frame at a time, demuxers which do not do
         /// are connected to a parser to split what they return into proper frames.
         /// This flag is reserved to the very rare category of codecs which have a
@@ -333,16 +333,14 @@ extension AVCodec {
         public static let intraOnly = Cap(rawValue: UInt32(AV_CODEC_CAP_INTRA_ONLY))
         /// Codec is lossless.
         public static let lossless = Cap(rawValue: AV_CODEC_CAP_LOSSLESS)
-        /// Codec is backed by a hardware implementation. Typically used to
-        /// identify a non-hwaccel hardware decoder. For information about hwaccels, use
-        /// avcodec_get_hw_config() instead.
+        /// Codec is backed by a hardware implementation. Typically used to identify a non-hwaccel hardware decoder.
+        /// For information about hwaccels, use `hwConfig(at:)` instead.
         public static let hardware = Cap(rawValue: UInt32(AV_CODEC_CAP_HARDWARE))
-        /// Codec is potentially backed by a hardware implementation, but not
-        /// necessarily. This is used instead of AV_CODEC_CAP_HARDWARE, if the
-        /// implementation provides some sort of internal fallback.
+        /// Codec is potentially backed by a hardware implementation, but not necessarily.
+        /// This is used instead of `Cap.hardware`, if the implementation provides some sort of internal fallback.
         public static let hybrid = Cap(rawValue: UInt32(AV_CODEC_CAP_HYBRID))
         /// This codec takes the reordered_opaque field from input AVFrames
-        /// and returns it in the corresponding field in AVCodecContext after encoding.
+        /// and returns it in the corresponding field in `AVCodecContext` after encoding.
         public static let encoderReorderedOpaque = Cap(rawValue: 1 << 20)
 
         public let rawValue: UInt32

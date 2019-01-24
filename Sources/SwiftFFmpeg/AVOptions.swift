@@ -166,8 +166,8 @@ extension AVOption {
         public static let subtitle = Flag(rawValue: AV_OPT_FLAG_SUBTITLE_PARAM)
         /// The option is intended for exporting values to the caller.
         public static let export = Flag(rawValue: AV_OPT_FLAG_EXPORT)
-        /// The option may not be set through the AVOptions API, only read.
-        /// This flag only makes sense when `AVOption.Flag.export` is also set.
+        /// The option may not be set through the `AVOption` API, only read.
+        /// This flag only makes sense when `export` is also set.
         public static let readonly = Flag(rawValue: AV_OPT_FLAG_READONLY)
         /// A generic parameter which can be set by the user for bit stream filtering.
         public static let bsf = Flag(rawValue: AV_OPT_FLAG_BSF_PARAM)
@@ -210,8 +210,8 @@ extension AVOption.Flag: CustomStringConvertible {
 public enum AVOptionSearchFlag: Int32 {
     /// Search in possible children of the given object first.
     case children = 1
-    /// The obj passed to av_opt_find() is fake – only a double pointer to AVClass
-    /// instead of a required pointer to a struct containing AVClass.
+    /// The obj passed to `av_opt_find()` is fake – only a double pointer to `AVClass`
+    /// instead of a required pointer to a struct containing `AVClass`.
     /// This is useful for searching for options without needing to allocate the corresponding object.
     case fakeObject = 2
 }

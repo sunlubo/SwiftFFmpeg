@@ -146,7 +146,8 @@ extension AVImage {
     ///   - pixelFormat: the pixel format of the image
     ///   - height: the height of the image
     ///   - buffer: the pointer to a buffer which will contain the image
-    ///   - linesizes: the array containing the linesize for each plane, should be filled by `fillLinesizes`
+    ///   - linesizes: the array containing the linesize for each plane, should be filled by
+    ///     `fillLinesizes(_:pixelFormat:width:)`
     /// - Returns: the size in bytes required for the image buffer
     /// - Throws: AVError
     @discardableResult

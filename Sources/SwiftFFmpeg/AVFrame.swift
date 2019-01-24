@@ -19,11 +19,11 @@ typealias CAVFrame = CFFmpeg.AVFrame
 /// to its original clean state before it is reused again.
 ///
 /// The data described by an `AVFrame` is usually reference counted through the
-/// `AVBuffer` API. The underlying buffer references are stored in `AVFrame.buffer` /
-/// `AVFrame.extendedBuffer`. An `AVFrame` is considered to be reference counted if at
-/// least one reference is set, i.e. if `AVFrame.buffer[0] != nil`. In such a case,
-/// every single data plane must be contained in one of the buffers in `AVFrame.buffer`
-/// or `AVFrame.extendedBuffer`.
+/// `AVBuffer` API. The underlying buffer references are stored in `buffer` /
+/// `extendedBuffer`. An `AVFrame` is considered to be reference counted if at
+/// least one reference is set, i.e. if `buffer[0] != nil`. In such a case,
+/// every single data plane must be contained in one of the buffers in `buffer`
+/// or `extendedBuffer`.
 /// There may be a single buffer for all the data, or one separate buffer for
 /// each plane, or anything in between.
 ///
@@ -40,7 +40,7 @@ public final class AVFrame {
     /// Creates an `AVFrame` and set its fields to default values.
     ///
     /// - Note: This only allocates the `AVFrame` itself, not the data buffers.
-    ///   Those must be allocated through other means, e.g. with `allocBuffer` or manually.
+    ///   Those must be allocated through other means, e.g. with `allocBuffer(align:)` or manually.
     public init() {
         guard let framePtr = av_frame_alloc() else {
             abort("av_frame_alloc")
@@ -65,7 +65,7 @@ public final class AVFrame {
     /// For video, size in bytes of each picture line.
     /// For audio, size in bytes of each plane.
     ///
-    /// For audio, only linesize[0] may be set.
+    /// For audio, only `linesize[0]` may be set.
     /// For planar audio, each channel plane must be the same size.
     ///
     /// For video the linesizes should be multiples of the CPUs alignment preference, this is 16 or 32
@@ -149,10 +149,10 @@ public final class AVFrame {
     }
 
     /// For planar audio which requires more than `AVConstant.dataPointersNumber` `AVBuffer`,
-    /// this array will hold all the references which cannot fit into `AVFrame.buffer`.
+    /// this array will hold all the references which cannot fit into `buffer`.
     ///
-    /// Note that this is different from `AVFrame.extendedData`, which always contains all the pointers.
-    /// This array only contains the extra pointers, which cannot fit into `AVFrame.buffer`.
+    /// Note that this is different from `extendedData`, which always contains all the pointers.
+    /// This array only contains the extra pointers, which cannot fit into `buffer`.
     public var extendedBuffer: [AVBuffer] {
         var list = [AVBuffer]()
         for i in 0..<extendedBufferCount {
@@ -166,7 +166,7 @@ public final class AVFrame {
         return Int(cFrame.nb_extended_buf)
     }
 
-    /// The frame timestamp estimated using various heuristics, in stream time base.
+    /// The frame timestamp estimated using various heuristics, in stream timebase.
     ///
     /// - encoding: Unused.
     /// - decoding: Set by libavcodec, read by user.
@@ -222,6 +222,14 @@ public final class AVFrame {
         }
     }
 
+    /// A Boolean value indicating whether the frame data is writable.
+    ///
+    /// `true` if the frame data is writable (which is `true` if and only if each of the
+    /// underlying buffers has only one reference, namely the one stored in this frame).
+    public var isWritable: Bool {
+        return av_frame_is_writable(cFramePtr) > 0
+    }
+
     /// Allocate new buffer(s) for audio or video data.
     ///
     /// The following fields must be set on frame before calling this function:
@@ -229,15 +237,16 @@ public final class AVFrame {
     ///   - `width` and `height` for video
     ///   - `sampleCount` and `channelLayout` for audio
     ///
-    /// This function will fill `AVFrame.data` and `AVFrame.buffer` arrays and, if necessary,
-    /// allocate and fill `AVFrame.extendedData` and `AVFrame.extendedBuffer`. For planar formats,
+    /// This function will fill `data` and `buffer` arrays and, if necessary,
+    /// allocate and fill `extendedData` and `extendedBuffer`. For planar formats,
     /// one buffer will be allocated for each plane.
     ///
     /// - Warning: If frame already has been allocated, calling this function will leak memory.
     ///   In addition, undefined behavior can occur in certain cases.
     ///
-    /// - Parameter align: Required buffer size alignment. If equal to 0, alignment will be chosen automatically
-    ///   for the current CPU. It is highly recommended to pass 0 here unless you know what you are doing.
+    /// - Parameter align: Required buffer size alignment.
+    ///   If equal to 0, alignment will be chosen automatically for the current CPU.
+    ///   It is highly recommended to pass 0 here unless you know what you are doing.
     /// - Throws: AVError
     public func allocBuffer(align: Int = 0) throws {
         try throwIfFail(av_frame_get_buffer(cFramePtr, Int32(align)))
@@ -246,9 +255,9 @@ public final class AVFrame {
     /// Set up a new reference to the data described by the source frame.
     ///
     /// Copy frame properties from src to dst and create a new reference for each `AVBuffer` from src.
-    /// If `src` is not reference counted, new buffers are allocated and the data is copied.
+    /// If src is not reference counted, new buffers are allocated and the data is copied.
     ///
-    /// - Warning: dst __must__ have been either unreferenced with `unref`, or newly allocated before
+    /// - Warning: dst __must__ have been either unreferenced with `unref()`, or newly created before
     ///   calling this function, or undefined behavior will occur.
     ///
     /// - Parameter src: the source frame
@@ -274,22 +283,14 @@ public final class AVFrame {
 
     /// Create a new frame that references the same data as src.
     ///
-    /// This is a shortcut for `av_frame_alloc() + av_frame_ref()`.
+    /// This is a shortcut for `init() + ref(from:)`.
     ///
-    /// - Returns: newly created `AVFrame` on success, nil on error.
+    /// - Returns: newly created `AVFrame` on success, `nil` on error.
     public func clone() -> AVFrame? {
         if let ptr = av_frame_clone(cFramePtr) {
             return AVFrame(cFramePtr: ptr)
         }
         return nil
-    }
-
-    /// Check if the frame data is writable.
-    ///
-    /// - Returns: `true` if the frame data is writable (which is true if and only if each of the underlying buffers
-    ///   has only one reference, namely the one stored in this frame).
-    public func isWritable() -> Bool {
-        return av_frame_is_writable(cFramePtr) > 0
     }
 
     /// Ensure that the frame data is writable, avoiding data copy if possible.
