@@ -15,7 +15,7 @@ typealias CAVFrame = CFFmpeg.AVFrame
 ///
 /// `AVFrame` is typically allocated once and then reused multiple times to hold
 /// different data (e.g. a single `AVFrame` to hold frames received from a decoder).
-/// In such a case, `unref` will free any references held by the frame and reset it
+/// In such a case, `unref()` will free any references held by the frame and reset it
 /// to its original clean state before it is reused again.
 ///
 /// The data described by an `AVFrame` is usually reference counted through the
@@ -26,9 +26,6 @@ typealias CAVFrame = CFFmpeg.AVFrame
 /// or `extendedBuffer`.
 /// There may be a single buffer for all the data, or one separate buffer for
 /// each plane, or anything in between.
-///
-/// Fields can be accessed through `AVOption`s, the name string used, matches the
-/// C structure field name for fields accessible through `AVOption`s.
 public final class AVFrame {
     let cFramePtr: UnsafeMutablePointer<CAVFrame>
     var cFrame: CAVFrame { return cFramePtr.pointee }

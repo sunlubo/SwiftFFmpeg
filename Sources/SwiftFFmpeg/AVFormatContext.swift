@@ -376,8 +376,18 @@ extension AVFormatContext {
     ///   - stream: the stream which the frame is part of
     ///   - frame: the frame with the aspect ratio to be determined
     /// - Returns: the guessed (valid) sample aspect ratio, 0/1 if no idea
-    public func guessSampleAspectRatio(stream: AVStream?, frame: AVFrame?) -> AVRational {
+    public func guessSampleAspectRatio(stream: AVStream?, frame: AVFrame? = nil) -> AVRational {
         return av_guess_sample_aspect_ratio(cContextPtr, stream?.cStreamPtr, frame?.cFramePtr)
+    }
+
+    /// Guess the frame rate, based on both the container and codec information.
+    ///
+    /// - Parameters:
+    ///   - stream: the stream which the frame is part of
+    ///   - frame: the frame for which the frame rate should be determined
+    /// - Returns: the guessed (valid) frame rate, 0/1 if no idea
+    public func guessFrameRate(stream: AVStream, frame: AVFrame? = nil) -> AVRational {
+        return av_guess_frame_rate(cContextPtr, stream.cStreamPtr, frame?.cFramePtr)
     }
 
     /// Return the next frame of a stream.
