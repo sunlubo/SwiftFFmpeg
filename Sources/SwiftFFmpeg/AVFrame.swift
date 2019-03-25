@@ -368,7 +368,7 @@ extension AVFrame {
     /// A Boolean value indicating whether this frame is key frame.
     public var isKeyFrame: Bool {
         get { return cFrame.key_frame == 1 }
-        set { cFrame.key_frame = newValue ? 1 : 0 }
+        set { cFramePtr.pointee.key_frame = newValue ? 1 : 0 }
     }
 
     /// A Boolean value indicating whether this frame is interlaced or progressive frame.
@@ -379,7 +379,7 @@ extension AVFrame {
     /// The picture type of the frame.
     public var pictureType: AVPictureType {
         get { return cFrame.pict_type }
-        set { cFrame.pict_type = newValue }
+        set { cFramePtr.pointee.pict_type = newValue }
     }
 
     /// The sample aspect ratio for the video frame, 0/1 if unknown/unspecified.
