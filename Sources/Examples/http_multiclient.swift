@@ -33,7 +33,7 @@ private func process_client(client: AVIOContext, input: String) throws {
     print("resource=\(resource)")
 
     var replyCode = Int(AVError.httpNotFound.code)
-    if resource.first == "/" && resource.dropFirst() == input {
+    if resource.first == "/", resource.dropFirst() == input {
         replyCode = 200
     }
     try client.set(replyCode, forKey: "reply_code")
@@ -82,7 +82,7 @@ func http_multiclient() throws {
     }
 
     AVLog.level = .trace
-    networkInit()
+    try FFmpeg.networkInit()
 
     let input = CommandLine.arguments[2]
     let output = CommandLine.arguments[3]

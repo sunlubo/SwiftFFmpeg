@@ -1,7 +1,6 @@
 #pragma once
 #include <errno.h>
 #include <stddef.h>
-
 #include <libavutil/avutil.h>
 #include <libavutil/common.h>
 #include <libavutil/error.h>
