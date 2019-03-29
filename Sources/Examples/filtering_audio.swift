@@ -5,7 +5,11 @@
 //  Created by sunlubo on 2019/1/16.
 //
 
+#if os(macOS) || os(iOS) || os(tvOS) || os(watchOS)
 import Darwin
+#else
+import Glibc
+#endif
 import SwiftFFmpeg
 
 private func print_frame(frame: AVFrame, file: UnsafeMutablePointer<FILE>) throws {

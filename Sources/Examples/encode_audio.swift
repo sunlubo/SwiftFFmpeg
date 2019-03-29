@@ -5,7 +5,11 @@
 //  Created by sunlubo on 2018/7/3.
 //
 
+#if os(macOS) || os(iOS) || os(tvOS) || os(watchOS)
 import Darwin
+#else
+import Glibc
+#endif
 import Foundation
 import SwiftFFmpeg
 

@@ -5,8 +5,12 @@
 //  Created by sunlubo on 2019/1/9.
 //
 
-import SwiftFFmpeg
+#if os(macOS) || os(iOS) || os(tvOS) || os(watchOS)
 import Darwin
+#else
+import Glibc
+#endif
+import SwiftFFmpeg
 
 private func decode(
     codecCtx: AVCodecContext,

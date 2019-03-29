@@ -5,7 +5,11 @@
 //  Created by sunlubo on 2018/7/12.
 //
 
+#if os(macOS) || os(iOS) || os(tvOS) || os(watchOS)
 import Darwin
+#else
+import Glibc
+#endif
 import SwiftFFmpeg
 
 private func fill_samples(_ samples: AVSamples, _ sampleRate: Int64, _ t: Double) -> Double {

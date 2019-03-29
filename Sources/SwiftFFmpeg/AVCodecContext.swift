@@ -5,13 +5,12 @@
 //  Created by sunlubo on 2018/6/29.
 //
 
-import CFFmpeg
-
-#if os(Linux)
-import Glibc
+#if os(macOS) || os(iOS) || os(tvOS) || os(watchOS)
+import Darwin
 #else
-import Darwin.C 
+import Glibc
 #endif
+import CFFmpeg
 
 public typealias AVGetFormatHandler = (AVCodecContext, [AVPixelFormat]) -> AVPixelFormat
 
