@@ -146,9 +146,7 @@ extension SwsContext {
 
         public let rawValue: Int32
 
-        public init(rawValue: Int32) {
-            self.rawValue = rawValue
-        }
+        public init(rawValue: Int32) { self.rawValue = rawValue }
     }
 }
 
@@ -180,17 +178,12 @@ extension SwsContext.Flag: CustomStringConvertible {
     }
 }
 
-extension SwsContext: AVClassSupport {
+extension SwsContext: AVClassSupport, AVOptionSupport {
     public static let `class` = AVClass(cClassPtr: sws_get_class())
 
-    public func withUnsafeClassObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T {
-        return try body(UnsafeMutableRawPointer(cContextPtr))
-    }
-}
-
-extension SwsContext: AVOptionAccessor {
-
-    public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T {
+    public func withUnsafeObjectPointer<T>(
+        _ body: (UnsafeMutableRawPointer) throws -> T
+    ) rethrows -> T {
         return try body(UnsafeMutableRawPointer(cContextPtr))
     }
 }

@@ -408,9 +408,7 @@ extension AVCodecContext {
 
         public let rawValue: UInt32
 
-        public init(rawValue: UInt32) {
-            self.rawValue = rawValue
-        }
+        public init(rawValue: UInt32) { self.rawValue = rawValue }
     }
 }
 
@@ -473,9 +471,7 @@ extension AVCodecContext {
 
         public let rawValue: Int32
 
-        public init(rawValue: Int32) {
-            self.rawValue = rawValue
-        }
+        public init(rawValue: Int32) { self.rawValue = rawValue }
     }
 }
 
@@ -582,7 +578,8 @@ extension AVCodecContext {
             opaqueBox = CodecContextBox((opaque: opaqueBox?.value.opaque, getFormat: newValue))
 
             var handler: (@convention(c) (
-                UnsafeMutablePointer<CAVCodecContext>?, UnsafePointer<AVPixelFormat>?) -> AVPixelFormat)!
+                UnsafeMutablePointer<CAVCodecContext>?, UnsafePointer<AVPixelFormat>?
+            ) -> AVPixelFormat)!
             if newValue != nil {
                 handler = { ctx, fmts in
                     let handler = Unmanaged<CodecContextBox>.fromOpaque(UnsafeRawPointer(ctx!.pointee.opaque!))
@@ -689,17 +686,12 @@ extension AVCodecContext {
     }
 }
 
-extension AVCodecContext: AVClassSupport {
+extension AVCodecContext: AVClassSupport, AVOptionSupport {
     public static let `class` = AVClass(cClassPtr: avcodec_get_class())
 
-    public func withUnsafeClassObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T {
-        return try body(cContextPtr)
-    }
-}
-
-extension AVCodecContext: AVOptionAccessor {
-
-    public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T {
+    public func withUnsafeObjectPointer<T>(
+        _ body: (UnsafeMutableRawPointer) throws -> T
+    ) rethrows -> T {
         return try body(cContextPtr)
     }
 }

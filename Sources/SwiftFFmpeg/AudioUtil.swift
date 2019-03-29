@@ -45,9 +45,7 @@ extension AVSampleFormat {
     /// - Parameter name: The name of the sample format.
     public init?(name: String) {
         let fmt = av_get_sample_fmt(name)
-        if fmt == .none {
-            return nil
-        }
+        if fmt == .none { return nil }
         self = fmt
     }
 
@@ -76,9 +74,7 @@ extension AVSampleFormat {
     /// If the passed sample format is already in planar format, the format returned is the same as the input.
     public func toPlanar() -> AVSampleFormat? {
         let fmt = av_get_planar_sample_fmt(self)
-        if fmt == .none {
-            return nil
-        }
+        if fmt == .none { return nil }
         return fmt
     }
 
@@ -87,9 +83,7 @@ extension AVSampleFormat {
     /// If the passed sample format is already in packed format, the format returned is the same as the input.
     public func toPacked() -> AVSampleFormat? {
         let fmt = av_get_packed_sample_fmt(self)
-        if fmt == .none {
-            return nil
-        }
+        if fmt == .none { return nil }
         return fmt
     }
 }
@@ -168,9 +162,7 @@ public struct AVChannel: Equatable {
 
     public let rawValue: UInt64
 
-    public init(rawValue: UInt64) {
-        self.rawValue = rawValue
-    }
+    public init(rawValue: UInt64) { self.rawValue = rawValue }
 
     /// The name of the audio channel.
     public var name: String {
@@ -251,9 +243,7 @@ public struct AVChannelLayout: Equatable {
 
     public let rawValue: UInt64
 
-    public init(rawValue: UInt64) {
-        self.rawValue = rawValue
-    }
+    public init(rawValue: UInt64) { self.rawValue = rawValue }
 
     /// Return a channel layout id that matches name, or `nil` if no match is found.
     ///
@@ -269,9 +259,7 @@ public struct AVChannelLayout: Equatable {
     ///     Example: "stereo+FC" = "2c+FC" = "2c+1c" = "0x7"
     public init?(name: String) {
         let layout = av_get_channel_layout(name)
-        if layout == .none {
-            return nil
-        }
+        if layout == .none { return nil }
         self.init(rawValue: layout)
     }
 

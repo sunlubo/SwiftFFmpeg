@@ -135,9 +135,7 @@ extension AVCodecHWConfig {
 
         public let rawValue: Int32
 
-        public init(rawValue: Int32) {
-            self.rawValue = rawValue
-        }
+        public init(rawValue: Int32) { self.rawValue = rawValue }
     }
 }
 
@@ -373,26 +371,25 @@ extension AVFrame {
         return nil
     }
 
-    /// Copy data to or from a hw surface. At least one of `dst/src` must have an
-    /// `AVHWFramesContext` attached.
+    /// Copy data from a hw surface.
     ///
-    /// If `src` has an `AVHWFramesContext` attached, then the format of `dst` (if set)
-    /// must use one of the formats returned by `AVHWFramesContext.getPixelFormats(.from)`.
-    /// If `dst` has an `AVHWFramesContext` attached, then the format of `src` must use one
-    /// of the formats returned by `AVHWFramesContext.getPixelFormats(.to)`.
+    /// The source frame must have an `AVHWFramesContext` attached, and the pixel format of
+    /// the destination frame must use one of the formats returned by
+    /// `AVHWFramesContext.getPixelFormats(.from)`.
     ///
-    /// `dst` may be "clean" (i.e. with `data`/`buffer` pointers unset),
+    /// The destination frame may be "clean" (i.e. with `data`/`buffer` pointers unset),
     /// in which case the data buffers will be allocated by this function using `allocBuffer(align:)`.
-    /// If `dst.pixelFormat` is set, then this format will be used, otherwise (when
-    /// `dst.pixelFormat` is `AVPixelFormat.none`) the first acceptable format will be chosen.
+    /// If the pixel format of the destination frame is set, then this format will be used,
+    /// otherwise (when the destination frame's pixel format is `AVPixelFormat.none`) the
+    /// first acceptable format will be chosen.
     ///
     /// The two frames must have matching allocated dimensions (i.e. equal to
-    /// `AVHWFramesContext.width/height`), since not all device types support
-    /// transferring a sub-rectangle of the whole surface. The display dimensions
-    /// (i.e. `AVFrame.width/height`) may be smaller than the allocated dimensions, but
-    /// also have to be equal for both frames. When the display dimensions are
-    /// smaller than the allocated dimensions, the content of the padding in the
-    /// destination frame is unspecified.
+    /// `AVHWFramesContext.width`/`AVHWFramesContext.height`), since not all device types
+    /// support transferring a sub-rectangle of the whole surface.
+    /// The display dimensions (i.e. `AVFrame.width`/`AVFrame.height`) may be smaller than
+    /// the allocated dimensions, but also have to be equal for both frames. When the
+    /// display dimensions are smaller than the allocated dimensions, the content of the
+    /// padding in the destination frame is unspecified.
     ///
     /// - Parameter frame: the source frame
     /// - Throws: AVError

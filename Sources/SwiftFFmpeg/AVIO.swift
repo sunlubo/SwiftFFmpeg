@@ -107,26 +107,75 @@ public enum AVIO {
     }
 }
 
-// MARK: - AVIODirEntryType
+// MARK: - AVIODirEntry
 
-/// Directory entry types.
-public typealias AVIODirEntryType = CFFmpeg.AVIODirEntryType
+typealias CAVIODirEntry = CFFmpeg.AVIODirEntry
 
-extension AVIODirEntryType {
-    public static let unknown = AVIO_ENTRY_UNKNOWN
-    public static let blockDevice = AVIO_ENTRY_BLOCK_DEVICE
-    public static let characterDevice = AVIO_ENTRY_CHARACTER_DEVICE
-    public static let directory = AVIO_ENTRY_DIRECTORY
-    public static let namedPipe = AVIO_ENTRY_NAMED_PIPE
-    public static let symbolicLink = AVIO_ENTRY_SYMBOLIC_LINK
-    public static let socket = AVIO_ENTRY_SOCKET
-    public static let file = AVIO_ENTRY_FILE
-    public static let server = AVIO_ENTRY_SERVER
-    public static let share = AVIO_ENTRY_SHARE
-    public static let workgroup = AVIO_ENTRY_WORKGROUP
+/// Describes single entry of the directory.
+///
+/// Only name and type fields are guaranteed be set.
+/// Rest of fields are protocol or/and platform dependent and might be unknown.
+public final class AVIODirEntry {
+    var cEntryPtr: UnsafeMutablePointer<CAVIODirEntry>!
+
+    /// Filename.
+    public let name: String
+    /// Type of the entry
+    public let type: Kind
+    /// File size in bytes, -1 if unknown.
+    public let size: Int64
+    /// Time of last modification in microseconds since unix epoch, -1 if unknown.
+    public let modificationTimestamp: Int64
+    /// Time of last access in microseconds since unix epoch, -1 if unknown.
+    public let accessTimestamp: Int64
+    /// Time of last status change in microseconds since unix epoch, -1 if unknown.
+    public let statusChangeTimestamp: Int64
+    /// User ID of owner, -1 if unknown.
+    public let userId: Int64
+    /// Group ID of owner, -1 if unknown.
+    public let groupId: Int64
+    /// Unix file mode, -1 if unknown.
+    public let filemode: Int64
+
+    init(cEntryPtr: UnsafeMutablePointer<CAVIODirEntry>) {
+        self.cEntryPtr = cEntryPtr
+        self.name = String(cString: cEntryPtr.pointee.name)
+        self.type = Kind(rawValue: UInt32(cEntryPtr.pointee.type))!
+        self.size = cEntryPtr.pointee.size
+        self.modificationTimestamp = cEntryPtr.pointee.modification_timestamp
+        self.accessTimestamp = cEntryPtr.pointee.access_timestamp
+        self.statusChangeTimestamp = cEntryPtr.pointee.status_change_timestamp
+        self.userId = cEntryPtr.pointee.user_id
+        self.groupId = cEntryPtr.pointee.group_id
+        self.filemode = cEntryPtr.pointee.filemode
+    }
+
+    deinit {
+        avio_free_directory_entry(&cEntryPtr)
+    }
 }
 
-extension AVIODirEntryType: CustomStringConvertible {
+// MARK: - AVIODirEntry.Kind
+
+extension AVIODirEntry {
+
+    /// Directory entry types.
+    public enum Kind: UInt32 {
+        case unknown
+        case blockDevice
+        case characterDevice
+        case directory
+        case namedPipe
+        case symbolicLink
+        case socket
+        case file
+        case server
+        case share
+        case workgroup
+    }
+}
+
+extension AVIODirEntry.Kind: CustomStringConvertible {
 
     public var description: String {
         switch self {
@@ -153,54 +202,6 @@ extension AVIODirEntryType: CustomStringConvertible {
         default:
             return "unknown"
         }
-    }
-}
-
-// MARK: - AVIODirEntry
-
-typealias CAVIODirEntry = CFFmpeg.AVIODirEntry
-
-/// Describes single entry of the directory.
-///
-/// Only name and type fields are guaranteed be set.
-/// Rest of fields are protocol or/and platform dependent and might be unknown.
-public final class AVIODirEntry {
-    var cEntryPtr: UnsafeMutablePointer<CAVIODirEntry>!
-
-    /// Filename.
-    public let name: String
-    /// Type of the entry
-    public let type: AVIODirEntryType
-    /// File size in bytes, -1 if unknown.
-    public let size: Int64
-    /// Time of last modification in microseconds since unix epoch, -1 if unknown.
-    public let modificationTimestamp: Int64
-    /// Time of last access in microseconds since unix epoch, -1 if unknown.
-    public let accessTimestamp: Int64
-    /// Time of last status change in microseconds since unix epoch, -1 if unknown.
-    public let statusChangeTimestamp: Int64
-    /// User ID of owner, -1 if unknown.
-    public let userId: Int64
-    /// Group ID of owner, -1 if unknown.
-    public let groupId: Int64
-    /// Unix file mode, -1 if unknown.
-    public let filemode: Int64
-
-    init(cEntryPtr: UnsafeMutablePointer<CAVIODirEntry>) {
-        self.cEntryPtr = cEntryPtr
-        self.name = String(cString: cEntryPtr.pointee.name)
-        self.type = AVIODirEntryType(rawValue: UInt32(cEntryPtr.pointee.type))
-        self.size = cEntryPtr.pointee.size
-        self.modificationTimestamp = cEntryPtr.pointee.modification_timestamp
-        self.accessTimestamp = cEntryPtr.pointee.access_timestamp
-        self.statusChangeTimestamp = cEntryPtr.pointee.status_change_timestamp
-        self.userId = cEntryPtr.pointee.user_id
-        self.groupId = cEntryPtr.pointee.group_id
-        self.filemode = cEntryPtr.pointee.filemode
-    }
-
-    deinit {
-        avio_free_directory_entry(&cEntryPtr)
     }
 }
 
@@ -283,9 +284,9 @@ public typealias AVIOInterruptCallback = AVIOInterruptCB
 
 typealias CAVIOContext = CFFmpeg.AVIOContext
 
-public typealias AVIOReadHandler = (UnsafeMutableRawPointer?, UnsafeMutablePointer<UInt8>?, Int) -> Int
+public typealias AVIOReadHandler  = (UnsafeMutableRawPointer?, UnsafeMutablePointer<UInt8>?, Int) -> Int
 public typealias AVIOWriteHandler = (UnsafeMutableRawPointer?, UnsafeMutablePointer<UInt8>?, Int) -> Int
-public typealias AVIOSeekHandler = (UnsafeMutableRawPointer?, Int64, Int) -> Int64
+public typealias AVIOSeekHandler  = (UnsafeMutableRawPointer?, Int64, Int) -> Int64
 
 typealias IOBoxValue = (
     opaque: UnsafeMutableRawPointer,
@@ -603,7 +604,7 @@ public final class AVIOContext {
     }
 }
 
-extension AVIOContext: AVOptionAccessor {
+extension AVIOContext: AVOptionSupport {
 
     public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T {
         return try body(cContextPtr)
@@ -642,9 +643,7 @@ extension AVIOContext {
 
         public let rawValue: Int32
 
-        public init(rawValue: Int32) {
-            self.rawValue = rawValue
-        }
+        public init(rawValue: Int32) { self.rawValue = rawValue }
     }
 }
 
@@ -682,8 +681,6 @@ extension AVIOContext {
 
         public let rawValue: Int32
 
-        public init(rawValue: Int32) {
-            self.rawValue = rawValue
-        }
+        public init(rawValue: Int32) { self.rawValue = rawValue }
     }
 }

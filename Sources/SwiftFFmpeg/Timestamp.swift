@@ -26,7 +26,7 @@ public enum AVTimestamp {
     ///   - -1 if `ts_a` is before `ts_b`
     ///   -  1 if `ts_a` is after `ts_b`
     ///   -  0 if they represent the same position
-    public static func compareTimestamp(
+    public static func compare(
         _ ts_a: Int64, _ tb_a: AVRational,
         _ ts_b: Int64, _ tb_b: AVRational
     ) -> Int {

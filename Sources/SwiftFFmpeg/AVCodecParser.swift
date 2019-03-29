@@ -1,5 +1,5 @@
 //
-//  AVCodecParserContext.swift
+//  AVCodecParser.swift
 //  SwiftFFmpeg
 //
 //  Created by sunlubo on 2018/7/1.
@@ -7,10 +7,43 @@
 
 import CFFmpeg
 
+// MARK: - AVCodecParser
+
+typealias CAVCodecParser = CFFmpeg.AVCodecParser
+
+public struct AVCodecParser {
+    let cParserPtr: UnsafeMutablePointer<CAVCodecParser>
+    var cParser: CAVCodecParser { return cParserPtr.pointee }
+
+    init(cParserPtr: UnsafeMutablePointer<CAVCodecParser>) {
+        self.cParserPtr = cParserPtr
+    }
+
+    /// several codec IDs are permitted
+    public var codecIds: [AVCodecID] {
+        let list = [
+            cParser.codec_ids.0, cParser.codec_ids.1, cParser.codec_ids.2, cParser.codec_ids.3
+        ]
+        return list.map({ AVCodecID(UInt32($0)) }).filter({ $0 != .none })
+    }
+
+    /// Get all registered codec parsers.
+    public static var supportedParsers: [AVCodecParser] {
+        var list = [AVCodecParser]()
+        var state: UnsafeMutableRawPointer?
+        while let fmtPtr = av_parser_iterate(&state) {
+            list.append(AVCodecParser(cParserPtr: fmtPtr.mutable))
+        }
+        return list
+    }
+}
+
+// MARK: - AVCodecParserContext
+
 public typealias AVCodecParserResult = (
     UnsafeMutablePointer<UInt8>?, // The parsed buffer or nil if not yet finished.
-    Int,                          // The number of bytes of the parsed buffer or zero if not yet finished.
-    Int                           // The number of bytes of the input bitstream used.
+    Int, // The number of bytes of the parsed buffer or zero if not yet finished.
+    Int // The number of bytes of the input bitstream used.
 )
 
 typealias CAVCodecParserContext = CFFmpeg.AVCodecParserContext

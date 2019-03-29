@@ -177,17 +177,12 @@ public final class SwrContext {
     }
 }
 
-extension SwrContext: AVClassSupport {
+extension SwrContext: AVClassSupport, AVOptionSupport {
     public static let `class` = AVClass(cClassPtr: swr_get_class())
 
-    public func withUnsafeClassObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T {
-        return try body(UnsafeMutableRawPointer(cContextPtr))
-    }
-}
-
-extension SwrContext: AVOptionAccessor {
-
-    public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T {
+    public func withUnsafeObjectPointer<T>(
+        _ body: (UnsafeMutableRawPointer) throws -> T
+    ) rethrows -> T {
         return try body(UnsafeMutableRawPointer(cContextPtr))
     }
 }

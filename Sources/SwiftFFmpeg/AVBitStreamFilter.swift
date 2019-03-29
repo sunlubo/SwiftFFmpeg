@@ -63,7 +63,7 @@ extension AVBitStreamFilter: CustomStringConvertible {
 typealias CAVBSFContext = CFFmpeg.AVBSFContext
 
 /// The bitstream filter state.
-public final class AVBSFContext {
+public final class AVBitStreamFilterContext {
     let cContextPtr: UnsafeMutablePointer<CAVBSFContext>
     var cContext: CAVBSFContext { return cContextPtr.pointee }
 
@@ -134,7 +134,6 @@ public final class AVBSFContext {
     ///   `AVPacket.unref()`) when this function is called.
     ///   If this function returns successfully, the contents of pkt will be completely overwritten by the
     ///   returned data. On failure, pkt is not touched.
-    /// - Throws: AVError
     /// - Throws:
     ///   - `AVError.tryAgain` if more packets need to be sent to the filter (using `sendPacket(_:)`) to get more output.
     ///   - `AVError.eof` if there will be no further output from the filter.
@@ -154,69 +153,12 @@ public final class AVBSFContext {
     }
 }
 
-extension AVBSFContext: AVClassSupport {
+extension AVBitStreamFilterContext: AVClassSupport, AVOptionSupport {
     public static let `class` = AVClass(cClassPtr: av_bsf_get_class())
 
-    public func withUnsafeClassObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T {
+    public func withUnsafeObjectPointer<T>(
+        _ body: (UnsafeMutableRawPointer) throws -> T
+    ) rethrows -> T {
         return try body(cContextPtr)
-    }
-}
-
-extension AVBSFContext: AVOptionAccessor {
-
-    public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T {
-        return try body(cContextPtr)
-    }
-}
-
-// MARK: - AVBSFList
-
-/// Structure for chain/list of bitstream filters.
-public final class AVBSFList {
-    var cListPtr: OpaquePointer?
-
-    /// Create an empty list of bitstream filters.
-    public init() {
-        guard let ptr = av_bsf_list_alloc() else {
-            abort("av_bsf_list_alloc")
-        }
-        self.cListPtr = ptr
-    }
-
-    /// Append bitstream filter to the list of bitstream filters.
-    ///
-    /// - Parameter bsf: The filter context to be appended.
-    public func append(_ bsf: AVBSFContext) {
-        abortIfFail(av_bsf_list_append(cListPtr, bsf.cContextPtr))
-    }
-
-    /// Create a new bitstream filter context with the given name and options, and append it to the list of bitstream filters.
-    ///
-    /// - Parameters:
-    ///   - bsfName: The name of the bitstream filter.
-    ///   - options: The options for the bitstream filter.
-    public func append(_ bsfName: String, options: [String: String]? = nil) {
-        var pm: OpaquePointer? = options?.toAVDict()
-        defer { av_dict_free(&pm) }
-
-        abortIfFail(av_bsf_list_append2(cListPtr, bsfName, &pm))
-
-        dumpUnrecognizedOptions(pm)
-    }
-
-    /// Finalize list of bitstream filters.
-    ///
-    /// This function will transform `AVBSFList` to single `AVBSFContext`, so the whole chain of bitstream filters
-    /// can be treated as single filter freshly created by `AVBSFContext.init(filter:)`.
-    ///
-    /// - Returns: The newly created `AVBSFContext` representing the chain of bitstream filters.
-    public func finalize() -> AVBSFContext {
-        var ctxPtr: UnsafeMutablePointer<CAVBSFContext>!
-        abortIfFail(av_bsf_list_finalize(&cListPtr, &ctxPtr))
-        return AVBSFContext(cContextPtr: ctxPtr)
-    }
-
-    deinit {
-        av_bsf_list_free(&cListPtr)
     }
 }

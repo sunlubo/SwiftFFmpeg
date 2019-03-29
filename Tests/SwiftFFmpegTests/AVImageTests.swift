@@ -51,7 +51,7 @@ final class AVImageTests: XCTestCase {
     }
 
     func testTotalSize() {
-        let size = try! AVImage.getBufferSize(pixelFormat: pixelFormat, width: width, height: height, align: 1)
+        let size = try! AVImage.getBufferSize(pixelFormat: pixelFormat, width: width, height: height)
         XCTAssertEqual(image.size, size)
     }
 }

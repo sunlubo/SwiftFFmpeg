@@ -251,11 +251,12 @@ public final class AVFrame {
 
     /// Set up a new reference to the data described by the source frame.
     ///
-    /// Copy frame properties from src to dst and create a new reference for each `AVBuffer` from src.
-    /// If src is not reference counted, new buffers are allocated and the data is copied.
+    /// Copy frame properties from `src` to this frame and create a new reference for each
+    /// `AVBuffer` from `src`. If `src` is not reference counted, new buffers are allocated
+    /// and the data is copied.
     ///
-    /// - Warning: dst __must__ have been either unreferenced with `unref()`, or newly created before
-    ///   calling this function, or undefined behavior will occur.
+    /// - Warning: this frame __must__ have been either unreferenced with `unref()`, or newly
+    ///   created before calling this function, or undefined behavior will occur.
     ///
     /// - Parameter src: the source frame
     /// - Throws: AVError
@@ -268,17 +269,18 @@ public final class AVFrame {
         av_frame_unref(cFramePtr)
     }
 
-    /// Move everything contained in src to dst and reset src.
+    /// Move everything contained in `src` to this frame and reset `src`.
     ///
-    /// - Warning: dst is not unreferenced, but directly overwritten without reading or deallocating its contents.
-    ///   Call `dst.unref()` manually before calling this function to ensure that no memory is leaked.
+    /// - Warning: This frame is not unreferenced, but directly overwritten without reading
+    ///   or deallocating its contents. Call `unref()` on this frame manually before calling
+    ///   this function to ensure that no memory is leaked.
     ///
     /// - Parameter src: the source frame
     public func moveRef(from src: AVFrame) {
         av_frame_move_ref(cFramePtr, src.cFramePtr)
     }
 
-    /// Create a new frame that references the same data as src.
+    /// Create a new frame that references the same data as this frame.
     ///
     /// This is a shortcut for `init() + ref(from:)`.
     ///
@@ -299,13 +301,13 @@ public final class AVFrame {
         try throwIfFail(av_frame_make_writable(cFramePtr))
     }
 
-    /// Copy the frame data from src to dst.
+    /// Copy the frame data from `src` to this frame.
     ///
-    /// This function does not allocate anything, dst must be already initialized and
-    /// allocated with the same parameters as src.
+    /// This function does not allocate anything, this frame must be already initialized
+    /// and allocated with the same parameters as `src`.
     ///
-    /// This function only copies the frame data (i.e. the contents of the data /
-    /// extended data arrays), not any other properties.
+    /// This function only copies the frame data (i.e. the contents of the `data` /
+    /// `extendedData` arrays), not any other properties.
     ///
     /// - Parameter src: the source frame
     /// - Throws: AVError
@@ -313,7 +315,7 @@ public final class AVFrame {
         try throwIfFail(av_frame_copy(cFramePtr, src.cFramePtr))
     }
 
-    /// Copy only "metadata" fields from src to dst.
+    /// Copy only "metadata" fields from `src` to this frame.
     ///
     /// Metadata for the purpose of this function are those fields that do not affect
     /// the data layout in the buffers. E.g. pts, sample rate (for audio) or sample
@@ -436,7 +438,7 @@ extension AVFrame {
 extension AVFrame: AVClassSupport {
     public static let `class` = AVClass(cClassPtr: avcodec_get_frame_class())
 
-    public func withUnsafeClassObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T {
-        return try body(cFramePtr)
+    public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T {
+        fatalError("unsupported")
     }
 }

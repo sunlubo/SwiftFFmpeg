@@ -24,9 +24,7 @@ extension UnsafeBufferPointer {
 extension String {
 
     init?(cString: UnsafePointer<CChar>?) {
-        guard let cString = cString else {
-            return nil
-        }
+        guard let cString = cString else { return nil }
         self.init(cString: cString)
     }
 }

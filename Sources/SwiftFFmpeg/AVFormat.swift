@@ -101,9 +101,7 @@ extension AVInputFormat {
 
         public let rawValue: Int32
 
-        public init(rawValue: Int32) {
-            self.rawValue = rawValue
-        }
+        public init(rawValue: Int32) { self.rawValue = rawValue }
     }
 }
 
@@ -128,7 +126,7 @@ extension AVInputFormat.Flag: CustomStringConvertible {
     }
 }
 
-extension AVInputFormat: AVOptionAccessor {
+extension AVInputFormat: AVOptionSupport {
 
     public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T {
         var tmp = cFormat.priv_class
@@ -251,9 +249,7 @@ extension AVOutputFormat {
 
         public let rawValue: Int32
 
-        public init(rawValue: Int32) {
-            self.rawValue = rawValue
-        }
+        public init(rawValue: Int32) { self.rawValue = rawValue }
     }
 }
 
@@ -279,7 +275,7 @@ extension AVOutputFormat.Flag: CustomStringConvertible {
     }
 }
 
-extension AVOutputFormat: AVOptionAccessor {
+extension AVOutputFormat: AVOptionSupport {
 
     public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T {
         var tmp = cFormat.priv_class

@@ -19,16 +19,16 @@ func device_list() throws {
     print(capabilities)
     
     for fmt in AVInputFormat.supportedFormats
-        where fmt.privClass?.category == AVClassCategory.deviceAudioInput ||
-        fmt.privClass?.category == AVClassCategory.deviceVideoInput ||
-        fmt.privClass?.category == AVClassCategory.deviceInput {
+        where fmt.privClass?.category == .deviceAudioInput ||
+        fmt.privClass?.category == .deviceVideoInput ||
+        fmt.privClass?.category == .deviceInput {
         print(fmt)
     }
     
     for fmt in AVOutputFormat.supportedFormats
-        where fmt.privClass?.category == AVClassCategory.deviceAudioOutput ||
-        fmt.privClass?.category == AVClassCategory.deviceVideoOutput ||
-        fmt.privClass?.category == AVClassCategory.deviceOutput {
+        where fmt.privClass?.category == .deviceAudioOutput ||
+        fmt.privClass?.category == .deviceVideoOutput ||
+        fmt.privClass?.category == .deviceOutput {
         print(fmt)
     }
     

@@ -7,37 +7,71 @@
 
 import CFFmpeg
 
-// MARK: - AVClassCategory
+// MARK: - AVClass
 
-public typealias AVClassCategory = CFFmpeg.AVClassCategory
+typealias CAVClass = CFFmpeg.AVClass
 
-extension AVClassCategory {
-    public static let na = AV_CLASS_CATEGORY_NA
-    public static let input = AV_CLASS_CATEGORY_INPUT
-    public static let output = AV_CLASS_CATEGORY_OUTPUT
-    public static let muxer = AV_CLASS_CATEGORY_MUXER
-    public static let demuxer = AV_CLASS_CATEGORY_DEMUXER
-    public static let encoder = AV_CLASS_CATEGORY_ENCODER
-    public static let decoder = AV_CLASS_CATEGORY_DECODER
-    public static let filter = AV_CLASS_CATEGORY_FILTER
-    public static let bitStreamFilter = AV_CLASS_CATEGORY_BITSTREAM_FILTER
-    public static let swscaler = AV_CLASS_CATEGORY_SWSCALER
-    public static let swresampler = AV_CLASS_CATEGORY_SWRESAMPLER
-    public static let deviceVideoOutput = AV_CLASS_CATEGORY_DEVICE_VIDEO_OUTPUT
-    public static let deviceVideoInput = AV_CLASS_CATEGORY_DEVICE_VIDEO_INPUT
-    public static let deviceAudioOutput = AV_CLASS_CATEGORY_DEVICE_AUDIO_OUTPUT
-    public static let deviceAudioInput = AV_CLASS_CATEGORY_DEVICE_AUDIO_INPUT
-    public static let deviceOutput = AV_CLASS_CATEGORY_DEVICE_OUTPUT
-    public static let deviceInput = AV_CLASS_CATEGORY_DEVICE_INPUT
-    public static let nb = AV_CLASS_CATEGORY_NB
+public struct AVClass {
+    /// The name of the class.
+    public let name: String
+    /// The options of the class.
+    public let options: [AVOption]?
+    /// The category of the class. It's used for visualization (like color).
+    ///
+    /// This is only set if the category is equal for all objects using this class.
+    public let category: Category
+
+    init(cClassPtr: UnsafePointer<CAVClass>) {
+        self.name = String(cString: cClassPtr.pointee.class_name)
+        self.category = Category(rawValue: cClassPtr.pointee.category.rawValue)!
+        self.options = values(cClassPtr.pointee.option, until: { $0.name == nil })?.map(AVOption.init(cOption:))
+    }
 }
 
-extension AVClassCategory: CustomStringConvertible {
+// MARK: - AVClass.Category
+
+extension AVClass {
+
+    // https://github.com/FFmpeg/FFmpeg/blob/master/libavutil/log.h#L48
+    public enum Category: UInt32 {
+        case na = 0
+        case input
+        case output
+        case muxer
+        case demuxer
+        case encoder
+        case decoder
+        case filter
+        case bitStreamFilter
+        case swscaler
+        case swresampler
+        case deviceVideoOutput = 40
+        case deviceVideoInput
+        case deviceAudioOutput
+        case deviceAudioInput
+        case deviceOutput
+        case deviceInput
+
+        public var isInputDevice: Bool {
+            return self == .deviceVideoInput
+                || self == .deviceAudioInput
+                || self == .deviceInput
+        }
+
+        public var isOutputDevice: Bool {
+            return self == .deviceVideoOutput
+                || self == .deviceAudioOutput
+                || self == .deviceOutput
+        }
+    }
+}
+
+extension AVClass.Category: CustomStringConvertible {
 
     public var description: String {
         switch self {
         case .na:
-            return "NA"
+            return "na"
         case .input:
             return "input"
         case .output:
@@ -70,32 +104,7 @@ extension AVClassCategory: CustomStringConvertible {
             return "deviceOutput"
         case .deviceInput:
             return "deviceInput"
-        case .nb:
-            return "NB"
-        default:
-            return "unknown"
         }
-    }
-}
-
-// MARK: - AVClass
-
-typealias CAVClass = CFFmpeg.AVClass
-
-public struct AVClass {
-    /// The name of the class.
-    public let name: String
-    /// The options of the class.
-    public let options: [AVOption]?
-    /// The category of the class. It's used for visualization (like color).
-    ///
-    /// This is only set if the category is equal for all objects using this class.
-    public let category: AVClassCategory
-
-    init(cClassPtr: UnsafePointer<CAVClass>) {
-        self.name = String(cString: cClassPtr.pointee.class_name)
-        self.category = cClassPtr.pointee.category
-        self.options = values(cClassPtr.pointee.option, until: { $0.name == nil })?.map(AVOption.init(cOption:))
     }
 }
 
@@ -104,5 +113,5 @@ public struct AVClass {
 public protocol AVClassSupport {
     static var `class`: AVClass { get }
 
-    func withUnsafeClassObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T
+    func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T
 }

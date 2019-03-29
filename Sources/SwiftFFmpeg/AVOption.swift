@@ -1,5 +1,5 @@
 //
-//  AVOptions.swift
+//  AVOption.swift
 //  SwiftFFmpeg
 //
 //  Created by sunlubo on 2018/7/10.
@@ -7,36 +7,114 @@
 
 import CFFmpeg
 
-// MARK: - AVOptionType
+// MARK: - AVOption
 
-public typealias AVOptionType = CFFmpeg.AVOptionType
+typealias CAVOption = CFFmpeg.AVOption
 
-extension AVOptionType {
-    public static let flags = AV_OPT_TYPE_FLAGS
-    public static let int = AV_OPT_TYPE_INT
-    public static let int64 = AV_OPT_TYPE_INT64
-    public static let double = AV_OPT_TYPE_DOUBLE
-    public static let float = AV_OPT_TYPE_FLOAT
-    public static let string = AV_OPT_TYPE_STRING
-    public static let rational = AV_OPT_TYPE_RATIONAL
-    /// offset must point to a pointer immediately followed by an int for the length
-    public static let binary = AV_OPT_TYPE_BINARY
-    public static let dict = AV_OPT_TYPE_DICT
-    public static let uint64 = AV_OPT_TYPE_UINT64
-    public static let const = AV_OPT_TYPE_CONST
-    /// offset must point to two consecutive integers
-    public static let imageSize = AV_OPT_TYPE_IMAGE_SIZE
-    public static let pixelFormat = AV_OPT_TYPE_PIXEL_FMT
-    public static let sampleFormat = AV_OPT_TYPE_SAMPLE_FMT
-    /// offset must point to `AVRational`
-    public static let videoRate = AV_OPT_TYPE_VIDEO_RATE
-    public static let duration = AV_OPT_TYPE_DURATION
-    public static let color = AV_OPT_TYPE_COLOR
-    public static let channelLayout = AV_OPT_TYPE_CHANNEL_LAYOUT
-    public static let bool = AV_OPT_TYPE_BOOL
+public struct AVOption {
+    public let name: String
+    /// The short English help text about the option.
+    public let help: String?
+    /// The offset relative to the context structure where the option value is stored.
+    /// It should be 0 for named constants.
+    public let offset: Int
+    public let type: Kind
+    /// The default value for scalar options.
+    public let defaultValue: Any
+    /// The minimum valid value for the option.
+    public let min: Double
+    /// The maximum valid value for the option.
+    public let max: Double
+    public let flags: Flag
+    /// The logical unit to which the option belongs.
+    /// Non-constant options and corresponding named constants share the same unit.
+    public let unit: String?
+
+    init(cOption: CAVOption) {
+        self.name = String(cString: cOption.name)
+        self.help = String(cString: cOption.help)
+        self.offset = Int(cOption.offset)
+        self.type = Kind(rawValue: cOption.type.rawValue)!
+        self.min = cOption.min
+        self.max = cOption.max
+        self.flags = Flag(rawValue: cOption.flags)
+        self.unit = String(cString: cOption.unit)
+
+        switch type {
+        case .flags, .int, .int64, .uint64, .const, .pixelFormat, .sampleFormat, .duration, .channelLayout:
+            self.defaultValue = cOption.default_val.i64
+        case .double, .float, .rational:
+            self.defaultValue = cOption.default_val.dbl
+        case .bool:
+            self.defaultValue = cOption.default_val.i64 != 0 ? "true" : "false"
+        case .string, .imageSize, .videoRate, .color:
+            self.defaultValue = String(cString: cOption.default_val.str) ?? "nil"
+        case .binary:
+            self.defaultValue = 0
+        case .dict:
+            // Cannot set defaults for these types
+            self.defaultValue = ""
+        }
+    }
 }
 
-extension AVOptionType: CustomStringConvertible {
+extension AVOption: CustomStringConvertible {
+
+    public var description: String {
+        var str = "{name: \"\(name)\", "
+        if let help = help {
+            str += "help: \"\(help)\", "
+        }
+        str += "offset: \(offset), type: \(type), "
+        if defaultValue is String {
+            str += "default: \"\(defaultValue)\", "
+        } else {
+            str += "default: \(defaultValue), "
+        }
+        str += "min: \(min), max: \(max), flags: \(flags), "
+        if let unit = unit {
+            str += "unit: \"\(unit)\""
+        } else {
+            str.removeLast(2)
+        }
+        str += "}"
+        return str
+    }
+}
+
+// MARK: - AVOption.Kind
+
+extension AVOption {
+
+    // https://github.com/FFmpeg/FFmpeg/blob/master/libavutil/opt.h#L221
+    public enum Kind: UInt32 {
+        case flags
+        case int
+        case int64
+        case double
+        case float
+        case string
+        case rational
+        /// offset must point to a pointer immediately followed by an int for the length
+        case binary
+        case dict
+        case uint64
+        case const
+        /// offset must point to two consecutive integers
+        case imageSize
+        case pixelFormat
+        case sampleFormat
+        /// offset must point to `AVRational`
+        case videoRate
+        case duration
+        case color
+        case channelLayout
+        case bool
+    }
+
+}
+
+extension AVOption.Kind: CustomStringConvertible {
 
     public var description: String {
         switch self {
@@ -72,83 +150,7 @@ extension AVOptionType: CustomStringConvertible {
             return "channel layout"
         case .bool:
             return "bool"
-        default:
-            return "unknown"
         }
-    }
-}
-
-// MARK: - AVOption
-
-typealias CAVOption = CFFmpeg.AVOption
-
-public struct AVOption: CustomStringConvertible {
-    public let name: String
-    /// The short English help text about the option.
-    public let help: String?
-    /// The offset relative to the context structure where the option value is stored.
-    /// It should be 0 for named constants.
-    public let offset: Int
-    public let type: AVOptionType
-    /// The default value for scalar options.
-    public let defaultValue: Any
-    /// The minimum valid value for the option.
-    public let min: Double
-    /// The maximum valid value for the option.
-    public let max: Double
-    public let flags: Flag
-    /// The logical unit to which the option belongs.
-    /// Non-constant options and corresponding named constants share the same unit.
-    public let unit: String?
-
-    init(cOption: CAVOption) {
-        self.name = String(cString: cOption.name)
-        self.help = String(cString: cOption.help)
-        self.offset = Int(cOption.offset)
-        self.type = cOption.type
-        self.min = cOption.min
-        self.max = cOption.max
-        self.flags = Flag(rawValue: cOption.flags)
-        self.unit = String(cString: cOption.unit)
-
-        switch type {
-        case .flags, .int, .int64, .uint64, .const, .pixelFormat, .sampleFormat, .duration, .channelLayout:
-            self.defaultValue = cOption.default_val.i64
-        case .double, .float, .rational:
-            self.defaultValue = cOption.default_val.dbl
-        case .bool:
-            self.defaultValue = cOption.default_val.i64 != 0 ? "true" : "false"
-        case .string, .imageSize, .videoRate, .color:
-            self.defaultValue = String(cString: cOption.default_val.str) ?? "nil"
-        case .binary:
-            self.defaultValue = 0
-        case .dict:
-            // Cannot set defaults for these types
-            self.defaultValue = ""
-        default:
-            self.defaultValue = "unknown"
-        }
-    }
-
-    public var description: String {
-        var str = "{name: \"\(name)\", "
-        if let help = help {
-            str += "help: \"\(help)\", "
-        }
-        str += "offset: \(offset), type: \(type), "
-        if defaultValue is String {
-            str += "default: \"\(defaultValue)\", "
-        } else {
-            str += "default: \(defaultValue), "
-        }
-        str += "min: \(min), max: \(max), flags: \(flags), "
-        if let unit = unit {
-            str += "unit: \"\(unit)\""
-        } else {
-            str.removeLast(2)
-        }
-        str += "}"
-        return str
     }
 }
 
@@ -156,6 +158,7 @@ public struct AVOption: CustomStringConvertible {
 
 extension AVOption {
 
+    // https://github.com/FFmpeg/FFmpeg/blob/master/libavutil/opt.h#L221
     public struct Flag: OptionSet {
         /// A generic parameter which can be set by the user for muxing or encoding.
         public static let encoding = Flag(rawValue: AV_OPT_FLAG_ENCODING_PARAM)
@@ -178,9 +181,7 @@ extension AVOption {
 
         public let rawValue: Int32
 
-        public init(rawValue: Int32) {
-            self.rawValue = rawValue
-        }
+        public init(rawValue: Int32) { self.rawValue = rawValue }
     }
 }
 
@@ -207,6 +208,7 @@ extension AVOption.Flag: CustomStringConvertible {
 
 // MARK: - AVOptionSearchFlag
 
+// https://github.com/FFmpeg/FFmpeg/blob/master/libavutil/opt.h#L556
 public enum AVOptionSearchFlag: Int32 {
     /// Search in possible children of the given object first.
     case children = 1
@@ -216,15 +218,15 @@ public enum AVOptionSearchFlag: Int32 {
     case fakeObject = 2
 }
 
-// MARK: - AVOptionAccessor
+// MARK: - AVOptionSupport
 
-public protocol AVOptionAccessor {
+public protocol AVOptionSupport {
     func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T
 }
 
 // MARK: - Option setting functions
 
-extension AVOptionAccessor {
+extension AVOptionSupport {
 
     /// Set the field of obj with the given name to value.
     ///
@@ -343,7 +345,7 @@ extension AVOptionAccessor {
 
 // MARK: - Option getting functions
 
-extension AVOptionAccessor {
+extension AVOptionSupport {
 
     /// Get a value of the option with the given name from an object.
     ///

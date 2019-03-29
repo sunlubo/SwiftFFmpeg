@@ -120,10 +120,10 @@ public final class AVPacket {
 
     /// Setup a new reference to the data described by a given packet.
     ///
-    /// If src is reference-counted, setup dst as a new reference to the buffer in src.
-    /// Otherwise allocate a new buffer in dst and copy the data from src into it.
+    /// If `src` is reference-counted, setup this frame as a new reference to the buffer in `src`.
+    /// Otherwise allocate a new buffer in this packet and copy the data from `src` into it.
     ///
-    /// All the other fields are copied from src.
+    /// All the other fields are copied from `src`.
     ///
     /// - Parameter src: the source packet
     /// - Throws: AVerror
@@ -139,14 +139,14 @@ public final class AVPacket {
         av_packet_unref(cPacketPtr)
     }
 
-    /// Move every field in src to dst and reset src.
+    /// Move every field in `src` to this packet and reset `src`.
     ///
     /// - Parameter src: the source packet
     public func moveRef(from src: AVPacket) {
         av_packet_move_ref(cPacketPtr, src.cPacketPtr)
     }
 
-    /// Create a new packet that references the same data as src.
+    /// Create a new packet that references the same data as this packet.
     ///
     /// This is a shortcut for `init() + ref(from:)`.
     ///
@@ -158,7 +158,8 @@ public final class AVPacket {
         return nil
     }
 
-    /// Create a writable reference for the data described by a given packet, avoiding data copy if possible.
+    /// Create a writable reference for the data described by a given packet,
+    /// avoiding data copy if possible.
     ///
     /// - Throws: AVError
     public func makeWritable() throws {
@@ -193,9 +194,7 @@ extension AVPacket {
 
         public let rawValue: Int32
 
-        public init(rawValue: Int32) {
-            self.rawValue = rawValue
-        }
+        public init(rawValue: Int32) { self.rawValue = rawValue }
     }
 }
 

@@ -185,9 +185,7 @@ extension AVPixelFormat {
     /// Finally if no pixel format has been found, returns `nil`.
     public init?(name: String) {
         let type = av_get_pix_fmt(name)
-        if type == .none {
-            return nil
-        }
+        if type == .none { return nil }
         self = type
     }
 

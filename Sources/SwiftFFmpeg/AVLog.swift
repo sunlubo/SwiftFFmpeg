@@ -29,8 +29,8 @@ public enum AVLog {
     /// to the current level. By default, all logging messages are sent to
     /// stderr. This behavior can be altered by setting a different logging callback
     /// function.
-    static func log(object: AVClassSupport, level: Level, message: String) {
-        object.withUnsafeClassObjectPointer { ptr in
+    public static func log(context: AVClassSupport, level: Level, message: String) {
+        context.withUnsafeObjectPointer { ptr in
             swift_log(ptr, level.rawValue, "\(message)\n")
         }
     }
@@ -66,8 +66,6 @@ extension AVLog {
 
         public let rawValue: Int32
 
-        public init(rawValue: Int32) {
-            self.rawValue = rawValue
-        }
+        public init(rawValue: Int32) { self.rawValue = rawValue }
     }
 }

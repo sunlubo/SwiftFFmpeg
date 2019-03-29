@@ -9,8 +9,8 @@ import CFFmpeg
 
 public final class AVImage {
     public let data: UnsafeMutableBufferPointer<UnsafeMutablePointer<UInt8>?>
-    public let size: Int
     public let linesizes: UnsafeMutableBufferPointer<Int32>
+    public let size: Int
     public let width: Int
     public let height: Int
     public let pixelFormat: AVPixelFormat
@@ -37,8 +37,8 @@ public final class AVImage {
         }
 
         self.data = UnsafeMutableBufferPointer(start: data, count: 4)
-        self.size = Int(ret)
         self.linesizes = UnsafeMutableBufferPointer(start: linesizes, count: 4)
+        self.size = Int(ret)
         self.width = width
         self.height = height
         self.pixelFormat = pixelFormat
@@ -103,9 +103,9 @@ public final class AVImage {
     /// - Throws: AVError
     @discardableResult
     public func reformat(using context: SwsContext, to image: AVImage) throws -> Int {
-        return try data.withMemoryRebound(to: UnsafePointer<UInt8>?.self) { bufPtr in
+        return try data.withMemoryRebound(to: UnsafePointer<UInt8>?.self) { ptr in
             return try context.scale(
-                src: bufPtr.baseAddress!,
+                src: ptr.baseAddress!,
                 srcStride: linesizes.baseAddress!,
                 srcSliceY: 0,
                 srcSliceHeight: height,
@@ -176,7 +176,7 @@ extension AVImage {
         pixelFormat: AVPixelFormat,
         width: Int,
         height: Int,
-        align: Int
+        align: Int = 1
     ) throws -> Int {
         let ret = av_image_get_buffer_size(pixelFormat, Int32(width), Int32(height), Int32(align))
         try throwIfFail(ret)

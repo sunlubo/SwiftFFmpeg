@@ -32,10 +32,10 @@ public final class AVFormatContext {
 
     /// Input or output URL.
     ///
-    /// - demuxing: Set by `openInput(_ url:format:options:)`, initialized to an empty string if `url` parameter
-    ///   was `nil` in `openInput(_ url:format:options:)`.
-    /// - muxing: May be set by the caller before calling `writeHeader(options:)` to a string. Set to an empty string if
-    ///   it was `nil` in `writeHeader(options:)`.
+    /// - demuxing: Set by `openInput(_ url:format:options:)`, initialized to an empty string
+    ///   if `url` parameter was `nil` in `openInput(_ url:format:options:)`.
+    /// - muxing: May be set by the caller before calling `writeHeader(options:)` to a string.
+    ///   Set to an empty string if it was `nil` in `writeHeader(options:)`.
     public var url: String? {
         get { return String(cString: cContext.url) }
         set { cContextPtr.pointee.url = av_strdup(newValue) }
@@ -201,9 +201,7 @@ extension AVFormatContext {
 
         public let rawValue: Int32
 
-        public init(rawValue: Int32) {
-            self.rawValue = rawValue
-        }
+        public init(rawValue: Int32) { self.rawValue = rawValue }
     }
 }
 
@@ -464,9 +462,7 @@ extension AVFormatContext {
 
         public let rawValue: Int32
 
-        public init(rawValue: Int32) {
-            self.rawValue = rawValue
-        }
+        public init(rawValue: Int32) { self.rawValue = rawValue }
     }
 }
 
@@ -613,17 +609,12 @@ extension AVFormatContext {
     }
 }
 
-extension AVFormatContext: AVClassSupport {
+extension AVFormatContext: AVClassSupport, AVOptionSupport {
     public static let `class` = AVClass(cClassPtr: avformat_get_class())
 
-    public func withUnsafeClassObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T {
-        return try body(cContextPtr)
-    }
-}
-
-extension AVFormatContext: AVOptionAccessor {
-
-    public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T {
+    public func withUnsafeObjectPointer<T>(
+        _ body: (UnsafeMutableRawPointer) throws -> T
+    ) rethrows -> T {
         return try body(cContextPtr)
     }
 }

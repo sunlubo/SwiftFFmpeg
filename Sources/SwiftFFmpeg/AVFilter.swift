@@ -152,9 +152,7 @@ extension AVFilter {
 
         public let rawValue: Int32
 
-        public init(rawValue: Int32) {
-            self.rawValue = rawValue
-        }
+        public init(rawValue: Int32) { self.rawValue = rawValue }
     }
 }
 
@@ -176,7 +174,7 @@ extension AVFilter.Flag: CustomStringConvertible {
     }
 }
 
-extension AVFilter: AVOptionAccessor {
+extension AVFilter: AVOptionSupport {
 
     public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T {
         var tmp = cFilter.priv_class
@@ -310,17 +308,12 @@ public final class AVFilterContext {
     }
 }
 
-extension AVFilterContext: AVClassSupport {
+extension AVFilterContext: AVClassSupport, AVOptionSupport {
     public static let `class` = AVClass(cClassPtr: avfilter_get_class())
 
-    public func withUnsafeClassObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T {
-        return try body(cContextPtr)
-    }
-}
-
-extension AVFilterContext: AVOptionAccessor {
-
-    public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T {
+    public func withUnsafeObjectPointer<T>(
+        _ body: (UnsafeMutableRawPointer) throws -> T
+    ) rethrows -> T {
         return try body(cContextPtr)
     }
 }
@@ -338,9 +331,7 @@ public struct AVBufferSourceFlag: OptionSet {
 
     public let rawValue: Int32
 
-    public init(rawValue: Int32) {
-        self.rawValue = rawValue
-    }
+    public init(rawValue: Int32) { self.rawValue = rawValue }
 }
 
 extension AVBufferSourceFlag: CustomStringConvertible {
@@ -393,9 +384,7 @@ public struct AVBufferSinkFlag: OptionSet {
 
     public let rawValue: Int32
 
-    public init(rawValue: Int32) {
-        self.rawValue = rawValue
-    }
+    public init(rawValue: Int32) { self.rawValue = rawValue }
 }
 
 extension AVBufferSinkFlag: CustomStringConvertible {
@@ -669,7 +658,7 @@ extension AVFilterGraph: CustomStringConvertible {
     }
 }
 
-extension AVFilterGraph: AVOptionAccessor {
+extension AVFilterGraph: AVOptionSupport {
 
     public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T {
         return try body(cGraphPtr)

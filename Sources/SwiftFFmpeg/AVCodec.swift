@@ -345,9 +345,7 @@ extension AVCodec {
 
         public let rawValue: UInt32
 
-        public init(rawValue: UInt32) {
-            self.rawValue = rawValue
-        }
+        public init(rawValue: UInt32) { self.rawValue = rawValue }
     }
 }
 
@@ -382,7 +380,7 @@ extension AVCodec.Cap: CustomStringConvertible {
     }
 }
 
-extension AVCodec: AVOptionAccessor {
+extension AVCodec: AVOptionSupport {
 
     public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T {
         var tmp = cCodec.priv_class
