@@ -207,3 +207,237 @@ extension AVPixelFormat: CustomStringConvertible {
         return name
     }
 }
+
+public typealias AVColorRange = CFFmpeg.AVColorRange
+
+extension CFFmpeg.AVColorRange {
+    public static let UNSPECIFIED = AVCOL_RANGE_UNSPECIFIED
+    
+    /// the normal 219*2^(n-8) "MPEG" YUV ranges
+    public static let MPEG = AVCOL_RANGE_MPEG
+    
+    /// the normal     2^n-1   "JPEG" YUV ranges
+    public static let JPEG = AVCOL_RANGE_JPEG
+    
+    /// Not part of ABI
+    public static let NB = AVCOL_RANGE_NB
+    
+    /// Return the color range corresponding to name.
+    ///
+    /// If there is no color range with name name, an error is thrown..
+    public init?(name: String) throws {
+        let range = av_color_range_from_name(name)
+        
+        if range < 0 {
+            throw AVError(code: range)
+        }
+        
+        self.init(UInt32(range))
+    }
+
+    // The name of the color range.
+    public var name: String {
+        return String(cString: av_color_range_name(self)) ?? "unknown"
+    }
+}
+
+public typealias AVColorPrimaries = CFFmpeg.AVColorPrimaries
+
+extension CFFmpeg.AVColorPrimaries {
+    public static let RESERVED0 = AVCOL_PRI_RESERVED0
+    /// also ITU-R BT1361 / IEC 61966-2-4 / SMPTE RP177 Annex B
+    public static let BT709 = AVCOL_PRI_BT709
+    public static let UNSPECIFIED = AVCOL_PRI_UNSPECIFIED
+    public static let RESERVED = AVCOL_PRI_RESERVED
+    /// also FCC Title 47 Code of Federal Regulations 73.682 (a)(20)
+    public static let BT470M = AVCOL_PRI_BT470M
+    /// also ITU-R BT601-6 625 / ITU-R BT1358 625 / ITU-R BT1700 625 PAL & SECAM
+    public static let BT470BG = AVCOL_PRI_BT470BG
+    /// also ITU-R BT601-6 525 / ITU-R BT1358 525 / ITU-R BT1700 NTSC
+    public static let SMPTE170M = AVCOL_PRI_SMPTE170M
+    /// functionally identical to above
+    public static let SMPTE240M = AVCOL_PRI_SMPTE240M
+    /// colour filters using Illuminant C
+    public static let FILM = AVCOL_PRI_FILM
+    /// ITU-R BT2020
+    public static let BT2020 = AVCOL_PRI_BT2020
+    /// SMPTE ST 428-1 (CIE 1931 XYZ)
+    public static let SMPTE428 = AVCOL_PRI_SMPTE428
+    public static let SMPTEST428_1 = AVCOL_PRI_SMPTEST428_1
+    /// SMPTE ST 431-2 (2011) / DCI P3
+    public static let SMPTE431 = AVCOL_PRI_SMPTE431
+    /// SMPTE ST 432-1 (2010) / P3 D65 / Display P3
+    public static let SMPTE432 = AVCOL_PRI_SMPTE432
+    /// JEDEC P22 phosphors
+    public static let JEDEC_P22 = AVCOL_PRI_JEDEC_P22
+    /// Not part of ABI
+    public static let NB = AVCOL_PRI_NB
+    
+    /// Return the color primaries corresponding to name.
+    ///
+    /// If there is no color primaries with name name, an error is thrown.
+    public init?(name: String) throws {
+        let range = av_color_primaries_from_name(name)
+        
+        if range < 0 {
+            throw AVError(code: range)
+        }
+        
+        self.init(UInt32(range))
+    }
+
+    // The name of the color primaries.
+    public var name: String {
+        return String(cString: av_color_primaries_name(self)) ?? "unknown"
+    }
+}
+
+public typealias AVColorTransferCharacteristic = CFFmpeg.AVColorTransferCharacteristic
+
+extension CFFmpeg.AVColorTransferCharacteristic {
+    public static let RESERVED0 = AVCOL_TRC_RESERVED0
+    /// also ITU-R BT1361
+    public static let BT709 = AVCOL_TRC_BT709
+    public static let UNSPECIFIED = AVCOL_TRC_UNSPECIFIED
+    public static let RESERVED = AVCOL_TRC_RESERVED
+    /// also ITU-R BT470M / ITU-R BT1700 625 PAL & SECAM
+    public static let GAMMA22 = AVCOL_TRC_GAMMA22
+    /// also ITU-R BT470BG
+    public static let GAMMA28 = AVCOL_TRC_GAMMA28
+    /// also ITU-R BT601-6 525 or 625 / ITU-R BT1358 525 or 625 / ITU-R BT1700 NTSC
+    public static let SMPTE170M = AVCOL_TRC_SMPTE170M
+    public static let SMPTE240M = AVCOL_TRC_SMPTE240M
+    /// "Linear transfer characteristics"
+    public static let LINEAR = AVCOL_TRC_LINEAR
+    /// "Logarithmic transfer characteristic (100:1 range)"
+    public static let LOG = AVCOL_TRC_LOG
+    /// "Logarithmic transfer characteristic (100 * Sqrt(10) : 1 range)"
+    public static let LOG_SQRT = AVCOL_TRC_LOG_SQRT
+    /// IEC 61966-2-4
+    public static let IEC61966_2_4 = AVCOL_TRC_IEC61966_2_4
+    /// ITU-R BT1361 Extended Colour Gamut
+    public static let BT1361_ECG = AVCOL_TRC_BT1361_ECG
+    /// IEC 61966-2-1 (sRGB or sYCC)
+    public static let IEC61966_2_1 = AVCOL_TRC_IEC61966_2_1
+    /// ITU-R BT2020 for 10-bit system
+    public static let BT2020_10 = AVCOL_TRC_BT2020_10
+    /// ITU-R BT2020 for 12-bit system
+    public static let BT2020_12 = AVCOL_TRC_BT2020_12
+    /// SMPTE ST 2084 for 10-, 12-, 14- and 16-bit systems
+    public static let SMPTE2084 = AVCOL_TRC_SMPTE2084
+    public static let SMPTEST2084 = AVCOL_TRC_SMPTEST2084
+    /// SMPTE ST 428-1
+    public static let SMPTE428 = AVCOL_TRC_SMPTE428
+    public static let SMPTEST428_1 = AVCOL_TRC_SMPTEST428_1
+    /// ARIB STD-B67, known as "Hybrid log-gamma"
+    public static let ARIB_STD_B67 = AVCOL_TRC_ARIB_STD_B67
+    /// Not part of ABI
+    public static let NB = AVCOL_TRC_NB
+    
+    /// Return the color transfer characteristic corresponding to name.
+    ///
+    /// If there is no color transfer characteristic with name name, an error is thrown.
+    public init?(name: String) throws {
+        let range = av_color_transfer_from_name(name)
+        
+        if range < 0 {
+            throw AVError(code: range)
+        }
+        
+        self.init(UInt32(range))
+    }
+
+    // The name of the color transfer characteristic.
+    public var name: String {
+        return String(cString: av_color_transfer_name(self)) ?? "unknown"
+    }
+}
+
+public typealias AVColorSpace = CFFmpeg.AVColorSpace
+
+extension CFFmpeg.AVColorSpace {
+    ///< order of coefficients is actually GBR, also IEC 61966-2-1 (sRGB)
+    public static let RGB = AVCOL_SPC_RGB
+    ///< also ITU-R BT1361 / IEC 61966-2-4 xvYCC709 / SMPTE RP177 Annex B
+    public static let BT709 = AVCOL_SPC_BT709
+    public static let UNSPECIFIED = AVCOL_SPC_UNSPECIFIED
+    public static let RESERVED = AVCOL_SPC_RESERVED
+    ///< FCC Title 47 Code of Federal Regulations 73.682 (a)(20)
+    public static let FCC = AVCOL_SPC_FCC
+    ///< also ITU-R BT601-6 625 / ITU-R BT1358 625 / ITU-R BT1700 625 PAL & SECAM / IEC 61966-2-4 xvYCC601
+    public static let BT470BG = AVCOL_SPC_BT470BG
+    ///< also ITU-R BT601-6 525 / ITU-R BT1358 525 / ITU-R BT1700 NTSC
+    public static let SMPTE170M = AVCOL_SPC_SMPTE170M
+    ///< functionally identical to above
+    public static let SMPTE240M = AVCOL_SPC_SMPTE240M
+    ///< Used by Dirac / VC-2 and H.264 FRext, see ITU-T SG16
+    public static let YCGCO = AVCOL_SPC_YCGCO
+    public static let YCOCG = AVCOL_SPC_YCOCG
+    ///< ITU-R BT2020 non-constant luminance system
+    public static let BT2020_NCL = AVCOL_SPC_BT2020_NCL
+    ///< ITU-R BT2020 constant luminance system
+    public static let BT2020_CL = AVCOL_SPC_BT2020_CL
+    ///< SMPTE 2085, Y'D'zD'x
+    public static let SMPTE2085 = AVCOL_SPC_SMPTE2085
+    ///< Chromaticity-derived non-constant luminance system
+    public static let CHROMA_DERIVED_NCL = AVCOL_SPC_CHROMA_DERIVED_NCL
+    ///< Chromaticity-derived constant luminance system
+    public static let CHROMA_DERIVED_CL = AVCOL_SPC_CHROMA_DERIVED_CL
+    ///< ITU-R BT.2100-0, ICtCp
+    public static let ICTCP = AVCOL_SPC_ICTCP
+    ///< Not part of ABI
+    public static let NB = AVCOL_SPC_NB
+    
+    /// Return the color space corresponding to name.
+    ///
+    /// If there is no color space with name name, an error is thrown.
+    public init?(name: String) throws {
+        let range = av_color_space_from_name(name)
+        
+        if range < 0 {
+            throw AVError(code: range)
+        }
+        
+        self.init(UInt32(range))
+    }
+    
+    // The name of the color space.
+    public var name: String {
+        return String(cString: av_color_space_name(self)) ?? "unknown"
+    }
+}
+
+public typealias AVChromaLocation = CFFmpeg.AVChromaLocation
+
+extension CFFmpeg.AVChromaLocation {
+    public static let UNSPECIFIED = AVCHROMA_LOC_UNSPECIFIED
+    ///< MPEG-2/4 4:2:0, H.264 default for 4:2:0
+    public static let LEFT = AVCHROMA_LOC_LEFT
+    ///< MPEG-1 4:2:0, JPEG 4:2:0, H.263 4:2:0
+    public static let CENTER = AVCHROMA_LOC_CENTER
+    ///< ITU-R 601, SMPTE 274M 296M S314M(DV 4:1:1), mpeg2 4:2:2
+    public static let TOPLEFT = AVCHROMA_LOC_TOPLEFT
+    public static let TOP = AVCHROMA_LOC_TOP
+    public static let BOTTOMLEFT = AVCHROMA_LOC_BOTTOMLEFT
+    public static let BOTTOM = AVCHROMA_LOC_BOTTOM
+    ///< Not part of ABI
+    public static let NB = AVCHROMA_LOC_NB
+    
+    /// Return the chroma location corresponding to name.
+    ///
+    /// If there is no chroma location with name name, an error is thrown.
+    public init?(name: String) throws {
+        let range = av_chroma_location_from_name(name)
+        
+        if range < 0 {
+            throw AVError(code: range)
+        }
+        
+        self.init(UInt32(range))
+    }
+
+    // The name of the chroma location.
+    public var name: String {
+        return String(cString: av_chroma_location_name(self)) ?? "unknown"
+    }
+}
