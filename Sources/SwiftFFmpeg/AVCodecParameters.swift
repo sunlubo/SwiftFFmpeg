@@ -124,6 +124,36 @@ extension AVCodecParameters {
         get { return Int(cParameters.video_delay) }
         set { cParametersPtr.pointee.video_delay = Int32(newValue) }
     }
+    
+    /// The color range of the video frame.
+    public var colorRange: AVColorRange {
+        get { return cParameters.color_range }
+        set { cParametersPtr.pointee.color_range = newValue }
+    }
+    
+    /// The color primaries of the video frame.
+    public var colorPrimaries: AVColorPrimaries {
+        get { return cParameters.color_primaries }
+        set { cParametersPtr.pointee.color_primaries = newValue }
+    }
+    
+    /// The color transfer characteristic of the video frame.
+    public var colorTransferCharacteristic: AVColorTransferCharacteristic {
+        get { return cParameters.color_trc }
+        set { cParametersPtr.pointee.color_trc = newValue }
+    }
+    
+    /// The color space of the video frame.
+    public var colorSpace: AVColorSpace {
+        get { return cParameters.color_space }
+        set { cParametersPtr.pointee.color_space = newValue }
+    }
+    
+    /// The chroma location of the video frame.
+    public var chromaLocation: AVChromaLocation {
+        get { return cParameters.chroma_location }
+        set { cParametersPtr.pointee.chroma_location = newValue }
+    }
 }
 
 // MARK: - Audio
