@@ -395,6 +395,36 @@ extension AVFrame {
     public var repeatPicture: Int {
         return Int(cFrame.repeat_pict)
     }
+    
+    /// The color range of the picture.
+    public var colorRange: AVColorRange {
+        get { return cFrame.color_range }
+        set { cFramePtr.pointee.color_range = newValue }
+    }
+    
+    /// The color primaries of the picture.
+    public var colorPrimaries: AVColorPrimaries {
+        get { return cFrame.color_primaries }
+        set { cFramePtr.pointee.color_primaries = newValue }
+    }
+    
+    /// The color transfer characteristic of the picture.
+    public var colorTransferCharacteristic: AVColorTransferCharacteristic {
+        get { return cFrame.color_trc }
+        set { cFramePtr.pointee.color_trc = newValue }
+    }
+    
+    /// The color space of the picture.
+    public var colorSpace: AVColorSpace {
+        get { return cFrame.colorspace }
+        set { cFramePtr.pointee.colorspace = newValue }
+    }
+    
+    /// The chroma location of the picture.
+    public var chromaLocation: AVChromaLocation {
+        get { return cFrame.chroma_location }
+        set { cFramePtr.pointee.chroma_location = newValue }
+    }
 }
 
 // MARK: - Audio
