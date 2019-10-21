@@ -200,7 +200,7 @@ extension AVPixelFormat {
         return count >= 0 ? count : 0
     }
     
-    // The pixel format descriptor of the pixel format.
+    /// The pixel format descriptor of the pixel format.
     public var descriptor: AVPixelFormatDescriptor? {
         if let desc = av_pix_fmt_desc_get(self) {
             return AVPixelFormatDescriptor(cDescriptorPtr: desc)
