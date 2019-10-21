@@ -199,6 +199,155 @@ extension AVPixelFormat {
         let count = Int(av_pix_fmt_count_planes(self))
         return count >= 0 ? count : 0
     }
+    
+    /// The pixel format descriptor of the pixel format.
+    public var descriptor: AVPixelFormatDescriptor? {
+        if let desc = av_pix_fmt_desc_get(self) {
+            return AVPixelFormatDescriptor(cDescriptorPtr: desc)
+        } else {
+            return nil
+        }
+    }
+}
+
+public typealias AVComponentDescriptor = CFFmpeg.AVComponentDescriptor
+
+public struct AVPixelFormatDescriptor {
+    let cDescriptorPtr: UnsafePointer<AVPixFmtDescriptor>
+    var cDescriptor: AVPixFmtDescriptor { return cDescriptorPtr.pointee }
+
+    init(cDescriptorPtr: UnsafePointer<AVPixFmtDescriptor>) {
+        self.cDescriptorPtr = cDescriptorPtr
+    }
+    
+    /// The name of the pixel format descriptor.
+    public var name: String {
+        return String(cString: cDescriptor.name) ?? "unknown"
+    }
+    
+    /// The number of components each pixel has, (1-4)
+    public var numberOfComponents: Int {
+        return Int(cDescriptor.nb_components)
+    }
+
+    /// Amount to shift the luma width right to find the chroma width.
+    /// For YV12 this is 1 for example.
+    /// chroma_width = AV_CEIL_RSHIFT(luma_width, log2_chroma_w)
+    /// The note above is needed to ensure rounding up.
+    /// This value only refers to the chroma components.
+    public var log2ChromaW: Int {
+        return Int(cDescriptor.log2_chroma_w)
+    }
+    
+    /// Amount to shift the luma height right to find the chroma height.
+    /// For YV12 this is 1 for example.
+    /// chroma_height= AV_CEIL_RSHIFT(luma_height, log2_chroma_h)
+    /// The note above is needed to ensure rounding up.
+    /// This value only refers to the chroma components.
+    public var log2ChromaH: Int {
+        return Int(cDescriptor.log2_chroma_h)
+    }
+
+    /// Parameters that describe how pixels are packed.
+    /// If the format has 1 or 2 components, then luma is 0.
+    /// If the format has 3 or 4 components:
+    ///   if the RGB flag is set then 0 is red, 1 is green and 2 is blue;
+    ///   otherwise 0 is luma, 1 is chroma-U and 2 is chroma-V.
+    ///
+    /// If present, the Alpha channel is always the last component.
+    public var componentDescriptors: [SwiftFFmpeg.AVComponentDescriptor] {
+        return [cDescriptor.comp.0, cDescriptor.comp.1, cDescriptor.comp.2, cDescriptor.comp.3]
+    }
+    
+    ///A wrapper around the C property for flags, containing AV_PIX_FMT_FLAG constants in a option set.
+    public var flags: AVPixelFormatFlags {
+        return AVPixelFormatFlags(rawValue: cDescriptor.flags)
+    }
+    
+    /// Alternative comma-separated names.
+    public var alias: String? {
+        return String(cString: cDescriptor.alias)
+    }
+    
+    /// Return the number of bits per pixel used by the pixel format
+    /// described by pixdesc. Note that this is not the same as the number
+    /// of bits per sample.
+    /// The returned number of bits refers to the number of bits actually
+    /// used for storing the pixel information, that is padding bits are
+    /// not counted.
+    public var bitsPerPixel: Int {
+        return Int(av_get_bits_per_pixel(cDescriptorPtr))
+    }
+    
+    ///Return the number of bits per pixel for the pixel format described by pixdesc, including any padding or unused bits.
+    public var bitsPerPixelPadded: Int {
+        return Int(av_get_padded_bits_per_pixel(cDescriptorPtr))
+    }
+    
+    /// @return an AVPixelFormat id described by desc, or AV_PIX_FMT_NONE if desc
+    /// is not a valid pointer to a pixel format descriptor.
+    public var id: AVPixelFormat {
+      return av_pix_fmt_desc_get_id(cDescriptorPtr)
+    }
+}
+
+public struct AVPixelFormatFlags: OptionSet {
+    public let rawValue: UInt64
+    
+    public init(rawValue: UInt64) {
+        self.rawValue = rawValue
+    }
+    
+    /// Pixel format is big-endian.
+    public static let BE = AVPixelFormatFlags(rawValue: UInt64(AV_PIX_FMT_FLAG_BE))
+    
+    /// Pixel format has a palette in data[1], values are indexes in this palette.
+    public static let PAL = AVPixelFormatFlags(rawValue: UInt64(AV_PIX_FMT_FLAG_PAL))
+    
+    /// All values of a component are bit-wise packed end to end.
+    public static let BITSTREAM = AVPixelFormatFlags(rawValue: UInt64(AV_PIX_FMT_FLAG_BITSTREAM))
+    
+    /// Pixel format is an HW accelerated format.
+    public static let HWACCEL = AVPixelFormatFlags(rawValue: UInt64(AV_PIX_FMT_FLAG_HWACCEL))
+    
+    /// At least one pixel component is not in the first data plane.
+    public static let PLANAR = AVPixelFormatFlags(rawValue: UInt64(AV_PIX_FMT_FLAG_PLANAR))
+    
+    /// The pixel format contains RGB-like data (as opposed to YUV/grayscale).
+    public static let RGB = AVPixelFormatFlags(rawValue: UInt64(AV_PIX_FMT_FLAG_RGB))
+
+    /// The pixel format is "pseudo-paletted". This means that it contains a
+    /// fixed palette in the 2nd plane but the palette is fixed/constant for each
+    /// PIX_FMT. This allows interpreting the data as if it was PAL8, which can
+    /// in some cases be simpler. Or the data can be interpreted purely based on
+    /// the pixel format without using the palette.
+    /// An example of a pseudo-paletted format is AV_PIX_FMT_GRAY8
+    /// @deprecated This flag is deprecated, and will be removed. When it is removed,
+    /// the extra palette allocation in AVFrame.data[1] is removed as well. Only
+    /// actual paletted formats (as indicated by AV_PIX_FMT_FLAG_PAL) will have a
+    /// palette. Starting with FFmpeg versions which have this flag deprecated, the
+    /// extra "pseudo" palette is already ignored, and API users are not required to
+    /// allocate a palette for AV_PIX_FMT_FLAG_PSEUDOPAL formats (it was required
+    /// before the deprecation, though).
+    public static let PSEUDOPAL = AVPixelFormatFlags(rawValue: UInt64(AV_PIX_FMT_FLAG_PSEUDOPAL))
+
+    
+    /// The pixel format has an alpha channel. This is set on all formats that
+    /// support alpha in some way, including AV_PIX_FMT_PAL8. The alpha is always
+    /// straight, never pre-multiplied.
+    /// If a codec or a filter does not support alpha, it should set all alpha to
+    /// opaque, or use the equivalent pixel formats without alpha component, e.g.
+    /// AV_PIX_FMT_RGB0 (or AV_PIX_FMT_RGB24 etc.) instead of AV_PIX_FMT_RGBA.
+    public static let ALPHA = AVPixelFormatFlags(rawValue: UInt64(AV_PIX_FMT_FLAG_ALPHA))
+
+    
+    /// The pixel format is following a Bayer pattern
+    public static let BAYER = AVPixelFormatFlags(rawValue: UInt64(AV_PIX_FMT_FLAG_BAYER))
+
+    
+    /// The pixel format contains IEEE-754 floating point values. Precision (double,
+    /// single, or half) should be determined by the pixel size (64, 32, or 16 bits).
+    public static let FLOAT = AVPixelFormatFlags(rawValue: UInt64(AV_PIX_FMT_FLAG_FLOAT))
 }
 
 extension AVPixelFormat: CustomStringConvertible {
