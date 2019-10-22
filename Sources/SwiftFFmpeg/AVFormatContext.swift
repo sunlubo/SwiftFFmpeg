@@ -450,7 +450,7 @@ extension AVFormatContext {
 
 extension AVFormatContext {
 
-    public struct SeekFlag {
+    public struct SeekFlag: OptionSet {
         /// seek backward
         public static let backward = SeekFlag(rawValue: AVSEEK_FLAG_BACKWARD)
         /// seeking based on position in bytes
