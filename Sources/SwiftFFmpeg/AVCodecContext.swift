@@ -686,6 +686,38 @@ extension AVCodecContext {
     }
 }
 
+// MARK: - Multithreading
+
+extension AVCodecContext {
+    
+    /// Which multithreading methods to use.
+    /// Use of FF_THREAD_FRAME will increase decoding delay by one frame per thread,
+    /// so clients which cannot provide future frames should not use it.
+    ///
+    /// - encoding: Set by user, otherwise the default is used.
+    /// - decoding: Set by user, otherwise the default is used.
+    public var threadType: FFThreadType {
+        get { return FFThreadType(rawValue: cContext.thread_type) }
+        set { cContextPtr.pointee.thread_type = newValue.rawValue }
+    }
+    
+    /// thread count
+    /// is used to decide how many independent tasks should be passed to execute()
+    /// - encoding: Set by user.
+    /// - decoding: Set by user.
+    public var threadCount: Int32 {
+        get { return cContext.thread_count }
+        set { cContextPtr.pointee.thread_count = newValue }
+    }
+    
+    /// Which multithreading methods are in use by the codec.
+    /// - encoding: Set by libavcodec.
+    /// - decoding: Set by libavcodec.
+    public var activeThreadType: FFThreadType {
+        get { return FFThreadType(rawValue: cContext.active_thread_type) }
+    }
+}
+
 extension AVCodecContext: AVClassSupport, AVOptionSupport {
     public static let `class` = AVClass(cClassPtr: avcodec_get_class())
 
@@ -694,4 +726,16 @@ extension AVCodecContext: AVClassSupport, AVOptionSupport {
     ) rethrows -> T {
         return try body(cContextPtr)
     }
+}
+
+public struct FFThreadType: Equatable, OptionSet {
+    /// Decode more than one frame at once
+    public static let frame = FFThreadType(rawValue: FF_THREAD_FRAME)
+    
+    /// Decode more than one part of a single frame at once
+    public static let slice = FFThreadType(rawValue: FF_THREAD_SLICE)
+    
+    public let rawValue: Int32
+
+    public init(rawValue: Int32) { self.rawValue = rawValue }
 }
