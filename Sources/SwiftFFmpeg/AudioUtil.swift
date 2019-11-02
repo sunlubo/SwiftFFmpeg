@@ -276,6 +276,10 @@ public struct AVChannelLayout: Equatable {
         let i = av_get_channel_layout_channel_index(rawValue, channel.rawValue)
         return i >= 0 ? Int(i) : nil
     }
+    
+    public func channel(at index: Int32) -> AVChannel {
+        return AVChannel(rawValue: av_channel_layout_extract_channel(rawValue, index))
+    }
 
     /// Get the default channel layout for a given number of channels.
     ///
