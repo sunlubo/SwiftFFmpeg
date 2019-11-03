@@ -13,7 +13,7 @@ typealias CAVBitStreamFilter = CFFmpeg.AVBitStreamFilter
 
 public struct AVBitStreamFilter {
     let cFilterPtr: UnsafePointer<CAVBitStreamFilter>
-    var cFilter: CAVBitStreamFilter { return cFilterPtr.pointee }
+    var cFilter: CAVBitStreamFilter { cFilterPtr.pointee }
 
     init(cFilterPtr: UnsafePointer<CAVBitStreamFilter>) {
         self.cFilterPtr = cFilterPtr
@@ -31,13 +31,13 @@ public struct AVBitStreamFilter {
 
     /// The name of the bitstream filter.
     public var name: String {
-        return String(cString: cFilter.name)
+        String(cString: cFilter.name)
     }
 
     /// A list of codec ids supported by the bitstream filter.
     /// May be `nil`, in that case the bitstream filter works with any codec id.
     public var codecIds: [AVCodecID]? {
-        return values(cFilter.codec_ids, until: .none)
+        values(cFilter.codec_ids, until: .none)
     }
 
     /// Get all registered bitstream filters.
@@ -54,7 +54,7 @@ public struct AVBitStreamFilter {
 extension AVBitStreamFilter: CustomStringConvertible {
 
     public var description: String {
-        return name
+        name
     }
 }
 
@@ -65,7 +65,7 @@ typealias CAVBSFContext = CFFmpeg.AVBSFContext
 /// The bitstream filter state.
 public final class AVBitStreamFilterContext {
     let cContextPtr: UnsafeMutablePointer<CAVBSFContext>
-    var cContext: CAVBSFContext { return cContextPtr.pointee }
+    var cContext: CAVBSFContext { cContextPtr.pointee }
 
     init(cContextPtr: UnsafeMutablePointer<CAVBSFContext>) {
         self.cContextPtr = cContextPtr
@@ -159,6 +159,6 @@ extension AVBitStreamFilterContext: AVClassSupport, AVOptionSupport {
     public func withUnsafeObjectPointer<T>(
         _ body: (UnsafeMutableRawPointer) throws -> T
     ) rethrows -> T {
-        return try body(cContextPtr)
+        try body(cContextPtr)
     }
 }

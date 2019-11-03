@@ -191,7 +191,7 @@ extension AVPixelFormat {
 
     // The name of the pixel format.
     public var name: String {
-        return String(cString: av_get_pix_fmt_name(self)) ?? "unknown"
+        String(cString: av_get_pix_fmt_name(self)) ?? "unknown"
     }
 
     /// The number of planes in the pixel format.
@@ -199,7 +199,7 @@ extension AVPixelFormat {
         let count = Int(av_pix_fmt_count_planes(self))
         return count >= 0 ? count : 0
     }
-    
+
     /// The pixel format descriptor of the pixel format.
     public var descriptor: AVPixelFormatDescriptor? {
         if let desc = av_pix_fmt_desc_get(self) {
@@ -219,15 +219,15 @@ public struct AVPixelFormatDescriptor {
     init(cDescriptorPtr: UnsafePointer<AVPixFmtDescriptor>) {
         self.cDescriptorPtr = cDescriptorPtr
     }
-    
+
     /// The name of the pixel format descriptor.
     public var name: String {
-        return String(cString: cDescriptor.name) ?? "unknown"
+        String(cString: cDescriptor.name) ?? "unknown"
     }
-    
+
     /// The number of components each pixel has, (1-4)
     public var numberOfComponents: Int {
-        return Int(cDescriptor.nb_components)
+        Int(cDescriptor.nb_components)
     }
 
     /// Amount to shift the luma width right to find the chroma width.
@@ -236,16 +236,16 @@ public struct AVPixelFormatDescriptor {
     /// The note above is needed to ensure rounding up.
     /// This value only refers to the chroma components.
     public var log2ChromaW: Int {
-        return Int(cDescriptor.log2_chroma_w)
+        Int(cDescriptor.log2_chroma_w)
     }
-    
+
     /// Amount to shift the luma height right to find the chroma height.
     /// For YV12 this is 1 for example.
     /// chroma_height= AV_CEIL_RSHIFT(luma_height, log2_chroma_h)
     /// The note above is needed to ensure rounding up.
     /// This value only refers to the chroma components.
     public var log2ChromaH: Int {
-        return Int(cDescriptor.log2_chroma_h)
+        Int(cDescriptor.log2_chroma_h)
     }
 
     /// Parameters that describe how pixels are packed.
@@ -256,19 +256,19 @@ public struct AVPixelFormatDescriptor {
     ///
     /// If present, the Alpha channel is always the last component.
     public var componentDescriptors: [SwiftFFmpeg.AVComponentDescriptor] {
-        return [cDescriptor.comp.0, cDescriptor.comp.1, cDescriptor.comp.2, cDescriptor.comp.3]
+        [cDescriptor.comp.0, cDescriptor.comp.1, cDescriptor.comp.2, cDescriptor.comp.3]
     }
-    
-    ///A wrapper around the C property for flags, containing AV_PIX_FMT_FLAG constants in a option set.
+
+    /// A wrapper around the C property for flags, containing AV_PIX_FMT_FLAG constants in a option set.
     public var flags: AVPixelFormatFlags {
-        return AVPixelFormatFlags(rawValue: cDescriptor.flags)
+        AVPixelFormatFlags(rawValue: cDescriptor.flags)
     }
-    
+
     /// Alternative comma-separated names.
     public var alias: String? {
-        return String(cString: cDescriptor.alias)
+        String(cString: cDescriptor.alias)
     }
-    
+
     /// Return the number of bits per pixel used by the pixel format
     /// described by pixdesc. Note that this is not the same as the number
     /// of bits per sample.
@@ -276,43 +276,43 @@ public struct AVPixelFormatDescriptor {
     /// used for storing the pixel information, that is padding bits are
     /// not counted.
     public var bitsPerPixel: Int {
-        return Int(av_get_bits_per_pixel(cDescriptorPtr))
+        Int(av_get_bits_per_pixel(cDescriptorPtr))
     }
-    
-    ///Return the number of bits per pixel for the pixel format described by pixdesc, including any padding or unused bits.
+
+    /// Return the number of bits per pixel for the pixel format described by pixdesc, including any padding or unused bits.
     public var bitsPerPixelPadded: Int {
-        return Int(av_get_padded_bits_per_pixel(cDescriptorPtr))
+        Int(av_get_padded_bits_per_pixel(cDescriptorPtr))
     }
-    
+
     /// @return an AVPixelFormat id described by desc, or AV_PIX_FMT_NONE if desc
     /// is not a valid pointer to a pixel format descriptor.
     public var id: AVPixelFormat {
-      return av_pix_fmt_desc_get_id(cDescriptorPtr)
+        av_pix_fmt_desc_get_id(cDescriptorPtr)
     }
 }
 
 public struct AVPixelFormatFlags: OptionSet {
     public let rawValue: UInt64
-    
+
     public init(rawValue: UInt64) {
         self.rawValue = rawValue
     }
-    
+
     /// Pixel format is big-endian.
     public static let BE = AVPixelFormatFlags(rawValue: UInt64(AV_PIX_FMT_FLAG_BE))
-    
+
     /// Pixel format has a palette in data[1], values are indexes in this palette.
     public static let PAL = AVPixelFormatFlags(rawValue: UInt64(AV_PIX_FMT_FLAG_PAL))
-    
+
     /// All values of a component are bit-wise packed end to end.
     public static let BITSTREAM = AVPixelFormatFlags(rawValue: UInt64(AV_PIX_FMT_FLAG_BITSTREAM))
-    
+
     /// Pixel format is an HW accelerated format.
     public static let HWACCEL = AVPixelFormatFlags(rawValue: UInt64(AV_PIX_FMT_FLAG_HWACCEL))
-    
+
     /// At least one pixel component is not in the first data plane.
     public static let PLANAR = AVPixelFormatFlags(rawValue: UInt64(AV_PIX_FMT_FLAG_PLANAR))
-    
+
     /// The pixel format contains RGB-like data (as opposed to YUV/grayscale).
     public static let RGB = AVPixelFormatFlags(rawValue: UInt64(AV_PIX_FMT_FLAG_RGB))
 
@@ -331,7 +331,6 @@ public struct AVPixelFormatFlags: OptionSet {
     /// before the deprecation, though).
     public static let PSEUDOPAL = AVPixelFormatFlags(rawValue: UInt64(AV_PIX_FMT_FLAG_PSEUDOPAL))
 
-    
     /// The pixel format has an alpha channel. This is set on all formats that
     /// support alpha in some way, including AV_PIX_FMT_PAL8. The alpha is always
     /// straight, never pre-multiplied.
@@ -340,11 +339,9 @@ public struct AVPixelFormatFlags: OptionSet {
     /// AV_PIX_FMT_RGB0 (or AV_PIX_FMT_RGB24 etc.) instead of AV_PIX_FMT_RGBA.
     public static let ALPHA = AVPixelFormatFlags(rawValue: UInt64(AV_PIX_FMT_FLAG_ALPHA))
 
-    
     /// The pixel format is following a Bayer pattern
     public static let BAYER = AVPixelFormatFlags(rawValue: UInt64(AV_PIX_FMT_FLAG_BAYER))
 
-    
     /// The pixel format contains IEEE-754 floating point values. Precision (double,
     /// single, or half) should be determined by the pixel size (64, 32, or 16 bits).
     public static let FLOAT = AVPixelFormatFlags(rawValue: UInt64(AV_PIX_FMT_FLAG_FLOAT))
@@ -353,7 +350,7 @@ public struct AVPixelFormatFlags: OptionSet {
 extension AVPixelFormat: CustomStringConvertible {
 
     public var description: String {
-        return name
+        name
     }
 }
 
@@ -361,32 +358,32 @@ public typealias AVColorRange = CFFmpeg.AVColorRange
 
 extension CFFmpeg.AVColorRange {
     public static let UNSPECIFIED = AVCOL_RANGE_UNSPECIFIED
-    
+
     /// the normal 219*2^(n-8) "MPEG" YUV ranges
     public static let MPEG = AVCOL_RANGE_MPEG
-    
+
     /// the normal     2^n-1   "JPEG" YUV ranges
     public static let JPEG = AVCOL_RANGE_JPEG
-    
+
     /// Not part of ABI
     public static let NB = AVCOL_RANGE_NB
-    
+
     /// Return the color range corresponding to name.
     ///
     /// If there is no color range with name name, an error is thrown..
     public init?(name: String) throws {
         let range = av_color_range_from_name(name)
-        
+
         if range < 0 {
             throw AVError(code: range)
         }
-        
+
         self.init(UInt32(range))
     }
 
     // The name of the color range.
     public var name: String {
-        return String(cString: av_color_range_name(self)) ?? "unknown"
+        String(cString: av_color_range_name(self)) ?? "unknown"
     }
 }
 
@@ -421,23 +418,23 @@ extension CFFmpeg.AVColorPrimaries {
     public static let JEDEC_P22 = AVCOL_PRI_JEDEC_P22
     /// Not part of ABI
     public static let NB = AVCOL_PRI_NB
-    
+
     /// Return the color primaries corresponding to name.
     ///
     /// If there is no color primaries with name name, an error is thrown.
     public init?(name: String) throws {
         let range = av_color_primaries_from_name(name)
-        
+
         if range < 0 {
             throw AVError(code: range)
         }
-        
+
         self.init(UInt32(range))
     }
 
     // The name of the color primaries.
     public var name: String {
-        return String(cString: av_color_primaries_name(self)) ?? "unknown"
+        String(cString: av_color_primaries_name(self)) ?? "unknown"
     }
 }
 
@@ -482,77 +479,75 @@ extension CFFmpeg.AVColorTransferCharacteristic {
     public static let ARIB_STD_B67 = AVCOL_TRC_ARIB_STD_B67
     /// Not part of ABI
     public static let NB = AVCOL_TRC_NB
-    
+
     /// Return the color transfer characteristic corresponding to name.
     ///
     /// If there is no color transfer characteristic with name name, an error is thrown.
     public init?(name: String) throws {
         let range = av_color_transfer_from_name(name)
-        
+
         if range < 0 {
             throw AVError(code: range)
         }
-        
+
         self.init(UInt32(range))
     }
 
     // The name of the color transfer characteristic.
     public var name: String {
-        return String(cString: av_color_transfer_name(self)) ?? "unknown"
+        String(cString: av_color_transfer_name(self)) ?? "unknown"
     }
 }
 
 public typealias AVColorSpace = CFFmpeg.AVColorSpace
 
 extension CFFmpeg.AVColorSpace {
-    ///< order of coefficients is actually GBR, also IEC 61966-2-1 (sRGB)
+    /// order of coefficients is actually GBR, also IEC 61966-2-1 (sRGB)
     public static let RGB = AVCOL_SPC_RGB
-    ///< also ITU-R BT1361 / IEC 61966-2-4 xvYCC709 / SMPTE RP177 Annex B
+    /// also ITU-R BT1361 / IEC 61966-2-4 xvYCC709 / SMPTE RP177 Annex B
     public static let BT709 = AVCOL_SPC_BT709
     public static let UNSPECIFIED = AVCOL_SPC_UNSPECIFIED
     public static let RESERVED = AVCOL_SPC_RESERVED
-    ///< FCC Title 47 Code of Federal Regulations 73.682 (a)(20)
+    /// FCC Title 47 Code of Federal Regulations 73.682 (a)(20)
     public static let FCC = AVCOL_SPC_FCC
-    ///< also ITU-R BT601-6 625 / ITU-R BT1358 625 / ITU-R BT1700 625 PAL & SECAM / IEC 61966-2-4 xvYCC601
+    /// also ITU-R BT601-6 625 / ITU-R BT1358 625 / ITU-R BT1700 625 PAL & SECAM / IEC 61966-2-4 xvYCC601
     public static let BT470BG = AVCOL_SPC_BT470BG
-    ///< also ITU-R BT601-6 525 / ITU-R BT1358 525 / ITU-R BT1700 NTSC
+    /// also ITU-R BT601-6 525 / ITU-R BT1358 525 / ITU-R BT1700 NTSC
     public static let SMPTE170M = AVCOL_SPC_SMPTE170M
-    ///< functionally identical to above
+    /// functionally identical to above
     public static let SMPTE240M = AVCOL_SPC_SMPTE240M
-    ///< Used by Dirac / VC-2 and H.264 FRext, see ITU-T SG16
+    /// Used by Dirac / VC-2 and H.264 FRext, see ITU-T SG16
     public static let YCGCO = AVCOL_SPC_YCGCO
     public static let YCOCG = AVCOL_SPC_YCOCG
-    ///< ITU-R BT2020 non-constant luminance system
+    /// ITU-R BT2020 non-constant luminance system
     public static let BT2020_NCL = AVCOL_SPC_BT2020_NCL
-    ///< ITU-R BT2020 constant luminance system
+    /// ITU-R BT2020 constant luminance system
     public static let BT2020_CL = AVCOL_SPC_BT2020_CL
-    ///< SMPTE 2085, Y'D'zD'x
+    /// SMPTE 2085, Y'D'zD'x
     public static let SMPTE2085 = AVCOL_SPC_SMPTE2085
-    ///< Chromaticity-derived non-constant luminance system
+    /// Chromaticity-derived non-constant luminance system
     public static let CHROMA_DERIVED_NCL = AVCOL_SPC_CHROMA_DERIVED_NCL
-    ///< Chromaticity-derived constant luminance system
+    /// Chromaticity-derived constant luminance system
     public static let CHROMA_DERIVED_CL = AVCOL_SPC_CHROMA_DERIVED_CL
-    ///< ITU-R BT.2100-0, ICtCp
+    /// ITU-R BT.2100-0, ICtCp
     public static let ICTCP = AVCOL_SPC_ICTCP
-    ///< Not part of ABI
+    /// Not part of ABI
     public static let NB = AVCOL_SPC_NB
-    
+
     /// Return the color space corresponding to name.
     ///
     /// If there is no color space with name name, an error is thrown.
     public init?(name: String) throws {
         let range = av_color_space_from_name(name)
-        
         if range < 0 {
             throw AVError(code: range)
         }
-        
         self.init(UInt32(range))
     }
-    
+
     // The name of the color space.
     public var name: String {
-        return String(cString: av_color_space_name(self)) ?? "unknown"
+        String(cString: av_color_space_name(self)) ?? "unknown"
     }
 }
 
@@ -560,33 +555,31 @@ public typealias AVChromaLocation = CFFmpeg.AVChromaLocation
 
 extension CFFmpeg.AVChromaLocation {
     public static let UNSPECIFIED = AVCHROMA_LOC_UNSPECIFIED
-    ///< MPEG-2/4 4:2:0, H.264 default for 4:2:0
+    /// MPEG-2/4 4:2:0, H.264 default for 4:2:0
     public static let LEFT = AVCHROMA_LOC_LEFT
-    ///< MPEG-1 4:2:0, JPEG 4:2:0, H.263 4:2:0
+    /// MPEG-1 4:2:0, JPEG 4:2:0, H.263 4:2:0
     public static let CENTER = AVCHROMA_LOC_CENTER
-    ///< ITU-R 601, SMPTE 274M 296M S314M(DV 4:1:1), mpeg2 4:2:2
+    /// ITU-R 601, SMPTE 274M 296M S314M(DV 4:1:1), mpeg2 4:2:2
     public static let TOPLEFT = AVCHROMA_LOC_TOPLEFT
     public static let TOP = AVCHROMA_LOC_TOP
     public static let BOTTOMLEFT = AVCHROMA_LOC_BOTTOMLEFT
     public static let BOTTOM = AVCHROMA_LOC_BOTTOM
-    ///< Not part of ABI
+    /// Not part of ABI
     public static let NB = AVCHROMA_LOC_NB
-    
+
     /// Return the chroma location corresponding to name.
     ///
     /// If there is no chroma location with name name, an error is thrown.
     public init?(name: String) throws {
         let range = av_chroma_location_from_name(name)
-        
         if range < 0 {
             throw AVError(code: range)
         }
-        
         self.init(UInt32(range))
     }
 
     // The name of the chroma location.
     public var name: String {
-        return String(cString: av_chroma_location_name(self)) ?? "unknown"
+        String(cString: av_chroma_location_name(self)) ?? "unknown"
     }
 }

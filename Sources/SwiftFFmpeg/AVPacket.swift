@@ -29,7 +29,7 @@ typealias CAVPacket = CFFmpeg.AVPacket
 /// The side data is always allocated with `AVIO.malloc(size:)`, copied by `ref(from:)` and freed `unref()`.
 public final class AVPacket {
     let cPacketPtr: UnsafeMutablePointer<CAVPacket>
-    var cPacket: CAVPacket { return cPacketPtr.pointee }
+    var cPacket: CAVPacket { cPacketPtr.pointee }
 
     init(cPacketPtr: UnsafeMutablePointer<CAVPacket>) {
         self.cPacketPtr = cPacketPtr
@@ -63,7 +63,7 @@ public final class AVPacket {
     ///
     /// Can be `AVTimestamp.noPTS` if it is not stored in the file.
     public var pts: Int64 {
-        get { return cPacket.pts }
+        get { cPacket.pts }
         set { cPacketPtr.pointee.pts = newValue }
     }
 
@@ -71,40 +71,40 @@ public final class AVPacket {
     ///
     /// Can be `AVTimestamp.noPTS` if it is not stored in the file.
     public var dts: Int64 {
-        get { return cPacket.dts }
+        get { cPacket.dts }
         set { cPacketPtr.pointee.dts = newValue }
     }
 
     public var data: UnsafeMutablePointer<UInt8>? {
-        get { return cPacket.data }
+        get { cPacket.data }
         set { cPacketPtr.pointee.data = newValue }
     }
 
     public var size: Int {
-        get { return Int(cPacket.size) }
+        get { Int(cPacket.size) }
         set { cPacketPtr.pointee.size = Int32(newValue) }
     }
 
     public var streamIndex: Int {
-        get { return Int(cPacket.stream_index) }
+        get { Int(cPacket.stream_index) }
         set { cPacketPtr.pointee.stream_index = Int32(newValue) }
     }
 
     public var flags: Flag {
-        get { return Flag(rawValue: cPacket.flags) }
+        get { Flag(rawValue: cPacket.flags) }
         set { cPacketPtr.pointee.flags = newValue.rawValue }
     }
 
     /// Duration of this packet in `AVStream.timebase` units, 0 if unknown.
     /// Equals `next_pts - this_pts` in presentation order.
     public var duration: Int64 {
-        get { return cPacket.duration }
+        get { cPacket.duration }
         set { cPacketPtr.pointee.duration = newValue }
     }
 
     /// Byte position in stream, -1 if unknown.
     public var position: Int64 {
-        get { return cPacket.pos }
+        get { cPacket.pos }
         set { cPacketPtr.pointee.pos = newValue }
     }
 

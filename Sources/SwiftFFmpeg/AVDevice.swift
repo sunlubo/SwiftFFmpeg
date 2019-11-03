@@ -154,7 +154,7 @@ public enum AVDevice {
 
     /// Return the libavdevice build-time configuration.
     public static var configuration: String {
-        return String(cString: avdevice_configuration())
+        String(cString: avdevice_configuration())
     }
 
     /// Get all registered audio input devices.
@@ -250,7 +250,7 @@ typealias CAVDeviceCapabilitiesQuery = CFFmpeg.AVDeviceCapabilitiesQuery
 public final class AVDeviceCapabilitiesQuery {
     private let formatContext: AVFormatContext
     private let cQueryPtr: UnsafeMutablePointer<CAVDeviceCapabilitiesQuery>
-    private var cQuery: CAVDeviceCapabilitiesQuery { return cQueryPtr.pointee }
+    private var cQuery: CAVDeviceCapabilitiesQuery { cQueryPtr.pointee }
 
     /// Initialize capabilities probing API based on `AVOption` API.
     ///
@@ -273,47 +273,47 @@ public final class AVDeviceCapabilitiesQuery {
     }
 
     public var codec: AVCodecID {
-        return cQuery.codec
+        cQuery.codec
     }
 
     public var sampleFormat: AVCodecID {
-        return cQuery.codec
+        cQuery.codec
     }
 
     public var sampleRate: Int {
-        return Int(cQuery.sample_rate)
+        Int(cQuery.sample_rate)
     }
 
     public var channelCount: Int {
-        return Int(cQuery.channels)
+        Int(cQuery.channels)
     }
 
     public var channelLayout: AVChannelLayout {
-        return AVChannelLayout(rawValue: UInt64(cQuery.channel_layout))
+        AVChannelLayout(rawValue: UInt64(cQuery.channel_layout))
     }
 
     public var pixelFormat: AVCodecID {
-        return cQuery.codec
+        cQuery.codec
     }
 
     public var windowWidth: Int {
-        return Int(cQuery.window_width)
+        Int(cQuery.window_width)
     }
 
     public var windowHeight: Int {
-        return Int(cQuery.window_height)
+        Int(cQuery.window_height)
     }
 
     public var frameWidth: Int {
-        return Int(cQuery.frame_width)
+        Int(cQuery.frame_width)
     }
 
     public var frameHeight: Int {
-        return Int(cQuery.frame_height)
+        Int(cQuery.frame_height)
     }
 
     public var fps: AVRational {
-        return cQuery.fps
+        cQuery.fps
     }
 
     deinit {
@@ -329,7 +329,7 @@ typealias CAVDeviceInfo = CFFmpeg.AVDeviceInfo
 /// Structure describes basic parameters of the device.
 public struct AVDeviceInfo {
     private let cDeviceInfoPtr: UnsafeMutablePointer<CAVDeviceInfo>
-    private var cDeviceInfo: CAVDeviceInfo { return cDeviceInfoPtr.pointee }
+    private var cDeviceInfo: CAVDeviceInfo { cDeviceInfoPtr.pointee }
 
     init(cDeviceInfoPtr: UnsafeMutablePointer<CAVDeviceInfo>) {
         self.cDeviceInfoPtr = cDeviceInfoPtr
@@ -337,12 +337,12 @@ public struct AVDeviceInfo {
 
     /// The name of the device.
     public var name: String {
-        return String(cString: cDeviceInfo.device_name)
+        String(cString: cDeviceInfo.device_name)
     }
 
     /// The human friendly name of the device.
     public var description: String {
-        return String(cString: cDeviceInfo.device_description)
+        String(cString: cDeviceInfo.device_description)
     }
 }
 
@@ -353,7 +353,7 @@ typealias CAVDeviceInfoList = CFFmpeg.AVDeviceInfoList
 /// List of devices.
 public final class AVDeviceInfoList {
     private let cDeviceInfoListPtr: UnsafeMutablePointer<CAVDeviceInfoList>
-    private var cDeviceInfoList: CAVDeviceInfoList { return cDeviceInfoListPtr.pointee }
+    private var cDeviceInfoList: CAVDeviceInfoList { cDeviceInfoListPtr.pointee }
 
     private var freeWhenDone: Bool = false
 
@@ -389,12 +389,12 @@ public final class AVDeviceInfoList {
 
     /// number of autodetected devices
     public var deviceCount: Int {
-        return Int(cDeviceInfoList.nb_devices)
+        Int(cDeviceInfoList.nb_devices)
     }
 
     /// index of default device or -1 if no default
     public var defaultDeviceIndex: Int {
-        return Int(cDeviceInfoList.default_device)
+        Int(cDeviceInfoList.default_device)
     }
 
     deinit {

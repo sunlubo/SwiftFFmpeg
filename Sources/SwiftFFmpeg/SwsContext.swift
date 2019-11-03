@@ -83,7 +83,7 @@ public final class SwsContext {
     /// - Parameter pixFmt: pixel format
     /// - Returns: `true` if it is supported; otherwise `false`.
     public static func supportsInput(_ pixFmt: AVPixelFormat) -> Bool {
-        return sws_isSupportedInput(pixFmt) > 0
+        sws_isSupportedInput(pixFmt) > 0
     }
 
     /// Returns a Boolean value indicating whether the pixel format is a supported output format.
@@ -91,7 +91,7 @@ public final class SwsContext {
     /// - Parameter pixFmt: pixel format
     /// - Returns: `true` if it is supported; otherwise `false`.
     public static func supportsOutput(_ pixFmt: AVPixelFormat) -> Bool {
-        return sws_isSupportedOutput(pixFmt) > 0
+        sws_isSupportedOutput(pixFmt) > 0
     }
 
     /// Returns a Boolean value indicating whether an endianness conversion is supported.
@@ -99,7 +99,7 @@ public final class SwsContext {
     /// - Parameter pixFmt: pixel format
     /// - Returns: `true` if it is supported; otherwise `false`.
     public static func supportsEndiannessConversion(_ pixFmt: AVPixelFormat) -> Bool {
-        return sws_isSupportedEndiannessConversion(pixFmt) > 0
+        sws_isSupportedEndiannessConversion(pixFmt) > 0
     }
 
     deinit {
@@ -184,6 +184,6 @@ extension SwsContext: AVClassSupport, AVOptionSupport {
     public func withUnsafeObjectPointer<T>(
         _ body: (UnsafeMutableRawPointer) throws -> T
     ) rethrows -> T {
-        return try body(UnsafeMutableRawPointer(cContextPtr))
+        try body(UnsafeMutableRawPointer(cContextPtr))
     }
 }

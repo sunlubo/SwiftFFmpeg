@@ -13,7 +13,7 @@ public enum AVLog {
 
     /// Get/set the log level.
     public static var level: Level {
-        get { return Level(rawValue: av_log_get_level()) }
+        get { Level(rawValue: av_log_get_level()) }
         set { av_log_set_level(newValue.rawValue) }
     }
 

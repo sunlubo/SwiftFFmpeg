@@ -22,19 +22,19 @@ public struct AVFilterPad {
 
     /// The name of the filter pad.
     public var name: String {
-        return String(cString: avfilter_pad_get_name(cPadsPtr, index))
+        String(cString: avfilter_pad_get_name(cPadsPtr, index))
     }
 
     /// The media type of the filter pad.
     public var mediaType: AVMediaType {
-        return avfilter_pad_get_type(cPadsPtr, index)
+        avfilter_pad_get_type(cPadsPtr, index)
     }
 }
 
 extension AVFilterPad: CustomStringConvertible {
 
     public var description: String {
-        return "\(name) - \(mediaType))"
+        "\(name) - \(mediaType))"
     }
 }
 
@@ -44,7 +44,7 @@ typealias CAVFilter = CFFmpeg.AVFilter
 
 public struct AVFilter {
     let cFilterPtr: UnsafePointer<CAVFilter>
-    var cFilter: CAVFilter { return cFilterPtr.pointee }
+    var cFilter: CAVFilter { cFilterPtr.pointee }
 
     init(cFilterPtr: UnsafePointer<CAVFilter>) {
         self.cFilterPtr = cFilterPtr
@@ -63,7 +63,7 @@ public struct AVFilter {
 
     /// The name of the filter.
     public var name: String {
-        return String(cString: cFilter.name)
+        String(cString: cFilter.name)
     }
 
     /// The inputs of the filter.
@@ -96,7 +96,7 @@ public struct AVFilter {
 
     /// The flags of the filter.
     public var flags: Flag {
-        return Flag(rawValue: cFilter.flags)
+        Flag(rawValue: cFilter.flags)
     }
 
     /// Get all registered filters.
@@ -113,7 +113,7 @@ public struct AVFilter {
 extension AVFilter: CustomStringConvertible {
 
     public var description: String {
-        return "\(name): \(String(cString: cFilter.description) ?? "")"
+        "\(name): \(String(cString: cFilter.description) ?? "")"
     }
 }
 
@@ -191,7 +191,7 @@ typealias CAVFilterContext = CFFmpeg.AVFilterContext
 /// An instance of a filter.
 public final class AVFilterContext {
     let cContextPtr: UnsafeMutablePointer<CAVFilterContext>
-    var cContext: CAVFilterContext { return cContextPtr.pointee }
+    var cContext: CAVFilterContext { cContextPtr.pointee }
 
     init(cContextPtr: UnsafeMutablePointer<CAVFilterContext>) {
         self.cContextPtr = cContextPtr
@@ -216,13 +216,13 @@ public final class AVFilterContext {
 
     /// The `AVFilter` of which this is an instance.
     public var filter: AVFilter {
-        get { return AVFilter(cFilterPtr: cContext.filter) }
+        get { AVFilter(cFilterPtr: cContext.filter) }
         set { cContextPtr.pointee.filter = newValue.cFilterPtr }
     }
 
     /// The name of this filter instance.
     public var name: String {
-        return String(cString: cContext.name)
+        String(cString: cContext.name)
     }
 
     /// The input links of this filter instance.
@@ -236,7 +236,7 @@ public final class AVFilterContext {
 
     /// The number of input pads.
     public var inputCount: Int {
-        return Int(cContext.nb_inputs)
+        Int(cContext.nb_inputs)
     }
 
     /// The output links of this filter instance.
@@ -250,12 +250,12 @@ public final class AVFilterContext {
 
     /// The number of input pads.
     public var outputCount: Int {
-        return Int(cContext.nb_outputs)
+        Int(cContext.nb_outputs)
     }
 
     /// The filtergraph this filter belongs to.
     public var graph: AVFilterGraph {
-        return AVFilterGraph(cGraphPtr: cContext.graph)
+        AVFilterGraph(cGraphPtr: cContext.graph)
     }
 
     /// Initialize a filter with the supplied parameters.
@@ -314,7 +314,7 @@ extension AVFilterContext: AVClassSupport, AVOptionSupport {
     public func withUnsafeObjectPointer<T>(
         _ body: (UnsafeMutableRawPointer) throws -> T
     ) rethrows -> T {
-        return try body(cContextPtr)
+        try body(cContextPtr)
     }
 }
 
@@ -407,57 +407,57 @@ extension AVFilterContext {
 
     /// The media type of the buffer sink.
     public var mediaType: AVMediaType {
-        return av_buffersink_get_type(cContextPtr)
+        av_buffersink_get_type(cContextPtr)
     }
 
     /// The timebase of the buffer sink.
     public var timebase: AVRational {
-        return av_buffersink_get_time_base(cContextPtr)
+        av_buffersink_get_time_base(cContextPtr)
     }
 
     /// The pixel format of the video buffer sink.
     public var pixelFormat: AVPixelFormat {
-        return AVPixelFormat(rawValue: av_buffersink_get_format(cContextPtr))
+        AVPixelFormat(rawValue: av_buffersink_get_format(cContextPtr))
     }
 
     /// The frame rate of the video buffer sink.
     public var frameRate: AVRational {
-        return av_buffersink_get_frame_rate(cContextPtr)
+        av_buffersink_get_frame_rate(cContextPtr)
     }
 
     /// The width of the video buffer sink.
     public var width: Int {
-        return Int(av_buffersink_get_w(cContextPtr))
+        Int(av_buffersink_get_w(cContextPtr))
     }
 
     /// The height of the video buffer sink.
     public var height: Int {
-        return Int(av_buffersink_get_h(cContextPtr))
+        Int(av_buffersink_get_h(cContextPtr))
     }
 
     /// The sample aspect ratio of the video buffer sink.
     public var sampleAspectRatio: AVRational {
-        return av_buffersink_get_sample_aspect_ratio(cContextPtr)
+        av_buffersink_get_sample_aspect_ratio(cContextPtr)
     }
 
     /// The sample format of the audio buffer sink.
     public var sampleFormat: AVSampleFormat {
-        return AVSampleFormat(rawValue: av_buffersink_get_format(cContextPtr))
+        AVSampleFormat(rawValue: av_buffersink_get_format(cContextPtr))
     }
 
     /// The sample rate of the audio buffer sink.
     public var sampleRate: Int {
-        return Int(av_buffersink_get_sample_rate(cContextPtr))
+        Int(av_buffersink_get_sample_rate(cContextPtr))
     }
 
     /// The number of channels in the audio buffer sink.
     public var channelCount: Int {
-        return Int(av_buffersink_get_channels(cContextPtr))
+        Int(av_buffersink_get_channels(cContextPtr))
     }
 
     /// The channel layout of the audio buffer sink.
     public var channelLayout: AVChannelLayout {
-        return AVChannelLayout(rawValue: av_buffersink_get_channel_layout(cContextPtr))
+        AVChannelLayout(rawValue: av_buffersink_get_channel_layout(cContextPtr))
     }
 
     /// Get a frame with filtered data from sink and put it in frame.
@@ -493,24 +493,24 @@ public struct AVFilterLink {
 
     /// The source filter.
     public var source: AVFilterContext {
-        return AVFilterContext(cContextPtr: cLinkPtr.pointee.src)
+        AVFilterContext(cContextPtr: cLinkPtr.pointee.src)
     }
 
     /// The destination filter.
     public var destination: AVFilterContext {
-        return AVFilterContext(cContextPtr: cLinkPtr.pointee.dst)
+        AVFilterContext(cContextPtr: cLinkPtr.pointee.dst)
     }
 
     /// The filter's media type.
     public var mediaType: AVMediaType {
-        return cLinkPtr.pointee.type
+        cLinkPtr.pointee.type
     }
 
     /// Define the timebase used by the PTS of the frames/samples which will pass through this link.
     /// During the configuration stage, each filter is supposed to change only the output timebase,
     /// while the timebase of the input link is assumed to be an unchangeable property.
     public var timebase: AVRational {
-        return cLinkPtr.pointee.time_base
+        cLinkPtr.pointee.time_base
     }
 }
 
@@ -520,22 +520,22 @@ extension AVFilterLink {
 
     /// agreed upon pixel format
     public var pixelFormat: AVPixelFormat {
-        return AVPixelFormat(cLinkPtr.pointee.format)
+        AVPixelFormat(cLinkPtr.pointee.format)
     }
 
     /// agreed upon image width
     public var width: Int {
-        return Int(cLinkPtr.pointee.w)
+        Int(cLinkPtr.pointee.w)
     }
 
     /// agreed upon image height
     public var height: Int {
-        return Int(cLinkPtr.pointee.h)
+        Int(cLinkPtr.pointee.h)
     }
 
     /// agreed upon sample aspect ratio
     public var sampleAspectRatio: AVRational {
-        return cLinkPtr.pointee.sample_aspect_ratio
+        cLinkPtr.pointee.sample_aspect_ratio
     }
 }
 
@@ -545,17 +545,17 @@ extension AVFilterLink {
 
     /// agreed upon sample format
     public var sampleFormat: AVSampleFormat {
-        return AVSampleFormat(cLinkPtr.pointee.format)
+        AVSampleFormat(cLinkPtr.pointee.format)
     }
 
     /// channel layout of current buffer
     public var channelLayout: AVChannelLayout {
-        return AVChannelLayout(rawValue: cLinkPtr.pointee.channel_layout)
+        AVChannelLayout(rawValue: cLinkPtr.pointee.channel_layout)
     }
 
     /// samples per second
     public var sampleRate: Int {
-        return Int(cLinkPtr.pointee.sample_rate)
+        Int(cLinkPtr.pointee.sample_rate)
     }
 }
 
@@ -565,7 +565,7 @@ typealias CAVFilterGraph = CFFmpeg.AVFilterGraph
 
 public final class AVFilterGraph {
     let cGraphPtr: UnsafeMutablePointer<CAVFilterGraph>
-    var cGraph: CAVFilterGraph { return cGraphPtr.pointee }
+    var cGraph: CAVFilterGraph { cGraphPtr.pointee }
 
     init(cGraphPtr: UnsafeMutablePointer<CAVFilterGraph>) {
         self.cGraphPtr = cGraphPtr
@@ -591,7 +591,7 @@ public final class AVFilterGraph {
 
     /// The number of filters in the graph.
     public var filterCount: Int {
-        return Int(cGraph.nb_filters)
+        Int(cGraph.nb_filters)
     }
 
     /// Create and add a filter instance into an existing graph.
@@ -661,7 +661,7 @@ extension AVFilterGraph: CustomStringConvertible {
 extension AVFilterGraph: AVOptionSupport {
 
     public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T {
-        return try body(cGraphPtr)
+        try body(cGraphPtr)
     }
 }
 
@@ -678,7 +678,7 @@ typealias CAVFilterInOut = CFFmpeg.AVFilterInOut
 /// filter context and the pad index required for establishing a link.
 public final class AVFilterInOut {
     let cInOutPtr: UnsafeMutablePointer<CAVFilterInOut>
-    var cInOut: CAVFilterInOut { return cInOutPtr.pointee }
+    var cInOut: CAVFilterInOut { cInOutPtr.pointee }
 
     var freeWhenDone: Bool = false
 
@@ -697,19 +697,19 @@ public final class AVFilterInOut {
 
     /// The unique name for this input/output in the list.
     public var name: String {
-        get { return String(cString: cInOut.name) }
+        get { String(cString: cInOut.name) }
         set { cInOutPtr.pointee.name = av_strdup(newValue) }
     }
 
     /// The filter context associated to this input/output.
     public var filterContext: AVFilterContext {
-        get { return AVFilterContext(cContextPtr: cInOut.filter_ctx) }
+        get { AVFilterContext(cContextPtr: cInOut.filter_ctx) }
         set { cInOutPtr.pointee.filter_ctx = newValue.cContextPtr }
     }
 
     /// The index of the filter context pad to use for linking.
     public var padIndex: Int {
-        get { return Int(cInOut.pad_idx) }
+        get { Int(cInOut.pad_idx) }
         set { cInOutPtr.pointee.pad_idx = Int32(newValue) }
     }
 

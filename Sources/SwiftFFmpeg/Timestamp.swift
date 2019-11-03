@@ -30,6 +30,6 @@ public enum AVTimestamp {
         _ ts_a: Int64, _ tb_a: AVRational,
         _ ts_b: Int64, _ tb_b: AVRational
     ) -> Int {
-        return Int(av_compare_ts(ts_a, tb_a, ts_b, tb_b))
+        Int(av_compare_ts(ts_a, tb_a, ts_b, tb_b))
     }
 }

@@ -35,7 +35,7 @@ typealias CAVStream = CFFmpeg.AVStream
 /// Stream structure.
 public final class AVStream {
     let cStreamPtr: UnsafeMutablePointer<CAVStream>
-    var cStream: CAVStream { return cStreamPtr.pointee }
+    var cStream: CAVStream { cStreamPtr.pointee }
 
     init(cStreamPtr: UnsafeMutablePointer<CAVStream>) {
         self.cStreamPtr = cStreamPtr
@@ -43,7 +43,7 @@ public final class AVStream {
 
     /// Stream index in `AVFormatContext`.
     public var index: Int {
-        return Int(cStream.index)
+        Int(cStream.index)
     }
 
     /// Format-specific stream ID.
@@ -51,7 +51,7 @@ public final class AVStream {
     /// - encoding: Set by the user, replaced by libavformat if left unset.
     /// - decoding: Set by libavformat.
     public var id: Int32 {
-        get { return cStream.id }
+        get { cStream.id }
         set { cStreamPtr.pointee.id = newValue }
     }
 
@@ -63,27 +63,27 @@ public final class AVStream {
     ///   file (which may or may not be related to the user-provided one, depending on the format).
     /// - decoding: Set by libavformat.
     public var timebase: AVRational {
-        get { return cStream.time_base }
+        get { cStream.time_base }
         set { cStreamPtr.pointee.time_base = newValue }
     }
 
     /// pts of the first frame of the stream in presentation order, in stream timebase.
     public var startTime: Int64 {
-        return cStream.start_time
+        cStream.start_time
     }
 
     public var duration: Int64 {
-        return cStream.duration
+        cStream.duration
     }
 
     /// Number of frames in this stream if known or 0.
     public var frameCount: Int {
-        return Int(cStream.nb_frames)
+        Int(cStream.nb_frames)
     }
 
     /// Selects which packets can be discarded at will and do not need to be demuxed.
     public var discard: AVDiscard {
-        get { return cStream.discard }
+        get { cStream.discard }
         set { cStreamPtr.pointee.discard = newValue }
     }
 
@@ -92,7 +92,7 @@ public final class AVStream {
     /// - encoding: Set by user.
     /// - decoding: Set by libavformat.
     public var sampleAspectRatio: AVRational {
-        return cStream.sample_aspect_ratio
+        cStream.sample_aspect_ratio
     }
 
     /// The metadata of the stream.
@@ -115,7 +115,7 @@ public final class AVStream {
     ///   `AVFormatContext.findStreamInfo(options:)`.
     /// - muxing: May be set by the caller before `AVFormatContext.writeHeader(options:)`.
     public var averageFramerate: AVRational {
-        get { return cStream.avg_frame_rate }
+        get { cStream.avg_frame_rate }
         set { cStreamPtr.pointee.avg_frame_rate = newValue }
     }
 
@@ -125,7 +125,7 @@ public final class AVStream {
     /// For example, if the timebase is 1/90000 and all frames have either approximately 3600 or 1800 timer ticks,
     /// then realFramerate will be 50/1.
     public var realFramerate: AVRational {
-        return cStream.r_frame_rate
+        cStream.r_frame_rate
     }
 
     /// Codec parameters associated with this stream.
@@ -133,11 +133,11 @@ public final class AVStream {
     /// - demuxing: Filled by libavformat on stream creation or in `AVFormatContext.findStreamInfo(options:)`.
     /// - muxing: Filled by the caller before `AVFormatContext.writeHeader(options:)`.
     public var codecParameters: AVCodecParameters {
-        return AVCodecParameters(cParametersPtr: cStream.codecpar)
+        AVCodecParameters(cParametersPtr: cStream.codecpar)
     }
 
     /// The media type of the stream.
     public var mediaType: AVMediaType {
-        return codecParameters.mediaType
+        codecParameters.mediaType
     }
 }

@@ -13,7 +13,7 @@ typealias CAVCodecParser = CFFmpeg.AVCodecParser
 
 public struct AVCodecParser {
     let cParserPtr: UnsafeMutablePointer<CAVCodecParser>
-    var cParser: CAVCodecParser { return cParserPtr.pointee }
+    var cParser: CAVCodecParser { cParserPtr.pointee }
 
     init(cParserPtr: UnsafeMutablePointer<CAVCodecParser>) {
         self.cParserPtr = cParserPtr
@@ -51,7 +51,7 @@ typealias CAVCodecParserContext = CFFmpeg.AVCodecParserContext
 public final class AVCodecParserContext {
     private let codecContext: AVCodecContext
     private let cContextPtr: UnsafeMutablePointer<CAVCodecParserContext>
-    private var cContext: CAVCodecParserContext { return cContextPtr.pointee }
+    private var cContext: CAVCodecParserContext { cContextPtr.pointee }
 
     public init?(codecContext: AVCodecContext) {
         precondition(codecContext.codec != nil, "'AVCodecContext.codec' must not be nil.")

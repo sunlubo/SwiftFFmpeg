@@ -46,7 +46,7 @@ extension AVHWDeviceType {
 
     /// The name of the device type.
     public var name: String? {
-        return String(cString: av_hwdevice_get_type_name(self))
+        String(cString: av_hwdevice_get_type_name(self))
     }
 
     /// Get all supported device types.
@@ -64,7 +64,7 @@ extension AVHWDeviceType {
 extension AVHWDeviceType: CustomStringConvertible {
 
     public var description: String {
-        return name ?? "unknown"
+        name ?? "unknown"
     }
 }
 
@@ -74,7 +74,7 @@ typealias CAVCodecHWConfig = CFFmpeg.AVCodecHWConfig
 
 public struct AVCodecHWConfig {
     let cConfigPtr: UnsafePointer<CAVCodecHWConfig>
-    var cConfig: CAVCodecHWConfig { return cConfigPtr.pointee }
+    var cConfig: CAVCodecHWConfig { cConfigPtr.pointee }
 
     init(cConfigPtr: UnsafePointer<CAVCodecHWConfig>) {
         self.cConfigPtr = cConfigPtr
@@ -82,13 +82,13 @@ public struct AVCodecHWConfig {
 
     /// A hardware pixel format which the codec can use.
     public var pixelFormat: AVPixelFormat {
-        return cConfig.pix_fmt
+        cConfig.pix_fmt
     }
 
     /// Bit set of `AVCodecHWConfig.Method` flags, describing the possible setup methods
     /// which can be used with this configuration.
     public var methods: Method {
-        return Method(rawValue: cConfig.methods)
+        Method(rawValue: cConfig.methods)
     }
 
     /// The device type associated with the configuration.
@@ -96,7 +96,7 @@ public struct AVCodecHWConfig {
     /// Must be set for `AVCodecHWConfig.Method.hwDeviceContext` and `AVCodecHWConfig.Method.hwFramesContext`,
     /// otherwise unused.
     public var deviceType: AVHWDeviceType {
-        return cConfig.device_type
+        cConfig.device_type
     }
 }
 
@@ -243,7 +243,7 @@ typealias CAVHWFramesContext = CFFmpeg.AVHWFramesContext
 public final class AVHWFramesContext {
     let cBufferPtr: UnsafeMutablePointer<CAVBuffer>
     let cContextPtr: UnsafeMutablePointer<CAVHWFramesContext>
-    var cContext: CAVHWFramesContext { return cContextPtr.pointee }
+    var cContext: CAVHWFramesContext { cContextPtr.pointee }
 
     private var freeWhenDone: Bool = false
 
@@ -268,7 +268,7 @@ public final class AVHWFramesContext {
 
     /// A reference to the parent `AVHWDeviceContext`.
     public var deviceContext: AVHWDeviceContext {
-        return AVHWDeviceContext(cBufferPtr: cContext.device_ref)
+        AVHWDeviceContext(cBufferPtr: cContext.device_ref)
     }
 
     /// The pixel format identifying the underlying HW surface type.
@@ -277,7 +277,7 @@ public final class AVHWFramesContext {
     ///
     /// Must be set by the user before calling `initialize()`.
     public var pixelFormat: AVPixelFormat {
-        get { return cContext.format }
+        get { cContext.format }
         set { cContextPtr.pointee.format = newValue }
     }
 
@@ -291,7 +291,7 @@ public final class AVHWFramesContext {
     /// planar version of that format (e.g. for 8-bit 420 YUV it should be
     /// `AVPixelFormat.YUV420P`, not `AVPixelFormat.NV12` or anything else).
     public var swPixelFormat: AVPixelFormat {
-        get { return cContext.sw_format }
+        get { cContext.sw_format }
         set { cContextPtr.pointee.sw_format = newValue }
     }
 
@@ -299,7 +299,7 @@ public final class AVHWFramesContext {
     ///
     /// Must be set by the user before calling `initialize()`.
     public var width: Int {
-        get { return Int(cContext.width) }
+        get { Int(cContext.width) }
         set { cContextPtr.pointee.width = Int32(newValue) }
     }
 
@@ -307,7 +307,7 @@ public final class AVHWFramesContext {
     ///
     /// Must be set by the user before calling `initialize()`.
     public var height: Int {
-        get { return Int(cContext.height) }
+        get { Int(cContext.height) }
         set { cContextPtr.pointee.height = Int32(newValue) }
     }
 
@@ -317,7 +317,7 @@ public final class AVHWFramesContext {
     /// May be set by the caller before calling `initialize()`.
     /// Must be set if pool is `nil` and the device type does not support dynamic pools.
     public var initialPoolSize: Int {
-        get { return Int(cContext.initial_pool_size) }
+        get { Int(cContext.initial_pool_size) }
         set { cContextPtr.pointee.initial_pool_size = Int32(newValue) }
     }
 

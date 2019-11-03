@@ -10,14 +10,14 @@ import CFFmpeg
 extension UnsafePointer {
 
     var mutable: UnsafeMutablePointer<Pointee> {
-        return UnsafeMutablePointer(mutating: self)
+        UnsafeMutablePointer(mutating: self)
     }
 }
 
 extension UnsafeBufferPointer {
 
     var mutable: UnsafeMutableBufferPointer<Element> {
-        return UnsafeMutableBufferPointer(mutating: self)
+        UnsafeMutableBufferPointer(mutating: self)
     }
 }
 

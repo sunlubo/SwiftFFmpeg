@@ -61,7 +61,7 @@ public final class AVSamples {
     /// - Throws: AVError
     @discardableResult
     public func reformat(using context: SwrContext, to samples: AVSamples) throws -> Int {
-        return try data.withMemoryRebound(to: UnsafePointer<UInt8>?.self) { bufPtr in
+        try data.withMemoryRebound(to: UnsafePointer<UInt8>?.self) { bufPtr in
             return try context.convert(
                 dst: samples.data.baseAddress!,
                 dstCount: samples.sampleCount,

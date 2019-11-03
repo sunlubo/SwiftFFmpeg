@@ -26,7 +26,7 @@ extension AVMediaType {
 extension AVMediaType: CustomStringConvertible {
 
     public var description: String {
-        return String(cString: av_get_media_type_string(self)) ?? "unknown"
+        String(cString: av_get_media_type_string(self)) ?? "unknown"
     }
 }
 

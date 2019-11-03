@@ -13,7 +13,7 @@ typealias CAVInputFormat = CFFmpeg.AVInputFormat
 
 public struct AVInputFormat {
     let cFormatPtr: UnsafeMutablePointer<CAVInputFormat>
-    var cFormat: CAVInputFormat { return cFormatPtr.pointee }
+    var cFormat: CAVInputFormat { cFormatPtr.pointee }
 
     init(cFormatPtr: UnsafeMutablePointer<CAVInputFormat>) {
         self.cFormatPtr = cFormatPtr
@@ -31,28 +31,28 @@ public struct AVInputFormat {
 
     /// A comma separated list of short names for the format.
     public var name: String {
-        return String(cString: cFormat.name)
+        String(cString: cFormat.name)
     }
 
     /// Descriptive name for the format, meant to be more human-readable than name.
     public var longName: String {
-        return String(cString: cFormat.long_name)
+        String(cString: cFormat.long_name)
     }
 
     public var flags: Flag {
-        get { return Flag(rawValue: cFormat.flags) }
+        get { Flag(rawValue: cFormat.flags) }
         set { cFormatPtr.pointee.flags = newValue.rawValue }
     }
 
     /// If extensions are defined, then no probe is done.
     /// You should usually not use extension format guessing because it is not reliable enough.
     public var extensions: String? {
-        return String(cString: cFormat.extensions)
+        String(cString: cFormat.extensions)
     }
 
     /// Comma-separated list of mime types.
     public var mimeType: String? {
-        return String(cString: cFormat.mime_type)
+        String(cString: cFormat.mime_type)
     }
 
     /// `AVClass` for the private context.
@@ -142,7 +142,7 @@ typealias CAVOutputFormat = CFFmpeg.AVOutputFormat
 
 public struct AVOutputFormat {
     let cFormatPtr: UnsafeMutablePointer<CAVOutputFormat>
-    var cFormat: CAVOutputFormat { return cFormatPtr.pointee }
+    var cFormat: CAVOutputFormat { cFormatPtr.pointee }
 
     init(cFormatPtr: UnsafeMutablePointer<CAVOutputFormat>) {
         self.cFormatPtr = cFormatPtr
@@ -160,42 +160,42 @@ public struct AVOutputFormat {
 
     /// A comma separated list of short names for the format.
     public var name: String {
-        return String(cString: cFormat.name)
+        String(cString: cFormat.name)
     }
 
     /// Descriptive name for the format, meant to be more human-readable than name.
     public var longName: String {
-        return String(cString: cFormat.long_name)
+        String(cString: cFormat.long_name)
     }
 
     /// If extensions are defined, then no probe is done. You should usually not use extension format guessing
     /// because it is not reliable enough.
     public var extensions: String? {
-        return String(cString: cFormat.extensions)
+        String(cString: cFormat.extensions)
     }
 
     /// Comma-separated list of mime types.
     public var mimeType: String? {
-        return String(cString: cFormat.mime_type)
+        String(cString: cFormat.mime_type)
     }
 
     /// The default audio codec of the muxer.
     public var audioCodec: AVCodecID {
-        return cFormat.audio_codec
+        cFormat.audio_codec
     }
 
     /// The default video codec of the muxer.
     public var videoCodec: AVCodecID {
-        return cFormat.video_codec
+        cFormat.video_codec
     }
 
     /// The default subtitle codec of the muxer.
     public var subtitleCodec: AVCodecID {
-        return cFormat.subtitle_codec
+        cFormat.subtitle_codec
     }
 
     public var flags: Flag {
-        get { return Flag(rawValue: cFormat.flags) }
+        get { Flag(rawValue: cFormat.flags) }
         set { cFormatPtr.pointee.flags = newValue.rawValue }
     }
 

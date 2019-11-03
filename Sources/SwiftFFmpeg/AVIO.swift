@@ -17,7 +17,7 @@ public enum AVIO {
     /// - Parameter size: Size in bytes for the memory block to be allocated
     /// - Returns: Pointer to the allocated block, or `nil` if the block cannot be allocated.
     public static func malloc(size: Int) -> UnsafeMutableRawPointer? {
-        return av_malloc(size)
+        av_malloc(size)
     }
 
     /// Allocate a memory block with alignment suitable for all memory accesses
@@ -26,7 +26,7 @@ public enum AVIO {
     /// - Parameter size: Size in bytes for the memory block to be allocated
     /// - Returns: Pointer to the allocated block, or `nil` if the block cannot be allocated.
     public static func mallocz(size: Int) -> UnsafeMutableRawPointer? {
-        return av_mallocz(size)
+        av_mallocz(size)
     }
 
     /// Allocate, reallocate, or free a block of memory.
@@ -43,7 +43,7 @@ public enum AVIO {
     /// - Returns: Pointer to a newly-reallocated block or `nil` if the block cannot be reallocated
     ///   or the function is used to free the memory block
     public static func realloc(_ ptr: UnsafeMutableRawPointer?, size: Int) -> UnsafeMutableRawPointer? {
-        return av_realloc(ptr, size)
+        av_realloc(ptr, size)
     }
 
     /// Free a memory block which has been allocated with a function of `malloc(size:)` or `realloc(_:size:)` family.
@@ -211,7 +211,7 @@ typealias CAVIODirContext = CFFmpeg.AVIODirContext
 
 public final class AVIODirContext {
     let cContextPtr: UnsafeMutablePointer<CAVIODirContext>
-    var cContext: CAVIODirContext { return cContextPtr.pointee }
+    var cContext: CAVIODirContext { cContextPtr.pointee }
 
     private var isOpen: Bool = false
 
@@ -270,7 +270,7 @@ extension AVIODirContext: Sequence {
     }
 
     public func makeIterator() -> Iterator {
-        return Iterator(dirCtx: self)
+        Iterator(dirCtx: self)
     }
 }
 
@@ -284,9 +284,9 @@ public typealias AVIOInterruptCallback = AVIOInterruptCB
 
 typealias CAVIOContext = CFFmpeg.AVIOContext
 
-public typealias AVIOReadHandler  = (UnsafeMutableRawPointer?, UnsafeMutablePointer<UInt8>?, Int) -> Int
+public typealias AVIOReadHandler = (UnsafeMutableRawPointer?, UnsafeMutablePointer<UInt8>?, Int) -> Int
 public typealias AVIOWriteHandler = (UnsafeMutableRawPointer?, UnsafeMutablePointer<UInt8>?, Int) -> Int
-public typealias AVIOSeekHandler  = (UnsafeMutableRawPointer?, Int64, Int) -> Int64
+public typealias AVIOSeekHandler = (UnsafeMutableRawPointer?, Int64, Int) -> Int64
 
 typealias IOBoxValue = (
     opaque: UnsafeMutableRawPointer,
@@ -299,7 +299,7 @@ typealias IOBox = Box<IOBoxValue>
 /// Bytestream IO Context.
 public final class AVIOContext {
     let cContextPtr: UnsafeMutablePointer<CAVIOContext>
-    var cContext: CAVIOContext { return cContextPtr.pointee }
+    var cContext: CAVIOContext { cContextPtr.pointee }
 
     private var opaque: IOBox?
     private var freeWhenDone: Bool = false
@@ -456,7 +456,7 @@ public final class AVIOContext {
 
     /// Checks if the end of the given file stream has been reached.
     public func feof() -> Bool {
-        return avio_feof(cContextPtr) != 0
+        avio_feof(cContextPtr) != 0
     }
 
     /// Force flushing of buffered data.
@@ -580,7 +580,7 @@ public final class AVIOContext {
     ///
     /// - Returns: The name of the protocol or nil.
     public static func protocolName(for url: String) -> String? {
-        return String(cString: avio_find_protocol_name(url))
+        String(cString: avio_find_protocol_name(url))
     }
 
     /// Returns an array of the input protocols supported by the `AVIOContext`.
@@ -607,7 +607,7 @@ public final class AVIOContext {
 extension AVIOContext: AVOptionSupport {
 
     public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T {
-        return try body(cContextPtr)
+        try body(cContextPtr)
     }
 }
 

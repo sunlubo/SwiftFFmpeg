@@ -53,13 +53,13 @@ extension AVClass {
         case deviceInput
 
         public var isInputDevice: Bool {
-            return self == .deviceVideoInput
+            self == .deviceVideoInput
                 || self == .deviceAudioInput
                 || self == .deviceInput
         }
 
         public var isOutputDevice: Bool {
-            return self == .deviceVideoOutput
+            self == .deviceVideoOutput
                 || self == .deviceAudioOutput
                 || self == .deviceOutput
         }

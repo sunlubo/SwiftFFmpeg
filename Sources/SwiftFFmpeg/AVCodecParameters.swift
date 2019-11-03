@@ -12,7 +12,7 @@ typealias CAVCodecParameters = CFFmpeg.AVCodecParameters
 /// This class describes the properties of an encoded stream.
 public final class AVCodecParameters {
     let cParametersPtr: UnsafeMutablePointer<CAVCodecParameters>
-    var cParameters: CAVCodecParameters { return cParametersPtr.pointee }
+    var cParameters: CAVCodecParameters { cParametersPtr.pointee }
     
     private var freeWhenDone: Bool = false
     
@@ -38,25 +38,25 @@ public final class AVCodecParameters {
     
     /// General type of the encoded data.
     public var mediaType: AVMediaType {
-        get { return cParameters.codec_type }
+        get { cParameters.codec_type }
         set { cParametersPtr.pointee.codec_type = newValue }
     }
     
     /// Specific type of the encoded data (the codec used).
     public var codecId: AVCodecID {
-        get { return cParameters.codec_id }
+        get { cParameters.codec_id }
         set { cParametersPtr.pointee.codec_id = newValue }
     }
     
     /// Codec-specific bitstream restrictions that the stream conforms to.
     public var profile: Int32 {
-        get { return cParameters.profile }
+        get { cParameters.profile }
         set { cParametersPtr.pointee.profile = newValue }
     }
     
     /// Additional information about the codec (corresponds to the AVI FOURCC).
     public var codecTag: UInt32 {
-        get { return cParameters.codec_tag }
+        get { cParameters.codec_tag }
         set { cParametersPtr.pointee.codec_tag = newValue }
     }
     
@@ -67,19 +67,19 @@ public final class AVCodecParameters {
     /// least `extradataSize + AVConstant.inputBufferPaddingSize`, with the padding
     /// bytes zeroed.
     public var extradata: UnsafeMutablePointer<UInt8>? {
-        get { return cParameters.extradata }
+        get { cParameters.extradata }
         set { cParametersPtr.pointee.extradata = newValue }
     }
     
     /// The size of the extradata content in bytes.
     public var extradataSize: Int {
-        get { return Int(cParameters.extradata_size) }
+        get { Int(cParameters.extradata_size) }
         set { cParametersPtr.pointee.extradata_size = Int32(newValue) }
     }
     
     /// The average bitrate of the encoded data (in bits per second).
     public var bitRate: Int64 {
-        get { return cParameters.bit_rate }
+        get { cParameters.bit_rate }
         set { cParametersPtr.pointee.bit_rate = newValue }
     }
     
@@ -100,19 +100,19 @@ extension AVCodecParameters {
     
     /// The pixel format of the video frame.
     public var pixelFormat: AVPixelFormat {
-        get { return AVPixelFormat(cParameters.format) }
+        get { AVPixelFormat(cParameters.format) }
         set { cParametersPtr.pointee.format = newValue.rawValue }
     }
     
     /// The width of the video frame in pixels.
     public var width: Int {
-        get { return Int(cParameters.width) }
+        get { Int(cParameters.width) }
         set { cParametersPtr.pointee.width = Int32(newValue) }
     }
     
     /// The height of the video frame in pixels.
     public var height: Int {
-        get { return Int(cParameters.height) }
+        get { Int(cParameters.height) }
         set { cParametersPtr.pointee.height = Int32(newValue) }
     }
     
@@ -121,43 +121,43 @@ extension AVCodecParameters {
     /// When the aspect ratio is unknown / undefined, the numerator should be set to 0
     /// (the denominator may have any value).
     public var sampleAspectRatio: AVRational {
-        get { return cParameters.sample_aspect_ratio }
+        get { cParameters.sample_aspect_ratio }
         set { cParametersPtr.pointee.sample_aspect_ratio = newValue }
     }
     
     /// Number of delayed frames.
     public var videoDelay: Int {
-        get { return Int(cParameters.video_delay) }
+        get { Int(cParameters.video_delay) }
         set { cParametersPtr.pointee.video_delay = Int32(newValue) }
     }
     
     /// The color range of the video frame.
     public var colorRange: AVColorRange {
-        get { return cParameters.color_range }
+        get { cParameters.color_range }
         set { cParametersPtr.pointee.color_range = newValue }
     }
     
     /// The color primaries of the video frame.
     public var colorPrimaries: AVColorPrimaries {
-        get { return cParameters.color_primaries }
+        get { cParameters.color_primaries }
         set { cParametersPtr.pointee.color_primaries = newValue }
     }
     
     /// The color transfer characteristic of the video frame.
     public var colorTransferCharacteristic: AVColorTransferCharacteristic {
-        get { return cParameters.color_trc }
+        get { cParameters.color_trc }
         set { cParametersPtr.pointee.color_trc = newValue }
     }
     
     /// The color space of the video frame.
     public var colorSpace: AVColorSpace {
-        get { return cParameters.color_space }
+        get { cParameters.color_space }
         set { cParametersPtr.pointee.color_space = newValue }
     }
     
     /// The chroma location of the video frame.
     public var chromaLocation: AVChromaLocation {
-        get { return cParameters.chroma_location }
+        get { cParameters.chroma_location }
         set { cParametersPtr.pointee.chroma_location = newValue }
     }
 }
@@ -168,32 +168,32 @@ extension AVCodecParameters {
     
     /// The sample format of audio.
     public var sampleFormat: AVSampleFormat {
-        get { return AVSampleFormat(cParameters.format) }
+        get { AVSampleFormat(cParameters.format) }
         set { cParametersPtr.pointee.format = newValue.rawValue }
     }
     
     /// The channel layout bitmask. May be 0 if the channel layout is unknown or unspecified,
     /// otherwise the number of bits set must be equal to the channels field.
     public var channelLayout: AVChannelLayout {
-        get { return AVChannelLayout(rawValue: cParameters.channel_layout) }
+        get { AVChannelLayout(rawValue: cParameters.channel_layout) }
         set { cParametersPtr.pointee.channel_layout = newValue.rawValue }
     }
     
     /// The number of audio channels.
     public var channelCount: Int {
-        get { return Int(cParameters.channels) }
+        get { Int(cParameters.channels) }
         set { cParametersPtr.pointee.channels = Int32(newValue) }
     }
     
     /// The number of audio samples per second.
     public var sampleRate: Int {
-        get { return Int(cParameters.sample_rate) }
+        get { Int(cParameters.sample_rate) }
         set { cParametersPtr.pointee.sample_rate = Int32(newValue) }
     }
     
     /// Audio frame size, if known. Required by some formats to be static.
     public var frameSize: Int {
-        get { return Int(cParameters.frame_size) }
+        get { Int(cParameters.frame_size) }
         set { cParametersPtr.pointee.frame_size = Int32(newValue) }
     }
 }

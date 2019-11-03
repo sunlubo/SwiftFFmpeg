@@ -26,7 +26,7 @@ typealias CAVCodecContext = CFFmpeg.AVCodecContext
 
 public final class AVCodecContext {
     let cContextPtr: UnsafeMutablePointer<CAVCodecContext>
-    var cContext: CAVCodecContext { return cContextPtr.pointee }
+    var cContext: CAVCodecContext { cContextPtr.pointee }
 
     fileprivate var opaqueBox: CodecContextBox? {
         didSet {
@@ -63,7 +63,7 @@ public final class AVCodecContext {
 
     /// The codec's media type.
     public var mediaType: AVMediaType {
-        return cContext.codec_type
+        cContext.codec_type
     }
 
     public var codec: AVCodec? {
@@ -78,7 +78,7 @@ public final class AVCodecContext {
 
     /// The codec's id.
     public var codecId: AVCodecID {
-        get { return cContext.codec_id }
+        get { cContext.codec_id }
         set { cContextPtr.pointee.codec_id = newValue }
     }
 
@@ -96,7 +96,7 @@ public final class AVCodecContext {
     /// - encoding: Set by user, if not then the default based on `codecId` will be used.
     /// - decoding: Set by user, will be converted to uppercase by libavcodec during init.
     public var codecTag: UInt32 {
-        get { return cContext.codec_tag }
+        get { cContext.codec_tag }
         set { cContextPtr.pointee.codec_tag = newValue }
     }
 
@@ -105,7 +105,7 @@ public final class AVCodecContext {
     /// - encoding: Set by user.
     /// - decoding: Set by user.
     public var opaque: UnsafeMutableRawPointer? {
-        get { return opaqueBox?.value.opaque }
+        get { opaqueBox?.value.opaque }
         set { opaqueBox = CodecContextBox((opaque: newValue, getFormat: opaqueBox?.value.getFormat)) }
     }
 
@@ -114,7 +114,7 @@ public final class AVCodecContext {
     /// - encoding: Set by user, unused for constant quantizer encoding.
     /// - decoding: Set by user, may be overwritten by libavcodec if this info is available in the stream.
     public var bitRate: Int64 {
-        get { return cContext.bit_rate }
+        get { cContext.bit_rate }
         set { cContextPtr.pointee.bit_rate = newValue }
     }
 
@@ -124,7 +124,7 @@ public final class AVCodecContext {
     /// - encoding: Set by user, unused for constant quantizer encoding.
     /// - decoding: Unused.
     public var bitRateTolerance: Int {
-        get { return Int(cContext.bit_rate_tolerance) }
+        get { Int(cContext.bit_rate_tolerance) }
         set { cContextPtr.pointee.bit_rate_tolerance = Int32(newValue) }
     }
 
@@ -133,7 +133,7 @@ public final class AVCodecContext {
     /// - encoding: Set by user.
     /// - decoding: Set by user.
     public var flags: Flag {
-        get { return Flag(rawValue: UInt32(cContext.flags)) }
+        get { Flag(rawValue: UInt32(cContext.flags)) }
         set { cContextPtr.pointee.flags = Int32(newValue.rawValue) }
     }
 
@@ -142,7 +142,7 @@ public final class AVCodecContext {
     /// - encoding: Set by user.
     /// - decoding: Set by user.
     public var flags2: Flag2 {
-        get { return Flag2(rawValue: cContext.flags2) }
+        get { Flag2(rawValue: cContext.flags2) }
         set { cContextPtr.pointee.flags2 = newValue.rawValue }
     }
 
@@ -160,13 +160,13 @@ public final class AVCodecContext {
     /// - encoding: Set/allocated/freed by libavcodec.
     /// - decoding: Set/allocated/freed by user.
     public var extradata: UnsafeMutablePointer<UInt8>? {
-        get { return cContext.extradata }
+        get { cContext.extradata }
         set { cContextPtr.pointee.extradata = newValue }
     }
 
     /// The size of the extradata content in bytes.
     public var extradataSize: Int {
-        get { return Int(cContext.extradata_size) }
+        get { Int(cContext.extradata_size) }
         set { cContextPtr.pointee.extradata_size = Int32(newValue) }
     }
 
@@ -185,7 +185,7 @@ public final class AVCodecContext {
     /// - encoding: Must be set by user.
     /// - decoding: The use of this field for decoding is deprecated. Use framerate instead.
     public var timebase: AVRational {
-        get { return cContext.time_base }
+        get { cContext.time_base }
         set { cContextPtr.pointee.time_base = newValue }
     }
 
@@ -194,7 +194,7 @@ public final class AVCodecContext {
     /// - encoding: Total number of frames passed to the encoder so far.
     /// - decoding: Total number of frames returned from the decoder so far.
     public var frameNumber: Int {
-        return Int(cContext.frame_number)
+        Int(cContext.frame_number)
     }
 
     /// A reference to the `AVHWFramesContext` describing the input (for encoding)
@@ -255,7 +255,7 @@ public final class AVCodecContext {
 
     /// A Boolean value indicating whether the codec is open.
     public var isOpen: Bool {
-        return avcodec_is_open(cContextPtr) > 0
+        avcodec_is_open(cContextPtr) > 0
     }
 
     /// Fill the codec context based on the values from the supplied codec parameters.
@@ -507,7 +507,7 @@ extension AVCodecContext {
     ///   Some decoders will require the dimensions to be set by the caller. During decoding, the decoder may
     ///   overwrite those values as required while parsing the data.
     public var width: Int {
-        get { return Int(cContext.width) }
+        get { Int(cContext.width) }
         set { cContextPtr.pointee.width = Int32(newValue) }
     }
 
@@ -518,7 +518,7 @@ extension AVCodecContext {
     ///   Some decoders will require the dimensions to be set by the caller. During decoding, the decoder may
     ///   overwrite those values as required while parsing the data.
     public var height: Int {
-        get { return Int(cContext.height) }
+        get { Int(cContext.height) }
         set { cContextPtr.pointee.height = Int32(newValue) }
     }
 
@@ -529,7 +529,7 @@ extension AVCodecContext {
     /// - decoding: May be set by the user before opening the decoder if known e.g. from the container.
     ///   During decoding, the decoder may overwrite those values as required while parsing the data.
     public var codedWidth: Int {
-        get { return Int(cContext.coded_width) }
+        get { Int(cContext.coded_width) }
         set { cContextPtr.pointee.coded_width = Int32(newValue) }
     }
 
@@ -540,7 +540,7 @@ extension AVCodecContext {
     /// - decoding: May be set by the user before opening the decoder if known e.g. from the container.
     ///   During decoding, the decoder may overwrite those values as required while parsing the data.
     public var codedHeight: Int {
-        get { return Int(cContext.coded_height) }
+        get { Int(cContext.coded_height) }
         set { cContextPtr.pointee.coded_height = Int32(newValue) }
     }
 
@@ -549,7 +549,7 @@ extension AVCodecContext {
     /// - encoding: Set by user.
     /// - decoding: Unused.
     public var gopSize: Int {
-        get { return Int(cContext.gop_size) }
+        get { Int(cContext.gop_size) }
         set { cContextPtr.pointee.gop_size = Int32(newValue) }
     }
 
@@ -558,7 +558,7 @@ extension AVCodecContext {
     /// - encoding: Set by user.
     /// - decoding: Set by user if known, overridden by codec while parsing the data.
     public var pixelFormat: AVPixelFormat {
-        get { return cContext.pix_fmt }
+        get { cContext.pix_fmt }
         set { cContextPtr.pointee.pix_fmt = newValue }
     }
 
@@ -573,7 +573,7 @@ extension AVCodecContext {
     /// - encoding: Unused.
     /// - decoding: Set by user, if not set the native format will be chosen.
     public var getFormat: AVGetFormatHandler? {
-        get { return opaqueBox?.value.getFormat }
+        get { opaqueBox?.value.getFormat }
         set {
             opaqueBox = CodecContextBox((opaque: opaqueBox?.value.opaque, getFormat: newValue))
 
@@ -601,7 +601,7 @@ extension AVCodecContext {
     /// - encoding: Set by user.
     /// - decoding: Unused.
     public var maxBFrames: Int {
-        get { return Int(cContext.max_b_frames) }
+        get { Int(cContext.max_b_frames) }
         set { cContextPtr.pointee.max_b_frames = Int32(newValue) }
     }
 
@@ -610,7 +610,7 @@ extension AVCodecContext {
     /// - encoding: Set by user.
     /// - decoding: Unused.
     public var mbDecision: Int {
-        get { return Int(cContext.mb_decision) }
+        get { Int(cContext.mb_decision) }
         set { cContextPtr.pointee.mb_decision = Int32(newValue) }
     }
 
@@ -622,7 +622,7 @@ extension AVCodecContext {
     /// - encoding: Set by user.
     /// - decoding: Set by codec.
     public var sampleAspectRatio: AVRational {
-        get { return cContext.sample_aspect_ratio }
+        get { cContext.sample_aspect_ratio }
         set { cContextPtr.pointee.sample_aspect_ratio = newValue }
     }
 
@@ -631,7 +631,7 @@ extension AVCodecContext {
     /// - encoding: Unused.
     /// - decoding: Set by user.
     public var lowres: Int {
-        return Int(cContext.lowres)
+        Int(cContext.lowres)
     }
 
     /// The framerate of the video.
@@ -640,7 +640,7 @@ extension AVCodecContext {
     /// - decoding: For codecs that store a framerate value in the compressed bitstream,
     ///   the decoder may export it here. 0/1 when unknown.
     public var framerate: AVRational {
-        get { return cContext.framerate }
+        get { cContext.framerate }
         set { cContextPtr.pointee.framerate = newValue }
     }
 }
@@ -651,13 +651,13 @@ extension AVCodecContext {
 
     /// Samples per second.
     public var sampleRate: Int {
-        get { return Int(cContext.sample_rate) }
+        get { Int(cContext.sample_rate) }
         set { cContextPtr.pointee.sample_rate = Int32(newValue) }
     }
 
     /// Number of audio channels.
     public var channelCount: Int {
-        get { return Int(cContext.channels) }
+        get { Int(cContext.channels) }
         set { cContextPtr.pointee.channels = Int32(newValue) }
     }
 
@@ -666,13 +666,13 @@ extension AVCodecContext {
     /// - encoding: Set by user.
     /// - decoding: Set by libavcodec.
     public var sampleFormat: AVSampleFormat {
-        get { return cContext.sample_fmt }
+        get { cContext.sample_fmt }
         set { cContextPtr.pointee.sample_fmt = newValue }
     }
 
     /// Number of samples per channel in an audio frame.
     public var frameSize: Int {
-        get { return Int(cContext.frame_size) }
+        get { Int(cContext.frame_size) }
         set { cContextPtr.pointee.frame_size = Int32(newValue) }
     }
 
@@ -681,7 +681,7 @@ extension AVCodecContext {
     /// - encoding: Set by user.
     /// - decoding: Set by user, may be overwritten by codec.
     public var channelLayout: AVChannelLayout {
-        get { return AVChannelLayout(rawValue: cContext.channel_layout) }
+        get { AVChannelLayout(rawValue: cContext.channel_layout) }
         set { cContextPtr.pointee.channel_layout = newValue.rawValue }
     }
 }
@@ -689,7 +689,7 @@ extension AVCodecContext {
 // MARK: - Multithreading
 
 extension AVCodecContext {
-    
+
     /// Which multithreading methods to use.
     /// Use of FF_THREAD_FRAME will increase decoding delay by one frame per thread,
     /// so clients which cannot provide future frames should not use it.
@@ -697,24 +697,24 @@ extension AVCodecContext {
     /// - encoding: Set by user, otherwise the default is used.
     /// - decoding: Set by user, otherwise the default is used.
     public var threadType: FFThreadType {
-        get { return FFThreadType(rawValue: cContext.thread_type) }
+        get { FFThreadType(rawValue: cContext.thread_type) }
         set { cContextPtr.pointee.thread_type = newValue.rawValue }
     }
-    
+
     /// thread count
     /// is used to decide how many independent tasks should be passed to execute()
     /// - encoding: Set by user.
     /// - decoding: Set by user.
     public var threadCount: Int32 {
-        get { return cContext.thread_count }
+        get { cContext.thread_count }
         set { cContextPtr.pointee.thread_count = newValue }
     }
-    
+
     /// Which multithreading methods are in use by the codec.
     /// - encoding: Set by libavcodec.
     /// - decoding: Set by libavcodec.
     public var activeThreadType: FFThreadType {
-        get { return FFThreadType(rawValue: cContext.active_thread_type) }
+        FFThreadType(rawValue: cContext.active_thread_type)
     }
 }
 
@@ -724,17 +724,17 @@ extension AVCodecContext: AVClassSupport, AVOptionSupport {
     public func withUnsafeObjectPointer<T>(
         _ body: (UnsafeMutableRawPointer) throws -> T
     ) rethrows -> T {
-        return try body(cContextPtr)
+        try body(cContextPtr)
     }
 }
 
 public struct FFThreadType: Equatable, OptionSet {
     /// Decode more than one frame at once
     public static let frame = FFThreadType(rawValue: FF_THREAD_FRAME)
-    
+
     /// Decode more than one part of a single frame at once
     public static let slice = FFThreadType(rawValue: FF_THREAD_SLICE)
-    
+
     public let rawValue: Int32
 
     public init(rawValue: Int32) { self.rawValue = rawValue }

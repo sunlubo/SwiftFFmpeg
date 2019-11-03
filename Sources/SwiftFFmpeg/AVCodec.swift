@@ -99,19 +99,19 @@ extension AVCodecID {
 
     /// The name of the codec.
     public var name: String {
-        return String(cString: avcodec_get_name(self))
+        String(cString: avcodec_get_name(self))
     }
 
     /// The media type of the codec.
     public var mediaType: AVMediaType {
-        return avcodec_get_type(self)
+        avcodec_get_type(self)
     }
 }
 
 extension AVCodecID: CustomStringConvertible {
 
     public var description: String {
-        return name
+        name
     }
 }
 
@@ -121,7 +121,7 @@ typealias CAVCodec = CFFmpeg.AVCodec
 
 public struct AVCodec {
     let cCodecPtr: UnsafeMutablePointer<CAVCodec>
-    var cCodec: CAVCodec { return cCodecPtr.pointee }
+    var cCodec: CAVCodec { cCodecPtr.pointee }
 
     /// Find a registered decoder with a matching codec ID.
     ///
@@ -166,12 +166,12 @@ public struct AVCodec {
         }
         return AVCodec(cCodecPtr: codecPtr)
     }
-    
+
     /// Returns a name for the specified profile, if available.
     ///
     /// Unlike the member function `getProfileName(...)`, which searches a list of profiles supported by a specific decoder or encoder implementation, this class function searches the list of profiles from the `codecID`'s `AVCodecDescriptor`
     public static func profileName(codecID: AVCodecID, profile: Int32) -> String? {
-        return String(cString: avcodec_profile_name(codecID, profile))
+        String(cString: avcodec_profile_name(codecID, profile))
     }
 
     init(cCodecPtr: UnsafeMutablePointer<CAVCodec>) {
@@ -180,67 +180,67 @@ public struct AVCodec {
 
     /// The codec's name.
     public var name: String {
-        return String(cString: cCodec.name)
+        String(cString: cCodec.name)
     }
 
     /// The codec's descriptive name, meant to be more human readable than name.
     public var longName: String {
-        return String(cString: cCodec.long_name)
+        String(cString: cCodec.long_name)
     }
 
     /// The codec's media type.
     public var mediaType: AVMediaType {
-        return cCodec.type
+        cCodec.type
     }
 
     /// The codec's id.
     public var id: AVCodecID {
-        return cCodec.id
+        cCodec.id
     }
 
     /// The codec's capabilities.
     public var capabilities: AVCodec.Cap {
-        return Cap(rawValue: UInt32(cCodec.capabilities))
+        Cap(rawValue: UInt32(cCodec.capabilities))
     }
 
     /// Returns an array of the framerates supported by the codec.
     public var supportedFramerates: [AVRational]? {
-        return values(cCodec.supported_framerates, until: AVRational(num: 0, den: 0))
+        values(cCodec.supported_framerates, until: AVRational(num: 0, den: 0))
     }
 
     /// Returns an array of the pixel formats supported by the codec.
     public var supportedPixelFormats: [AVPixelFormat]? {
-        return values(cCodec.pix_fmts, until: .none)
+        values(cCodec.pix_fmts, until: .none)
     }
 
     /// Returns an array of the audio samplerates supported by the codec.
     public var supportedSampleRates: [Int]? {
-        return values(cCodec.supported_samplerates, until: 0)?.map { Int($0) }
+        values(cCodec.supported_samplerates, until: 0)?.map { Int($0) }
     }
 
     /// Returns an array of the sample formats supported by the codec.
     public var supportedSampleFormats: [AVSampleFormat]? {
-        return values(cCodec.sample_fmts, until: .none)
+        values(cCodec.sample_fmts, until: .none)
     }
 
     /// Returns an array of the channel layouts supported by the codec.
     public var supportedChannelLayouts: [AVChannelLayout]? {
-        return values(cCodec.channel_layouts, until: 0)?.map { AVChannelLayout(rawValue: $0) }
+        values(cCodec.channel_layouts, until: 0)?.map { AVChannelLayout(rawValue: $0) }
     }
 
     /// Maximum value for lowres supported by the decoder.
     public var maxLowres: UInt8 {
-        return cCodec.max_lowres
+        cCodec.max_lowres
     }
 
     /// A Boolean value indicating whether the codec is decoder.
     public var isDecoder: Bool {
-        return av_codec_is_decoder(cCodecPtr) != 0
+        av_codec_is_decoder(cCodecPtr) != 0
     }
 
     /// A Boolean value indicating whether the codec is encoder.
     public var isEncoder: Bool {
-        return av_codec_is_encoder(cCodecPtr) != 0
+        av_codec_is_encoder(cCodecPtr) != 0
     }
 
     /// Retrieve supported hardware configurations for a codec.
@@ -254,10 +254,10 @@ public struct AVCodec {
         }
         return nil
     }
-    
+
     /// Returns a name for the specified profile, if available.
     public func profileName(profile: Int32) -> String? {
-        return String(cString: av_get_profile_name(cCodecPtr, profile))
+        String(cString: av_get_profile_name(cCodecPtr, profile))
     }
 
     /// Get all registered codecs.

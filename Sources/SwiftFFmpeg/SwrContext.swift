@@ -52,7 +52,7 @@ public final class SwrContext {
 
     /// A Boolean value indicating whether the context has been initialized or not.
     public var isInitialized: Bool {
-        return swr_is_initialized(cContextPtr) > 0
+        swr_is_initialized(cContextPtr) > 0
     }
 
     /// Set/reset common parameters.
@@ -118,7 +118,7 @@ public final class SwrContext {
     ///     `out_sample_rate` then an exact rounding-free delay will be returned
     /// - Returns: the delay in 1 / base units.
     public func getDelay(_ timebase: Int64) -> Int {
-        return Int(swr_get_delay(cContextPtr, timebase))
+        Int(swr_get_delay(cContextPtr, timebase))
     }
 
     /// Find an upper bound on the number of samples that the next `convert(dst:dstCount:src:srcCount:)`
@@ -183,6 +183,6 @@ extension SwrContext: AVClassSupport, AVOptionSupport {
     public func withUnsafeObjectPointer<T>(
         _ body: (UnsafeMutableRawPointer) throws -> T
     ) rethrows -> T {
-        return try body(UnsafeMutableRawPointer(cContextPtr))
+        try body(UnsafeMutableRawPointer(cContextPtr))
     }
 }

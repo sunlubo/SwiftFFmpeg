@@ -103,8 +103,8 @@ public final class AVImage {
     /// - Throws: AVError
     @discardableResult
     public func reformat(using context: SwsContext, to image: AVImage) throws -> Int {
-        return try data.withMemoryRebound(to: UnsafePointer<UInt8>?.self) { ptr in
-            return try context.scale(
+        try data.withMemoryRebound(to: UnsafePointer<UInt8>?.self) { ptr in
+            try context.scale(
                 src: ptr.baseAddress!,
                 srcStride: linesizes.baseAddress!,
                 srcSliceY: 0,
@@ -199,7 +199,7 @@ extension AVImage {
         size: Int,
         align: Int = 1
     ) throws -> Int {
-        return try frame.data.withMemoryRebound(to: UnsafePointer<UInt8>?.self) { ptr -> Int in
+        try frame.data.withMemoryRebound(to: UnsafePointer<UInt8>?.self) { ptr -> Int in
             let ret = av_image_copy_to_buffer(
                 buffer,
                 Int32(size),

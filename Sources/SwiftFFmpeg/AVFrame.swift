@@ -28,7 +28,7 @@ typealias CAVFrame = CFFmpeg.AVFrame
 /// each plane, or anything in between.
 public final class AVFrame {
     let cFramePtr: UnsafeMutablePointer<CAVFrame>
-    var cFrame: CAVFrame { return cFramePtr.pointee }
+    var cFrame: CAVFrame { cFramePtr.pointee }
 
     init(cFramePtr: UnsafeMutablePointer<CAVFrame>) {
         self.cFramePtr = cFramePtr
@@ -106,7 +106,7 @@ public final class AVFrame {
 
     /// Presentation timestamp in timebase units (time when frame should be shown to user).
     public var pts: Int64 {
-        get { return cFrame.pts }
+        get { cFrame.pts }
         set { cFramePtr.pointee.pts = newValue }
     }
 
@@ -114,17 +114,17 @@ public final class AVFrame {
     /// This is also the presentation time of this `AVFrame` calculated from only `AVPacket.dts` values
     /// without pts values.
     public var dts: Int64 {
-        return cFrame.pkt_dts
+        cFrame.pkt_dts
     }
 
     /// Picture number in bitstream order.
     public var codedPictureNumber: Int {
-        return Int(cFrame.coded_picture_number)
+        Int(cFrame.coded_picture_number)
     }
 
     /// Picture number in display order.
     public var displayPictureNumber: Int {
-        return Int(cFrame.display_picture_number)
+        Int(cFrame.display_picture_number)
     }
 
     /// `AVBuffer` references backing the data for this frame.
@@ -160,7 +160,7 @@ public final class AVFrame {
 
     /// The number of elements in `extendedBuffer`.
     public var extendedBufferCount: Int {
-        return Int(cFrame.nb_extended_buf)
+        Int(cFrame.nb_extended_buf)
     }
 
     /// The frame timestamp estimated using various heuristics, in stream timebase.
@@ -168,7 +168,7 @@ public final class AVFrame {
     /// - encoding: Unused.
     /// - decoding: Set by libavcodec, read by user.
     public var bestEffortTimestamp: Int64 {
-        return cFrame.best_effort_timestamp
+        cFrame.best_effort_timestamp
     }
 
     /// Reordered pos from the last `AVPacket` that has been input into the decoder.
@@ -176,7 +176,7 @@ public final class AVFrame {
     /// - encoding: Unused.
     /// - decoding: Set by libavcodec, read by user.
     public var pktPosition: Int64 {
-        return cFrame.pkt_pos
+        cFrame.pkt_pos
     }
 
     /// Duration of the corresponding packet, expressed in `AVStream.timebase` units, 0 if unknown.
@@ -184,7 +184,7 @@ public final class AVFrame {
     /// - encoding: Unused.
     /// - decoding: Set by libavcodec, read by user.
     public var pktDuration: Int64 {
-        return cFrame.pkt_duration
+        cFrame.pkt_duration
     }
 
     /// Size of the corresponding packet containing the compressed frame.
@@ -193,7 +193,7 @@ public final class AVFrame {
     /// - encoding: Unused.
     /// - decoding: Set by libavcodec, read by user.
     public var pktSize: Int {
-        return Int(cFrame.pkt_size)
+        Int(cFrame.pkt_size)
     }
 
     /// The metadata of the frame.
@@ -224,7 +224,7 @@ public final class AVFrame {
     /// `true` if the frame data is writable (which is `true` if and only if each of the
     /// underlying buffers has only one reference, namely the one stored in this frame).
     public var isWritable: Bool {
-        return av_frame_is_writable(cFramePtr) > 0
+        av_frame_is_writable(cFramePtr) > 0
     }
 
     /// Allocate new buffer(s) for audio or video data.
@@ -351,78 +351,78 @@ extension AVFrame {
 
     /// The pixel format of the picture.
     public var pixelFormat: AVPixelFormat {
-        get { return AVPixelFormat(cFrame.format) }
+        get { AVPixelFormat(cFrame.format) }
         set { cFramePtr.pointee.format = newValue.rawValue }
     }
 
     /// The width of the picture, in pixels.
     public var width: Int {
-        get { return Int(cFrame.width) }
+        get { Int(cFrame.width) }
         set { cFramePtr.pointee.width = Int32(newValue) }
     }
 
     /// The height of the picture, in pixels.
     public var height: Int {
-        get { return Int(cFrame.height) }
+        get { Int(cFrame.height) }
         set { cFramePtr.pointee.height = Int32(newValue) }
     }
 
     /// A Boolean value indicating whether this frame is key frame.
     public var isKeyFrame: Bool {
-        get { return cFrame.key_frame == 1 }
+        get { cFrame.key_frame == 1 }
         set { cFramePtr.pointee.key_frame = newValue ? 1 : 0 }
     }
 
     /// A Boolean value indicating whether this frame is interlaced or progressive frame.
     public var isInterlacedFrame: Bool {
-        return cFrame.interlaced_frame == 1
+        cFrame.interlaced_frame == 1
     }
 
     /// The picture type of the frame.
     public var pictureType: AVPictureType {
-        get { return cFrame.pict_type }
+        get { cFrame.pict_type }
         set { cFramePtr.pointee.pict_type = newValue }
     }
 
     /// The sample aspect ratio for the video frame, 0/1 if unknown/unspecified.
     public var sampleAspectRatio: AVRational {
-        get { return cFrame.sample_aspect_ratio }
+        get { cFrame.sample_aspect_ratio }
         set { cFramePtr.pointee.sample_aspect_ratio = newValue }
     }
 
     /// When decoding, this signals how much the picture must be delayed.
     /// ```extra_delay = repeat_pict / (2*fps)```
     public var repeatPicture: Int {
-        return Int(cFrame.repeat_pict)
+        Int(cFrame.repeat_pict)
     }
-    
+
     /// The color range of the picture.
     public var colorRange: AVColorRange {
-        get { return cFrame.color_range }
+        get { cFrame.color_range }
         set { cFramePtr.pointee.color_range = newValue }
     }
-    
+
     /// The color primaries of the picture.
     public var colorPrimaries: AVColorPrimaries {
-        get { return cFrame.color_primaries }
+        get { cFrame.color_primaries }
         set { cFramePtr.pointee.color_primaries = newValue }
     }
-    
+
     /// The color transfer characteristic of the picture.
     public var colorTransferCharacteristic: AVColorTransferCharacteristic {
-        get { return cFrame.color_trc }
+        get { cFrame.color_trc }
         set { cFramePtr.pointee.color_trc = newValue }
     }
-    
+
     /// The color space of the picture.
     public var colorSpace: AVColorSpace {
-        get { return cFrame.colorspace }
+        get { cFrame.colorspace }
         set { cFramePtr.pointee.colorspace = newValue }
     }
-    
+
     /// The chroma location of the picture.
     public var chromaLocation: AVChromaLocation {
-        get { return cFrame.chroma_location }
+        get { cFrame.chroma_location }
         set { cFramePtr.pointee.chroma_location = newValue }
     }
 }
@@ -433,25 +433,25 @@ extension AVFrame {
 
     /// The sample format of the audio data.
     public var sampleFormat: AVSampleFormat {
-        get { return AVSampleFormat(cFrame.format) }
+        get { AVSampleFormat(cFrame.format) }
         set { cFramePtr.pointee.format = newValue.rawValue }
     }
 
     /// The sample rate of the audio data.
     public var sampleRate: Int {
-        get { return Int(cFrame.sample_rate) }
+        get { Int(cFrame.sample_rate) }
         set { cFramePtr.pointee.sample_rate = Int32(newValue) }
     }
 
     /// The channel layout of the audio data.
     public var channelLayout: AVChannelLayout {
-        get { return AVChannelLayout(rawValue: cFrame.channel_layout) }
+        get { AVChannelLayout(rawValue: cFrame.channel_layout) }
         set { cFramePtr.pointee.channel_layout = newValue.rawValue }
     }
 
     /// The number of audio samples (per channel) described by this frame.
     public var sampleCount: Int {
-        get { return Int(cFrame.nb_samples) }
+        get { Int(cFrame.nb_samples) }
         set { cFramePtr.pointee.nb_samples = Int32(newValue) }
     }
 
@@ -460,7 +460,7 @@ extension AVFrame {
     /// - encoding: Unused.
     /// - decoding: Read by user.
     public var channelCount: Int {
-        get { return Int(cFrame.channels) }
+        get { Int(cFrame.channels) }
         set { cFramePtr.pointee.channels = Int32(newValue) }
     }
 }

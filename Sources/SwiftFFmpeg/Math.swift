@@ -16,42 +16,42 @@ extension AVRational {
 
     /// Convert an `AVRational` to a `Double`.
     public var toDouble: Double {
-        return av_q2d(self)
+        av_q2d(self)
     }
 
     /// Invert a rational. `1 / q`
     public var inverted: AVRational {
-        return av_inv_q(self)
+        av_inv_q(self)
     }
 }
 
 extension AVRational: Equatable {
 
-    public static func ==(lhs: AVRational, rhs: AVRational) -> Bool {
-        return av_cmp_q(lhs, rhs) == 0
+    public static func == (lhs: AVRational, rhs: AVRational) -> Bool {
+        av_cmp_q(lhs, rhs) == 0
     }
 }
 
 extension AVRational {
 
     /// Add two rationals.
-    public static func +(lhs: AVRational, rhs: AVRational) -> AVRational {
-        return av_add_q(lhs, rhs)
+    public static func + (lhs: AVRational, rhs: AVRational) -> AVRational {
+        av_add_q(lhs, rhs)
     }
 
     /// Subtract one rational from another.
-    public static func -(lhs: AVRational, rhs: AVRational) -> AVRational {
-        return av_sub_q(lhs, rhs)
+    public static func - (lhs: AVRational, rhs: AVRational) -> AVRational {
+        av_sub_q(lhs, rhs)
     }
 
     /// Multiply two rationals.
-    public static func *(lhs: AVRational, rhs: AVRational) -> AVRational {
-        return av_mul_q(lhs, rhs)
+    public static func * (lhs: AVRational, rhs: AVRational) -> AVRational {
+        av_mul_q(lhs, rhs)
     }
 
     /// Divide one rational by another.
-    public static func /(lhs: AVRational, rhs: AVRational) -> AVRational {
-        return av_div_q(lhs, rhs)
+    public static func / (lhs: AVRational, rhs: AVRational) -> AVRational {
+        av_div_q(lhs, rhs)
     }
 }
 
@@ -108,7 +108,7 @@ public enum AVMath {
         _ a: T, _ b: T, _ c: T,
         _ rnd: AVRounding = .inf
     ) -> Int64 {
-        return av_rescale_rnd(Int64(a), Int64(b), Int64(c), rnd)
+        av_rescale_rnd(Int64(a), Int64(b), Int64(c), rnd)
     }
 
     /// Rescale a integer by 2 rational numbers with specified rounding.
@@ -118,6 +118,6 @@ public enum AVMath {
         _ a: T, _ b: AVRational, _ c: AVRational,
         _ rnd: AVRounding = .inf
     ) -> Int64 {
-        return av_rescale_q_rnd(Int64(a), b, c, rnd)
+        av_rescale_q_rnd(Int64(a), b, c, rnd)
     }
 }

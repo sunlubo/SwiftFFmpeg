@@ -51,22 +51,22 @@ extension AVSampleFormat {
 
     /// The name of the sample format, or `nil` if sample format is not recognized.
     public var name: String? {
-        return String(cString: av_get_sample_fmt_name(self))
+        String(cString: av_get_sample_fmt_name(self))
     }
 
     /// The number of bytes per sample or zero if unknown for the given sample format.
     public var bytesPerSample: Int {
-        return Int(av_get_bytes_per_sample(self))
+        Int(av_get_bytes_per_sample(self))
     }
 
     /// A Boolean value indicating whether the sample format is planar.
     public var isPlanar: Bool {
-        return av_sample_fmt_is_planar(self) == 1
+        av_sample_fmt_is_planar(self) == 1
     }
 
     /// A Boolean value indicating whether the sample format is packed.
     public var isPacked: Bool {
-        return !isPlanar
+        !isPlanar
     }
 
     /// Return the planar alternative form of the given sample format, or `nil` if the planar sample format does not exist.
@@ -91,7 +91,7 @@ extension AVSampleFormat {
 extension AVSampleFormat: CustomStringConvertible {
 
     public var description: String {
-        return name ?? "unknown"
+        name ?? "unknown"
     }
 }
 
@@ -166,14 +166,14 @@ public struct AVChannel: Equatable {
 
     /// The name of the audio channel.
     public var name: String {
-        return String(cString: av_get_channel_name(rawValue))
+        String(cString: av_get_channel_name(rawValue))
     }
 }
 
 extension AVChannel: CustomStringConvertible {
 
     public var description: String {
-        return name
+        name
     }
 }
 
@@ -265,7 +265,7 @@ public struct AVChannelLayout: Equatable {
 
     /// The number of channels in the channel layout.
     public var channelCount: Int {
-        return Int(av_get_channel_layout_nb_channels(rawValue))
+        Int(av_get_channel_layout_nb_channels(rawValue))
     }
 
     /// Get the index of a channel in channel layout.
@@ -276,9 +276,9 @@ public struct AVChannelLayout: Equatable {
         let i = av_get_channel_layout_channel_index(rawValue, channel.rawValue)
         return i >= 0 ? Int(i) : nil
     }
-    
+
     public func channel(at index: Int32) -> AVChannel {
-        return AVChannel(rawValue: av_channel_layout_extract_channel(rawValue, index))
+        AVChannel(rawValue: av_channel_layout_extract_channel(rawValue, index))
     }
 
     /// Get the default channel layout for a given number of channels.
@@ -286,7 +286,7 @@ public struct AVChannelLayout: Equatable {
     /// - Parameter count: The number of channels.
     /// - Returns: AVChannelLayout
     public static func `default`(for count: Int) -> AVChannelLayout {
-        return AVChannelLayout(rawValue: UInt64(av_get_default_channel_layout(Int32(count))))
+        AVChannelLayout(rawValue: UInt64(av_get_default_channel_layout(Int32(count))))
     }
 }
 

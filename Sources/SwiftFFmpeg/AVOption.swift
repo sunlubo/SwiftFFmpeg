@@ -359,7 +359,7 @@ extension AVOptionSupport {
     public func string(
         forKey key: String, searchFlags: AVOptionSearchFlag = .children
     ) throws -> String {
-        return try withUnsafeObjectPointer { objPtr in
+        try withUnsafeObjectPointer { objPtr in
             var outVal: UnsafeMutablePointer<UInt8>?
             try throwIfFail(av_opt_get(objPtr, key, searchFlags.rawValue, &outVal))
             return String(cString: outVal!)
@@ -370,7 +370,7 @@ extension AVOptionSupport {
     public func integer<T: FixedWidthInteger>(
         forKey key: String, searchFlags: AVOptionSearchFlag = .children
     ) throws -> T {
-        return try withUnsafeObjectPointer { objPtr in
+        try withUnsafeObjectPointer { objPtr in
             var outVal: Int64 = 0
             try throwIfFail(av_opt_get_int(objPtr, key, searchFlags.rawValue, &outVal))
             return T(outVal)
@@ -381,7 +381,7 @@ extension AVOptionSupport {
     public func double(
         forKey key: String, searchFlags: AVOptionSearchFlag = .children
     ) throws -> Double {
-        return try withUnsafeObjectPointer { objPtr in
+        try withUnsafeObjectPointer { objPtr in
             var outVal: Double = 0
             try throwIfFail(av_opt_get_double(objPtr, key, searchFlags.rawValue, &outVal))
             return outVal
@@ -392,7 +392,7 @@ extension AVOptionSupport {
     public func rational(
         forKey key: String, searchFlags: AVOptionSearchFlag = .children
     ) throws -> AVRational {
-        return try withUnsafeObjectPointer { objPtr in
+        try withUnsafeObjectPointer { objPtr in
             var outVal = AVRational(num: 0, den: 0)
             try throwIfFail(av_opt_get_q(objPtr, key, searchFlags.rawValue, &outVal))
             return outVal
@@ -403,7 +403,7 @@ extension AVOptionSupport {
     public func size(
         forKey key: String, searchFlags: AVOptionSearchFlag = .children
     ) throws -> (Int, Int) {
-        return try withUnsafeObjectPointer { objPtr in
+        try withUnsafeObjectPointer { objPtr in
             var wOutVal: Int32 = 0
             var hOutVal: Int32 = 0
             try throwIfFail(av_opt_get_image_size(objPtr, key, searchFlags.rawValue, &wOutVal, &hOutVal))
@@ -415,7 +415,7 @@ extension AVOptionSupport {
     public func pixelFormat(
         forKey key: String, searchFlags: AVOptionSearchFlag = .children
     ) throws -> AVPixelFormat {
-        return try withUnsafeObjectPointer { objPtr in
+        try withUnsafeObjectPointer { objPtr in
             var outVal = AVPixelFormat.none
             try throwIfFail(av_opt_get_pixel_fmt(objPtr, key, searchFlags.rawValue, &outVal))
             return outVal
@@ -426,7 +426,7 @@ extension AVOptionSupport {
     public func sampleFormat(
         forKey key: String, searchFlags: AVOptionSearchFlag = .children
     ) throws -> AVSampleFormat {
-        return try withUnsafeObjectPointer { objPtr in
+        try withUnsafeObjectPointer { objPtr in
             var outVal = AVSampleFormat.none
             try throwIfFail(av_opt_get_sample_fmt(objPtr, key, searchFlags.rawValue, &outVal))
             return outVal
@@ -437,7 +437,7 @@ extension AVOptionSupport {
     public func videoRate(
         forKey key: String, searchFlags: AVOptionSearchFlag = .children
     ) throws -> AVRational {
-        return try withUnsafeObjectPointer { objPtr in
+        try withUnsafeObjectPointer { objPtr in
             var outVal = AVRational(num: 0, den: 0)
             try throwIfFail(av_opt_get_video_rate(objPtr, key, searchFlags.rawValue, &outVal))
             return outVal
@@ -448,7 +448,7 @@ extension AVOptionSupport {
     public func channelLayout(
         forKey key: String, searchFlags: AVOptionSearchFlag = .children
     ) throws -> Int64 {
-        return try withUnsafeObjectPointer { objPtr in
+        try withUnsafeObjectPointer { objPtr in
             var outVal: Int64 = 0
             try throwIfFail(av_opt_get_channel_layout(objPtr, key, searchFlags.rawValue, &outVal))
             return outVal
@@ -457,7 +457,7 @@ extension AVOptionSupport {
 
     /// Returns an array of the options supported by the type.
     public var supportedOptions: [AVOption] {
-        return withUnsafeObjectPointer { objPtr in
+        withUnsafeObjectPointer { objPtr in
             var list = [AVOption]()
             var prev: UnsafePointer<CAVOption>?
             while let option = av_opt_next(objPtr, prev) {

@@ -14,7 +14,7 @@ typealias CAVFormatContext = CFFmpeg.AVFormatContext
 /// Format I/O context.
 public final class AVFormatContext {
     var cContextPtr: UnsafeMutablePointer<CAVFormatContext>!
-    var cContext: CAVFormatContext { return cContextPtr.pointee }
+    var cContext: CAVFormatContext { cContextPtr.pointee }
 
     private var ioContext: AVIOContext?
 
@@ -37,7 +37,7 @@ public final class AVFormatContext {
     /// - muxing: May be set by the caller before calling `writeHeader(options:)` to a string.
     ///   Set to an empty string if it was `nil` in `writeHeader(options:)`.
     public var url: String? {
-        get { return String(cString: cContext.url) }
+        get { String(cString: cContext.url) }
         set { cContextPtr.pointee.url = av_strdup(newValue) }
     }
 
@@ -61,7 +61,7 @@ public final class AVFormatContext {
 
     /// The number of streams in the file.
     public var streamCount: Int {
-        return Int(cContext.nb_streams)
+        Int(cContext.nb_streams)
     }
 
     /// A list of all streams in the file. New streams are created with `addStream(codec:)`.
@@ -80,17 +80,17 @@ public final class AVFormatContext {
 
     /// The first video stream in the file.
     public var videoStream: AVStream? {
-        return streams.first { $0.mediaType == .video }
+        streams.first { $0.mediaType == .video }
     }
 
     /// The first audio stream in the file.
     public var audioStream: AVStream? {
-        return streams.first { $0.mediaType == .audio }
+        streams.first { $0.mediaType == .audio }
     }
 
     /// The first subtitle stream in the file.
     public var subtitleStream: AVStream? {
-        return streams.first { $0.mediaType == .subtitle }
+        streams.first { $0.mediaType == .subtitle }
     }
 
     /// The flags used to modify the (de)muxer behaviour.
@@ -98,7 +98,7 @@ public final class AVFormatContext {
     /// - demuxing: Set by the caller before `openInput(_ url:format:options:)`.
     /// - muxing: Set by the caller before `writeHeader(options:)`.
     public var flags: Flag {
-        get { return Flag(rawValue: cContext.flags) }
+        get { Flag(rawValue: cContext.flags) }
         set { cContextPtr.pointee.flags = newValue.rawValue }
     }
 
@@ -125,7 +125,7 @@ public final class AVFormatContext {
     /// - muxing: Set by the user before `writeHeader(options:)` (mainly useful for `AVOutputFormat.Flag.noFile` formats).
     ///   The callback should also be passed to `avio_open2()` if it's used to open the file.
     public var interruptCallback: AVIOInterruptCallback {
-        get { return cContext.interrupt_callback }
+        get { cContext.interrupt_callback }
         set { cContextPtr.pointee.interrupt_callback = newValue }
     }
 
@@ -272,17 +272,17 @@ extension AVFormatContext {
 
     /// Position of the first frame of the component, in `AVTimestamp.timebase` fractional seconds.
     public var startTime: Int64 {
-        return cContext.start_time
+        cContext.start_time
     }
 
     /// Duration of the stream, in `AVTimestamp.timebase` fractional seconds.
     public var duration: Int64 {
-        return cContext.duration
+        cContext.duration
     }
 
     /// Total stream bitrate in bit/s, 0 if not available.
     public var bitRate: Int64 {
-        return cContext.bit_rate
+        cContext.bit_rate
     }
 
     /// The size of the file.
@@ -375,7 +375,7 @@ extension AVFormatContext {
     ///   - frame: the frame with the aspect ratio to be determined
     /// - Returns: the guessed (valid) sample aspect ratio, 0/1 if no idea
     public func guessSampleAspectRatio(stream: AVStream?, frame: AVFrame? = nil) -> AVRational {
-        return av_guess_sample_aspect_ratio(cContextPtr, stream?.cStreamPtr, frame?.cFramePtr)
+        av_guess_sample_aspect_ratio(cContextPtr, stream?.cStreamPtr, frame?.cFramePtr)
     }
 
     /// Guess the frame rate, based on both the container and codec information.
@@ -385,7 +385,7 @@ extension AVFormatContext {
     ///   - frame: the frame for which the frame rate should be determined
     /// - Returns: the guessed (valid) frame rate, 0/1 if no idea
     public func guessFrameRate(stream: AVStream, frame: AVFrame? = nil) -> AVRational {
-        return av_guess_frame_rate(cContextPtr, stream.cStreamPtr, frame?.cFramePtr)
+        av_guess_frame_rate(cContextPtr, stream.cStreamPtr, frame?.cFramePtr)
     }
 
     /// Return the next frame of a stream.
@@ -615,6 +615,6 @@ extension AVFormatContext: AVClassSupport, AVOptionSupport {
     public func withUnsafeObjectPointer<T>(
         _ body: (UnsafeMutableRawPointer) throws -> T
     ) rethrows -> T {
-        return try body(cContextPtr)
+        try body(cContextPtr)
     }
 }

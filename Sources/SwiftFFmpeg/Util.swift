@@ -25,7 +25,7 @@ func dumpUnrecognizedOptions(_ dict: OpaquePointer?) {
 }
 
 func values<T>(_ ptr: UnsafePointer<T>?, until end: T) -> [T]? where T: Equatable {
-    return values(ptr, until: { $0 == end })
+    values(ptr, until: { $0 == end })
 }
 
 func values<T>(_ ptr: UnsafePointer<T>?, until predicate: (T) -> Bool) -> [T]? {

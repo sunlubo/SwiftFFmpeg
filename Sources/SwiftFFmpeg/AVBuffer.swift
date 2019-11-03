@@ -32,12 +32,12 @@ public final class AVBuffer {
 
     /// The data buffer.
     public var data: UnsafeMutablePointer<UInt8> {
-        return cBuffer.data
+        cBuffer.data
     }
 
     /// The size of data in bytes.
     public var size: Int {
-        return Int(cBuffer.size)
+        Int(cBuffer.size)
     }
 
     /// The reference count held by the buffer.
