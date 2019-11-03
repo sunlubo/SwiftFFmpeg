@@ -166,6 +166,13 @@ public struct AVCodec {
         }
         return AVCodec(cCodecPtr: codecPtr)
     }
+    
+    /// Returns a name for the specified profile, if available.
+    ///
+    /// Unlike the member function `getProfileName(...)`, which searches a list of profiles supported by a specific decoder or encoder implementation, this class function searches the list of profiles from the `codecID`'s `AVCodecDescriptor`
+    public static func profileName(codecID: AVCodecID, profile: Int32) -> String? {
+        return String(cString: avcodec_profile_name(codecID, profile))
+    }
 
     init(cCodecPtr: UnsafeMutablePointer<CAVCodec>) {
         self.cCodecPtr = cCodecPtr
@@ -246,6 +253,11 @@ public struct AVCodec {
             return AVCodecHWConfig(cConfigPtr: ptr)
         }
         return nil
+    }
+    
+    /// Returns a name for the specified profile, if available.
+    public func profileName(profile: Int32) -> String? {
+        return String(cString: av_get_profile_name(cCodecPtr, profile))
     }
 
     /// Get all registered codecs.

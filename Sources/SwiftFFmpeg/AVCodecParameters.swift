@@ -48,6 +48,12 @@ public final class AVCodecParameters {
         set { cParametersPtr.pointee.codec_id = newValue }
     }
     
+    /// Codec-specific bitstream restrictions that the stream conforms to.
+    public var profile: Int32 {
+        get { return cParameters.profile }
+        set { cParametersPtr.pointee.profile = newValue }
+    }
+    
     /// Additional information about the codec (corresponds to the AVI FOURCC).
     public var codecTag: UInt32 {
         get { return cParameters.codec_tag }
