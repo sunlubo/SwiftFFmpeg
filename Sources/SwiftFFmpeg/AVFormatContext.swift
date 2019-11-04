@@ -101,6 +101,14 @@ public final class AVFormatContext {
         get { Flag(rawValue: cContext.flags) }
         set { cContextPtr.pointee.flags = newValue.rawValue }
     }
+    
+    /// Maximum size of the data read from input for determining the input container format.
+    ///
+    /// Demuxing only, set by the caller before avformat_open_input().
+    public var probeSize: Int64 {
+        get { cContext.probesize }
+        set { cContextPtr.pointee.probesize = newValue }
+    }
 
     /// Metadata that applies to the whole file.
     ///
