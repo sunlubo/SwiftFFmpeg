@@ -699,10 +699,10 @@ public typealias AVColorRange = CFFmpeg.AVColorRange
 extension CFFmpeg.AVColorRange {
     public static let UNSPECIFIED = AVCOL_RANGE_UNSPECIFIED
 
-    /// the normal 219*2^(n-8) "MPEG" YUV ranges
+    /// the normal 219*2^(n-8) "MPEG" YUV ranges - also known as "Legal" or "Video" range
     public static let MPEG = AVCOL_RANGE_MPEG
 
-    /// the normal     2^n-1   "JPEG" YUV ranges
+    /// the normal     2^n-1   "JPEG" YUV ranges - also known as "Full" range
     public static let JPEG = AVCOL_RANGE_JPEG
 
     /// Not part of ABI
