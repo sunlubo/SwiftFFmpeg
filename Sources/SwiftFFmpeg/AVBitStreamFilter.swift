@@ -100,6 +100,16 @@ public final class AVBitStreamFilterContext {
         self.cContextPtr = ptr
     }
 
+    /// Parameters of the input stream.
+    public var inParameters: AVCodecParameters {
+        return AVCodecParameters(cParametersPtr: cContext.par_in)
+    }
+
+    /// Parameters of the input stream.
+    public var outParameters: AVCodecParameters {
+        return AVCodecParameters(cParametersPtr: cContext.par_out)
+    }
+
     /// Prepare the filter for use, after all the parameters and options have been set.
     public func initialize() throws {
         try throwIfFail(av_bsf_init(cContextPtr))
