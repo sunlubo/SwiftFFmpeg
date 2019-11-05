@@ -8,7 +8,7 @@
 import Foundation
 import SwiftFFmpeg
 
-private func log_packet(_ pkt: AVPacket, fmtCtx: AVFormatContext, tag: String) {
+private func log_packet(_ pkt: Packet, fmtCtx: FormatContext, tag: String) {
     let timebase = fmtCtx.streams[pkt.streamIndex].timebase
     print("""
     \(tag): \
@@ -29,11 +29,11 @@ func remuxing() throws {
     let input = CommandLine.arguments[2]
     let output = CommandLine.arguments[3]
 
-    let ifmtCtx = try AVFormatContext(url: input)
+    let ifmtCtx = try FormatContext(url: input)
     try ifmtCtx.findStreamInfo()
     ifmtCtx.dumpFormat(isOutput: false)
 
-    let ofmtCtx = try AVFormatContext(format: nil, filename: output)
+    let ofmtCtx = try FormatContext(format: nil, filename: output)
 
     var streamMapping = [Int](repeating: 0, count: ifmtCtx.streamCount)
     var streamIndex = 0
@@ -66,7 +66,7 @@ func remuxing() throws {
 
     try ofmtCtx.writeHeader()
 
-    let pkt = AVPacket()
+    let pkt = Packet()
     while let _ = try? ifmtCtx.readFrame(into: pkt) {
         defer {
             pkt.unref()
@@ -83,8 +83,8 @@ func remuxing() throws {
         log_packet(pkt, fmtCtx: ofmtCtx, tag: "in ")
 
         // copy packet
-        pkt.pts = AVMath.rescale(pkt.pts, istream.timebase, ostream.timebase, AVRounding.nearInf.union(.passMinMax))
-        pkt.dts = AVMath.rescale(pkt.dts, istream.timebase, ostream.timebase, AVRounding.nearInf.union(.passMinMax))
+        pkt.pts = AVMath.rescale(pkt.pts, istream.timebase, ostream.timebase, Rounding.nearInf.union(.passMinMax))
+        pkt.dts = AVMath.rescale(pkt.dts, istream.timebase, ostream.timebase, Rounding.nearInf.union(.passMinMax))
         pkt.duration = AVMath.rescale(pkt.duration, istream.timebase, ostream.timebase)
         pkt.position = -1
         log_packet(pkt, fmtCtx: ofmtCtx, tag: "out")

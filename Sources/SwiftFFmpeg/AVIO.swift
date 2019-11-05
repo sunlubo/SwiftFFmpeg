@@ -107,7 +107,7 @@ public enum AVIO {
     }
 }
 
-// MARK: - AVIODirEntry
+// MARK: - IODirEntry
 
 typealias CAVIODirEntry = CFFmpeg.AVIODirEntry
 
@@ -115,7 +115,7 @@ typealias CAVIODirEntry = CFFmpeg.AVIODirEntry
 ///
 /// Only name and type fields are guaranteed be set.
 /// Rest of fields are protocol or/and platform dependent and might be unknown.
-public final class AVIODirEntry {
+public final class IODirEntry {
     var cEntryPtr: UnsafeMutablePointer<CAVIODirEntry>!
 
     /// Filename.
@@ -155,9 +155,9 @@ public final class AVIODirEntry {
     }
 }
 
-// MARK: - AVIODirEntry.Kind
+// MARK: - IODirEntry.Kind
 
-extension AVIODirEntry {
+extension IODirEntry {
 
     /// Directory entry types.
     public enum Kind: UInt32 {
@@ -175,7 +175,7 @@ extension AVIODirEntry {
     }
 }
 
-extension AVIODirEntry.Kind: CustomStringConvertible {
+extension IODirEntry.Kind: CustomStringConvertible {
 
     public var description: String {
         switch self {
@@ -205,11 +205,11 @@ extension AVIODirEntry.Kind: CustomStringConvertible {
     }
 }
 
-// MARK: - AVIODirContext
+// MARK: - IODirContext
 
 typealias CAVIODirContext = CFFmpeg.AVIODirContext
 
-public final class AVIODirContext {
+public final class IODirContext {
     let cContextPtr: UnsafeMutablePointer<CAVIODirContext>
     var cContext: CAVIODirContext { cContextPtr.pointee }
 
@@ -247,23 +247,23 @@ public final class AVIODirContext {
     }
 
     deinit {
-        assert(!isOpen, "AVIODirContext must be close.")
+        assert(!isOpen, "IODirContext must be close.")
     }
 }
 
-extension AVIODirContext: Sequence {
+extension IODirContext: Sequence {
 
     public struct Iterator: IteratorProtocol {
-        private let dirCtx: AVIODirContext
+        private let dirCtx: IODirContext
         private var nextEntry: UnsafeMutablePointer<CAVIODirEntry>?
 
-        init(dirCtx: AVIODirContext) {
+        init(dirCtx: IODirContext) {
             self.dirCtx = dirCtx
         }
 
-        public mutating func next() -> AVIODirEntry? {
+        public mutating func next() -> IODirEntry? {
             if avio_read_dir(dirCtx.cContextPtr, &nextEntry) >= 0, let entryPtr = nextEntry {
-                return AVIODirEntry(cEntryPtr: entryPtr)
+                return IODirEntry(cEntryPtr: entryPtr)
             }
             return nil
         }
@@ -278,26 +278,26 @@ extension AVIODirContext: Sequence {
 /// `AVError.exit` is returned in this case by the interrupted function.
 /// During blocking operations, callback is called with opaque as parameter.
 /// If the callback returns 1, the blocking operation will be aborted.
-public typealias AVIOInterruptCallback = AVIOInterruptCB
+public typealias IOInterruptCallback = AVIOInterruptCB
 
-// MARK: - AVIOContext
+// MARK: - IOContext
 
 typealias CAVIOContext = CFFmpeg.AVIOContext
 
-public typealias AVIOReadHandler = (UnsafeMutableRawPointer?, UnsafeMutablePointer<UInt8>?, Int) -> Int
-public typealias AVIOWriteHandler = (UnsafeMutableRawPointer?, UnsafeMutablePointer<UInt8>?, Int) -> Int
-public typealias AVIOSeekHandler = (UnsafeMutableRawPointer?, Int64, Int) -> Int64
+public typealias IOReadHandler = (UnsafeMutableRawPointer?, UnsafeMutablePointer<UInt8>?, Int) -> Int
+public typealias IOWriteHandler = (UnsafeMutableRawPointer?, UnsafeMutablePointer<UInt8>?, Int) -> Int
+public typealias IOSeekHandler = (UnsafeMutableRawPointer?, Int64, Int) -> Int64
 
 typealias IOBoxValue = (
     opaque: UnsafeMutableRawPointer,
-    read: AVIOReadHandler?,
-    write: AVIOWriteHandler?,
-    seek: AVIOSeekHandler?
+    read: IOReadHandler?,
+    write: IOWriteHandler?,
+    seek: IOSeekHandler?
 )
 typealias IOBox = Box<IOBoxValue>
 
 /// Bytestream IO Context.
-public final class AVIOContext {
+public final class IOContext {
     let cContextPtr: UnsafeMutablePointer<CAVIOContext>
     var cContext: CAVIOContext { cContextPtr.pointee }
 
@@ -309,10 +309,10 @@ public final class AVIOContext {
         self.cContextPtr = cContextPtr
     }
 
-    /// Allocate and initialize an `AVIOContext` for buffered I/O.
+    /// Allocate and initialize an `IOContext` for buffered I/O.
     ///
     /// - Parameters:
-    ///   - buffer: Memory block for input/output operations via `AVIOContext`.
+    ///   - buffer: Memory block for input/output operations via `IOContext`.
     ///   - size: The buffer size is very important for performance. For protocols with fixed blocksize
     ///     it should be set to this blocksize. For others a typical size is a cache page, e.g. 4kb.
     ///   - writable: Set to `true` if the buffer should be writable, `false` otherwise.
@@ -327,9 +327,9 @@ public final class AVIOContext {
         size: Int,
         writable: Bool,
         opaque: UnsafeMutableRawPointer,
-        readHandler: AVIOReadHandler?,
-        writeHandler: AVIOWriteHandler?,
-        seekHandler: AVIOSeekHandler?
+        readHandler: IOReadHandler?,
+        writeHandler: IOWriteHandler?,
+        seekHandler: IOSeekHandler?
     ) {
         // Store everything we want to pass into the c function in a `Box` so we can hand-over the reference.
         let box = IOBox((opaque: opaque, read: readHandler, write: writeHandler, seek: seekHandler))
@@ -373,10 +373,10 @@ public final class AVIOContext {
         self.freeWhenDone = true
     }
 
-    /// Create and initialize a `AVIOContext` for accessing the resource indicated by url.
+    /// Create and initialize a `IOContext` for accessing the resource indicated by url.
     ///
     /// - Note: When the resource indicated by url has been opened in _read+write_ mode,
-    ///   the `AVIOContext` can be used only for writing.
+    ///   the `IOContext` can be used only for writing.
     ///
     /// - Parameters:
     ///   - url: resource to access
@@ -387,7 +387,7 @@ public final class AVIOContext {
     public convenience init(
         url: String,
         flags: Flag,
-        interruptCallback: AVIOInterruptCallback? = nil,
+        interruptCallback: IOInterruptCallback? = nil,
         options: [String: String]? = nil
     ) throws {
         var pm: OpaquePointer? = options?.toAVDict()
@@ -471,7 +471,7 @@ public final class AVIOContext {
         avio_flush(cContextPtr)
     }
 
-    /// Read size bytes from `AVIOContext` into buffer.
+    /// Read size bytes from `IOContext` into buffer.
     ///
     /// - Parameters:
     ///   - buffer: The buffer into which the data is read.
@@ -484,7 +484,7 @@ public final class AVIOContext {
         return Int(ret)
     }
 
-    /// Read size bytes from `AVIOContext` into buffer. Unlike `read(_:size:)`, this is allowed to
+    /// Read size bytes from `IOContext` into buffer. Unlike `read(_:size:)`, this is allowed to
     /// read fewer bytes than requested.
     /// The missing bytes can be read in the next call. This always tries to read at least 1 byte.
     /// Useful to reduce latency in certain cases.
@@ -523,10 +523,10 @@ public final class AVIOContext {
     /// - Note: Only meaningful if using a network streaming protocol (e.g. MMS.).
     ///
     /// - Parameters:
-    ///   - timestamp: timestamp in `AVStream.timebase` units or if there is no stream specified
-    ///     then in `AVTimestamp.timebase` units.
+    ///   - timestamp: timestamp in `Stream.timebase` units or if there is no stream specified
+    ///     then in `Timestamp.timebase` units.
     ///   - streamIndex: The stream index that the timestamp is relative to.
-    ///     If `streamIndex` is -1 the timestamp should be in `AVTimestamp.timebase` units from
+    ///     If `streamIndex` is -1 the timestamp should be in `Timestamp.timebase` units from
     ///     the beginning of the presentation.
     ///     If a `streamIndex` >= 0 is used and the protocol does not support seeking based on
     ///     component streams, the call will fail.
@@ -534,7 +534,7 @@ public final class AVIOContext {
     ///     The protocol may silently ignore `SeekFlag.backward` and `SeekFlag.any`, but `SeekFlag.byte`
     ///     will fail if used and not supported.
     /// - Throws: AVError
-    public func seek(to timestamp: Int64, streamIndex: Int64, flags: AVFormatContext.SeekFlag) throws -> Int {
+    public func seek(to timestamp: Int64, streamIndex: Int64, flags: FormatContext.SeekFlag) throws -> Int {
         let ret = avio_seek_time(cContextPtr, Int32(streamIndex), timestamp, flags.rawValue)
         try throwIfFail(Int32(ret))
         return Int(ret)
@@ -543,10 +543,10 @@ public final class AVIOContext {
     /// Accept and allocate a client context on a server context.
     ///
     /// - Throws: AVError
-    public func accept() throws -> AVIOContext {
+    public func accept() throws -> IOContext {
         var ctxPtr: UnsafeMutablePointer<CAVIOContext>!
         try throwIfFail(avio_accept(cContextPtr, &ctxPtr))
-        return AVIOContext(cContextPtr: ctxPtr)
+        return IOContext(cContextPtr: ctxPtr)
     }
 
     /// Perform one step of the protocol handshake to accept a new client.
@@ -568,7 +568,7 @@ public final class AVIOContext {
         return ret == 0
     }
 
-    /// Close the resource accessed by the `AVIOContext`.
+    /// Close the resource accessed by the `IOContext`.
     ///
     /// The internal buffer is automatically flushed before closing the resource.
     public func close() {
@@ -604,16 +604,16 @@ public final class AVIOContext {
     }
 }
 
-extension AVIOContext: AVOptionSupport {
+extension IOContext: OptionSupport {
 
     public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T {
         try body(cContextPtr)
     }
 }
 
-// MARK: - AVIOContext.Flag
+// MARK: - IOContext.Flag
 
-extension AVIOContext {
+extension IOContext {
 
     /// URL open modes
     ///
@@ -647,7 +647,7 @@ extension AVIOContext {
     }
 }
 
-extension AVIOContext.Flag: CustomStringConvertible {
+extension IOContext.Flag: CustomStringConvertible {
 
     public var description: String {
         var str = "["
@@ -664,9 +664,9 @@ extension AVIOContext.Flag: CustomStringConvertible {
     }
 }
 
-// MARK: - AVIOContext.SeekWhence
+// MARK: - IOContext.SeekWhence
 
-extension AVIOContext {
+extension IOContext {
 
     public struct SeekWhence {
         /// ORing this as the "whence" parameter to a seek function causes it to

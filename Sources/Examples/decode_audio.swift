@@ -13,9 +13,9 @@ import Glibc
 import SwiftFFmpeg
 
 private func decode(
-    codecCtx: AVCodecContext,
-    frame: AVFrame,
-    pkt: AVPacket?,
+    codecCtx: CodecContext,
+    frame: Frame,
+    pkt: Packet?,
     file: UnsafeMutablePointer<FILE>
 ) throws {
     try codecCtx.sendPacket(pkt)
@@ -58,14 +58,14 @@ func decode_audio() throws {
     }
     defer { fclose(outFile) }
     
-    let codec = AVCodec.findDecoderById(.MP2)!
-    let codecCtx = AVCodecContext(codec: codec)
+    let codec = Codec.findDecoderById(.MP2)!
+    let codecCtx = CodecContext(codec: codec)
     try codecCtx.openCodec()
     
-    let parser = AVCodecParserContext(codecContext: codecCtx)!
+    let parser = CodecParserContext(codecContext: codecCtx)!
     
-    let pkt = AVPacket()
-    let frame = AVFrame()
+    let pkt = Packet()
+    let frame = Frame()
     
     let inbufSize = 20480
     let refillThresh = 4096

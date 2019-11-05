@@ -7,7 +7,7 @@
 
 import CFFmpeg
 
-public enum AVTimestamp {
+public enum Timestamp {
     /// Internal timebase represented as integer
     public static let timebase = AV_TIME_BASE
     /// Internal timebase represented as fractional value
@@ -27,8 +27,8 @@ public enum AVTimestamp {
     ///   -  1 if `ts_a` is after `ts_b`
     ///   -  0 if they represent the same position
     public static func compare(
-        _ ts_a: Int64, _ tb_a: AVRational,
-        _ ts_b: Int64, _ tb_b: AVRational
+        _ ts_a: Int64, _ tb_a: Rational,
+        _ ts_b: Int64, _ tb_b: Rational
     ) -> Int {
         Int(av_compare_ts(ts_a, tb_a, ts_b, tb_b))
     }

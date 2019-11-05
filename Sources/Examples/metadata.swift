@@ -14,7 +14,7 @@ func metadata() throws {
     }
 
     let input = CommandLine.arguments[2]
-    let fmtCtx = try AVFormatContext(url: input)
+    let fmtCtx = try FormatContext(url: input)
     try fmtCtx.findStreamInfo()
 
     for (k, v) in fmtCtx.metadata {

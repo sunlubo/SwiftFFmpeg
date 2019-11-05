@@ -12,15 +12,15 @@ import Glibc
 #endif
 import SwiftFFmpeg
 
-private var lastPts = AVTimestamp.noPTS
+private var lastPts = Timestamp.noPTS
 
-private func display_frame(frame: AVFrame, timebase: AVRational) throws {
+private func display_frame(frame: Frame, timebase: Rational) throws {
     var delay = 0 as Int64
-    if frame.pts != AVTimestamp.noPTS {
-        if lastPts != AVTimestamp.noPTS {
+    if frame.pts != Timestamp.noPTS {
+        if lastPts != Timestamp.noPTS {
             // sleep roughly the right amount of time;
             // usleep is in microseconds, just like AV_TIME_BASE.
-            delay = AVMath.rescale(frame.pts - lastPts, timebase, AVTimestamp.timebaseQ)
+            delay = AVMath.rescale(frame.pts - lastPts, timebase, Timestamp.timebaseQ)
             if delay > 0 && delay < 1000000 {
                 usleep(useconds_t(delay))
             }
@@ -48,7 +48,7 @@ func filtering_video() throws {
     }
     
     let input = CommandLine.arguments[2]
-    let fmtCtx = try AVFormatContext(url: input)
+    let fmtCtx = try FormatContext(url: input)
     try fmtCtx.findStreamInfo()
     
     // select the video stream
@@ -56,18 +56,18 @@ func filtering_video() throws {
     let stram = fmtCtx.streams[streamIndex]
     
     // create decoding context
-    let decoder = AVCodec.findDecoderById(stram.codecParameters.codecId)!
-    let decoderCtx = AVCodecContext(codec: decoder)
+    let decoder = Codec.findDecoderById(stram.codecParameters.codecId)!
+    let decoderCtx = CodecContext(codec: decoder)
     decoderCtx.setParameters(stram.codecParameters)
     // init the video decoder
     try decoderCtx.openCodec()
     
-    let buffersrc = AVFilter(name: "buffer")!
-    let buffersink = AVFilter(name: "buffersink")!
-    let inputs = AVFilterInOut()
-    let outputs = AVFilterInOut()
-    let pixFmts = [AVPixelFormat.GRAY8, AVPixelFormat.none]
-    let filterGraph = AVFilterGraph()
+    let buffersrc = Filter(name: "buffer")!
+    let buffersink = Filter(name: "buffersink")!
+    let inputs = FilterInOut()
+    let outputs = FilterInOut()
+    let pixFmts = [PixelFormat.GRAY8, PixelFormat.none]
+    let filterGraph = FilterGraph()
     
     // buffer video source: the decoded frames from the decoder will be inserted here.
     let args = """
@@ -103,9 +103,9 @@ func filtering_video() throws {
     try filterGraph.parse(filters: "scale=78:24,transpose=cclock", inputs: inputs, outputs: outputs)
     try filterGraph.configure()
     
-    let pkt = AVPacket()
-    let frame = AVFrame()
-    let filterFrame = AVFrame()
+    let pkt = Packet()
+    let frame = Frame()
+    let filterFrame = Frame()
     
     // read all packets
     while let _ = try? fmtCtx.readFrame(into: pkt) {

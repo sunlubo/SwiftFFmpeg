@@ -12,7 +12,7 @@ import Glibc
 #endif
 import SwiftFFmpeg
 
-private func print_frame(frame: AVFrame, file: UnsafeMutablePointer<FILE>) throws {
+private func print_frame(frame: Frame, file: UnsafeMutablePointer<FILE>) throws {
     let n = frame.sampleCount * frame.channelLayout.channelCount
     let data = UnsafeRawPointer(frame.data[0]!).bindMemory(to: UInt16.self, capacity: n)
     for i in 0 ..< n {
@@ -36,7 +36,7 @@ func filtering_audio() throws {
     defer { fclose(file) }
     
     let input = CommandLine.arguments[2]
-    let fmtCtx = try AVFormatContext(url: input)
+    let fmtCtx = try FormatContext(url: input)
     try fmtCtx.findStreamInfo()
     
     // select the audio stream
@@ -44,20 +44,20 @@ func filtering_audio() throws {
     let stram = fmtCtx.streams[streamIndex]
     
     // create decoding context
-    let decoder = AVCodec.findDecoderById(stram.codecParameters.codecId)!
-    let decoderCtx = AVCodecContext(codec: decoder)
+    let decoder = Codec.findDecoderById(stram.codecParameters.codecId)!
+    let decoderCtx = CodecContext(codec: decoder)
     decoderCtx.setParameters(stram.codecParameters)
     // init the audio decoder
     try decoderCtx.openCodec()
     
-    let buffersrc = AVFilter(name: "abuffer")!
-    let buffersink = AVFilter(name: "abuffersink")!
-    let inputs = AVFilterInOut()
-    let outputs = AVFilterInOut()
-    let sampleFmts = [AVSampleFormat.s16, AVSampleFormat.none]
-    let channelLayouts = [AVChannelLayout.CHL_MONO, AVChannelLayout.none]
+    let buffersrc = Filter(name: "abuffer")!
+    let buffersink = Filter(name: "abuffersink")!
+    let inputs = FilterInOut()
+    let outputs = FilterInOut()
+    let sampleFmts = [SampleFormat.s16, SampleFormat.none]
+    let channelLayouts = [ChannelLayout.CHL_MONO, ChannelLayout.none]
     let sampleRates = [8000, -1] as [CInt]
-    let filterGraph = AVFilterGraph()
+    let filterGraph = FilterGraph()
     
     // buffer audio source: the decoded frames from the decoder will be inserted here.
     let args = """
@@ -101,9 +101,9 @@ func filtering_audio() throws {
     let outlink = buffersinkCtx.inputs[0]
     print("Output: srate:\(outlink.sampleRate)Hz fmt:\(outlink.sampleFormat) chlayout:\(outlink.channelLayout)")
     
-    let pkt = AVPacket()
-    let frame = AVFrame()
-    let filterFrame = AVFrame()
+    let pkt = Packet()
+    let frame = Frame()
+    let filterFrame = Frame()
     
     // read all packets
     while let _ = try? fmtCtx.readFrame(into: pkt) {

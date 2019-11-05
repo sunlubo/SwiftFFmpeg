@@ -1,5 +1,5 @@
 //
-//  AVHWContext.swift
+//  HardwareContext.swift
 //  SwiftFFmpeg
 //
 //  Created by sunlubo on 2018/8/6.
@@ -7,11 +7,11 @@
 
 import CFFmpeg
 
-// MARK: - AVHWDeviceType
+// MARK: - HardwareDeviceType
 
-public typealias AVHWDeviceType = CFFmpeg.AVHWDeviceType
+public typealias HardwareDeviceType = CFFmpeg.AVHWDeviceType
 
-extension AVHWDeviceType {
+extension HardwareDeviceType {
     /// Do not use any hardware acceleration (the default).
     public static let none = AV_HWDEVICE_TYPE_NONE
     /// Use VDPAU (Video Decode and Presentation API for Unix) hardware acceleration.
@@ -33,7 +33,7 @@ extension AVHWDeviceType {
     /// Use MediaCodec (Android) hardware acceleration.
     public static let mediaCodec = AV_HWDEVICE_TYPE_MEDIACODEC
 
-    /// Return an `AVHWDeviceType` corresponding to name, or `nil` if the device type does not exist.
+    /// Return an `HardwareDeviceType` corresponding to name, or `nil` if the device type does not exist.
     ///
     /// - Parameter name: String name of the device type (case-insensitive).
     public init?(name: String) {
@@ -50,8 +50,8 @@ extension AVHWDeviceType {
     }
 
     /// Get all supported device types.
-    public static func supportedDeviceTypes() -> [AVHWDeviceType] {
-        var list = [AVHWDeviceType]()
+    public static func supportedDeviceTypes() -> [HardwareDeviceType] {
+        var list = [HardwareDeviceType]()
         var type = av_hwdevice_iterate_types(.none)
         while type != .none {
             list.append(type)
@@ -61,18 +61,18 @@ extension AVHWDeviceType {
     }
 }
 
-extension AVHWDeviceType: CustomStringConvertible {
+extension HardwareDeviceType: CustomStringConvertible {
 
     public var description: String {
         name ?? "unknown"
     }
 }
 
-// MARK: - AVCodecHWConfig
+// MARK: - CodecHardwareConfig
 
 typealias CAVCodecHWConfig = CFFmpeg.AVCodecHWConfig
 
-public struct AVCodecHWConfig {
+public struct CodecHardwareConfig {
     let cConfigPtr: UnsafePointer<CAVCodecHWConfig>
     var cConfig: CAVCodecHWConfig { cConfigPtr.pointee }
 
@@ -81,11 +81,11 @@ public struct AVCodecHWConfig {
     }
 
     /// A hardware pixel format which the codec can use.
-    public var pixelFormat: AVPixelFormat {
+    public var pixelFormat: PixelFormat {
         cConfig.pix_fmt
     }
 
-    /// Bit set of `AVCodecHWConfig.Method` flags, describing the possible setup methods
+    /// Bit set of `CodecHardwareConfig.Method` flags, describing the possible setup methods
     /// which can be used with this configuration.
     public var methods: Method {
         Method(rawValue: cConfig.methods)
@@ -93,30 +93,30 @@ public struct AVCodecHWConfig {
 
     /// The device type associated with the configuration.
     ///
-    /// Must be set for `AVCodecHWConfig.Method.hwDeviceContext` and `AVCodecHWConfig.Method.hwFramesContext`,
+    /// Must be set for `CodecHardwareConfig.Method.hwDeviceContext` and `CodecHardwareConfig.Method.hwFramesContext`,
     /// otherwise unused.
-    public var deviceType: AVHWDeviceType {
+    public var deviceType: HardwareDeviceType {
         cConfig.device_type
     }
 }
 
-// MARK: - AVCodecHWConfig.Method
+// MARK: - CodecHWConfig.Method
 
-extension AVCodecHWConfig {
+extension CodecHardwareConfig {
 
     /// Flags used by `methods`.
     public struct Method: OptionSet {
-        /// The codec supports this format via the `AVCodecContext.hwDeviceContext` interface.
+        /// The codec supports this format via the `CodecContext.hwDeviceContext` interface.
         ///
-        /// When selecting this format, `AVCodecContext.hwDeviceContext` should
+        /// When selecting this format, `CodecContext.hwDeviceContext` should
         /// have been set to a device of the specified type before calling
-        /// `AVCodecContext.openCodec(options:)`.
+        /// `CodecContext.openCodec(options:)`.
         public static let hwDeviceContext = Method(rawValue: Int32(AV_CODEC_HW_CONFIG_METHOD_HW_DEVICE_CTX))
 
-        /// The codec supports this format via the `AVCodecContext.hwFramesContext` interface.
+        /// The codec supports this format via the `CodecContext.hwFramesContext` interface.
         ///
-        /// When selecting this format for a decoder, `AVCodecContext.hwFramesContext`
-        /// should be set to a suitable frames context inside the `AVCodecContext.getFormat` callback.
+        /// When selecting this format for a decoder, `CodecContext.hwFramesContext`
+        /// should be set to a suitable frames context inside the `CodecContext.getFormat` callback.
         /// The frames context must have been created on a device of the specified type.
         public static let hwFramesContext = Method(rawValue: Int32(AV_CODEC_HW_CONFIG_METHOD_HW_FRAMES_CTX))
 
@@ -139,7 +139,7 @@ extension AVCodecHWConfig {
     }
 }
 
-extension AVCodecHWConfig.Method: CustomStringConvertible {
+extension CodecHardwareConfig.Method: CustomStringConvertible {
 
     public var description: String {
         var str = "["
@@ -155,9 +155,9 @@ extension AVCodecHWConfig.Method: CustomStringConvertible {
     }
 }
 
-// MARK: - AVHWDeviceContext
+// MARK: - HardwareDeviceContext
 
-public final class AVHWDeviceContext {
+public final class HardwareDeviceContext {
     let cBufferPtr: UnsafeMutablePointer<CAVBuffer>
 
     private var freeWhenDone: Bool = false
@@ -166,14 +166,14 @@ public final class AVHWDeviceContext {
         self.cBufferPtr = cBufferPtr
     }
 
-    /// Open a device of the specified type and create an `AVHWDeviceContext` for it.
+    /// Open a device of the specified type and create an `HardwareDeviceContext` for it.
     ///
     /// - Parameters:
     ///   - deviceType: The type of the device to create.
     ///   - device: A type-specific string identifying the device to open.
     ///   - options: A dictionary of additional (type-specific) options to use in opening the device.
     public init(
-        deviceType: AVHWDeviceType,
+        deviceType: HardwareDeviceType,
         device: String? = nil,
         options: [String: String]? = nil
     ) throws {
@@ -200,9 +200,9 @@ public final class AVHWDeviceContext {
     ///
     /// - Parameters:
     ///   - deviceType: The type of the new device to create.
-    ///   - deviceContext: An existing `AVHWDeviceContext` which will be used to create the new device.
+    ///   - deviceContext: An existing `HardwareDeviceContext` which will be used to create the new device.
     /// - Throws: AVError
-    public init(deviceType: AVHWDeviceType, deviceContext: AVHWDeviceContext) throws {
+    public init(deviceType: HardwareDeviceType, deviceContext: HardwareDeviceContext) throws {
         var ptr: UnsafeMutablePointer<AVBufferRef>!
         try throwIfFail(av_hwdevice_ctx_create_derived(&ptr, deviceType, deviceContext.cBufferPtr, 0))
         self.cBufferPtr = ptr
@@ -217,18 +217,18 @@ public final class AVHWDeviceContext {
     }
 }
 
-// MARK: - AVHWFrameTransferDirection
+// MARK: - HardwareFrameTransferDirection
 
-public typealias AVHWFrameTransferDirection = CFFmpeg.AVHWFrameTransferDirection
+public typealias HardwareFrameTransferDirection = CFFmpeg.AVHWFrameTransferDirection
 
-extension AVHWFrameTransferDirection {
+extension HardwareFrameTransferDirection {
     /// Transfer the data from the queried hw frame.
     public static let from = AV_HWFRAME_TRANSFER_DIRECTION_FROM
     /// Transfer the data to the queried hw frame.
     public static let to = AV_HWFRAME_TRANSFER_DIRECTION_TO
 }
 
-// MARK: - AVHWFramesContext
+// MARK: - HardwareFramesContext
 
 typealias CAVHWFramesContext = CFFmpeg.AVHWFramesContext
 
@@ -236,11 +236,11 @@ typealias CAVHWFramesContext = CFFmpeg.AVHWFramesContext
 /// data not located in normal system memory). All the frames in the pool are
 /// assumed to be allocated in the same way and interchangeable.
 ///
-/// This struct is reference-counted with the `AVBuffer` mechanism and tied to a
-/// given `AVHWDeviceContext` instance. The `init(deviceContext:)` constructor
-/// yields a reference, whose data field points to the actual `AVHWFramesContext`
+/// This struct is reference-counted with the `Buffer` mechanism and tied to a
+/// given `HardwareDeviceContext` instance. The `init(deviceContext:)` constructor
+/// yields a reference, whose data field points to the actual `HardwareFramesContext`
 /// struct.
-public final class AVHWFramesContext {
+public final class HardwareFramesContext {
     let cBufferPtr: UnsafeMutablePointer<CAVBuffer>
     let cContextPtr: UnsafeMutablePointer<CAVHWFramesContext>
     var cContext: CAVHWFramesContext { cContextPtr.pointee }
@@ -253,10 +253,10 @@ public final class AVHWFramesContext {
             .bindMemory(to: CAVHWFramesContext.self, capacity: 1)
     }
 
-    /// Create an `AVHWFramesContext` tied to a given device context.
+    /// Create an `HardwareFramesContext` tied to a given device context.
     ///
-    /// - Parameter deviceContext: a `AVHWDeviceContext` instance.
-    public init(deviceContext: AVHWDeviceContext) {
+    /// - Parameter deviceContext: a `HardwareDeviceContext` instance.
+    public init(deviceContext: HardwareDeviceContext) {
         guard let ptr = av_hwframe_ctx_alloc(deviceContext.cBufferPtr) else {
             abort("av_hwframe_ctx_alloc")
         }
@@ -267,8 +267,8 @@ public final class AVHWFramesContext {
     }
 
     /// A reference to the parent `AVHWDeviceContext`.
-    public var deviceContext: AVHWDeviceContext {
-        AVHWDeviceContext(cBufferPtr: cContext.device_ref)
+    public var deviceContext: HardwareDeviceContext {
+        HardwareDeviceContext(cBufferPtr: cContext.device_ref)
     }
 
     /// The pixel format identifying the underlying HW surface type.
@@ -276,7 +276,7 @@ public final class AVHWFramesContext {
     /// `AV_PIX_FMT_FLAG_HWACCEL` flag set.
     ///
     /// Must be set by the user before calling `initialize()`.
-    public var pixelFormat: AVPixelFormat {
+    public var pixelFormat: PixelFormat {
         get { cContext.format }
         set { cContextPtr.pointee.format = newValue }
     }
@@ -289,8 +289,8 @@ public final class AVHWFramesContext {
     /// - Note: When the underlying API does not provide the exact data layout, but
     /// only the colorspace/bit depth, this field should be set to the fully
     /// planar version of that format (e.g. for 8-bit 420 YUV it should be
-    /// `AVPixelFormat.YUV420P`, not `AVPixelFormat.NV12` or anything else).
-    public var swPixelFormat: AVPixelFormat {
+    /// `PixelFormat.YUV420P`, not `PixelFormat.NV12` or anything else).
+    public var swPixelFormat: PixelFormat {
         get { cContext.sw_format }
         set { cContextPtr.pointee.sw_format = newValue }
     }
@@ -330,21 +330,21 @@ public final class AVHWFramesContext {
         try throwIfFail(av_hwframe_ctx_init(cBufferPtr))
     }
 
-    /// Allocate a new frame attached to the given `AVHWFramesContext`.
+    /// Allocate a new frame attached to the given `HardwareFramesContext`.
     ///
     /// - Parameter frame: an empty (freshly allocated or unreffed) frame to be filled with
     ///   newly allocated buffers.
     /// - Throws: AVError
-    public func allocBuffer(frame: AVFrame) throws {
+    public func allocBuffer(frame: Frame) throws {
         try throwIfFail(av_hwframe_get_buffer(cBufferPtr, frame.cFramePtr, 0))
     }
 
-    /// Get a list of possible source or target formats usable in `AVFrame.transferData(from:)`.
+    /// Get a list of possible source or target formats usable in `Frame.transferData(from:)`.
     ///
     /// - Parameter direction: the direction of the transfer
     /// - Returns: supported pixel formats
-    public func getPixelFormats(_ direction: AVHWFrameTransferDirection) -> [AVPixelFormat]? {
-        var ptr: UnsafeMutablePointer<AVPixelFormat>?
+    public func getPixelFormats(_ direction: HardwareFrameTransferDirection) -> [PixelFormat]? {
+        var ptr: UnsafeMutablePointer<PixelFormat>?
         defer { av_free(ptr) }
         if av_hwframe_transfer_get_formats(cBufferPtr, direction, &ptr, 0) != 0 {
             return nil
@@ -360,40 +360,40 @@ public final class AVHWFramesContext {
     }
 }
 
-extension AVFrame {
+extension Frame {
 
     /// For hwaccel-format frames, this should be a reference to the `AVHWFramesContext`
     /// describing the frame.
-    public var hwFramesContext: AVHWFramesContext? {
+    public var hwFramesContext: HardwareFramesContext? {
         if let ptr = cFrame.hw_frames_ctx {
-            return AVHWFramesContext(cBufferPtr: ptr)
+            return HardwareFramesContext(cBufferPtr: ptr)
         }
         return nil
     }
 
     /// Copy data from a hw surface.
     ///
-    /// The source frame must have an `AVHWFramesContext` attached, and the pixel format of
+    /// The source frame must have an `HardwareFramesContext` attached, and the pixel format of
     /// the destination frame must use one of the formats returned by
-    /// `AVHWFramesContext.getPixelFormats(.from)`.
+    /// `HardwareFramesContext.getPixelFormats(.from)`.
     ///
     /// The destination frame may be "clean" (i.e. with `data`/`buffer` pointers unset),
     /// in which case the data buffers will be allocated by this function using `allocBuffer(align:)`.
     /// If the pixel format of the destination frame is set, then this format will be used,
-    /// otherwise (when the destination frame's pixel format is `AVPixelFormat.none`) the
+    /// otherwise (when the destination frame's pixel format is `PixelFormat.none`) the
     /// first acceptable format will be chosen.
     ///
     /// The two frames must have matching allocated dimensions (i.e. equal to
-    /// `AVHWFramesContext.width`/`AVHWFramesContext.height`), since not all device types
+    /// `HardwareFramesContext.width`/`HardwareFramesContext.height`), since not all device types
     /// support transferring a sub-rectangle of the whole surface.
-    /// The display dimensions (i.e. `AVFrame.width`/`AVFrame.height`) may be smaller than
+    /// The display dimensions (i.e. `Frame.width`/`Frame.height`) may be smaller than
     /// the allocated dimensions, but also have to be equal for both frames. When the
     /// display dimensions are smaller than the allocated dimensions, the content of the
     /// padding in the destination frame is unspecified.
     ///
     /// - Parameter frame: the source frame
     /// - Throws: AVError
-    public func transferData(from frame: AVFrame) throws {
+    public func transferData(from frame: Frame) throws {
         try throwIfFail(av_hwframe_transfer_data(cFramePtr, frame.cFramePtr, 0))
     }
 }

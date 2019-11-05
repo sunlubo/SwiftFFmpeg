@@ -111,6 +111,6 @@ func abortIfFail(_ condition: @autoclosure () -> Int32) {
 }
 
 func abort(_ message: String) -> Never {
-    AVLog.log(level: .fatal, message: message)
+    Logger.log(level: .fatal, message: message)
     fatalError(message)
 }

@@ -14,7 +14,7 @@ private func list_op() throws {
     }
 
     let input = CommandLine.arguments[3]
-    let dirCtx = try AVIODirContext(url: input)
+    let dirCtx = try IODirContext(url: input)
     defer {
         dirCtx.close()
     }

@@ -7,11 +7,11 @@
 
 import CFFmpeg
 
-// MARK: - AVCodecID
+// MARK: - CodecID
 
-public typealias AVCodecID = CFFmpeg.AVCodecID
+public typealias CodecID = CFFmpeg.AVCodecID
 
-extension AVCodecID {
+extension CodecID {
     public static let none = AV_CODEC_ID_NONE
 
     // MARK: - Video Codecs
@@ -103,23 +103,23 @@ extension AVCodecID {
     }
 
     /// The media type of the codec.
-    public var mediaType: AVMediaType {
+    public var mediaType: MediaType {
         avcodec_get_type(self)
     }
 }
 
-extension AVCodecID: CustomStringConvertible {
+extension CodecID: CustomStringConvertible {
 
     public var description: String {
         name
     }
 }
 
-// MARK: - AVCodec
+// MARK: - Codec
 
 typealias CAVCodec = CFFmpeg.AVCodec
 
-public struct AVCodec {
+public struct Codec {
     let cCodecPtr: UnsafeMutablePointer<CAVCodec>
     var cCodec: CAVCodec { cCodecPtr.pointee }
 
@@ -127,50 +127,50 @@ public struct AVCodec {
     ///
     /// - Parameter codecId: id of the requested decoder
     /// - Returns: A decoder if one was found, `nil` otherwise.
-    public static func findDecoderById(_ codecId: AVCodecID) -> AVCodec? {
+    public static func findDecoderById(_ codecId: CodecID) -> Codec? {
         guard let codecPtr = avcodec_find_decoder(codecId) else {
             return nil
         }
-        return AVCodec(cCodecPtr: codecPtr)
+        return Codec(cCodecPtr: codecPtr)
     }
 
     /// Find a registered decoder with the specified name.
     ///
     /// - Parameter name: name of the requested decoder
     /// - Returns: A decoder if one was found, `nil` otherwise.
-    public static func findDecoderByName(_ name: String) -> AVCodec? {
+    public static func findDecoderByName(_ name: String) -> Codec? {
         guard let codecPtr = avcodec_find_decoder_by_name(name) else {
             return nil
         }
-        return AVCodec(cCodecPtr: codecPtr)
+        return Codec(cCodecPtr: codecPtr)
     }
 
     /// Find a registered encoder with a matching codec ID.
     ///
     /// - Parameter codecId: id of the requested encoder
     /// - Returns: An encoder if one was found, `nil` otherwise.
-    public static func findEncoderById(_ codecId: AVCodecID) -> AVCodec? {
+    public static func findEncoderById(_ codecId: CodecID) -> Codec? {
         guard let codecPtr = avcodec_find_encoder(codecId) else {
             return nil
         }
-        return AVCodec(cCodecPtr: codecPtr)
+        return Codec(cCodecPtr: codecPtr)
     }
 
     /// Find a registered encoder with the specified name.
     ///
     /// - Parameter name: name of the requested encoder
     /// - Returns: An encoder if one was found, `nil` otherwise.
-    public static func findEncoderByName(_ name: String) -> AVCodec? {
+    public static func findEncoderByName(_ name: String) -> Codec? {
         guard let codecPtr = avcodec_find_encoder_by_name(name) else {
             return nil
         }
-        return AVCodec(cCodecPtr: codecPtr)
+        return Codec(cCodecPtr: codecPtr)
     }
 
     /// Returns a name for the specified profile, if available.
     ///
-    /// Unlike the member function `getProfileName(...)`, which searches a list of profiles supported by a specific decoder or encoder implementation, this class function searches the list of profiles from the `codecID`'s `AVCodecDescriptor`
-    public static func profileName(codecID: AVCodecID, profile: Int32) -> String? {
+    /// Unlike the member function `getProfileName(...)`, which searches a list of profiles supported by a specific decoder or encoder implementation, this class function searches the list of profiles from the `codecID`'s `CodecDescriptor`
+    public static func profileName(codecID: CodecID, profile: Int32) -> String? {
         String(cString: avcodec_profile_name(codecID, profile))
     }
 
@@ -189,27 +189,27 @@ public struct AVCodec {
     }
 
     /// The codec's media type.
-    public var mediaType: AVMediaType {
+    public var mediaType: MediaType {
         cCodec.type
     }
 
     /// The codec's id.
-    public var id: AVCodecID {
+    public var id: CodecID {
         cCodec.id
     }
 
     /// The codec's capabilities.
-    public var capabilities: AVCodec.Cap {
+    public var capabilities: Codec.Cap {
         Cap(rawValue: UInt32(cCodec.capabilities))
     }
 
     /// Returns an array of the framerates supported by the codec.
-    public var supportedFramerates: [AVRational]? {
-        values(cCodec.supported_framerates, until: AVRational(num: 0, den: 0))
+    public var supportedFramerates: [Rational]? {
+        values(cCodec.supported_framerates, until: Rational(num: 0, den: 0))
     }
 
     /// Returns an array of the pixel formats supported by the codec.
-    public var supportedPixelFormats: [AVPixelFormat]? {
+    public var supportedPixelFormats: [PixelFormat]? {
         values(cCodec.pix_fmts, until: .none)
     }
 
@@ -219,13 +219,13 @@ public struct AVCodec {
     }
 
     /// Returns an array of the sample formats supported by the codec.
-    public var supportedSampleFormats: [AVSampleFormat]? {
+    public var supportedSampleFormats: [SampleFormat]? {
         values(cCodec.sample_fmts, until: .none)
     }
 
     /// Returns an array of the channel layouts supported by the codec.
-    public var supportedChannelLayouts: [AVChannelLayout]? {
-        values(cCodec.channel_layouts, until: 0)?.map { AVChannelLayout(rawValue: $0) }
+    public var supportedChannelLayouts: [ChannelLayout]? {
+        values(cCodec.channel_layouts, until: 0)?.map { ChannelLayout(rawValue: $0) }
     }
 
     /// Maximum value for lowres supported by the decoder.
@@ -248,9 +248,9 @@ public struct AVCodec {
     /// Values of index from zero to some maximum return the indexed configuration descriptor;
     /// all other values return `nil`.
     /// If the codec does not support any hardware configurations then it will always return `nil`.
-    public func hwConfig(at index: Int) -> AVCodecHWConfig? {
+    public func hwConfig(at index: Int) -> CodecHardwareConfig? {
         if let ptr = avcodec_get_hw_config(cCodecPtr, Int32(index)) {
-            return AVCodecHWConfig(cConfigPtr: ptr)
+            return CodecHardwareConfig(cConfigPtr: ptr)
         }
         return nil
     }
@@ -261,19 +261,19 @@ public struct AVCodec {
     }
 
     /// Get all registered codecs.
-    public static var supportedCodecs: [AVCodec] {
-        var list = [AVCodec]()
+    public static var supportedCodecs: [Codec] {
+        var list = [Codec]()
         var state: UnsafeMutableRawPointer?
         while let codecPtr = av_codec_iterate(&state) {
-            list.append(AVCodec(cCodecPtr: codecPtr.mutable))
+            list.append(Codec(cCodecPtr: codecPtr.mutable))
         }
         return list
     }
 }
 
-// MARK: - AVCodec.Cap
+// MARK: - Codec.Cap
 
-extension AVCodec {
+extension Codec {
 
     /// Codec capabilities
     public struct Cap: OptionSet {
@@ -301,7 +301,7 @@ extension AVCodec {
         /// The encoder needs to be fed with NULL data at the end of encoding until the
         /// encoder no longer returns data.
         ///
-        /// - Note: For encoders implementing the AVCodec.encode2() function, setting this
+        /// - Note: For encoders implementing the `Codec.encode2()` function, setting this
         ///       flag also means that the encoder must set the pts and duration for
         ///       each output packet. If this flag is not set, the pts and duration will
         ///       be determined by libavcodec from the input frame.
@@ -309,7 +309,7 @@ extension AVCodec {
         /// Codec can be fed a final frame with a smaller size.
         /// This can be used to prevent truncation of the last audio samples.
         public static let smallLastFrame = Cap(rawValue: UInt32(AV_CODEC_CAP_SMALL_LAST_FRAME))
-        /// Codec can output multiple frames per `AVPacket`.
+        /// Codec can output multiple frames per `Packet`.
         /// Normally demuxers return one frame at a time, demuxers which do not do
         /// are connected to a parser to split what they return into proper frames.
         /// This flag is reserved to the very rare category of codecs which have a
@@ -352,7 +352,7 @@ extension AVCodec {
         /// This is used instead of `Cap.hardware`, if the implementation provides some sort of internal fallback.
         public static let hybrid = Cap(rawValue: UInt32(AV_CODEC_CAP_HYBRID))
         /// This codec takes the reordered_opaque field from input AVFrames
-        /// and returns it in the corresponding field in `AVCodecContext` after encoding.
+        /// and returns it in the corresponding field in `CodecContext` after encoding.
         public static let encoderReorderedOpaque = Cap(rawValue: 1 << 20)
 
         public let rawValue: UInt32
@@ -361,7 +361,7 @@ extension AVCodec {
     }
 }
 
-extension AVCodec.Cap: CustomStringConvertible {
+extension Codec.Cap: CustomStringConvertible {
 
     public var description: String {
         var str = "["
@@ -392,7 +392,7 @@ extension AVCodec.Cap: CustomStringConvertible {
     }
 }
 
-extension AVCodec: AVOptionSupport {
+extension Codec: OptionSupport {
 
     public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T {
         var tmp = cCodec.priv_class

@@ -1,5 +1,5 @@
 //
-//  AVImage.swift
+//  Image.swift
 //  SwiftFFmpeg
 //
 //  Created by sunlubo on 2018/7/12.
@@ -7,13 +7,13 @@
 
 import CFFmpeg
 
-public final class AVImage {
+public final class Image {
     public let data: UnsafeMutableBufferPointer<UnsafeMutablePointer<UInt8>?>
     public let linesizes: UnsafeMutableBufferPointer<Int32>
     public let size: Int
     public let width: Int
     public let height: Int
-    public let pixelFormat: AVPixelFormat
+    public let pixelFormat: PixelFormat
 
     private var freeWhenDone = false
 
@@ -24,7 +24,7 @@ public final class AVImage {
     ///   - height: image height
     ///   - pixelFormat: image pixel format
     ///   - align: the value to use for buffer size alignment, e.g. 1(no alignment), 16, 32, 64
-    public init(width: Int, height: Int, pixelFormat: AVPixelFormat, align: Int = 1) {
+    public init(width: Int, height: Int, pixelFormat: PixelFormat, align: Int = 1) {
         let data = UnsafeMutablePointer<UnsafeMutablePointer<UInt8>?>.allocate(capacity: 4)
         data.initialize(to: nil)
 
@@ -46,7 +46,7 @@ public final class AVImage {
     }
 
     /// Create an image from the given frame.
-    public init(frame: AVFrame) {
+    public init(frame: Frame) {
         precondition(frame.pixelFormat != .none)
 
         let data = UnsafeMutablePointer<UnsafeMutablePointer<UInt8>?>.allocate(capacity: 4)
@@ -91,18 +91,18 @@ public final class AVImage {
     }
 
     /// Copy image from the given frame.
-    public func copy(from frame: AVFrame) {
+    public func copy(from frame: Frame) {
         frame.data.withMemoryRebound(to: UnsafePointer<UInt8>?.self) { ptr in
             copy(from: ptr.baseAddress!, linesizes: frame.linesize.baseAddress!)
         }
     }
 
-    /// Reformat image using the given `SwsContext`.
+    /// Reformat image using the given `ScaleContext`.
     ///
     /// - Returns: the height of the output slice
     /// - Throws: AVError
     @discardableResult
-    public func reformat(using context: SwsContext, to image: AVImage) throws -> Int {
+    public func reformat(using context: ScaleContext, to image: Image) throws -> Int {
         try data.withMemoryRebound(to: UnsafePointer<UInt8>?.self) { ptr in
             try context.scale(
                 src: ptr.baseAddress!,
@@ -116,13 +116,13 @@ public final class AVImage {
     }
 }
 
-extension AVImage {
+extension Image {
 
     /// Compute the size of an image line with format and width for the plane.
     ///
     /// - Returns: the computed size in bytes
     /// - Throws: AVError
-    public static func getLinesize(pixelFormat: AVPixelFormat, width: Int, plane: Int) throws -> Int {
+    public static func getLinesize(pixelFormat: PixelFormat, width: Int, plane: Int) throws -> Int {
         let ret = av_image_get_linesize(pixelFormat, Int32(width), Int32(plane))
         try throwIfFail(ret)
         return Int(ret)
@@ -133,7 +133,7 @@ extension AVImage {
     /// - Throws: AVError
     public static func fillLinesizes(
         _ linesizes: UnsafeMutablePointer<Int32>,
-        pixelFormat: AVPixelFormat,
+        pixelFormat: PixelFormat,
         width: Int
     ) throws {
         try throwIfFail(av_image_fill_linesizes(linesizes, pixelFormat, Int32(width)))
@@ -153,7 +153,7 @@ extension AVImage {
     @discardableResult
     public static func fillPointers(
         _ data: UnsafeMutablePointer<UnsafeMutablePointer<UInt8>?>,
-        pixelFormat: AVPixelFormat,
+        pixelFormat: PixelFormat,
         height: Int,
         buffer: UnsafeMutablePointer<UInt8>?,
         linesizes: UnsafePointer<Int32>?
@@ -173,7 +173,7 @@ extension AVImage {
     /// - Returns: the buffer size in bytes
     /// - Throws: AVError
     public static func getBufferSize(
-        pixelFormat: AVPixelFormat,
+        pixelFormat: PixelFormat,
         width: Int,
         height: Int,
         align: Int = 1
@@ -194,7 +194,7 @@ extension AVImage {
     /// - Throws: AVError
     @discardableResult
     public static func copyImageData(
-        from frame: AVFrame,
+        from frame: Frame,
         to buffer: UnsafeMutablePointer<UInt8>,
         size: Int,
         align: Int = 1
@@ -223,7 +223,7 @@ extension AVImage {
     /// - Returns: a buffer into which picture data will be copied
     /// - Throws: AVError
     public static func makePixelBuffer(
-        from frame: AVFrame,
+        from frame: Frame,
         align: Int = 1
     ) throws -> UnsafeMutableBufferPointer<UInt8> {
         let size = try getBufferSize(

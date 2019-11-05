@@ -14,12 +14,12 @@ import Foundation
 import SwiftFFmpeg
 
 private let sampleRate = 48000
-private let sampleFormat = AVSampleFormat.fltp
-private let channelLayout = AVChannelLayout.CHL_5POINT0
+private let sampleFormat = SampleFormat.fltp
+private let channelLayout = ChannelLayout.CHL_5POINT0
 private let frameSize = 1024
 
 /// Construct a frame of audio data to be filtered; this simple example just synthesizes a sine wave.
-private func get_input(frame: AVFrame, index: Int) throws {
+private func get_input(frame: Frame, index: Int) throws {
     // Set up the frame properties and allocate the buffer for the data.
     frame.sampleRate = sampleRate
     frame.sampleFormat = sampleFormat
@@ -40,13 +40,13 @@ private func get_input(frame: AVFrame, index: Int) throws {
 
 /// Do something useful with the filtered data: this simple
 /// example just prints the MD5 checksum of each plane to stdout.
-private func process_output(frame: AVFrame) throws {
+private func process_output(frame: Frame) throws {
     let channels = frame.channelLayout.channelCount
     let planes = frame.sampleFormat.isPlanar ? channels : 1
     let bps = frame.sampleFormat.bytesPerSample
     let planeSize = bps * frame.sampleCount * (frame.sampleFormat.isPlanar ? 1 : channels)
     for i in 0 ..< planes {
-        let checksum = AVHash.calculateMD5(for: UnsafeBufferPointer(start: frame.extendedData[i], count: planeSize))
+        let checksum = Hash.calculateMD5(for: UnsafeBufferPointer(start: frame.extendedData[i], count: planeSize))
         var str = ""
         for i in 0 ..< 16 {
             str += String(format: "%02X", checksum[i])
@@ -82,38 +82,38 @@ func filter_audio() throws {
     // Set up the filtergraph.
     
     // Create a new filtergraph, which will contain all the filters.
-    let filterGraph = AVFilterGraph()
+    let filterGraph = FilterGraph()
     
     // Create the abuffer filter;
     // it will be used for feeding the data into the graph.
-    let abuffer = AVFilter(name: "abuffer")!
-    let abufferCtx = AVFilterContext(graph: filterGraph, filter: abuffer, name: "src")
+    let abuffer = Filter(name: "abuffer")!
+    let abufferCtx = FilterContext(graph: filterGraph, filter: abuffer, name: "src")
     // Set the filter options through the AVOptions API.
     try abufferCtx.set(channelLayout.description, forKey: "channel_layout")
     try abufferCtx.set(sampleFormat.name!, forKey: "sample_fmt")
-    try abufferCtx.set(AVRational(num: 1, den: Int32(sampleRate)), forKey: "time_base")
+    try abufferCtx.set(Rational(num: 1, den: Int32(sampleRate)), forKey: "time_base")
     try abufferCtx.set(sampleRate, forKey: "sample_rate")
     // Now initialize the filter; we pass NULL options, since we have already set all the options above.
     try abufferCtx.initialize()
     
     // Create volume filter.
-    let volume = AVFilter(name: "volume")!
-    let volumeCtx = AVFilterContext(graph: filterGraph, filter: volume, name: "volume")
+    let volume = Filter(name: "volume")!
+    let volumeCtx = FilterContext(graph: filterGraph, filter: volume, name: "volume")
     // A different way of passing the options is as key/value pairs in a dictionary.
     try volumeCtx.initialize(args: ["volume": "0.90"])
     
     // Create the aformat filter;
     // it ensures that the output is of the format we want.
-    let aformat = AVFilter(name: "aformat")!
-    let aformatCtx = AVFilterContext(graph: filterGraph, filter: aformat, name: "aformat")
+    let aformat = Filter(name: "aformat")!
+    let aformatCtx = FilterContext(graph: filterGraph, filter: aformat, name: "aformat")
     // A third way of passing the options is in a string of the form key1=value1:key2=value2...
-    let args = "sample_fmts=\(AVSampleFormat.s16.name!):sample_rates=44100:channel_layouts=0x\(AVChannelLayout.CHL_STEREO.rawValue)"
+    let args = "sample_fmts=\(SampleFormat.s16.name!):sample_rates=44100:channel_layouts=0x\(ChannelLayout.CHL_STEREO.rawValue)"
     try aformatCtx.initialize(args: args)
     
     // Finally create the abuffersink filter;
     // it will be used to get the filtered data out of the graph.
-    let abuffersink = AVFilter(name: "abuffersink")!
-    let abuffersinkCtx = AVFilterContext(graph: filterGraph, filter: abuffersink, name: "sink")
+    let abuffersink = Filter(name: "abuffersink")!
+    let abuffersinkCtx = FilterContext(graph: filterGraph, filter: abuffersink, name: "sink")
     // This filter takes no options.
     try abuffersinkCtx.initialize()
     
@@ -124,7 +124,7 @@ func filter_audio() throws {
     // Configure the graph.
     try filterGraph.configure()
     
-    let frame = AVFrame()
+    let frame = Frame()
     
     // the main filtering loop
     for i in 0 ..< frameCount {

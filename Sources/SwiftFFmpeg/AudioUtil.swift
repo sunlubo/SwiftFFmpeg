@@ -7,11 +7,11 @@
 
 import CFFmpeg
 
-// MARK: - AVSampleFormat
+// MARK: - SampleFormat
 
-public typealias AVSampleFormat = CFFmpeg.AVSampleFormat
+public typealias SampleFormat = CFFmpeg.AVSampleFormat
 
-extension AVSampleFormat {
+extension SampleFormat {
     public static let none = AV_SAMPLE_FMT_NONE
     /// unsigned 8 bits
     public static let u8 = AV_SAMPLE_FMT_U8
@@ -72,7 +72,7 @@ extension AVSampleFormat {
     /// Return the planar alternative form of the given sample format, or `nil` if the planar sample format does not exist.
     ///
     /// If the passed sample format is already in planar format, the format returned is the same as the input.
-    public func toPlanar() -> AVSampleFormat? {
+    public func toPlanar() -> SampleFormat? {
         let fmt = av_get_planar_sample_fmt(self)
         if fmt == .none { return nil }
         return fmt
@@ -81,14 +81,14 @@ extension AVSampleFormat {
     /// Return the packed alternative form of the given sample format, or `nil` if the packed sample format does not exist.
     ///
     /// If the passed sample format is already in packed format, the format returned is the same as the input.
-    public func toPacked() -> AVSampleFormat? {
+    public func toPacked() -> SampleFormat? {
         let fmt = av_get_packed_sample_fmt(self)
         if fmt == .none { return nil }
         return fmt
     }
 }
 
-extension AVSampleFormat: CustomStringConvertible {
+extension SampleFormat: CustomStringConvertible {
 
     public var description: String {
         name ?? "unknown"
@@ -104,61 +104,61 @@ extension AVSampleFormat: CustomStringConvertible {
 // - Note: this data structure is not powerful enough to handle channels
 // combinations that have the same channel multiple times, such as dual-mono.
 
-public struct AVChannel: Equatable {
+public struct Channel: Equatable {
     /// FL
-    public static let frontLeft = AVChannel(rawValue: UInt64(AV_CH_FRONT_LEFT))
+    public static let frontLeft = Channel(rawValue: UInt64(AV_CH_FRONT_LEFT))
     /// FR
-    public static let frontRight = AVChannel(rawValue: UInt64(AV_CH_FRONT_RIGHT))
+    public static let frontRight = Channel(rawValue: UInt64(AV_CH_FRONT_RIGHT))
     /// FC
-    public static let frontCenter = AVChannel(rawValue: UInt64(AV_CH_FRONT_CENTER))
+    public static let frontCenter = Channel(rawValue: UInt64(AV_CH_FRONT_CENTER))
     /// LFE
-    public static let lowFrequency = AVChannel(rawValue: UInt64(AV_CH_LOW_FREQUENCY))
+    public static let lowFrequency = Channel(rawValue: UInt64(AV_CH_LOW_FREQUENCY))
     /// BL
-    public static let backLeft = AVChannel(rawValue: UInt64(AV_CH_BACK_LEFT))
+    public static let backLeft = Channel(rawValue: UInt64(AV_CH_BACK_LEFT))
     /// BR
-    public static let backRight = AVChannel(rawValue: UInt64(AV_CH_BACK_RIGHT))
+    public static let backRight = Channel(rawValue: UInt64(AV_CH_BACK_RIGHT))
     /// FLC
-    public static let frontLeftOfCenter = AVChannel(rawValue: UInt64(AV_CH_FRONT_LEFT_OF_CENTER))
+    public static let frontLeftOfCenter = Channel(rawValue: UInt64(AV_CH_FRONT_LEFT_OF_CENTER))
     /// FRC
-    public static let frontRightOfCenter = AVChannel(rawValue: UInt64(AV_CH_FRONT_RIGHT_OF_CENTER))
+    public static let frontRightOfCenter = Channel(rawValue: UInt64(AV_CH_FRONT_RIGHT_OF_CENTER))
     /// BC
-    public static let backCenter = AVChannel(rawValue: UInt64(AV_CH_BACK_CENTER))
+    public static let backCenter = Channel(rawValue: UInt64(AV_CH_BACK_CENTER))
     /// SL
-    public static let sideLeft = AVChannel(rawValue: UInt64(AV_CH_SIDE_LEFT))
+    public static let sideLeft = Channel(rawValue: UInt64(AV_CH_SIDE_LEFT))
     /// SR
-    public static let sideRight = AVChannel(rawValue: UInt64(AV_CH_SIDE_RIGHT))
+    public static let sideRight = Channel(rawValue: UInt64(AV_CH_SIDE_RIGHT))
     /// TC
-    public static let topCenter = AVChannel(rawValue: UInt64(AV_CH_TOP_CENTER))
+    public static let topCenter = Channel(rawValue: UInt64(AV_CH_TOP_CENTER))
     /// TFL
-    public static let topFrontLeft = AVChannel(rawValue: UInt64(AV_CH_TOP_FRONT_LEFT))
+    public static let topFrontLeft = Channel(rawValue: UInt64(AV_CH_TOP_FRONT_LEFT))
     /// TFC
-    public static let topFrontCenter = AVChannel(rawValue: UInt64(AV_CH_TOP_FRONT_CENTER))
+    public static let topFrontCenter = Channel(rawValue: UInt64(AV_CH_TOP_FRONT_CENTER))
     /// TFR
-    public static let topFrontRight = AVChannel(rawValue: UInt64(AV_CH_TOP_FRONT_RIGHT))
+    public static let topFrontRight = Channel(rawValue: UInt64(AV_CH_TOP_FRONT_RIGHT))
     /// TBL
-    public static let topBackLeft = AVChannel(rawValue: UInt64(AV_CH_TOP_BACK_LEFT))
+    public static let topBackLeft = Channel(rawValue: UInt64(AV_CH_TOP_BACK_LEFT))
     /// TBC
-    public static let topBackCenter = AVChannel(rawValue: UInt64(AV_CH_TOP_BACK_CENTER))
+    public static let topBackCenter = Channel(rawValue: UInt64(AV_CH_TOP_BACK_CENTER))
     /// TBR
-    public static let topBackRight = AVChannel(rawValue: UInt64(AV_CH_TOP_BACK_RIGHT))
+    public static let topBackRight = Channel(rawValue: UInt64(AV_CH_TOP_BACK_RIGHT))
     /// DL
     ///
     /// Stereo downmix.
-    public static let stereoLeft = AVChannel(rawValue: UInt64(AV_CH_STEREO_LEFT))
+    public static let stereoLeft = Channel(rawValue: UInt64(AV_CH_STEREO_LEFT))
     /// DR
     ///
     /// See `stereoLeft`.
-    public static let stereoRight = AVChannel(rawValue: UInt64(AV_CH_STEREO_RIGHT))
+    public static let stereoRight = Channel(rawValue: UInt64(AV_CH_STEREO_RIGHT))
     /// WL
-    public static let wideLeft = AVChannel(rawValue: AV_CH_WIDE_LEFT)
+    public static let wideLeft = Channel(rawValue: AV_CH_WIDE_LEFT)
     /// WR
-    public static let wideRight = AVChannel(rawValue: AV_CH_WIDE_RIGHT)
+    public static let wideRight = Channel(rawValue: AV_CH_WIDE_RIGHT)
     /// SDL
-    public static let surroundDirectLeft = AVChannel(rawValue: AV_CH_SURROUND_DIRECT_LEFT)
+    public static let surroundDirectLeft = Channel(rawValue: AV_CH_SURROUND_DIRECT_LEFT)
     /// SDR
-    public static let surroundDirectRight = AVChannel(rawValue: AV_CH_SURROUND_DIRECT_RIGHT)
+    public static let surroundDirectRight = Channel(rawValue: AV_CH_SURROUND_DIRECT_RIGHT)
     /// LFE2
-    public static let lowFrequency2 = AVChannel(rawValue: AV_CH_LOW_FREQUENCY_2)
+    public static let lowFrequency2 = Channel(rawValue: AV_CH_LOW_FREQUENCY_2)
 
     public let rawValue: UInt64
 
@@ -170,7 +170,7 @@ public struct AVChannel: Equatable {
     }
 }
 
-extension AVChannel: CustomStringConvertible {
+extension Channel: CustomStringConvertible {
 
     public var description: String {
         name
@@ -179,67 +179,67 @@ extension AVChannel: CustomStringConvertible {
 
 // MARK: - Audio Channel Layout
 
-public struct AVChannelLayout: Equatable {
-    public static let none = AVChannelLayout(rawValue: 0)
-    /// Channel mask value used for `AVCodecContext.request_channel_layout` to indicate that
+public struct ChannelLayout: Equatable {
+    public static let none = ChannelLayout(rawValue: 0)
+    /// Channel mask value used for `CodecContext.request_channel_layout` to indicate that
     /// the user requests the channel order of the decoder output to be the native codec channel order.
-    public static let CHL_NATIVE = AVChannelLayout(rawValue: swift_AV_CH_LAYOUT_NATIVE)
+    public static let CHL_NATIVE = ChannelLayout(rawValue: swift_AV_CH_LAYOUT_NATIVE)
     /// FC
-    public static let CHL_MONO = AVChannelLayout(rawValue: swift_AV_CH_LAYOUT_MONO)
+    public static let CHL_MONO = ChannelLayout(rawValue: swift_AV_CH_LAYOUT_MONO)
     /// FL+FR
-    public static let CHL_STEREO = AVChannelLayout(rawValue: swift_AV_CH_LAYOUT_STEREO)
+    public static let CHL_STEREO = ChannelLayout(rawValue: swift_AV_CH_LAYOUT_STEREO)
     /// FL+FR+LFE
-    public static let CHL_2POINT1 = AVChannelLayout(rawValue: swift_AV_CH_LAYOUT_2POINT1)
+    public static let CHL_2POINT1 = ChannelLayout(rawValue: swift_AV_CH_LAYOUT_2POINT1)
     /// FL+FR+BC
-    public static let CHL_2_1 = AVChannelLayout(rawValue: swift_AV_CH_LAYOUT_2_1)
+    public static let CHL_2_1 = ChannelLayout(rawValue: swift_AV_CH_LAYOUT_2_1)
     /// FL+FR+FC
-    public static let CHL_SURROUND = AVChannelLayout(rawValue: swift_AV_CH_LAYOUT_SURROUND)
+    public static let CHL_SURROUND = ChannelLayout(rawValue: swift_AV_CH_LAYOUT_SURROUND)
     /// FL+FR+FC+LFE
-    public static let CHL_3POINT1 = AVChannelLayout(rawValue: swift_AV_CH_LAYOUT_3POINT1)
+    public static let CHL_3POINT1 = ChannelLayout(rawValue: swift_AV_CH_LAYOUT_3POINT1)
     /// FL+FR+FC+BC
-    public static let CHL_4POINT0 = AVChannelLayout(rawValue: swift_AV_CH_LAYOUT_4POINT0)
+    public static let CHL_4POINT0 = ChannelLayout(rawValue: swift_AV_CH_LAYOUT_4POINT0)
     /// FL+FR+FC+BC+LFE
-    public static let CHL_4POINT1 = AVChannelLayout(rawValue: swift_AV_CH_LAYOUT_4POINT1)
+    public static let CHL_4POINT1 = ChannelLayout(rawValue: swift_AV_CH_LAYOUT_4POINT1)
     /// FL+FR+SL+SR
-    public static let CHL_2_2 = AVChannelLayout(rawValue: swift_AV_CH_LAYOUT_2_2)
+    public static let CHL_2_2 = ChannelLayout(rawValue: swift_AV_CH_LAYOUT_2_2)
     /// FL+FR+BL+BR
-    public static let CHL_QUAD = AVChannelLayout(rawValue: swift_AV_CH_LAYOUT_QUAD)
+    public static let CHL_QUAD = ChannelLayout(rawValue: swift_AV_CH_LAYOUT_QUAD)
     /// FL+FR+FC+SL+SR
-    public static let CHL_5POINT0 = AVChannelLayout(rawValue: swift_AV_CH_LAYOUT_5POINT0)
+    public static let CHL_5POINT0 = ChannelLayout(rawValue: swift_AV_CH_LAYOUT_5POINT0)
     /// FL+FR+FC+SL+SR+LFE
-    public static let CHL_5POINT1 = AVChannelLayout(rawValue: swift_AV_CH_LAYOUT_5POINT1)
+    public static let CHL_5POINT1 = ChannelLayout(rawValue: swift_AV_CH_LAYOUT_5POINT1)
     /// FL+FR+FC+BL+BR
-    public static let CHL_5POINT0_BACK = AVChannelLayout(rawValue: swift_AV_CH_LAYOUT_5POINT0_BACK)
+    public static let CHL_5POINT0_BACK = ChannelLayout(rawValue: swift_AV_CH_LAYOUT_5POINT0_BACK)
     /// FL+FR+FC+BL+BR+LFE
-    public static let CHL_5POINT1_BACK = AVChannelLayout(rawValue: swift_AV_CH_LAYOUT_5POINT1_BACK)
+    public static let CHL_5POINT1_BACK = ChannelLayout(rawValue: swift_AV_CH_LAYOUT_5POINT1_BACK)
     /// FL+FR+SL+SR+FLC+FRC
-    public static let CHL_6POINT0 = AVChannelLayout(rawValue: swift_AV_CH_LAYOUT_6POINT0)
+    public static let CHL_6POINT0 = ChannelLayout(rawValue: swift_AV_CH_LAYOUT_6POINT0)
     /// FL+FR+FLC+FRC+SL+SR
-    public static let CHL_6POINT0_FRONT = AVChannelLayout(rawValue: swift_AV_CH_LAYOUT_6POINT0_FRONT)
+    public static let CHL_6POINT0_FRONT = ChannelLayout(rawValue: swift_AV_CH_LAYOUT_6POINT0_FRONT)
     /// FL+FR+FC+BL+BR+BC
-    public static let CHL_HEXAGONAL = AVChannelLayout(rawValue: swift_AV_CH_LAYOUT_HEXAGONAL)
+    public static let CHL_HEXAGONAL = ChannelLayout(rawValue: swift_AV_CH_LAYOUT_HEXAGONAL)
     /// FL+FR+FC+SL+SR+LFE+BC
-    public static let CHL_6POINT1 = AVChannelLayout(rawValue: swift_AV_CH_LAYOUT_6POINT1)
+    public static let CHL_6POINT1 = ChannelLayout(rawValue: swift_AV_CH_LAYOUT_6POINT1)
     /// FL+FR+FC+BL+BR+LFE+BC
-    public static let CHL_6POINT1_BACK = AVChannelLayout(rawValue: swift_AV_CH_LAYOUT_6POINT1_BACK)
+    public static let CHL_6POINT1_BACK = ChannelLayout(rawValue: swift_AV_CH_LAYOUT_6POINT1_BACK)
     /// FL+FR+FLC+FRC+SL+SR+LFE
-    public static let CHL_6POINT1_FRONT = AVChannelLayout(rawValue: swift_AV_CH_LAYOUT_6POINT1_FRONT)
+    public static let CHL_6POINT1_FRONT = ChannelLayout(rawValue: swift_AV_CH_LAYOUT_6POINT1_FRONT)
     /// FL+FR+FC+SL+SR+BL+BR
-    public static let CHL_7POINT0 = AVChannelLayout(rawValue: swift_AV_CH_LAYOUT_7POINT0)
+    public static let CHL_7POINT0 = ChannelLayout(rawValue: swift_AV_CH_LAYOUT_7POINT0)
     /// FL+FR+FC+SL+SR+FLC+FRC
-    public static let CHL_7POINT0_FRONT = AVChannelLayout(rawValue: swift_AV_CH_LAYOUT_7POINT0_FRONT)
+    public static let CHL_7POINT0_FRONT = ChannelLayout(rawValue: swift_AV_CH_LAYOUT_7POINT0_FRONT)
     /// FL+FR+FC+SL+SR+LFE+BL+BR
-    public static let CHL_7POINT1 = AVChannelLayout(rawValue: swift_AV_CH_LAYOUT_7POINT1)
+    public static let CHL_7POINT1 = ChannelLayout(rawValue: swift_AV_CH_LAYOUT_7POINT1)
     /// FL+FR+FC+SL+SR+LFE+FLC+FRC
-    public static let CHL_7POINT1_WIDE = AVChannelLayout(rawValue: swift_AV_CH_LAYOUT_7POINT1_WIDE)
+    public static let CHL_7POINT1_WIDE = ChannelLayout(rawValue: swift_AV_CH_LAYOUT_7POINT1_WIDE)
     /// FL+FR+FC+BL+BR+LFE+FLC+FRC
-    public static let CHL_7POINT1_WIDE_BACK = AVChannelLayout(rawValue: swift_AV_CH_LAYOUT_7POINT1_WIDE_BACK)
+    public static let CHL_7POINT1_WIDE_BACK = ChannelLayout(rawValue: swift_AV_CH_LAYOUT_7POINT1_WIDE_BACK)
     /// FL+FR+FC+SL+SR+BL+BC+BR
-    public static let CHL_OCTAGONAL = AVChannelLayout(rawValue: swift_AV_CH_LAYOUT_OCTAGONAL)
+    public static let CHL_OCTAGONAL = ChannelLayout(rawValue: swift_AV_CH_LAYOUT_OCTAGONAL)
     /// FL+FR+FC+SL+SR+BL+BC+BR+WL+WR+TBL+TBR+TBC+TFC+TFL+TFR
-    public static let CHL_HEXADECAGONAL = AVChannelLayout(rawValue: swift_AV_CH_LAYOUT_HEXADECAGONAL)
+    public static let CHL_HEXADECAGONAL = ChannelLayout(rawValue: swift_AV_CH_LAYOUT_HEXADECAGONAL)
     /// DL+DR
-    public static let CHL_STEREO_DOWNMIX = AVChannelLayout(rawValue: swift_AV_CH_LAYOUT_STEREO_DOWNMIX)
+    public static let CHL_STEREO_DOWNMIX = ChannelLayout(rawValue: swift_AV_CH_LAYOUT_STEREO_DOWNMIX)
 
     public let rawValue: UInt64
 
@@ -272,25 +272,25 @@ public struct AVChannelLayout: Equatable {
     ///
     /// - Parameter channel: A channel layout describing exactly one channel which must be present in channel layout.
     /// - Returns: The index of channel in channel layout, `nil` on error.
-    public func index(for channel: AVChannel) -> Int? {
+    public func index(for channel: Channel) -> Int? {
         let i = av_get_channel_layout_channel_index(rawValue, channel.rawValue)
         return i >= 0 ? Int(i) : nil
     }
 
-    public func channel(at index: Int32) -> AVChannel {
-        AVChannel(rawValue: av_channel_layout_extract_channel(rawValue, index))
+    public func channel(at index: Int32) -> Channel {
+        Channel(rawValue: av_channel_layout_extract_channel(rawValue, index))
     }
 
     /// Get the default channel layout for a given number of channels.
     ///
     /// - Parameter count: The number of channels.
     /// - Returns: AVChannelLayout
-    public static func `default`(for count: Int) -> AVChannelLayout {
-        AVChannelLayout(rawValue: UInt64(av_get_default_channel_layout(Int32(count))))
+    public static func `default`(for count: Int) -> ChannelLayout {
+        ChannelLayout(rawValue: UInt64(av_get_default_channel_layout(Int32(count))))
     }
 }
 
-extension AVChannelLayout: CustomStringConvertible {
+extension ChannelLayout: CustomStringConvertible {
 
     public var description: String {
         let buf = UnsafeMutablePointer<Int8>.allocate(capacity: 256)

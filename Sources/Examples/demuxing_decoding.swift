@@ -8,13 +8,13 @@
 import Foundation
 import SwiftFFmpeg
 
-private func openCodecContext(fmtCtx: AVFormatContext, mediaType: AVMediaType) throws -> (AVCodecContext, Int) {
+private func openCodecContext(fmtCtx: FormatContext, mediaType: MediaType) throws -> (CodecContext, Int) {
     let streamIndex = fmtCtx.findBestStream(type: mediaType)!
     let stream = fmtCtx.streams[streamIndex]
     // find decoder for the stream
-    let decoder = AVCodec.findDecoderById(stream.codecParameters.codecId)!
+    let decoder = Codec.findDecoderById(stream.codecParameters.codecId)!
     // Allocate a codec context for the decoder
-    let codecCtx = AVCodecContext(codec: decoder)
+    let codecCtx = CodecContext(codec: decoder)
     // Copy codec parameters from input stream to output codec context
     codecCtx.setParameters(stream.codecParameters)
     // Init the decoders, with or without reference counting
@@ -24,10 +24,10 @@ private func openCodecContext(fmtCtx: AVFormatContext, mediaType: AVMediaType) t
 }
 
 private func decode_video_packet(
-    codecCtx: AVCodecContext,
-    pkt: AVPacket?,
-    frame: AVFrame,
-    image: AVImage,
+    codecCtx: CodecContext,
+    pkt: Packet?,
+    frame: Frame,
+    image: Image,
     file: UnsafeMutablePointer<FILE>
 ) throws {
     try codecCtx.sendPacket(pkt)
@@ -60,9 +60,9 @@ private func decode_video_packet(
 }
 
 private func decode_audio_packet(
-    codecCtx: AVCodecContext,
-    pkt: AVPacket?,
-    frame: AVFrame,
+    codecCtx: CodecContext,
+    pkt: Packet?,
+    frame: Frame,
     file: UnsafeMutablePointer<FILE>
 ) throws {
     try codecCtx.sendPacket(pkt)
@@ -102,7 +102,7 @@ func demuxing_decoding() throws {
     let audioOutput = CommandLine.arguments[4]
 
     // open input file, and allocate format context
-    let fmtCtx = try AVFormatContext(url: input)
+    let fmtCtx = try FormatContext(url: input)
     // retrieve stream information
     try fmtCtx.findStreamInfo()
     // dump input information to stderr
@@ -115,7 +115,7 @@ func demuxing_decoding() throws {
     defer { fclose(videoOutputFile) }
 
     // allocate image where the decoded image will be put
-    let image = AVImage(width: videoCodecCtx.width, height: videoCodecCtx.height, pixelFormat: videoCodecCtx.pixelFormat)
+    let image = Image(width: videoCodecCtx.width, height: videoCodecCtx.height, pixelFormat: videoCodecCtx.pixelFormat)
 
     let (audioCodecCtx, audioIndex) = try openCodecContext(fmtCtx: fmtCtx, mediaType: .audio)
     guard let audioOutputFile = fopen(audioOutput, "wb") else {
@@ -126,8 +126,8 @@ func demuxing_decoding() throws {
     print("Demuxing video from file '\(input)' into '\(videoOutput)'")
     print("Demuxing audio from file '\(input)' into '\(audioOutput)'")
 
-    let frame = AVFrame()
-    let pkt = AVPacket()
+    let frame = Frame()
+    let pkt = Packet()
 
     // read frames from the file
     while let _ = try? fmtCtx.readFrame(into: pkt) {

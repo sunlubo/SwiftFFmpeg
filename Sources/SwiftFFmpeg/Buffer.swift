@@ -1,5 +1,5 @@
 //
-//  AVBuffer.swift
+//  Buffer.swift
 //  SwiftFFmpeg
 //
 //  Created by sunlubo on 2018/7/24.
@@ -9,7 +9,7 @@ import CFFmpeg
 
 typealias CAVBuffer = CFFmpeg.AVBufferRef
 
-public final class AVBuffer {
+public final class Buffer {
     var cBufferPtr: UnsafeMutablePointer<CAVBuffer>?
     var cBuffer: CAVBuffer {
         precondition(cBufferPtr != nil, "buffer has been freed")
@@ -20,7 +20,7 @@ public final class AVBuffer {
         self.cBufferPtr = cBufferPtr
     }
 
-    /// Create an `AVBuffer` of the given size. (only for test)
+    /// Create an `Buffer` of the given size. (only for test)
     ///
     /// - Parameter size: size of the buffer
     init(size: Int) {
@@ -69,12 +69,12 @@ public final class AVBuffer {
         abortIfFail(av_buffer_make_writable(&cBufferPtr))
     }
 
-    /// Create a new reference to an `AVBuffer`.
+    /// Create a new reference to an `Buffer`.
     ///
-    /// - Returns: a new `AVBuffer` referring to the same underlying buffer or `nil` on failure.
-    public func ref() -> AVBuffer? {
+    /// - Returns: a new `Buffer` referring to the same underlying buffer or `nil` on failure.
+    public func ref() -> Buffer? {
         precondition(cBufferPtr != nil, "buffer has been freed")
-        return AVBuffer(cBufferPtr: av_buffer_ref(cBufferPtr))
+        return Buffer(cBufferPtr: av_buffer_ref(cBufferPtr))
     }
 
     /// Free a given reference and automatically free the buffer if there are no more references to it.

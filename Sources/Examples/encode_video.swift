@@ -13,9 +13,9 @@ import Glibc
 import SwiftFFmpeg
 
 private func encode(
-    codecCtx: AVCodecContext,
-    frame: AVFrame?,
-    pkt: AVPacket,
+    codecCtx: CodecContext,
+    frame: Frame?,
+    pkt: Packet,
     file: UnsafeMutablePointer<FILE>
 ) throws {
     if let frame = frame {
@@ -48,8 +48,8 @@ func encode_video() throws {
     
     let output = CommandLine.arguments[2]
     // find the mpeg1video encoder
-    let codec = AVCodec.findEncoderByName("mpeg1video")!
-    let codecCtx = AVCodecContext(codec: codec)
+    let codec = Codec.findEncoderByName("mpeg1video")!
+    let codecCtx = CodecContext(codec: codec)
     
     // put sample parameters
     codecCtx.bitRate = 400000
@@ -57,8 +57,8 @@ func encode_video() throws {
     codecCtx.width = 352
     codecCtx.height = 288
     // frames per second
-    codecCtx.timebase = AVRational(num: 1, den: 25)
-    codecCtx.framerate = AVRational(num: 25, den: 1)
+    codecCtx.timebase = Rational(num: 1, den: 25)
+    codecCtx.framerate = Rational(num: 25, den: 1)
     // emit one intra frame every ten frames
     // check frame pict_type before passing frame
     // to encoder, if frame->pict_type is AV_PICTURE_TYPE_I
@@ -75,8 +75,8 @@ func encode_video() throws {
     }
     defer { fclose(file) }
     
-    let pkt = AVPacket()
-    let frame = AVFrame()
+    let pkt = Packet()
+    let frame = Frame()
     frame.pixelFormat = codecCtx.pixelFormat
     frame.width = codecCtx.width
     frame.height = codecCtx.height

@@ -7,10 +7,10 @@
 
 import CFFmpeg
 
-// MARK: - AVRational
+// MARK: - Rational
 
 /// Rational number (pair of numerator and denominator).
-public typealias AVRational = CFFmpeg.AVRational
+public typealias Rational = CFFmpeg.AVRational
 
 extension AVRational {
 
@@ -20,14 +20,14 @@ extension AVRational {
     }
 
     /// Invert a rational. `1 / q`
-    public var inverted: AVRational {
+    public var inverted: Rational {
         av_inv_q(self)
     }
 }
 
 extension AVRational: Equatable {
 
-    public static func == (lhs: AVRational, rhs: AVRational) -> Bool {
+    public static func == (lhs: Rational, rhs: Rational) -> Bool {
         av_cmp_q(lhs, rhs) == 0
     }
 }
@@ -35,22 +35,22 @@ extension AVRational: Equatable {
 extension AVRational {
 
     /// Add two rationals.
-    public static func + (lhs: AVRational, rhs: AVRational) -> AVRational {
+    public static func + (lhs: Rational, rhs: Rational) -> Rational {
         av_add_q(lhs, rhs)
     }
 
     /// Subtract one rational from another.
-    public static func - (lhs: AVRational, rhs: AVRational) -> AVRational {
+    public static func - (lhs: Rational, rhs: Rational) -> Rational {
         av_sub_q(lhs, rhs)
     }
 
     /// Multiply two rationals.
-    public static func * (lhs: AVRational, rhs: AVRational) -> AVRational {
+    public static func * (lhs: Rational, rhs: Rational) -> Rational {
         av_mul_q(lhs, rhs)
     }
 
     /// Divide one rational by another.
-    public static func / (lhs: AVRational, rhs: AVRational) -> AVRational {
+    public static func / (lhs: Rational, rhs: Rational) -> Rational {
         av_div_q(lhs, rhs)
     }
 }
@@ -58,9 +58,9 @@ extension AVRational {
 // MARK: - Rescale
 
 /// Rounding methods.
-public typealias AVRounding = CFFmpeg.AVRounding
+public typealias Rounding = CFFmpeg.AVRounding
 
-extension AVRounding {
+extension Rounding {
     /// Round toward zero.
     public static let zero = AV_ROUND_ZERO
     /// Round away from zero.
@@ -92,9 +92,9 @@ extension AVRounding {
     ///     //     => AV_NOPTS_VALUE
     public static let passMinMax = AV_ROUND_PASS_MINMAX
 
-    public func union(_ other: AVRounding) -> AVRounding {
+    public func union(_ other: Rounding) -> Rounding {
         if other != .passMinMax { return self }
-        return AVRounding(rawValue | other.rawValue)
+        return Rounding(rawValue | other.rawValue)
     }
 }
 
@@ -106,7 +106,7 @@ public enum AVMath {
     /// directly can overflow, and does not support different rounding methods.
     public static func rescale<T: BinaryInteger>(
         _ a: T, _ b: T, _ c: T,
-        _ rnd: AVRounding = .inf
+        _ rnd: Rounding = .inf
     ) -> Int64 {
         av_rescale_rnd(Int64(a), Int64(b), Int64(c), rnd)
     }
@@ -115,8 +115,8 @@ public enum AVMath {
     ///
     /// The operation is mathematically equivalent to `a * bq / cq`.
     public static func rescale<T: BinaryInteger>(
-        _ a: T, _ b: AVRational, _ c: AVRational,
-        _ rnd: AVRounding = .inf
+        _ a: T, _ b: Rational, _ c: Rational,
+        _ rnd: Rounding = .inf
     ) -> Int64 {
         av_rescale_q_rnd(Int64(a), b, c, rnd)
     }

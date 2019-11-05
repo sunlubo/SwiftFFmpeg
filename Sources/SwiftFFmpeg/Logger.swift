@@ -1,5 +1,5 @@
 //
-//  AVLog.swift
+//  Logger.swift
 //  SwiftFFmpeg
 //
 //  Created by sunlubo on 2019/1/13.
@@ -7,9 +7,9 @@
 
 import CFFmpeg
 
-// MARK: - AVLog
+// MARK: - Logger
 
-public enum AVLog {
+public enum Logger {
 
     /// Get/set the log level.
     public static var level: Level {
@@ -29,7 +29,7 @@ public enum AVLog {
     /// to the current level. By default, all logging messages are sent to
     /// stderr. This behavior can be altered by setting a different logging callback
     /// function.
-    public static func log(context: AVClassSupport, level: Level, message: String) {
+    public static func log(context: ClassSupport, level: Level, message: String) {
         context.withUnsafeObjectPointer { ptr in
             swift_log(ptr, level.rawValue, "\(message)\n")
         }
@@ -38,7 +38,7 @@ public enum AVLog {
 
 // MARK: - AVLog.Level
 
-extension AVLog {
+extension Logger {
 
     public struct Level: OptionSet {
         /// Print no output.

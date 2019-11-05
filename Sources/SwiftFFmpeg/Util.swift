@@ -19,7 +19,7 @@ final class Box<T> {
 func dumpUnrecognizedOptions(_ dict: OpaquePointer?) {
     var prev: UnsafeMutablePointer<AVDictionaryEntry>?
     while let tag = av_dict_get(dict, "", prev, AV_DICT_IGNORE_SUFFIX) {
-        AVLog.log(level: .warning, message: "Option '\(String(cString: tag.pointee.key!))' not found.")
+        Logger.log(level: .warning, message: "Option '\(String(cString: tag.pointee.key!))' not found.")
         prev = tag
     }
 }

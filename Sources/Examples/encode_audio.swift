@@ -14,9 +14,9 @@ import Foundation
 import SwiftFFmpeg
 
 private func encode(
-    codecCtx: AVCodecContext,
-    frame: AVFrame?,
-    pkt: AVPacket,
+    codecCtx: CodecContext,
+    frame: Frame?,
+    pkt: Packet,
     file: UnsafeMutablePointer<FILE>
 ) throws {
     // send the frame for encoding
@@ -43,8 +43,8 @@ func encode_audio() throws {
     
     let output = CommandLine.arguments[2]
     // find the MP2 encoder
-    let codec = AVCodec.findEncoderById(.MP2)!
-    let codecCtx = AVCodecContext(codec: codec)
+    let codec = Codec.findEncoderById(.MP2)!
+    let codecCtx = CodecContext(codec: codec)
     
     // set sample parameters
     codecCtx.bitRate = 64000
@@ -61,10 +61,10 @@ func encode_audio() throws {
     defer { fclose(file) }
     
     // packet for holding encoded output
-    let pkt = AVPacket()
+    let pkt = Packet()
     
     // frame containing input raw audio
-    let frame = AVFrame()
+    let frame = Frame()
     frame.sampleCount = codecCtx.frameSize
     frame.sampleFormat = codecCtx.sampleFormat
     frame.channelLayout = codecCtx.channelLayout

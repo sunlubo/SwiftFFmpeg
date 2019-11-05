@@ -9,7 +9,7 @@ import Foundation
 import SwiftFFmpeg
 
 // prepare a dummy image
-private func fill_yuv_image(image: AVImage, frameIndex: Int) {
+private func fill_yuv_image(image: Image, frameIndex: Int) {
     // Y
     for y in 0..<image.height {
         for x in 0..<image.width {
@@ -43,15 +43,15 @@ func scaling_video() throws {
     // source
     let srcW = 320
     let srcH = 240
-    let srcPixFmt = AVPixelFormat.YUV420P
+    let srcPixFmt = PixelFormat.YUV420P
 
     // destination
     let dstW = Int(videoSize.split(separator: "x")[0]) ?? 640
     let dstH = Int(videoSize.split(separator: "x")[1]) ?? 480
-    let dstPixFmt = AVPixelFormat.RGB24
+    let dstPixFmt = PixelFormat.RGB24
 
     // create scaling context
-    guard let swsCtx = SwsContext(
+    guard let swsCtx = ScaleContext(
         srcWidth: srcW,
         srcHeight: srcH,
         srcPixelFormat: srcPixFmt,
@@ -64,8 +64,8 @@ func scaling_video() throws {
     }
 
     // allocate source and destination image buffers
-    let srcImage = AVImage(width: srcW, height: srcH, pixelFormat: srcPixFmt)
-    let dstImage = AVImage(width: dstW, height: dstH, pixelFormat: dstPixFmt)
+    let srcImage = Image(width: srcW, height: srcH, pixelFormat: srcPixFmt)
+    let dstImage = Image(width: dstW, height: dstH, pixelFormat: dstPixFmt)
 
     for i in 0..<100 {
         // generate synthetic video

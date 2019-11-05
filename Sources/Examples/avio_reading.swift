@@ -46,11 +46,11 @@ func avio_reading() throws {
     defer {
         AVIO.fileUnmap(buffer: fileBuffer, size: size)
     }
-    // fill opaque structure used by the AVIOContext read callback
+    // fill opaque structure used by the IOContext read callback
     var bufferData = BufferData(ptr: fileBuffer, size: size)
 
     let ioCtxBuffer = AVIO.malloc(size: bufferSize)!.bindMemory(to: UInt8.self, capacity: bufferSize)
-    let ioCtx = AVIOContext(
+    let ioCtx = IOContext(
         buffer: ioCtxBuffer,
         size: bufferSize,
         writable: false,
@@ -60,7 +60,7 @@ func avio_reading() throws {
         seekHandler: nil
     )
 
-    let fmtCtx = AVFormatContext()
+    let fmtCtx = FormatContext()
     fmtCtx.pb = ioCtx
     try fmtCtx.openInput()
     try fmtCtx.findStreamInfo()

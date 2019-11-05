@@ -30,9 +30,9 @@ private func saveToPGM(
 }
 
 private func decode(
-    codecCtx: AVCodecContext,
-    frame: AVFrame,
-    pkt: AVPacket?,
+    codecCtx: CodecContext,
+    frame: Frame,
+    pkt: Packet?,
     output: String
 ) throws {
     try codecCtx.sendPacket(pkt)
@@ -62,11 +62,11 @@ func decode_video() throws {
     let input = CommandLine.arguments[2]
     let output = CommandLine.arguments[3]
     
-    let codec = AVCodec.findDecoderById(.H264)!
-    let codecCtx = AVCodecContext(codec: codec)
+    let codec = Codec.findDecoderById(.H264)!
+    let codecCtx = CodecContext(codec: codec)
     try codecCtx.openCodec()
     
-    let parser = AVCodecParserContext(codecContext: codecCtx)!
+    let parser = CodecParserContext(codecContext: codecCtx)!
     
     guard let file = fopen(input, "rb") else {
         print("Could not open \(input).")
@@ -74,8 +74,8 @@ func decode_video() throws {
     }
     defer { fclose(file) }
     
-    let pkt = AVPacket()
-    let frame = AVFrame()
+    let pkt = Packet()
+    let frame = Frame()
     
     let inbufSize = 4096
     let inbuf = UnsafeMutablePointer<UInt8>.allocate(capacity: inbufSize + AVConstant.inputBufferPaddingSize)

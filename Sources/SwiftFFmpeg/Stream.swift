@@ -1,5 +1,5 @@
 //
-//  AVStream.swift
+//  Stream.swift
 //  SwiftFFmpeg
 //
 //  Created by sunlubo on 2018/6/29.
@@ -7,11 +7,11 @@
 
 import CFFmpeg
 
-// MARK: - AVDiscard
+// MARK: - Discard
 
-public typealias AVDiscard = CFFmpeg.AVDiscard
+public typealias Discard = CFFmpeg.AVDiscard
 
-extension AVDiscard {
+extension Discard {
     /// discard nothing
     public static let none = AVDISCARD_NONE
     /// discard useless packets like 0 size packets in avi
@@ -28,12 +28,12 @@ extension AVDiscard {
     public static let all = AVDISCARD_ALL
 }
 
-// MARK: - AVStream
+// MARK: - Stream
 
 typealias CAVStream = CFFmpeg.AVStream
 
 /// Stream structure.
-public final class AVStream {
+public final class Stream {
     let cStreamPtr: UnsafeMutablePointer<CAVStream>
     var cStream: CAVStream { cStreamPtr.pointee }
 
@@ -41,7 +41,7 @@ public final class AVStream {
         self.cStreamPtr = cStreamPtr
     }
 
-    /// Stream index in `AVFormatContext`.
+    /// Stream index in `FormatContext`.
     public var index: Int {
         Int(cStream.index)
     }
@@ -57,12 +57,12 @@ public final class AVStream {
 
     /// This is the fundamental unit of time (in seconds) in terms of which frame timestamps are represented.
     ///
-    /// - encoding: May be set by the caller before `AVFormatContext.writeHeader(options:)` to provide a hint
-    ///   to the muxer about the desired timebase. In `AVFormatContext.writeHeader(options:)`, the muxer will
+    /// - encoding: May be set by the caller before `FormatContext.writeHeader(options:)` to provide a hint
+    ///   to the muxer about the desired timebase. In `FormatContext.writeHeader(options:)`, the muxer will
     ///   overwrite this field with the timebase that will actually be used for the timestamps written into the
     ///   file (which may or may not be related to the user-provided one, depending on the format).
     /// - decoding: Set by libavformat.
-    public var timebase: AVRational {
+    public var timebase: Rational {
         get { cStream.time_base }
         set { cStreamPtr.pointee.time_base = newValue }
     }
@@ -82,7 +82,7 @@ public final class AVStream {
     }
 
     /// Selects which packets can be discarded at will and do not need to be demuxed.
-    public var discard: AVDiscard {
+    public var discard: Discard {
         get { cStream.discard }
         set { cStreamPtr.pointee.discard = newValue }
     }
@@ -91,7 +91,7 @@ public final class AVStream {
     ///
     /// - encoding: Set by user.
     /// - decoding: Set by libavformat.
-    public var sampleAspectRatio: AVRational {
+    public var sampleAspectRatio: Rational {
         cStream.sample_aspect_ratio
     }
 
@@ -112,9 +112,9 @@ public final class AVStream {
     /// Average framerate.
     ///
     /// - demuxing: May be set by libavformat when creating the stream or in
-    ///   `AVFormatContext.findStreamInfo(options:)`.
-    /// - muxing: May be set by the caller before `AVFormatContext.writeHeader(options:)`.
-    public var averageFramerate: AVRational {
+    ///   `FormatContext.findStreamInfo(options:)`.
+    /// - muxing: May be set by the caller before `FormatContext.writeHeader(options:)`.
+    public var averageFramerate: Rational {
         get { cStream.avg_frame_rate }
         set { cStreamPtr.pointee.avg_frame_rate = newValue }
     }
@@ -124,20 +124,20 @@ public final class AVStream {
     /// (it is the least common multiple of all framerates in the stream). Note, this value is just a guess!
     /// For example, if the timebase is 1/90000 and all frames have either approximately 3600 or 1800 timer ticks,
     /// then realFramerate will be 50/1.
-    public var realFramerate: AVRational {
+    public var realFramerate: Rational {
         cStream.r_frame_rate
     }
 
     /// Codec parameters associated with this stream.
     ///
-    /// - demuxing: Filled by libavformat on stream creation or in `AVFormatContext.findStreamInfo(options:)`.
-    /// - muxing: Filled by the caller before `AVFormatContext.writeHeader(options:)`.
-    public var codecParameters: AVCodecParameters {
-        AVCodecParameters(cParametersPtr: cStream.codecpar)
+    /// - demuxing: Filled by libavformat on stream creation or in `FormatContext.findStreamInfo(options:)`.
+    /// - muxing: Filled by the caller before `FormatContext.writeHeader(options:)`.
+    public var codecParameters: CodecParameters {
+        CodecParameters(cParametersPtr: cStream.codecpar)
     }
 
     /// The media type of the stream.
-    public var mediaType: AVMediaType {
+    public var mediaType: MediaType {
         codecParameters.mediaType
     }
 }

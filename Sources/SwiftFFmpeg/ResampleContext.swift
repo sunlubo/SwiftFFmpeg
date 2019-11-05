@@ -1,5 +1,5 @@
 //
-//  SwrContext.swift
+//  ResampleContext.swift
 //  SwiftFFmpeg
 //
 //  Created by sunlubo on 2018/7/6.
@@ -7,10 +7,10 @@
 
 import CFFmpeg
 
-public final class SwrContext {
+public final class ResampleContext {
     let cContextPtr: OpaquePointer
 
-    /// Create `SwrContext`.
+    /// Create `ResampleContext`.
     ///
     /// If you use this function you will need to set the parameters before calling `initialize()`.
     public init() {
@@ -20,7 +20,7 @@ public final class SwrContext {
         self.cContextPtr = ctxPtr
     }
 
-    /// Create `SwrContext` if needed and set/reset common parameters.
+    /// Create `ResampleContext` if needed and set/reset common parameters.
     ///
     /// - Parameters:
     ///   - dstChannelLayout: output channel layout
@@ -30,11 +30,11 @@ public final class SwrContext {
     ///   - srcSampleFormat: input sample format
     ///   - srcSampleRate: input sample rate (frequency in Hz)
     public init(
-        dstChannelLayout: AVChannelLayout,
-        dstSampleFormat: AVSampleFormat,
+        dstChannelLayout: ChannelLayout,
+        dstSampleFormat: SampleFormat,
         dstSampleRate: Int,
-        srcChannelLayout: AVChannelLayout,
-        srcSampleFormat: AVSampleFormat,
+        srcChannelLayout: ChannelLayout,
+        srcSampleFormat: SampleFormat,
         srcSampleRate: Int
     ) {
         cContextPtr = swr_alloc_set_opts(
@@ -67,11 +67,11 @@ public final class SwrContext {
     ///
     /// - Throws: AVError
     public func setOptions(
-        dstChannelLayout: AVChannelLayout,
-        dstSampleFormat: AVSampleFormat,
+        dstChannelLayout: ChannelLayout,
+        dstSampleFormat: SampleFormat,
         dstSampleRate: Int,
-        srcChannelLayout: AVChannelLayout,
-        srcSampleFormat: AVSampleFormat,
+        srcChannelLayout: ChannelLayout,
+        srcSampleFormat: SampleFormat,
         srcSampleRate: Int
     ) throws {
         let ptr = swr_alloc_set_opts(
@@ -177,8 +177,8 @@ public final class SwrContext {
     }
 }
 
-extension SwrContext: AVClassSupport, AVOptionSupport {
-    public static let `class` = AVClass(cClassPtr: swr_get_class())
+extension ResampleContext: ClassSupport, OptionSupport {
+    public static let `class` = Class(cClassPtr: swr_get_class())
 
     public func withUnsafeObjectPointer<T>(
         _ body: (UnsafeMutableRawPointer) throws -> T

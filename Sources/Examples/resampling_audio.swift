@@ -12,7 +12,7 @@ import Glibc
 #endif
 import SwiftFFmpeg
 
-private func fill_samples(_ samples: AVSamples, _ sampleRate: Int64, _ t: Double) -> Double {
+private func fill_samples(_ samples: Samples, _ sampleRate: Int64, _ t: Double) -> Double {
     var t = t
     let tincr = 1.0 / Double(sampleRate)
     let c = 2 * Double.pi * 440.0
@@ -44,20 +44,20 @@ func resampling_audio() throws {
     defer { fclose(file) }
 
     // source
-    let srcChannelLayout = AVChannelLayout.CHL_STEREO
+    let srcChannelLayout = ChannelLayout.CHL_STEREO
     let srcChannelCount = srcChannelLayout.channelCount
     let srcSampleRate = 48000 as Int64
-    let srcSampleFmt = AVSampleFormat.dbl
+    let srcSampleFmt = SampleFormat.dbl
     let srcSampleCount = 1024
 
     // destination
-    let dstChannelLayout = AVChannelLayout.CHL_SURROUND
+    let dstChannelLayout = ChannelLayout.CHL_SURROUND
     let dstChannelCount = dstChannelLayout.channelCount
     let dstSampleRate = 44100 as Int64
-    let dstSampleFmt = AVSampleFormat.s16
+    let dstSampleFmt = SampleFormat.s16
     var dstSampleCount = 0
 
-    let swrCtx = SwrContext()
+    let swrCtx = ResampleContext()
     // set options
     try swrCtx.set(srcChannelLayout.rawValue, forKey: "in_channel_layout")
     try swrCtx.set(srcSampleRate, forKey: "in_sample_rate")
@@ -70,7 +70,7 @@ func resampling_audio() throws {
     try swrCtx.initialize()
 
     // allocate source and destination samples buffers
-    let srcSamples = AVSamples(channelCount: srcChannelCount, sampleCount: srcSampleCount, sampleFormat: srcSampleFmt)
+    let srcSamples = Samples(channelCount: srcChannelCount, sampleCount: srcSampleCount, sampleFormat: srcSampleFmt)
 
     // compute the number of converted samples: buffering is avoided
     // ensuring that the output buffer will contain at least all the
@@ -78,7 +78,7 @@ func resampling_audio() throws {
     var maxDstSampleCount = Int(AVMath.rescale(Int64(srcSampleCount), dstSampleRate, srcSampleRate, .up))
     dstSampleCount = maxDstSampleCount
     // buffer is going to be directly written to a rawaudio file, no alignment
-    var dstSamples = AVSamples(channelCount: dstChannelCount, sampleCount: dstSampleCount, sampleFormat: dstSampleFmt, align: 0)
+    var dstSamples = Samples(channelCount: dstChannelCount, sampleCount: dstSampleCount, sampleFormat: dstSampleFmt, align: 0)
 
     var t = 0.0
     repeat {
@@ -89,14 +89,14 @@ func resampling_audio() throws {
         dstSampleCount = Int(AVMath.rescale(Int64(swrCtx.getDelay(srcSampleRate) + srcSampleCount), dstSampleRate, srcSampleRate, .up))
 
         if dstSampleCount > maxDstSampleCount {
-            dstSamples = AVSamples(channelCount: dstChannelCount, sampleCount: dstSampleCount, sampleFormat: dstSampleFmt, align: 1)
+            dstSamples = Samples(channelCount: dstChannelCount, sampleCount: dstSampleCount, sampleFormat: dstSampleFmt, align: 1)
             maxDstSampleCount = dstSampleCount
         }
 
         // convert to destination format
         let sampleCount = try srcSamples.reformat(using: swrCtx, to: dstSamples)
 
-        let (size, _) = try AVSamples.getBufferSize(channelCount: dstChannelCount, sampleCount: sampleCount, sampleFormat: dstSampleFmt, align: 1)
+        let (size, _) = try Samples.getBufferSize(channelCount: dstChannelCount, sampleCount: sampleCount, sampleFormat: dstSampleFmt, align: 1)
         fwrite(dstSamples.data[0], 1, size, file)
 
         print("t:\(t) in:\(srcSampleCount) out:\(sampleCount)")

@@ -9,7 +9,7 @@ import CFFmpeg
 
 // MARK: - AVMediaType
 
-public typealias AVMediaType = CFFmpeg.AVMediaType
+public typealias MediaType = CFFmpeg.AVMediaType
 
 extension AVMediaType {
     /// Usually treated as `data`

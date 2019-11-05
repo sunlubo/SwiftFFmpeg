@@ -1,5 +1,5 @@
 //
-//  AVCodecParameters.swift
+//  CodecParameters.swift
 //  SwiftFFmpeg
 //
 //  Created by sunlubo on 2019/1/26.
@@ -10,7 +10,7 @@ import CFFmpeg
 typealias CAVCodecParameters = CFFmpeg.AVCodecParameters
 
 /// This class describes the properties of an encoded stream.
-public final class AVCodecParameters {
+public final class CodecParameters {
     let cParametersPtr: UnsafeMutablePointer<CAVCodecParameters>
     var cParameters: CAVCodecParameters { cParametersPtr.pointee }
     
@@ -20,7 +20,7 @@ public final class AVCodecParameters {
         self.cParametersPtr = cParametersPtr
     }
     
-    /// Create a new `AVCodecParameters` and set its fields to default values (unknown/invalid/0).
+    /// Create a new `CodecParameters` and set its fields to default values (unknown/invalid/0).
     public init() {
         guard let ptr = avcodec_parameters_alloc() else {
             abort("avcodec_parameters_alloc")
@@ -37,13 +37,13 @@ public final class AVCodecParameters {
     }
     
     /// General type of the encoded data.
-    public var mediaType: AVMediaType {
+    public var mediaType: MediaType {
         get { cParameters.codec_type }
         set { cParametersPtr.pointee.codec_type = newValue }
     }
     
     /// Specific type of the encoded data (the codec used).
-    public var codecId: AVCodecID {
+    public var codecId: CodecID {
         get { cParameters.codec_id }
         set { cParametersPtr.pointee.codec_id = newValue }
     }
@@ -84,23 +84,23 @@ public final class AVCodecParameters {
     }
     
     /// Copy the contents from the supplied codec parameters.
-    public func copy(from codecpar: AVCodecParameters) {
+    public func copy(from codecpar: CodecParameters) {
         abortIfFail(avcodec_parameters_copy(cParametersPtr, codecpar.cParametersPtr))
     }
     
     /// Fill the parameters struct based on the values from the supplied codec context.
-    public func copy(from codecCtx: AVCodecContext) {
+    public func copy(from codecCtx: CodecContext) {
         abortIfFail(avcodec_parameters_from_context(cParametersPtr, codecCtx.cContextPtr))
     }
 }
 
 // MARK: - Video
 
-extension AVCodecParameters {
+extension CodecParameters {
     
     /// The pixel format of the video frame.
-    public var pixelFormat: AVPixelFormat {
-        get { AVPixelFormat(cParameters.format) }
+    public var pixelFormat: PixelFormat {
+        get { PixelFormat(cParameters.format) }
         set { cParametersPtr.pointee.format = newValue.rawValue }
     }
     
@@ -120,7 +120,7 @@ extension AVCodecParameters {
     ///
     /// When the aspect ratio is unknown / undefined, the numerator should be set to 0
     /// (the denominator may have any value).
-    public var sampleAspectRatio: AVRational {
+    public var sampleAspectRatio: Rational {
         get { cParameters.sample_aspect_ratio }
         set { cParametersPtr.pointee.sample_aspect_ratio = newValue }
     }
@@ -132,31 +132,31 @@ extension AVCodecParameters {
     }
     
     /// The color range of the video frame.
-    public var colorRange: AVColorRange {
+    public var colorRange: ColorRange {
         get { cParameters.color_range }
         set { cParametersPtr.pointee.color_range = newValue }
     }
     
     /// The color primaries of the video frame.
-    public var colorPrimaries: AVColorPrimaries {
+    public var colorPrimaries: ColorPrimaries {
         get { cParameters.color_primaries }
         set { cParametersPtr.pointee.color_primaries = newValue }
     }
     
     /// The color transfer characteristic of the video frame.
-    public var colorTransferCharacteristic: AVColorTransferCharacteristic {
+    public var colorTransferCharacteristic: ColorTransferCharacteristic {
         get { cParameters.color_trc }
         set { cParametersPtr.pointee.color_trc = newValue }
     }
     
     /// The color space of the video frame.
-    public var colorSpace: AVColorSpace {
+    public var colorSpace: ColorSpace {
         get { cParameters.color_space }
         set { cParametersPtr.pointee.color_space = newValue }
     }
     
     /// The chroma location of the video frame.
-    public var chromaLocation: AVChromaLocation {
+    public var chromaLocation: ChromaLocation {
         get { cParameters.chroma_location }
         set { cParametersPtr.pointee.chroma_location = newValue }
     }
@@ -164,18 +164,18 @@ extension AVCodecParameters {
 
 // MARK: - Audio
 
-extension AVCodecParameters {
+extension CodecParameters {
     
     /// The sample format of audio.
-    public var sampleFormat: AVSampleFormat {
-        get { AVSampleFormat(cParameters.format) }
+    public var sampleFormat: SampleFormat {
+        get { SampleFormat(cParameters.format) }
         set { cParametersPtr.pointee.format = newValue.rawValue }
     }
     
     /// The channel layout bitmask. May be 0 if the channel layout is unknown or unspecified,
     /// otherwise the number of bits set must be equal to the channels field.
-    public var channelLayout: AVChannelLayout {
-        get { AVChannelLayout(rawValue: cParameters.channel_layout) }
+    public var channelLayout: ChannelLayout {
+        get { ChannelLayout(rawValue: cParameters.channel_layout) }
         set { cParametersPtr.pointee.channel_layout = newValue.rawValue }
     }
     

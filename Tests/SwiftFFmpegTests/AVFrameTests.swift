@@ -17,7 +17,7 @@ final class AVFrameTests: XCTestCase {
     ]
     
     func testAlloc() {
-        let f1 = AVFrame()
+        let f1 = Frame()
         f1.width = 1920
         f1.height = 1080
         f1.pixelFormat = .YUV420P
@@ -31,14 +31,14 @@ final class AVFrameTests: XCTestCase {
     }
     
     func testRef() {
-        let f1 = AVFrame()
+        let f1 = Frame()
         f1.width = 1920
         f1.height = 1080
         f1.pixelFormat = .YUV420P
         
         XCTAssertNoThrow(try f1.allocBuffer())
         
-        let f2 = AVFrame()
+        let f2 = Frame()
         XCTAssertNoThrow(try f2.ref(from: f1))
         XCTAssertEqual(f1.width, f2.width)
         XCTAssertEqual(f1.height, f2.height)
@@ -52,14 +52,14 @@ final class AVFrameTests: XCTestCase {
     }
     
     func testUnref() {
-        let f1 = AVFrame()
+        let f1 = Frame()
         f1.width = 1920
         f1.height = 1080
         f1.pixelFormat = .YUV420P
         
         XCTAssertNoThrow(try f1.allocBuffer())
         
-        let f2 = AVFrame()
+        let f2 = Frame()
         XCTAssertNoThrow(try f2.ref(from: f1))
         
         f2.unref()
@@ -72,14 +72,14 @@ final class AVFrameTests: XCTestCase {
     }
     
     func testMoveRef() {
-        let f1 = AVFrame()
+        let f1 = Frame()
         f1.width = 1920
         f1.height = 1080
         f1.pixelFormat = .YUV420P
         
         XCTAssertNoThrow(try f1.allocBuffer())
         
-        let f2 = AVFrame()
+        let f2 = Frame()
         f2.moveRef(from: f1)
         
         XCTAssertFalse(f1.isWritable)
@@ -96,7 +96,7 @@ final class AVFrameTests: XCTestCase {
     }
     
     func testClone() {
-        let f1 = AVFrame()
+        let f1 = Frame()
         f1.width = 1920
         f1.height = 1080
         f1.pixelFormat = .YUV420P

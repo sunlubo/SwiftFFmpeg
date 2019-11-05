@@ -7,12 +7,12 @@
 
 import SwiftFFmpeg
 
-private func makeMuxer(stream: AVStream) throws -> (AVFormatContext, AVStream) {
+private func makeMuxer(stream: Stream) throws -> (FormatContext, Stream) {
     let input = CommandLine.arguments[2]
     let output = "\(input[..<(input.firstIndex(of: ".") ?? input.endIndex)])_\(stream.index).\(stream.codecParameters.codecId.name)"
     print(output)
     
-    let muxer = try AVFormatContext(format: nil, filename: String(output))
+    let muxer = try FormatContext(format: nil, filename: String(output))
     guard let ostream = muxer.addStream() else {
         fatalError("Failed allocating output stream.")
     }
@@ -30,11 +30,11 @@ func split_stream() throws {
         return
     }
     
-    let fmtCtx = try AVFormatContext(url: CommandLine.arguments[2])
+    let fmtCtx = try FormatContext(url: CommandLine.arguments[2])
     try fmtCtx.findStreamInfo()
     fmtCtx.dumpFormat(isOutput: false)
     
-    var streamMapping = [Int: (AVFormatContext, AVStream)]()
+    var streamMapping = [Int: (FormatContext, Stream)]()
     for istream in fmtCtx.streams where istream.mediaType == .audio || istream.mediaType == .video {
         streamMapping[istream.index] = try makeMuxer(stream: istream)
     }
@@ -43,12 +43,12 @@ func split_stream() throws {
         try muxer.writeHeader()
     }
     
-    let pkt = AVPacket()
+    let pkt = Packet()
     while let _ = try? fmtCtx.readFrame(into: pkt) {
         if let (muxer, ostream) = streamMapping[pkt.streamIndex] {
             let istream = fmtCtx.streams[pkt.streamIndex]
-            pkt.pts = AVMath.rescale(pkt.pts, istream.timebase, ostream.timebase, AVRounding.nearInf.union(.passMinMax))
-            pkt.dts = AVMath.rescale(pkt.dts, istream.timebase, ostream.timebase, AVRounding.nearInf.union(.passMinMax))
+            pkt.pts = AVMath.rescale(pkt.pts, istream.timebase, ostream.timebase, Rounding.nearInf.union(.passMinMax))
+            pkt.dts = AVMath.rescale(pkt.dts, istream.timebase, ostream.timebase, Rounding.nearInf.union(.passMinMax))
             pkt.duration = AVMath.rescale(pkt.duration, istream.timebase, ostream.timebase)
             pkt.position = -1
             pkt.streamIndex = ostream.index

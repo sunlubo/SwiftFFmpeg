@@ -1,5 +1,5 @@
 //
-//  AVCodecContext.swift
+//  CodecContext.swift
 //  SwiftFFmpeg
 //
 //  Created by sunlubo on 2018/6/29.
@@ -12,19 +12,19 @@ import Glibc
 #endif
 import CFFmpeg
 
-public typealias AVGetFormatHandler = (AVCodecContext, [AVPixelFormat]) -> AVPixelFormat
+public typealias GetFormatHandler = (CodecContext, [PixelFormat]) -> PixelFormat
 
 typealias CodecContextBoxValue = (
     opaque: UnsafeMutableRawPointer?,
-    getFormat: AVGetFormatHandler?
+    getFormat: GetFormatHandler?
 )
 typealias CodecContextBox = Box<CodecContextBoxValue>
 
-// MARK: - AVCodecContext
+// MARK: - CodecContext
 
 typealias CAVCodecContext = CFFmpeg.AVCodecContext
 
-public final class AVCodecContext {
+public final class CodecContext {
     let cContextPtr: UnsafeMutablePointer<CAVCodecContext>
     var cContext: CAVCodecContext { cContextPtr.pointee }
 
@@ -43,10 +43,10 @@ public final class AVCodecContext {
         self.cContextPtr = cContextPtr
     }
 
-    /// Creates an `AVCodecContext` and set its fields to default values.
+    /// Creates an `CodecContext` and set its fields to default values.
     ///
     /// - Parameter codec: codec
-    public init(codec: AVCodec? = nil) {
+    public init(codec: Codec? = nil) {
         guard let ctxPtr = avcodec_alloc_context3(codec?.cCodecPtr) else {
             abort("avcodec_alloc_context3")
         }
@@ -62,14 +62,14 @@ public final class AVCodecContext {
     }
 
     /// The codec's media type.
-    public var mediaType: AVMediaType {
+    public var mediaType: MediaType {
         cContext.codec_type
     }
 
-    public var codec: AVCodec? {
+    public var codec: Codec? {
         get {
             if let ptr = cContext.codec {
-                return AVCodec(cCodecPtr: ptr.mutable)
+                return Codec(cCodecPtr: ptr.mutable)
             }
             return nil
         }
@@ -77,7 +77,7 @@ public final class AVCodecContext {
     }
 
     /// The codec's id.
-    public var codecId: AVCodecID {
+    public var codecId: CodecID {
         get { cContext.codec_id }
         set { cContextPtr.pointee.codec_id = newValue }
     }
@@ -128,7 +128,7 @@ public final class AVCodecContext {
         set { cContextPtr.pointee.bit_rate_tolerance = Int32(newValue) }
     }
 
-    /// `AVCodecContext.Flag`
+    /// `CodecContext.Flag`
     ///
     /// - encoding: Set by user.
     /// - decoding: Set by user.
@@ -137,7 +137,7 @@ public final class AVCodecContext {
         set { cContextPtr.pointee.flags = Int32(newValue.rawValue) }
     }
 
-    /// `AVCodecContext.Flag2`
+    /// `CodecContext.Flag2`
     ///
     /// - encoding: Set by user.
     /// - decoding: Set by user.
@@ -184,7 +184,7 @@ public final class AVCodecContext {
     ///
     /// - encoding: Must be set by user.
     /// - decoding: The use of this field for decoding is deprecated. Use framerate instead.
-    public var timebase: AVRational {
+    public var timebase: Rational {
         get { cContext.time_base }
         set { cContextPtr.pointee.time_base = newValue }
     }
@@ -197,15 +197,15 @@ public final class AVCodecContext {
         Int(cContext.frame_number)
     }
 
-    /// A reference to the `AVHWFramesContext` describing the input (for encoding)
+    /// A reference to the `HardwareFramesContext` describing the input (for encoding)
     /// or output (decoding) frames. The reference is set by the caller and
     /// afterwards owned (and freed) by libavcodec - it should never be read by
     /// the caller after being set.
     ///
     /// - encoding: For hardware encoders configured to use a hwaccel pixel
     ///   format, this field should be set by the caller to a reference
-    ///   to the `AVHWFramesContext` describing input frames.
-    ///   `AVHWFramesContext.pixelFormat` must be equal to `AVCodecContext.pixelFormat`.
+    ///   to the `HardwareFramesContext` describing input frames.
+    ///   `HardwareFramesContext.pixelFormat` must be equal to `CodecContext.pixelFormat`.
     ///
     ///   This field should be set before `openCodec(_:options:)` is called.
     ///
@@ -214,18 +214,18 @@ public final class AVCodecContext {
     ///   unreffed by libavcodec before the `getFormat` call.
     ///
     ///   If the default `get_buffer2()` is used with a hwaccel pixel format,
-    ///   then this `AVHWFramesContext` will be used for allocating the frame buffers.
-    public var hwFramesContext: AVHWFramesContext? {
+    ///   then this `HardwareFramesContext` will be used for allocating the frame buffers.
+    public var hwFramesContext: HardwareFramesContext? {
         get {
             if let ctxPtr = cContext.hw_frames_ctx {
-                return AVHWFramesContext(cBufferPtr: ctxPtr)
+                return HardwareFramesContext(cBufferPtr: ctxPtr)
             }
             return nil
         }
         set { cContextPtr.pointee.hw_frames_ctx = av_buffer_ref(newValue?.cBufferPtr) }
     }
 
-    /// A reference to the `AVHWDeviceContext` describing the device which will
+    /// A reference to the `HardwareDeviceContext` describing the device which will
     /// be used by a hardware encoder/decoder. The reference is set by the caller
     /// and afterwards owned (and freed) by libavcodec.
     ///
@@ -243,10 +243,10 @@ public final class AVCodecContext {
     /// Note that some decoders may require this field to be set initially in
     /// order to support `hwFramesContext` at all - in that case, all frames
     /// contexts used must be created on the same device.
-    public var hwDeviceContext: AVHWDeviceContext? {
+    public var hwDeviceContext: HardwareDeviceContext? {
         get {
             if let ctxPtr = cContext.hw_device_ctx {
-                return AVHWDeviceContext(cBufferPtr: ctxPtr)
+                return HardwareDeviceContext(cBufferPtr: ctxPtr)
             }
             return nil
         }
@@ -261,19 +261,19 @@ public final class AVCodecContext {
     /// Fill the codec context based on the values from the supplied codec parameters.
     ///
     /// - Parameter params: codec parameters
-    public func setParameters(_ params: AVCodecParameters) {
+    public func setParameters(_ params: CodecParameters) {
         abortIfFail(avcodec_parameters_to_context(cContextPtr, params.cParametersPtr))
     }
 
-    /// Initialize the `AVCodecContext`.
+    /// Initialize the `CodecContext`.
     ///
     /// - Parameters:
     ///   - codec: The codec to open this context for. If a non-NULL codec has been previously
     ///     passed to `init(codec:)` or for this context, then this parameter _MUST_ be either `nil`
     ///     or equal to the previously passed codec.
-    ///   - options: A dictionary filled with `AVCodecContext` and codec-private options.
+    ///   - options: A dictionary filled with `CodecContext` and codec-private options.
     /// - Throws: AVError
-    public func openCodec(_ codec: AVCodec? = nil, options: [String: String]? = nil) throws {
+    public func openCodec(_ codec: Codec? = nil, options: [String: String]? = nil) throws {
         var pm: OpaquePointer? = options?.toAVDict()
         defer { av_dict_free(&pm) }
 
@@ -284,9 +284,9 @@ public final class AVCodecContext {
 
     /// Supply raw packet data as input to a decoder.
     ///
-    /// - Parameter packet: The input `AVPacket`. Usually, this will be a single video frame,
+    /// - Parameter packet: The input `Packet`. Usually, this will be a single video frame,
     ///   or several complete audio frames.
-    ///   It can be `nil` (or an `AVPacket` with data set to `nil` and size set to 0);
+    ///   It can be `nil` (or an `Packet` with data set to `nil` and size set to 0);
     ///   in this case, it is considered a flush packet, which signals the end of the stream.
     ///   Sending the first flush packet will return success. Subsequent ones are unnecessary
     ///   and will throw `AVError.eof`. If the decoder still has frames buffered, it will
@@ -300,7 +300,7 @@ public final class AVCodecContext {
     ///     - `AVError.invalidArgument` if codec not opened, it is an encoder, or requires flush
     ///     - `AVError.outOfMemory` if failed to add packet to internal queue, or similar.
     ///     - legitimate decoding errors
-    public func sendPacket(_ packet: AVPacket?) throws {
+    public func sendPacket(_ packet: Packet?) throws {
         try throwIfFail(avcodec_send_packet(cContextPtr, packet?.cPacketPtr))
     }
 
@@ -313,13 +313,13 @@ public final class AVCodecContext {
     ///     - `AVError.eof` if the decoder has been fully flushed, and there will be no more output frames.
     ///     - `AVError.invalidArgument` if codec not opened, or it is an encoder.
     ///     - legitimate decoding errors
-    public func receiveFrame(_ frame: AVFrame) throws {
+    public func receiveFrame(_ frame: Frame) throws {
         try throwIfFail(avcodec_receive_frame(cContextPtr, frame.cFramePtr))
     }
 
     /// Supply a raw video or audio frame to the encoder.
     ///
-    /// - Parameter frame: `AVFrame` containing the raw audio or video frame to be encoded.
+    /// - Parameter frame: `Frame` containing the raw audio or video frame to be encoded.
     ///   It can be `nil`, in which case it is considered a flush packet. This signals the end of the stream.
     ///   If the encoder still has packets buffered, it will return them after this call.
     ///   Once flushing mode has been entered, additional flush packets are ignored, and sending frames
@@ -333,7 +333,7 @@ public final class AVCodecContext {
     ///       or requires flush.
     ///     - `AVError.outOfMemory` if failed to add packet to internal queue, or similar.
     ///     - legitimate decoding errors
-    public func sendFrame(_ frame: AVFrame?) throws {
+    public func sendFrame(_ frame: Frame?) throws {
         try throwIfFail(avcodec_send_frame(cContextPtr, frame?.cFramePtr))
     }
 
@@ -345,7 +345,7 @@ public final class AVCodecContext {
     ///     - `AVError.eof` if the encoder has been fully flushed, and there will be no more output packets.
     ///     - `AVError.invalidArgument` if codec not opened, or it is an encoder.
     ///     - legitimate decoding errors
-    public func receivePacket(_ packet: AVPacket) throws {
+    public func receivePacket(_ packet: Packet) throws {
         try throwIfFail(avcodec_receive_packet(cContextPtr, packet.cPacketPtr))
     }
 
@@ -361,13 +361,13 @@ public final class AVCodecContext {
     }
 }
 
-// MARK: - AVCodecContext.Flag
+// MARK: - CodecContext.Flag
 
-extension AVCodecContext {
+extension CodecContext {
 
     /// Encoding support
     ///
-    /// These flags can be passed in `AVCodecContext.flags` before initialization.
+    /// These flags can be passed in `CodecContext.flags` before initialization.
     public struct Flag: OptionSet {
         /// Allow decoders to produce frames with data planes that are not aligned
         /// to CPU requirements (e.g. due to cropping).
@@ -412,7 +412,7 @@ extension AVCodecContext {
     }
 }
 
-extension AVCodecContext.Flag: CustomStringConvertible {
+extension CodecContext.Flag: CustomStringConvertible {
 
     public var description: String {
         var str = "["
@@ -442,13 +442,13 @@ extension AVCodecContext.Flag: CustomStringConvertible {
     }
 }
 
-// MARK: - AVCodecContext.Flag2
+// MARK: - CodecContext.Flag2
 
-extension AVCodecContext {
+extension CodecContext {
 
     /// Encoding support
     ///
-    /// These flags can be passed in `AVCodecContext.flags2` before initialization.
+    /// These flags can be passed in `CodecContext.flags2` before initialization.
     public struct Flag2: OptionSet {
         /// Allow non spec compliant speedup tricks.
         public static let fast = Flag2(rawValue: AV_CODEC_FLAG2_FAST)
@@ -475,7 +475,7 @@ extension AVCodecContext {
     }
 }
 
-extension AVCodecContext.Flag2: CustomStringConvertible {
+extension CodecContext.Flag2: CustomStringConvertible {
 
     public var description: String {
         var str = "["
@@ -498,7 +498,7 @@ extension AVCodecContext.Flag2: CustomStringConvertible {
 
 // MARK: - Video
 
-extension AVCodecContext {
+extension CodecContext {
 
     /// The width of the picture.
     ///
@@ -557,7 +557,7 @@ extension AVCodecContext {
     ///
     /// - encoding: Set by user.
     /// - decoding: Set by user if known, overridden by codec while parsing the data.
-    public var pixelFormat: AVPixelFormat {
+    public var pixelFormat: PixelFormat {
         get { cContext.pix_fmt }
         set { cContextPtr.pointee.pix_fmt = newValue }
     }
@@ -572,22 +572,22 @@ extension AVCodecContext {
     ///
     /// - encoding: Unused.
     /// - decoding: Set by user, if not set the native format will be chosen.
-    public var getFormat: AVGetFormatHandler? {
+    public var getFormat: GetFormatHandler? {
         get { opaqueBox?.value.getFormat }
         set {
             opaqueBox = CodecContextBox((opaque: opaqueBox?.value.opaque, getFormat: newValue))
 
             var handler: (@convention(c) (
-                UnsafeMutablePointer<CAVCodecContext>?, UnsafePointer<AVPixelFormat>?
-            ) -> AVPixelFormat)!
+                UnsafeMutablePointer<CAVCodecContext>?, UnsafePointer<PixelFormat>?
+            ) -> PixelFormat)!
             if newValue != nil {
                 handler = { ctx, fmts in
                     let handler = Unmanaged<CodecContextBox>.fromOpaque(UnsafeRawPointer(ctx!.pointee.opaque!))
                         .takeUnretainedValue()
                         .value
                         .getFormat!
-                    let list = values(fmts, until: AVPixelFormat.none) ?? []
-                    return handler(AVCodecContext(cContextPtr: ctx!), list)
+                    let list = values(fmts, until: PixelFormat.none) ?? []
+                    return handler(CodecContext(cContextPtr: ctx!), list)
                 }
             }
             cContextPtr.pointee.get_format = handler
@@ -621,7 +621,7 @@ extension AVCodecContext {
     ///
     /// - encoding: Set by user.
     /// - decoding: Set by codec.
-    public var sampleAspectRatio: AVRational {
+    public var sampleAspectRatio: Rational {
         get { cContext.sample_aspect_ratio }
         set { cContextPtr.pointee.sample_aspect_ratio = newValue }
     }
@@ -639,7 +639,7 @@ extension AVCodecContext {
     /// - encoding: May be used to signal the framerate of CFR content to an encoder.
     /// - decoding: For codecs that store a framerate value in the compressed bitstream,
     ///   the decoder may export it here. 0/1 when unknown.
-    public var framerate: AVRational {
+    public var framerate: Rational {
         get { cContext.framerate }
         set { cContextPtr.pointee.framerate = newValue }
     }
@@ -647,7 +647,7 @@ extension AVCodecContext {
 
 // MARK: - Audio
 
-extension AVCodecContext {
+extension CodecContext {
 
     /// Samples per second.
     public var sampleRate: Int {
@@ -665,7 +665,7 @@ extension AVCodecContext {
     ///
     /// - encoding: Set by user.
     /// - decoding: Set by libavcodec.
-    public var sampleFormat: AVSampleFormat {
+    public var sampleFormat: SampleFormat {
         get { cContext.sample_fmt }
         set { cContextPtr.pointee.sample_fmt = newValue }
     }
@@ -680,15 +680,15 @@ extension AVCodecContext {
     ///
     /// - encoding: Set by user.
     /// - decoding: Set by user, may be overwritten by codec.
-    public var channelLayout: AVChannelLayout {
-        get { AVChannelLayout(rawValue: cContext.channel_layout) }
+    public var channelLayout: ChannelLayout {
+        get { ChannelLayout(rawValue: cContext.channel_layout) }
         set { cContextPtr.pointee.channel_layout = newValue.rawValue }
     }
 }
 
 // MARK: - Multithreading
 
-extension AVCodecContext {
+extension CodecContext {
 
     /// Which multithreading methods to use.
     /// Use of FF_THREAD_FRAME will increase decoding delay by one frame per thread,
@@ -718,8 +718,8 @@ extension AVCodecContext {
     }
 }
 
-extension AVCodecContext: AVClassSupport, AVOptionSupport {
-    public static let `class` = AVClass(cClassPtr: avcodec_get_class())
+extension CodecContext: ClassSupport, OptionSupport {
+    public static let `class` = Class(cClassPtr: avcodec_get_class())
 
     public func withUnsafeObjectPointer<T>(
         _ body: (UnsafeMutableRawPointer) throws -> T

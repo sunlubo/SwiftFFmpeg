@@ -1,5 +1,5 @@
 //
-//  SwsContext.swift
+//  ScaleContext.swift
 //  SwiftFFmpeg
 //
 //  Created by sunlubo on 2018/7/11.
@@ -7,12 +7,12 @@
 
 import CFFmpeg
 
-// MARK: - SwsContext
+// MARK: - ScaleContext
 
-public final class SwsContext {
+public final class ScaleContext {
     let cContextPtr: OpaquePointer
 
-    /// Create an empty `SwsContext`.
+    /// Create an empty `ScaleContext`.
     public init() {
         guard let ctxPtr = sws_alloc_context() else {
             abort("sws_alloc_context")
@@ -20,7 +20,7 @@ public final class SwsContext {
         self.cContextPtr = ctxPtr
     }
 
-    /// Create an `SwsContext` use the given parameters.
+    /// Create an `ScaleContext` use the given parameters.
     ///
     /// - Parameters:
     ///   - srcWidth: the width of the source image
@@ -31,8 +31,8 @@ public final class SwsContext {
     ///   - dstPixelFormat: the destination image format
     ///   - flags: specify which algorithm and options to use for rescaling
     public init?(
-        srcWidth: Int, srcHeight: Int, srcPixelFormat: AVPixelFormat,
-        dstWidth: Int, dstHeight: Int, dstPixelFormat: AVPixelFormat,
+        srcWidth: Int, srcHeight: Int, srcPixelFormat: PixelFormat,
+        dstWidth: Int, dstHeight: Int, dstPixelFormat: PixelFormat,
         flags: Flag
     ) {
         guard let ptr = sws_getContext(
@@ -82,7 +82,7 @@ public final class SwsContext {
     ///
     /// - Parameter pixFmt: pixel format
     /// - Returns: `true` if it is supported; otherwise `false`.
-    public static func supportsInput(_ pixFmt: AVPixelFormat) -> Bool {
+    public static func supportsInput(_ pixFmt: PixelFormat) -> Bool {
         sws_isSupportedInput(pixFmt) > 0
     }
 
@@ -90,7 +90,7 @@ public final class SwsContext {
     ///
     /// - Parameter pixFmt: pixel format
     /// - Returns: `true` if it is supported; otherwise `false`.
-    public static func supportsOutput(_ pixFmt: AVPixelFormat) -> Bool {
+    public static func supportsOutput(_ pixFmt: PixelFormat) -> Bool {
         sws_isSupportedOutput(pixFmt) > 0
     }
 
@@ -98,7 +98,7 @@ public final class SwsContext {
     ///
     /// - Parameter pixFmt: pixel format
     /// - Returns: `true` if it is supported; otherwise `false`.
-    public static func supportsEndiannessConversion(_ pixFmt: AVPixelFormat) -> Bool {
+    public static func supportsEndiannessConversion(_ pixFmt: PixelFormat) -> Bool {
         sws_isSupportedEndiannessConversion(pixFmt) > 0
     }
 
@@ -107,7 +107,7 @@ public final class SwsContext {
     }
 }
 
-extension SwsContext {
+extension ScaleContext {
 
     public struct Flag: OptionSet {
         /// Select fast bilinear scaling algorithm.
@@ -150,7 +150,7 @@ extension SwsContext {
     }
 }
 
-extension SwsContext.Flag: CustomStringConvertible {
+extension ScaleContext.Flag: CustomStringConvertible {
 
     public var description: String {
         var str = "["
@@ -178,8 +178,8 @@ extension SwsContext.Flag: CustomStringConvertible {
     }
 }
 
-extension SwsContext: AVClassSupport, AVOptionSupport {
-    public static let `class` = AVClass(cClassPtr: sws_get_class())
+extension ScaleContext: ClassSupport, OptionSupport {
+    public static let `class` = Class(cClassPtr: sws_get_class())
 
     public func withUnsafeObjectPointer<T>(
         _ body: (UnsafeMutableRawPointer) throws -> T

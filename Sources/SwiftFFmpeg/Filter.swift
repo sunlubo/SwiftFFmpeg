@@ -1,5 +1,5 @@
 //
-//  AVFilter.swift
+//  Filter.swift
 //  SwiftFFmpeg
 //
 //  Created by sunlubo on 2018/7/18.
@@ -9,9 +9,9 @@
 
 import CFFmpeg
 
-// MARK: - AVFilterPad
+// MARK: - FilterPad
 
-public struct AVFilterPad {
+public struct FilterPad {
     let cPadsPtr: OpaquePointer
     let index: Int32
 
@@ -26,23 +26,23 @@ public struct AVFilterPad {
     }
 
     /// The media type of the filter pad.
-    public var mediaType: AVMediaType {
+    public var mediaType: MediaType {
         avfilter_pad_get_type(cPadsPtr, index)
     }
 }
 
-extension AVFilterPad: CustomStringConvertible {
+extension FilterPad: CustomStringConvertible {
 
     public var description: String {
         "\(name) - \(mediaType))"
     }
 }
 
-// MARK: - AVFilter
+// MARK: - Filter
 
 typealias CAVFilter = CFFmpeg.AVFilter
 
-public struct AVFilter {
+public struct Filter {
     let cFilterPtr: UnsafePointer<CAVFilter>
     var cFilter: CAVFilter { cFilterPtr.pointee }
 
@@ -71,12 +71,12 @@ public struct AVFilter {
     /// `nil` if there are no (static) inputs.
     /// Instances of filters with `AVFilter.Flag.dynamicInputs` set may have more inputs
     /// than present in this list.
-    public var inputs: [AVFilterPad]? {
+    public var inputs: [FilterPad]? {
         guard let start = cFilter.inputs else {
             return nil
         }
         let count = avfilter_pad_count(cFilter.inputs)
-        let list = (0..<count).map({ AVFilterPad(cPadsPtr: start, index: $0) })
+        let list = (0..<count).map({ FilterPad(cPadsPtr: start, index: $0) })
         return list
     }
 
@@ -85,12 +85,12 @@ public struct AVFilter {
     /// `nil` if there are no (static) outputs.
     /// Instances of filters with `AVFilter.Flag.dynamicOutputs` set may have more outputs
     /// than present in this list.
-    public var outputs: [AVFilterPad]? {
+    public var outputs: [FilterPad]? {
         guard let start = cFilter.outputs else {
             return nil
         }
         let count = avfilter_pad_count(cFilter.outputs)
-        let list = (0..<count).map({ AVFilterPad(cPadsPtr: start, index: $0) })
+        let list = (0..<count).map({ FilterPad(cPadsPtr: start, index: $0) })
         return list
     }
 
@@ -100,33 +100,33 @@ public struct AVFilter {
     }
 
     /// Get all registered filters.
-    public static var supportedFilters: [AVFilter] {
-        var list = [AVFilter]()
+    public static var supportedFilters: [Filter] {
+        var list = [Filter]()
         var state: UnsafeMutableRawPointer?
         while let filter = av_filter_iterate(&state) {
-            list.append(AVFilter(cFilterPtr: filter))
+            list.append(Filter(cFilterPtr: filter))
         }
         return list
     }
 }
 
-extension AVFilter: CustomStringConvertible {
+extension Filter: CustomStringConvertible {
 
     public var description: String {
         "\(name): \(String(cString: cFilter.description) ?? "")"
     }
 }
 
-// MARK: - AVFilter.Flag
+// MARK: - Filter.Flag
 
-extension AVFilter {
+extension Filter {
 
     public struct Flag: OptionSet {
-        /// The number of the filter inputs is not determined just by `AVFilter.inputs`.
+        /// The number of the filter inputs is not determined just by `Filter.inputs`.
         /// The filter might add additional inputs during initialization depending on the
         /// options supplied to it.
         public static let dynamicInputs = Flag(rawValue: AVFILTER_FLAG_DYNAMIC_INPUTS)
-        /// The number of the filter outputs is not determined just by `AVFilter.outputs`.
+        /// The number of the filter outputs is not determined just by `Filter.outputs`.
         /// The filter might add additional outputs during initialization depending on
         /// the options supplied to it.
         public static let dynamicOutputs = Flag(rawValue: AVFILTER_FLAG_DYNAMIC_OUTPUTS)
@@ -144,7 +144,7 @@ extension AVFilter {
         /// have its `filter_frame()` callback(s) called as usual even when the enable
         /// expression is false. The filter will disable filtering within the
         /// `filter_frame()` callback(s) itself, for example executing code depending on
-        /// the `AVFilterContext->is_disabled` value.
+        /// the `FilterContext->is_disabled` value.
         public static let supportTimelineInternal = Flag(rawValue: AVFILTER_FLAG_SUPPORT_TIMELINE_INTERNAL)
         /// Handy mask to test whether the filter supports or no the timeline feature
         /// (internally or generically).
@@ -156,7 +156,7 @@ extension AVFilter {
     }
 }
 
-extension AVFilter.Flag: CustomStringConvertible {
+extension Filter.Flag: CustomStringConvertible {
 
     public var description: String {
         var str = "["
@@ -174,7 +174,7 @@ extension AVFilter.Flag: CustomStringConvertible {
     }
 }
 
-extension AVFilter: AVOptionSupport {
+extension Filter: OptionSupport {
 
     public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T {
         var tmp = cFilter.priv_class
@@ -184,12 +184,12 @@ extension AVFilter: AVOptionSupport {
     }
 }
 
-// MARK: - AVFilterContext
+// MARK: - FilterContext
 
 typealias CAVFilterContext = CFFmpeg.AVFilterContext
 
 /// An instance of a filter.
-public final class AVFilterContext {
+public final class FilterContext {
     let cContextPtr: UnsafeMutablePointer<CAVFilterContext>
     var cContext: CAVFilterContext { cContextPtr.pointee }
 
@@ -202,12 +202,12 @@ public final class AVFilterContext {
     /// - Parameters:
     ///   - graph: graph in which the new filter will be used
     ///   - filter: the filter to create an instance of
-    ///   - name: Name to give to the new instance (will be copied to `AVFilterContext.name`).
+    ///   - name: Name to give to the new instance (will be copied to `FilterContext.name`).
     ///     This may be used by the caller to identify different filters, libavfilter itself
     ///     assigns no semantics to this parameter. May be `nil`.
     /// - Returns: the context of the newly created filter instance (note that it is also
     ///   retrievable directly through `AVFilterGraph.filters` or with `avfilter_graph_get_filter()`).
-    public init(graph: AVFilterGraph, filter: AVFilter, name: String? = nil) {
+    public init(graph: FilterGraph, filter: Filter, name: String? = nil) {
         guard let ctxPtr = avfilter_graph_alloc_filter(graph.cGraphPtr, filter.cFilterPtr, name) else {
             abort("avfilter_graph_alloc_filter")
         }
@@ -215,8 +215,8 @@ public final class AVFilterContext {
     }
 
     /// The `AVFilter` of which this is an instance.
-    public var filter: AVFilter {
-        get { AVFilter(cFilterPtr: cContext.filter) }
+    public var filter: Filter {
+        get { Filter(cFilterPtr: cContext.filter) }
         set { cContextPtr.pointee.filter = newValue.cFilterPtr }
     }
 
@@ -226,10 +226,10 @@ public final class AVFilterContext {
     }
 
     /// The input links of this filter instance.
-    public var inputs: [AVFilterLink] {
-        var list = [AVFilterLink]()
+    public var inputs: [FilterLink] {
+        var list = [FilterLink]()
         for i in 0..<inputCount {
-            list.append(AVFilterLink(cLinkPtr: cContext.inputs[i]!))
+            list.append(FilterLink(cLinkPtr: cContext.inputs[i]!))
         }
         return list
     }
@@ -240,10 +240,10 @@ public final class AVFilterContext {
     }
 
     /// The output links of this filter instance.
-    public var outputs: [AVFilterLink] {
-        var list = [AVFilterLink]()
+    public var outputs: [FilterLink] {
+        var list = [FilterLink]()
         for i in 0..<outputCount {
-            list.append(AVFilterLink(cLinkPtr: cContext.outputs[i]!))
+            list.append(FilterLink(cLinkPtr: cContext.outputs[i]!))
         }
         return list
     }
@@ -254,8 +254,8 @@ public final class AVFilterContext {
     }
 
     /// The filtergraph this filter belongs to.
-    public var graph: AVFilterGraph {
-        AVFilterGraph(cGraphPtr: cContext.graph)
+    public var graph: FilterGraph {
+        FilterGraph(cGraphPtr: cContext.graph)
     }
 
     /// Initialize a filter with the supplied parameters.
@@ -300,16 +300,16 @@ public final class AVFilterContext {
     @discardableResult
     public func link(
         srcPad: UInt = 0,
-        dst: AVFilterContext,
+        dst: FilterContext,
         dstPad: UInt = 0
-    ) throws -> AVFilterContext {
+    ) throws -> FilterContext {
         try throwIfFail(avfilter_link(cContextPtr, UInt32(srcPad), dst.cContextPtr, UInt32(dstPad)))
         return dst
     }
 }
 
-extension AVFilterContext: AVClassSupport, AVOptionSupport {
-    public static let `class` = AVClass(cClassPtr: avfilter_get_class())
+extension FilterContext: ClassSupport, OptionSupport {
+    public static let `class` = Class(cClassPtr: avfilter_get_class())
 
     public func withUnsafeObjectPointer<T>(
         _ body: (UnsafeMutableRawPointer) throws -> T
@@ -318,23 +318,23 @@ extension AVFilterContext: AVClassSupport, AVOptionSupport {
     }
 }
 
-// MARK: - AVBufferSourceFlag
+// MARK: - BufferSourceFlag
 
-public struct AVBufferSourceFlag: OptionSet {
+public struct BufferSourceFlag: OptionSet {
     /// Do not check for format changes.
-    public static let noCheckFormat = AVBufferSourceFlag(rawValue: Int32(AV_BUFFERSRC_FLAG_NO_CHECK_FORMAT))
+    public static let noCheckFormat = BufferSourceFlag(rawValue: Int32(AV_BUFFERSRC_FLAG_NO_CHECK_FORMAT))
     // Immediately push the frame to the output.
-    public static let push = AVBufferSourceFlag(rawValue: Int32(AV_BUFFERSRC_FLAG_PUSH))
+    public static let push = BufferSourceFlag(rawValue: Int32(AV_BUFFERSRC_FLAG_PUSH))
     /// Keep a reference to the frame.
     /// If the frame if reference-counted, create a new reference; otherwise copy the frame data.
-    public static let keepReference = AVBufferSourceFlag(rawValue: Int32(AV_BUFFERSRC_FLAG_KEEP_REF))
+    public static let keepReference = BufferSourceFlag(rawValue: Int32(AV_BUFFERSRC_FLAG_KEEP_REF))
 
     public let rawValue: Int32
 
     public init(rawValue: Int32) { self.rawValue = rawValue }
 }
 
-extension AVBufferSourceFlag: CustomStringConvertible {
+extension BufferSourceFlag: CustomStringConvertible {
 
     public var description: String {
         var str = "["
@@ -351,7 +351,7 @@ extension AVBufferSourceFlag: CustomStringConvertible {
 
 // MARK: - Buffer Source
 
-extension AVFilterContext {
+extension FilterContext {
 
     /// Add a frame to the buffer source.
     ///
@@ -363,31 +363,31 @@ extension AVFilterContext {
     ///
     /// - Parameters:
     ///   - frame: a frame, or `nil` to mark EOF
-    ///   - flags: a combination of `AVBufferSourceFlag` flags
+    ///   - flags: a combination of `BufferSourceFlag` flags
     /// - Throws: AVError
-    public func addFrame(_ frame: AVFrame?, flags: AVBufferSourceFlag = .init(rawValue: 0)) throws {
+    public func addFrame(_ frame: Frame?, flags: BufferSourceFlag = .init(rawValue: 0)) throws {
         try throwIfFail(av_buffersrc_add_frame_flags(cContextPtr, frame?.cFramePtr, flags.rawValue))
     }
 }
 
-// MARK: - AVBufferSinkFlag
+// MARK: - BufferSinkFlag
 
-public struct AVBufferSinkFlag: OptionSet {
+public struct BufferSinkFlag: OptionSet {
     /// Tell av_buffersink_get_buffer_ref() to read video/samples buffer
     /// reference, but not remove it from the buffer. This is useful if you
     /// need only to read a video/samples buffer, without to fetch it.
-    public static let peek = AVBufferSinkFlag(rawValue: Int32(AV_BUFFERSINK_FLAG_PEEK))
+    public static let peek = BufferSinkFlag(rawValue: Int32(AV_BUFFERSINK_FLAG_PEEK))
     /// Tell av_buffersink_get_buffer_ref() not to request a frame from its input.
     /// If a frame is already buffered, it is read (and removed from the buffer),
     /// but if no frame is present, return AVERROR(EAGAIN).
-    public static let noRequest = AVBufferSinkFlag(rawValue: Int32(AV_BUFFERSINK_FLAG_NO_REQUEST))
+    public static let noRequest = BufferSinkFlag(rawValue: Int32(AV_BUFFERSINK_FLAG_NO_REQUEST))
 
     public let rawValue: Int32
 
     public init(rawValue: Int32) { self.rawValue = rawValue }
 }
 
-extension AVBufferSinkFlag: CustomStringConvertible {
+extension BufferSinkFlag: CustomStringConvertible {
 
     public var description: String {
         var str = "["
@@ -403,25 +403,25 @@ extension AVBufferSinkFlag: CustomStringConvertible {
 
 // MARK: - Buffer Sink
 
-extension AVFilterContext {
+extension FilterContext {
 
     /// The media type of the buffer sink.
-    public var mediaType: AVMediaType {
+    public var mediaType: MediaType {
         av_buffersink_get_type(cContextPtr)
     }
 
     /// The timebase of the buffer sink.
-    public var timebase: AVRational {
+    public var timebase: Rational {
         av_buffersink_get_time_base(cContextPtr)
     }
 
     /// The pixel format of the video buffer sink.
-    public var pixelFormat: AVPixelFormat {
-        AVPixelFormat(rawValue: av_buffersink_get_format(cContextPtr))
+    public var pixelFormat: PixelFormat {
+        PixelFormat(rawValue: av_buffersink_get_format(cContextPtr))
     }
 
     /// The frame rate of the video buffer sink.
-    public var frameRate: AVRational {
+    public var frameRate: Rational {
         av_buffersink_get_frame_rate(cContextPtr)
     }
 
@@ -436,13 +436,13 @@ extension AVFilterContext {
     }
 
     /// The sample aspect ratio of the video buffer sink.
-    public var sampleAspectRatio: AVRational {
+    public var sampleAspectRatio: Rational {
         av_buffersink_get_sample_aspect_ratio(cContextPtr)
     }
 
     /// The sample format of the audio buffer sink.
-    public var sampleFormat: AVSampleFormat {
-        AVSampleFormat(rawValue: av_buffersink_get_format(cContextPtr))
+    public var sampleFormat: SampleFormat {
+        SampleFormat(rawValue: av_buffersink_get_format(cContextPtr))
     }
 
     /// The sample rate of the audio buffer sink.
@@ -456,8 +456,8 @@ extension AVFilterContext {
     }
 
     /// The channel layout of the audio buffer sink.
-    public var channelLayout: AVChannelLayout {
-        AVChannelLayout(rawValue: av_buffersink_get_channel_layout(cContextPtr))
+    public var channelLayout: ChannelLayout {
+        ChannelLayout(rawValue: av_buffersink_get_channel_layout(cContextPtr))
     }
 
     /// Get a frame with filtered data from sink and put it in frame.
@@ -465,18 +465,18 @@ extension AVFilterContext {
     /// - Parameters:
     ///   - frame: pointer to an allocated frame that will be filled with data.
     ///     The data must be freed using `av_frame_unref() / av_frame_free()`.
-    ///   - flags: a combination of `AVBufferSinkFlag` flags
+    ///   - flags: a combination of `BufferSinkFlag` flags
     /// - Throws:
     ///     - `AVError.tryAgain` if no frames are available at this point;
     ///       more input frames must be added to the filtergraph to get more output.
     ///     - `AVError.eof` if there will be no more output frames on this sink.
     ///     - A different `AVError` in other failure cases.
-    public func getFrame(_ frame: AVFrame, flags: AVBufferSinkFlag = .init(rawValue: 0)) throws {
+    public func getFrame(_ frame: Frame, flags: BufferSinkFlag = .init(rawValue: 0)) throws {
         try throwIfFail(av_buffersink_get_frame_flags(cContextPtr, frame.cFramePtr, flags.rawValue))
     }
 }
 
-// MARK: - AVFilterLink
+// MARK: - FilterLink
 
 typealias CAVFilterLink = CFFmpeg.AVFilterLink
 
@@ -484,7 +484,7 @@ typealias CAVFilterLink = CFFmpeg.AVFilterLink
 /// between which this link exists, and the indexes of the pads involved.
 /// In addition, this link also contains the parameters which have been negotiated and
 /// agreed upon between the filter, such as image dimensions, format, etc.
-public struct AVFilterLink {
+public struct FilterLink {
     let cLinkPtr: UnsafeMutablePointer<CAVFilterLink>
 
     init(cLinkPtr: UnsafeMutablePointer<CAVFilterLink>) {
@@ -492,35 +492,35 @@ public struct AVFilterLink {
     }
 
     /// The source filter.
-    public var source: AVFilterContext {
-        AVFilterContext(cContextPtr: cLinkPtr.pointee.src)
+    public var source: FilterContext {
+        FilterContext(cContextPtr: cLinkPtr.pointee.src)
     }
 
     /// The destination filter.
-    public var destination: AVFilterContext {
-        AVFilterContext(cContextPtr: cLinkPtr.pointee.dst)
+    public var destination: FilterContext {
+        FilterContext(cContextPtr: cLinkPtr.pointee.dst)
     }
 
     /// The filter's media type.
-    public var mediaType: AVMediaType {
+    public var mediaType: MediaType {
         cLinkPtr.pointee.type
     }
 
     /// Define the timebase used by the PTS of the frames/samples which will pass through this link.
     /// During the configuration stage, each filter is supposed to change only the output timebase,
     /// while the timebase of the input link is assumed to be an unchangeable property.
-    public var timebase: AVRational {
+    public var timebase: Rational {
         cLinkPtr.pointee.time_base
     }
 }
 
 // MARK: - Video
 
-extension AVFilterLink {
+extension FilterLink {
 
     /// agreed upon pixel format
-    public var pixelFormat: AVPixelFormat {
-        AVPixelFormat(cLinkPtr.pointee.format)
+    public var pixelFormat: PixelFormat {
+        PixelFormat(cLinkPtr.pointee.format)
     }
 
     /// agreed upon image width
@@ -534,23 +534,23 @@ extension AVFilterLink {
     }
 
     /// agreed upon sample aspect ratio
-    public var sampleAspectRatio: AVRational {
+    public var sampleAspectRatio: Rational {
         cLinkPtr.pointee.sample_aspect_ratio
     }
 }
 
 // MARK: - Audio
 
-extension AVFilterLink {
+extension FilterLink {
 
     /// agreed upon sample format
-    public var sampleFormat: AVSampleFormat {
-        AVSampleFormat(cLinkPtr.pointee.format)
+    public var sampleFormat: SampleFormat {
+        SampleFormat(cLinkPtr.pointee.format)
     }
 
     /// channel layout of current buffer
-    public var channelLayout: AVChannelLayout {
-        AVChannelLayout(rawValue: cLinkPtr.pointee.channel_layout)
+    public var channelLayout: ChannelLayout {
+        ChannelLayout(rawValue: cLinkPtr.pointee.channel_layout)
     }
 
     /// samples per second
@@ -559,11 +559,11 @@ extension AVFilterLink {
     }
 }
 
-// MARK: - AVFilterGraph
+// MARK: - FilterGraph
 
 typealias CAVFilterGraph = CFFmpeg.AVFilterGraph
 
-public final class AVFilterGraph {
+public final class FilterGraph {
     let cGraphPtr: UnsafeMutablePointer<CAVFilterGraph>
     var cGraph: CAVFilterGraph { cGraphPtr.pointee }
 
@@ -580,11 +580,11 @@ public final class AVFilterGraph {
     }
 
     /// The filter list in the graph.
-    public var filters: [AVFilterContext] {
-        var list = [AVFilterContext]()
+    public var filters: [FilterContext] {
+        var list = [FilterContext]()
         for i in 0..<filterCount {
             let filter = cGraph.filters.advanced(by: i).pointee!
-            list.append(AVFilterContext(cContextPtr: filter))
+            list.append(FilterContext(cContextPtr: filter))
         }
         return list
     }
@@ -606,11 +606,11 @@ public final class AVFilterGraph {
     ///     AVOptions API or there are no options that need to be set.
     /// - Returns: newly created filter instance
     /// - Throws: AVError
-    public func addFilter(_ filter: AVFilter, name: String, args: String? = nil) throws -> AVFilterContext {
+    public func addFilter(_ filter: Filter, name: String, args: String? = nil) throws -> FilterContext {
         var ctxPtr: UnsafeMutablePointer<CAVFilterContext>!
         let ret = avfilter_graph_create_filter(&ctxPtr, filter.cFilterPtr, name, args, nil, cGraphPtr)
         try throwIfFail(ret)
-        return AVFilterContext(cContextPtr: ctxPtr)
+        return FilterContext(cContextPtr: ctxPtr)
     }
 
     /// Add a graph described by a string to a graph.
@@ -628,7 +628,7 @@ public final class AVFilterGraph {
     ///     If non-NULL, *outputs is updated to contain the list of open outputs
     ///     after the parsing, should be freed with avfilter_inout_free().
     /// - Throws: AVError
-    public func parse(filters: String, inputs: AVFilterInOut, outputs: AVFilterInOut) throws {
+    public func parse(filters: String, inputs: FilterInOut, outputs: FilterInOut) throws {
         inputs.freeWhenDone = false
         outputs.freeWhenDone = false
         var inputsPtr: UnsafeMutablePointer<CAVFilterInOut>? = inputs.cInOutPtr
@@ -649,7 +649,7 @@ public final class AVFilterGraph {
     }
 }
 
-extension AVFilterGraph: CustomStringConvertible {
+extension FilterGraph: CustomStringConvertible {
 
     public var description: String {
         let cstr = avfilter_graph_dump(cGraphPtr, nil)
@@ -658,14 +658,14 @@ extension AVFilterGraph: CustomStringConvertible {
     }
 }
 
-extension AVFilterGraph: AVOptionSupport {
+extension FilterGraph: OptionSupport {
 
     public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T {
         try body(cGraphPtr)
     }
 }
 
-// MARK: - AVFilterInOut
+// MARK: - FilterInOut
 
 typealias CAVFilterInOut = CFFmpeg.AVFilterInOut
 
@@ -676,7 +676,7 @@ typealias CAVFilterInOut = CFFmpeg.AVFilterInOut
 /// to the caller.
 /// This struct specifies, per each not connected pad contained in the graph, the
 /// filter context and the pad index required for establishing a link.
-public final class AVFilterInOut {
+public final class FilterInOut {
     let cInOutPtr: UnsafeMutablePointer<CAVFilterInOut>
     var cInOut: CAVFilterInOut { cInOutPtr.pointee }
 
@@ -686,7 +686,7 @@ public final class AVFilterInOut {
         self.cInOutPtr = cInOutPtr
     }
 
-    /// Create a single `AVFilterInOut` entry.
+    /// Create a single `FilterInOut` entry.
     public init() {
         guard let inOutPtr = avfilter_inout_alloc() else {
             abort("avfilter_inout_alloc")
@@ -702,8 +702,8 @@ public final class AVFilterInOut {
     }
 
     /// The filter context associated to this input/output.
-    public var filterContext: AVFilterContext {
-        get { AVFilterContext(cContextPtr: cInOut.filter_ctx) }
+    public var filterContext: FilterContext {
+        get { FilterContext(cContextPtr: cInOut.filter_ctx) }
         set { cInOutPtr.pointee.filter_ctx = newValue.cContextPtr }
     }
 
@@ -714,10 +714,10 @@ public final class AVFilterInOut {
     }
 
     /// The next input/input in the list, `nil` if this is the last.
-    public var next: AVFilterInOut? {
+    public var next: FilterInOut? {
         get {
             if let ptr = cInOut.next {
-                return AVFilterInOut(cInOutPtr: ptr)
+                return FilterInOut(cInOutPtr: ptr)
             }
             return nil
         }

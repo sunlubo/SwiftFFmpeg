@@ -1,5 +1,5 @@
 //
-//  AVDevice.swift
+//  Device.swift
 //  SwiftFFmpeg
 //
 //  Created by sunlubo on 2019/1/17.
@@ -7,16 +7,16 @@
 
 import CFFmpeg
 
-// MARK: - AVDeviceRect
+// MARK: - DeviceRect
 
-public typealias AVDeviceRect = CFFmpeg.AVDeviceRect
+public typealias DeviceRect = CFFmpeg.AVDeviceRect
 
-// MARK: - AVAppToDevMessageType
+// MARK: - AppToDevMessageType
 
-/// Message types used by `AVFormatContext.sendMessageToDevice(type:data:)`.
-public typealias AVAppToDevMessageType = CFFmpeg.AVAppToDevMessageType
+/// Message types used by `FormatContext.sendMessageToDevice(type:data:)`.
+public typealias AppToDevMessageType = CFFmpeg.AVAppToDevMessageType
 
-extension AVAppToDevMessageType {
+extension AppToDevMessageType {
     /// Dummy message.
     public static let none = AV_APP_TO_DEV_NONE
     /// Window size change message.
@@ -25,13 +25,13 @@ extension AVAppToDevMessageType {
     /// of the window device renders to.
     /// Message should also be sent right after window is created.
     ///
-    /// data: `AVDeviceRect`: new window size.
+    /// data: `DeviceRect`: new window size.
     public static let windowSize = AV_APP_TO_DEV_WINDOW_SIZE
     /// Repaint request message.
     ///
     /// Message is sent to the device when window has to be repainted.
     ///
-    /// data: `AVDeviceRect`: area required to be repainted.
+    /// data: `DeviceRect`: area required to be repainted.
     ///       `nil`: whole area is required to be repainted.
     public static let windowRepaint = AV_APP_TO_DEV_WINDOW_REPAINT
     /// Request pause/play.
@@ -63,20 +63,20 @@ extension AVAppToDevMessageType {
     public static let toggleMute = AV_APP_TO_DEV_TOGGLE_MUTE
     /// Get volume/mute messages.
     ///
-    /// Force the device to send `AVDevToAppMessageType.volumeLevelChanged` or
-    /// `AVDevToAppMessageType.muteStateChanged` command respectively.
+    /// Force the device to send `DevToAppMessageType.volumeLevelChanged` or
+    /// `DevToAppMessageType.muteStateChanged` command respectively.
     ///
     /// data: `nil`.
     public static let getVolume = AV_APP_TO_DEV_GET_VOLUME
     public static let getMute = AV_APP_TO_DEV_GET_MUTE
 }
 
-// MARK: - AVDevToAppMessageType
+// MARK: - DevToAppMessageType
 
-/// Message types used by `AVFormatContext.sendMessageToApplication(type:data:)`.
-public typealias AVDevToAppMessageType = CFFmpeg.AVDevToAppMessageType
+/// Message types used by `FormatContext.sendMessageToApplication(type:data:)`.
+public typealias DevToAppMessageType = CFFmpeg.AVDevToAppMessageType
 
-extension AVDevToAppMessageType {
+extension DevToAppMessageType {
     /// Dummy message.
     public static let none = AV_DEV_TO_APP_NONE
     /// Create window buffer message.
@@ -87,9 +87,9 @@ extension AVDevToAppMessageType {
     /// Application is allowed to ignore preferred window buffer size.
     ///
     /// - Note: Application is obligated to inform about window buffer size
-    ///   with `AVAppToDevMessageType.windowSize` message.
+    ///   with `AppToDevMessageType.windowSize` message.
     ///
-    /// data: `AVDeviceRect`: preferred size of the window buffer.
+    /// data: `DeviceRect`: preferred size of the window buffer.
     ///       `nil`: no preferred size of the window buffer.
     public static let createWindowBuffer = AV_DEV_TO_APP_CREATE_WINDOW_BUFFER
     /// Prepare window buffer message.
@@ -148,9 +148,9 @@ extension AVDevToAppMessageType {
     public static let volumeLevelChanged = AV_DEV_TO_APP_VOLUME_LEVEL_CHANGED
 }
 
-// MARK: - AVDevice
+// MARK: - Device
 
-public enum AVDevice {
+public enum Device {
 
     /// Return the libavdevice build-time configuration.
     public static var configuration: String {
@@ -158,51 +158,51 @@ public enum AVDevice {
     }
 
     /// Get all registered audio input devices.
-    public static var supportedAudioInputDevices: [AVInputFormat] {
-        var list = [AVInputFormat]()
+    public static var supportedAudioInputDevices: [InputFormat] {
+        var list = [InputFormat]()
         var prev: UnsafeMutablePointer<CAVInputFormat>?
         while let fmtPtr = av_input_audio_device_next(prev) {
-            list.append(AVInputFormat(cFormatPtr: fmtPtr))
+            list.append(InputFormat(cFormatPtr: fmtPtr))
             prev = fmtPtr
         }
         return list
     }
 
     /// Get all registered video input devices.
-    public static var supportedVideoInputDevices: [AVInputFormat] {
-        var list = [AVInputFormat]()
+    public static var supportedVideoInputDevices: [InputFormat] {
+        var list = [InputFormat]()
         var prev: UnsafeMutablePointer<CAVInputFormat>?
         while let fmtPtr = av_input_video_device_next(prev) {
-            list.append(AVInputFormat(cFormatPtr: fmtPtr))
+            list.append(InputFormat(cFormatPtr: fmtPtr))
             prev = fmtPtr
         }
         return list
     }
 
     /// Get all registered audio output devices.
-    public static var supportedAudioOutputDevices: [AVOutputFormat] {
-        var list = [AVOutputFormat]()
+    public static var supportedAudioOutputDevices: [OutputFormat] {
+        var list = [OutputFormat]()
         var prev: UnsafeMutablePointer<CAVOutputFormat>?
         while let fmtPtr = av_output_audio_device_next(prev) {
-            list.append(AVOutputFormat(cFormatPtr: fmtPtr))
+            list.append(OutputFormat(cFormatPtr: fmtPtr))
             prev = fmtPtr
         }
         return list
     }
 
     /// Get all registered video output devices.
-    public static var supportedVideoOutputDevices: [AVOutputFormat] {
-        var list = [AVOutputFormat]()
+    public static var supportedVideoOutputDevices: [OutputFormat] {
+        var list = [OutputFormat]()
         var prev: UnsafeMutablePointer<CAVOutputFormat>?
         while let fmtPtr = av_output_video_device_next(prev) {
-            list.append(AVOutputFormat(cFormatPtr: fmtPtr))
+            list.append(OutputFormat(cFormatPtr: fmtPtr))
             prev = fmtPtr
         }
         return list
     }
 }
 
-extension AVFormatContext {
+extension FormatContext {
 
     /// Send control message from application to device.
     ///
@@ -213,7 +213,7 @@ extension AVFormatContext {
     ///     - `AVError.noSystem` when device doesn't implement handler of the message.
     ///     - othrer errors
     public func sendMessageToDevice(
-        type: AVAppToDevMessageType,
+        type: AppToDevMessageType,
         data: UnsafeMutableRawBufferPointer?
     ) throws {
         try throwIfFail(
@@ -230,7 +230,7 @@ extension AVFormatContext {
     ///     - `AVError.noSystem` when device doesn't implement handler of the message.
     ///     - othrer errors
     public func sendMessageToApplication(
-        type: AVDevToAppMessageType,
+        type: DevToAppMessageType,
         data: UnsafeMutableRawBufferPointer?
     ) throws {
         try throwIfFail(
@@ -239,29 +239,29 @@ extension AVFormatContext {
     }
 }
 
-// MARK: - AVDeviceCapabilitiesQuery
+// MARK: - DeviceCapabilitiesQuery
 
 typealias CAVDeviceCapabilitiesQuery = CFFmpeg.AVDeviceCapabilitiesQuery
 
 /// Structure describes device capabilities.
 ///
-/// It is used by devices in conjunction with `av_device_capabilities` `AVOption` table
-/// to implement capabilities probing API based on `AVOption` API. Should not be used directly.
-public final class AVDeviceCapabilitiesQuery {
-    private let formatContext: AVFormatContext
+/// It is used by devices in conjunction with `av_device_capabilities` `Option` table
+/// to implement capabilities probing API based on `Option` API. Should not be used directly.
+public final class DeviceCapabilitiesQuery {
+    private let formatContext: FormatContext
     private let cQueryPtr: UnsafeMutablePointer<CAVDeviceCapabilitiesQuery>
     private var cQuery: CAVDeviceCapabilitiesQuery { cQueryPtr.pointee }
 
-    /// Initialize capabilities probing API based on `AVOption` API.
+    /// Initialize capabilities probing API based on `Option` API.
     ///
     /// - Parameters:
     ///   - formatContext: Context of the device.
     ///   - options: An dictionary filled with device-private options.
-    ///     The same options must be passed later to `AVFormatContext.writeHeader(options:)`
-    ///     for output devices or `AVFormatContext.openInput(_:format:options:)` for input devices,
+    ///     The same options must be passed later to `FormatContext.writeHeader(options:)`
+    ///     for output devices or `FormatContext.openInput(_:format:options:)` for input devices,
     ///     or at any other place that affects device-private options.
     /// - Throws: AVError
-    public init(formatContext: AVFormatContext, options: [String: String]? = nil) throws {
+    public init(formatContext: FormatContext, options: [String: String]? = nil) throws {
         var pm: OpaquePointer? = options?.toAVDict()
         defer { av_dict_free(&pm) }
 
@@ -272,11 +272,11 @@ public final class AVDeviceCapabilitiesQuery {
         self.cQueryPtr = queryPtr!
     }
 
-    public var codec: AVCodecID {
+    public var codec: CodecID {
         cQuery.codec
     }
 
-    public var sampleFormat: AVCodecID {
+    public var sampleFormat: CodecID {
         cQuery.codec
     }
 
@@ -288,11 +288,11 @@ public final class AVDeviceCapabilitiesQuery {
         Int(cQuery.channels)
     }
 
-    public var channelLayout: AVChannelLayout {
-        AVChannelLayout(rawValue: UInt64(cQuery.channel_layout))
+    public var channelLayout: ChannelLayout {
+        ChannelLayout(rawValue: UInt64(cQuery.channel_layout))
     }
 
-    public var pixelFormat: AVCodecID {
+    public var pixelFormat: CodecID {
         cQuery.codec
     }
 
@@ -312,7 +312,7 @@ public final class AVDeviceCapabilitiesQuery {
         Int(cQuery.frame_height)
     }
 
-    public var fps: AVRational {
+    public var fps: Rational {
         cQuery.fps
     }
 
@@ -322,12 +322,12 @@ public final class AVDeviceCapabilitiesQuery {
     }
 }
 
-// MARK: - AVDeviceInfo
+// MARK: - DeviceInfo
 
 typealias CAVDeviceInfo = CFFmpeg.AVDeviceInfo
 
 /// Structure describes basic parameters of the device.
-public struct AVDeviceInfo {
+public struct DeviceInfo {
     private let cDeviceInfoPtr: UnsafeMutablePointer<CAVDeviceInfo>
     private var cDeviceInfo: CAVDeviceInfo { cDeviceInfoPtr.pointee }
 
@@ -351,7 +351,7 @@ public struct AVDeviceInfo {
 typealias CAVDeviceInfoList = CFFmpeg.AVDeviceInfoList
 
 /// List of devices.
-public final class AVDeviceInfoList {
+public final class DeviceInfoList {
     private let cDeviceInfoListPtr: UnsafeMutablePointer<CAVDeviceInfoList>
     private var cDeviceInfoList: CAVDeviceInfoList { cDeviceInfoListPtr.pointee }
 
@@ -370,7 +370,7 @@ public final class AVDeviceInfoList {
     ///
     /// - Parameter formatContext: device context
     /// - Throws: AVError
-    public init(formatContext: AVFormatContext) throws {
+    public init(formatContext: FormatContext) throws {
         var listPtr: UnsafeMutablePointer<CAVDeviceInfoList>!
         let ret = avdevice_list_devices(formatContext.cContextPtr, &listPtr)
         try throwIfFail(ret)
@@ -379,10 +379,10 @@ public final class AVDeviceInfoList {
     }
 
     /// list of autodetected devices
-    public var devices: [AVDeviceInfo] {
-        var list = [AVDeviceInfo]()
+    public var devices: [DeviceInfo] {
+        var list = [DeviceInfo]()
         for i in 0 ..< deviceCount {
-            list.append(AVDeviceInfo(cDeviceInfoPtr: cDeviceInfoList.devices[i]!))
+            list.append(DeviceInfo(cDeviceInfoPtr: cDeviceInfoList.devices[i]!))
         }
         return list
     }
@@ -416,36 +416,36 @@ public final class AVDeviceInfoList {
     ///   - device: device format. May be `nil` if device name is set.
     ///   - deviceName: device name. May be `nil` if device format is set.
     ///   - options: An dictionary filled with device-private options.
-    ///     The same options must be passed later to `AVFormatContext.writeHeader(options:)`
-    ///     for output devices or `AVFormatContext.openInput(_:format:options:)` for input devices,
+    ///     The same options must be passed later to `FormatContext.writeHeader(options:)`
+    ///     for output devices or `FormatContext.openInput(_:format:options:)` for input devices,
     ///     or at any other place that affects device-private options.
     /// - Returns: list of autodetected devices
     /// - Throws: AVError
     public static func listInputSources(
-        device: AVInputFormat?,
+        device: InputFormat?,
         deviceName: String?,
         options: [String: String]? = nil
-    ) throws -> AVDeviceInfoList {
+    ) throws -> DeviceInfoList {
         var pm: OpaquePointer? = options?.toAVDict()
         defer { av_dict_free(&pm) }
 
         var listPtr: UnsafeMutablePointer<CAVDeviceInfoList>!
         let ret = avdevice_list_input_sources(device?.cFormatPtr, deviceName, pm, &listPtr)
         try throwIfFail(ret)
-        return AVDeviceInfoList(cDeviceInfoListPtr: listPtr)
+        return DeviceInfoList(cDeviceInfoListPtr: listPtr)
     }
 
     public static func listInputSinks(
-        device: AVOutputFormat?,
+        device: OutputFormat?,
         deviceName: String? = nil,
         options: [String: String]? = nil
-    ) throws -> AVDeviceInfoList {
+    ) throws -> DeviceInfoList {
         var pm: OpaquePointer? = options?.toAVDict()
         defer { av_dict_free(&pm) }
 
         var listPtr: UnsafeMutablePointer<CAVDeviceInfoList>!
         let ret = avdevice_list_output_sinks(device?.cFormatPtr, deviceName, pm, &listPtr)
         try throwIfFail(ret)
-        return AVDeviceInfoList(cDeviceInfoListPtr: listPtr)
+        return DeviceInfoList(cDeviceInfoListPtr: listPtr)
     }
 }

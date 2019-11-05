@@ -15,7 +15,7 @@ import SwiftFFmpeg
 
 private let queue = DispatchQueue(label: "http_client", attributes: .concurrent)
 
-private func process_client(client: AVIOContext, input: String) throws {
+private func process_client(client: IOContext, input: String) throws {
     defer {
         print("Flushing client")
         client.flush()
@@ -48,7 +48,7 @@ private func process_client(client: AVIOContext, input: String) throws {
         return
     }
     print("Opening input file.")
-    let input = try AVIOContext(url: input, flags: .read)
+    let input = try IOContext(url: input, flags: .read)
     defer {
         print("Closing input")
         input.close()
@@ -81,12 +81,12 @@ func http_multiclient() throws {
         return
     }
 
-    AVLog.level = .trace
+    Logger.level = .trace
     try FFmpeg.networkInit()
 
     let input = CommandLine.arguments[2]
     let output = CommandLine.arguments[3]
-    let server = try AVIOContext(url: output, flags: .write, options: ["listen": "2"])
+    let server = try IOContext(url: output, flags: .write, options: ["listen": "2"])
     defer {
         server.close()
     }

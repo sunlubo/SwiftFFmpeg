@@ -1,5 +1,5 @@
 //
-//  AVFormat.swift
+//  Format.swift
 //  SwiftFFmpeg
 //
 //  Created by sunlubo on 2019/1/16.
@@ -7,11 +7,11 @@
 
 import CFFmpeg
 
-// MARK: - AVInputFormat
+// MARK: - InputFormat
 
 typealias CAVInputFormat = CFFmpeg.AVInputFormat
 
-public struct AVInputFormat {
+public struct InputFormat {
     let cFormatPtr: UnsafeMutablePointer<CAVInputFormat>
     var cFormat: CAVInputFormat { cFormatPtr.pointee }
 
@@ -19,7 +19,7 @@ public struct AVInputFormat {
         self.cFormatPtr = cFormatPtr
     }
 
-    /// Find `AVInputFormat` based on the short name of the input format.
+    /// Find `InputFormat` based on the short name of the input format.
     ///
     /// - Parameter name: name of the input format
     public init?(name: String) {
@@ -56,27 +56,27 @@ public struct AVInputFormat {
     }
 
     /// `AVClass` for the private context.
-    public var privClass: AVClass? {
+    public var privClass: Class? {
         if let classPtr = cFormat.priv_class {
-            return AVClass(cClassPtr: classPtr)
+            return Class(cClassPtr: classPtr)
         }
         return nil
     }
 
     /// Get all registered demuxers.
-    public static var supportedFormats: [AVInputFormat] {
-        var list = [AVInputFormat]()
+    public static var supportedFormats: [InputFormat] {
+        var list = [InputFormat]()
         var state: UnsafeMutableRawPointer?
         while let fmtPtr = av_demuxer_iterate(&state) {
-            list.append(AVInputFormat(cFormatPtr: fmtPtr.mutable))
+            list.append(InputFormat(cFormatPtr: fmtPtr.mutable))
         }
         return list
     }
 }
 
-// MARK: - AVInputFormat.Flag
+// MARK: - InputFormat.Flag
 
-extension AVInputFormat {
+extension InputFormat {
 
     /// Flags used by `flags`.
     public struct Flag: OptionSet {
@@ -105,7 +105,7 @@ extension AVInputFormat {
     }
 }
 
-extension AVInputFormat.Flag: CustomStringConvertible {
+extension InputFormat.Flag: CustomStringConvertible {
 
     public var description: String {
         var str = "["
@@ -126,7 +126,7 @@ extension AVInputFormat.Flag: CustomStringConvertible {
     }
 }
 
-extension AVInputFormat: AVOptionSupport {
+extension InputFormat: OptionSupport {
 
     public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T {
         var tmp = cFormat.priv_class
@@ -136,11 +136,11 @@ extension AVInputFormat: AVOptionSupport {
     }
 }
 
-// MARK: - AVOutputFormat
+// MARK: - OutputFormat
 
 typealias CAVOutputFormat = CFFmpeg.AVOutputFormat
 
-public struct AVOutputFormat {
+public struct OutputFormat {
     let cFormatPtr: UnsafeMutablePointer<CAVOutputFormat>
     var cFormat: CAVOutputFormat { cFormatPtr.pointee }
 
@@ -148,7 +148,7 @@ public struct AVOutputFormat {
         self.cFormatPtr = cFormatPtr
     }
 
-    /// Find `AVOutputFormat` based on the short name of the output format.
+    /// Find `OutputFormat` based on the short name of the output format.
     ///
     /// - Parameter name: name of the input format
     public init?(name: String) {
@@ -180,17 +180,17 @@ public struct AVOutputFormat {
     }
 
     /// The default audio codec of the muxer.
-    public var audioCodec: AVCodecID {
+    public var audioCodec: CodecID {
         cFormat.audio_codec
     }
 
     /// The default video codec of the muxer.
-    public var videoCodec: AVCodecID {
+    public var videoCodec: CodecID {
         cFormat.video_codec
     }
 
     /// The default subtitle codec of the muxer.
-    public var subtitleCodec: AVCodecID {
+    public var subtitleCodec: CodecID {
         cFormat.subtitle_codec
     }
 
@@ -199,28 +199,28 @@ public struct AVOutputFormat {
         set { cFormatPtr.pointee.flags = newValue.rawValue }
     }
 
-    /// `AVClass` for the private context.
-    public var privClass: AVClass? {
+    /// `Class` for the private context.
+    public var privClass: Class? {
         if let classPtr = cFormat.priv_class {
-            return AVClass(cClassPtr: classPtr)
+            return Class(cClassPtr: classPtr)
         }
         return nil
     }
 
     /// Get all registered muxers.
-    public static var supportedFormats: [AVOutputFormat] {
-        var list = [AVOutputFormat]()
+    public static var supportedFormats: [OutputFormat] {
+        var list = [OutputFormat]()
         var state: UnsafeMutableRawPointer?
         while let fmtPtr = av_muxer_iterate(&state) {
-            list.append(AVOutputFormat(cFormatPtr: fmtPtr.mutable))
+            list.append(OutputFormat(cFormatPtr: fmtPtr.mutable))
         }
         return list
     }
 }
 
-// MARK: - AVOutputFormat.Flag
+// MARK: - OutputFormat.Flag
 
-extension AVOutputFormat {
+extension OutputFormat {
 
     /// Flags used by `flags`.
     public struct Flag: OptionSet {
@@ -253,7 +253,7 @@ extension AVOutputFormat {
     }
 }
 
-extension AVOutputFormat.Flag: CustomStringConvertible {
+extension OutputFormat.Flag: CustomStringConvertible {
 
     public var description: String {
         var str = "["
@@ -275,7 +275,7 @@ extension AVOutputFormat.Flag: CustomStringConvertible {
     }
 }
 
-extension AVOutputFormat: AVOptionSupport {
+extension OutputFormat: OptionSupport {
 
     public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T {
         var tmp = cFormat.priv_class

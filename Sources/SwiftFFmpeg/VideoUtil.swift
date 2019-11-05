@@ -7,11 +7,11 @@
 
 import CFFmpeg
 
-// MARK: - AVPictureType
+// MARK: - PictureType
 
-public typealias AVPictureType = CFFmpeg.AVPictureType
+public typealias PictureType = CFFmpeg.AVPictureType
 
-extension AVPictureType {
+extension PictureType {
     /// Undefined
     public static let none = AV_PICTURE_TYPE_NONE
     /// Intra
@@ -30,7 +30,7 @@ extension AVPictureType {
     public static let BI = AV_PICTURE_TYPE_BI
 }
 
-extension AVPictureType: CustomStringConvertible {
+extension PictureType: CustomStringConvertible {
 
     public var description: String {
         let char = av_get_picture_type_char(self)
@@ -39,11 +39,11 @@ extension AVPictureType: CustomStringConvertible {
     }
 }
 
-// MARK: - AVPixelFormat
+// MARK: - PixelFormat
 
-public typealias AVPixelFormat = CFFmpeg.AVPixelFormat
+public typealias PixelFormat = CFFmpeg.AVPixelFormat
 
-extension AVPixelFormat {
+extension PixelFormat {
     public static let none = AV_PIX_FMT_NONE
     /// planar YUV 4:2:0, 12bpp, (1 Cr & Cb sample per 2x2 Y samples)
     public static let YUV420P = AV_PIX_FMT_YUV420P
@@ -201,22 +201,23 @@ extension AVPixelFormat {
     }
 
     /// The pixel format descriptor of the pixel format.
-    public var descriptor: AVPixelFormatDescriptor? {
+    public var descriptor: PixelFormatDescriptor? {
         if let desc = av_pix_fmt_desc_get(self) {
-            return AVPixelFormatDescriptor(cDescriptorPtr: desc)
+            return PixelFormatDescriptor(cDescriptorPtr: desc)
         } else {
             return nil
         }
     }
 }
 
-public typealias AVComponentDescriptor = CFFmpeg.AVComponentDescriptor
+public typealias CComponentDescriptor = CFFmpeg.AVComponentDescriptor
+public typealias CPixelFormatDescriptor = CFFmpeg.AVPixFmtDescriptor
 
-public struct AVPixelFormatDescriptor {
-    let cDescriptorPtr: UnsafePointer<AVPixFmtDescriptor>
-    var cDescriptor: AVPixFmtDescriptor { return cDescriptorPtr.pointee }
+public struct PixelFormatDescriptor {
+    let cDescriptorPtr: UnsafePointer<CPixelFormatDescriptor>
+    var cDescriptor: CPixelFormatDescriptor { cDescriptorPtr.pointee }
 
-    init(cDescriptorPtr: UnsafePointer<AVPixFmtDescriptor>) {
+    init(cDescriptorPtr: UnsafePointer<CPixelFormatDescriptor>) {
         self.cDescriptorPtr = cDescriptorPtr
     }
 
@@ -255,13 +256,13 @@ public struct AVPixelFormatDescriptor {
     ///   otherwise 0 is luma, 1 is chroma-U and 2 is chroma-V.
     ///
     /// If present, the Alpha channel is always the last component.
-    public var componentDescriptors: [SwiftFFmpeg.AVComponentDescriptor] {
+    public var componentDescriptors: [CComponentDescriptor] {
         [cDescriptor.comp.0, cDescriptor.comp.1, cDescriptor.comp.2, cDescriptor.comp.3]
     }
 
     /// A wrapper around the C property for flags, containing AV_PIX_FMT_FLAG constants in a option set.
-    public var flags: AVPixelFormatFlags {
-        AVPixelFormatFlags(rawValue: cDescriptor.flags)
+    public var flags: PixelFormatFlags {
+        PixelFormatFlags(rawValue: cDescriptor.flags)
     }
 
     /// Alternative comma-separated names.
@@ -286,12 +287,12 @@ public struct AVPixelFormatDescriptor {
 
     /// @return an AVPixelFormat id described by desc, or AV_PIX_FMT_NONE if desc
     /// is not a valid pointer to a pixel format descriptor.
-    public var id: AVPixelFormat {
+    public var id: PixelFormat {
         av_pix_fmt_desc_get_id(cDescriptorPtr)
     }
 }
 
-public struct AVPixelFormatFlags: OptionSet {
+public struct PixelFormatFlags: OptionSet {
     public let rawValue: UInt64
 
     public init(rawValue: UInt64) {
@@ -299,22 +300,22 @@ public struct AVPixelFormatFlags: OptionSet {
     }
 
     /// Pixel format is big-endian.
-    public static let BE = AVPixelFormatFlags(rawValue: UInt64(AV_PIX_FMT_FLAG_BE))
+    public static let BE = PixelFormatFlags(rawValue: UInt64(AV_PIX_FMT_FLAG_BE))
 
     /// Pixel format has a palette in data[1], values are indexes in this palette.
-    public static let PAL = AVPixelFormatFlags(rawValue: UInt64(AV_PIX_FMT_FLAG_PAL))
+    public static let PAL = PixelFormatFlags(rawValue: UInt64(AV_PIX_FMT_FLAG_PAL))
 
     /// All values of a component are bit-wise packed end to end.
-    public static let BITSTREAM = AVPixelFormatFlags(rawValue: UInt64(AV_PIX_FMT_FLAG_BITSTREAM))
+    public static let BITSTREAM = PixelFormatFlags(rawValue: UInt64(AV_PIX_FMT_FLAG_BITSTREAM))
 
     /// Pixel format is an HW accelerated format.
-    public static let HWACCEL = AVPixelFormatFlags(rawValue: UInt64(AV_PIX_FMT_FLAG_HWACCEL))
+    public static let HWACCEL = PixelFormatFlags(rawValue: UInt64(AV_PIX_FMT_FLAG_HWACCEL))
 
     /// At least one pixel component is not in the first data plane.
-    public static let PLANAR = AVPixelFormatFlags(rawValue: UInt64(AV_PIX_FMT_FLAG_PLANAR))
+    public static let PLANAR = PixelFormatFlags(rawValue: UInt64(AV_PIX_FMT_FLAG_PLANAR))
 
     /// The pixel format contains RGB-like data (as opposed to YUV/grayscale).
-    public static let RGB = AVPixelFormatFlags(rawValue: UInt64(AV_PIX_FMT_FLAG_RGB))
+    public static let RGB = PixelFormatFlags(rawValue: UInt64(AV_PIX_FMT_FLAG_RGB))
 
     /// The pixel format is "pseudo-paletted". This means that it contains a
     /// fixed palette in the 2nd plane but the palette is fixed/constant for each
@@ -329,7 +330,7 @@ public struct AVPixelFormatFlags: OptionSet {
     /// extra "pseudo" palette is already ignored, and API users are not required to
     /// allocate a palette for AV_PIX_FMT_FLAG_PSEUDOPAL formats (it was required
     /// before the deprecation, though).
-    public static let PSEUDOPAL = AVPixelFormatFlags(rawValue: UInt64(AV_PIX_FMT_FLAG_PSEUDOPAL))
+    public static let PSEUDOPAL = PixelFormatFlags(rawValue: UInt64(AV_PIX_FMT_FLAG_PSEUDOPAL))
 
     /// The pixel format has an alpha channel. This is set on all formats that
     /// support alpha in some way, including AV_PIX_FMT_PAL8. The alpha is always
@@ -337,14 +338,14 @@ public struct AVPixelFormatFlags: OptionSet {
     /// If a codec or a filter does not support alpha, it should set all alpha to
     /// opaque, or use the equivalent pixel formats without alpha component, e.g.
     /// AV_PIX_FMT_RGB0 (or AV_PIX_FMT_RGB24 etc.) instead of AV_PIX_FMT_RGBA.
-    public static let ALPHA = AVPixelFormatFlags(rawValue: UInt64(AV_PIX_FMT_FLAG_ALPHA))
+    public static let ALPHA = PixelFormatFlags(rawValue: UInt64(AV_PIX_FMT_FLAG_ALPHA))
 
     /// The pixel format is following a Bayer pattern
-    public static let BAYER = AVPixelFormatFlags(rawValue: UInt64(AV_PIX_FMT_FLAG_BAYER))
+    public static let BAYER = PixelFormatFlags(rawValue: UInt64(AV_PIX_FMT_FLAG_BAYER))
 
     /// The pixel format contains IEEE-754 floating point values. Precision (double,
     /// single, or half) should be determined by the pixel size (64, 32, or 16 bits).
-    public static let FLOAT = AVPixelFormatFlags(rawValue: UInt64(AV_PIX_FMT_FLAG_FLOAT))
+    public static let FLOAT = PixelFormatFlags(rawValue: UInt64(AV_PIX_FMT_FLAG_FLOAT))
 }
 
 extension AVPixelFormat: CustomStringConvertible {
@@ -354,9 +355,9 @@ extension AVPixelFormat: CustomStringConvertible {
     }
 }
 
-public typealias AVColorRange = CFFmpeg.AVColorRange
+public typealias ColorRange = CFFmpeg.AVColorRange
 
-extension CFFmpeg.AVColorRange {
+extension ColorRange {
     public static let UNSPECIFIED = AVCOL_RANGE_UNSPECIFIED
 
     /// the normal 219*2^(n-8) "MPEG" YUV ranges
@@ -387,9 +388,9 @@ extension CFFmpeg.AVColorRange {
     }
 }
 
-public typealias AVColorPrimaries = CFFmpeg.AVColorPrimaries
+public typealias ColorPrimaries = CFFmpeg.AVColorPrimaries
 
-extension CFFmpeg.AVColorPrimaries {
+extension ColorPrimaries {
     public static let RESERVED0 = AVCOL_PRI_RESERVED0
     /// also ITU-R BT1361 / IEC 61966-2-4 / SMPTE RP177 Annex B
     public static let BT709 = AVCOL_PRI_BT709
@@ -438,9 +439,9 @@ extension CFFmpeg.AVColorPrimaries {
     }
 }
 
-public typealias AVColorTransferCharacteristic = CFFmpeg.AVColorTransferCharacteristic
+public typealias ColorTransferCharacteristic = CFFmpeg.AVColorTransferCharacteristic
 
-extension CFFmpeg.AVColorTransferCharacteristic {
+extension ColorTransferCharacteristic {
     public static let RESERVED0 = AVCOL_TRC_RESERVED0
     /// also ITU-R BT1361
     public static let BT709 = AVCOL_TRC_BT709
@@ -485,11 +486,9 @@ extension CFFmpeg.AVColorTransferCharacteristic {
     /// If there is no color transfer characteristic with name name, an error is thrown.
     public init?(name: String) throws {
         let range = av_color_transfer_from_name(name)
-
         if range < 0 {
             throw AVError(code: range)
         }
-
         self.init(UInt32(range))
     }
 
@@ -499,9 +498,9 @@ extension CFFmpeg.AVColorTransferCharacteristic {
     }
 }
 
-public typealias AVColorSpace = CFFmpeg.AVColorSpace
+public typealias ColorSpace = CFFmpeg.AVColorSpace
 
-extension CFFmpeg.AVColorSpace {
+extension ColorSpace {
     /// order of coefficients is actually GBR, also IEC 61966-2-1 (sRGB)
     public static let RGB = AVCOL_SPC_RGB
     /// also ITU-R BT1361 / IEC 61966-2-4 xvYCC709 / SMPTE RP177 Annex B
@@ -551,9 +550,9 @@ extension CFFmpeg.AVColorSpace {
     }
 }
 
-public typealias AVChromaLocation = CFFmpeg.AVChromaLocation
+public typealias ChromaLocation = CFFmpeg.AVChromaLocation
 
-extension CFFmpeg.AVChromaLocation {
+extension ChromaLocation {
     public static let UNSPECIFIED = AVCHROMA_LOC_UNSPECIFIED
     /// MPEG-2/4 4:2:0, H.264 default for 4:2:0
     public static let LEFT = AVCHROMA_LOC_LEFT

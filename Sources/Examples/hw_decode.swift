@@ -13,17 +13,17 @@ import Glibc
 import SwiftFFmpeg
 
 private func decode_write(
-    codecCtx: AVCodecContext,
-    pkt: AVPacket?,
-    hwPixFmt: AVPixelFormat,
+    codecCtx: CodecContext,
+    pkt: Packet?,
+    hwPixFmt: PixelFormat,
     file: UnsafeMutablePointer<FILE>
 ) throws {
     try codecCtx.sendPacket(pkt)
 
     while true {
-        let frame = AVFrame()
-        let swFrame = AVFrame()
-        var tmpFrame: AVFrame!
+        let frame = Frame()
+        let swFrame = Frame()
+        var tmpFrame: Frame!
 
         do {
             try codecCtx.receiveFrame(frame)
@@ -39,7 +39,7 @@ private func decode_write(
             tmpFrame = frame
         }
 
-        let buffer = try AVImage.makePixelBuffer(from: tmpFrame)
+        let buffer = try Image.makePixelBuffer(from: tmpFrame)
         defer { buffer.deallocate() }
         fwrite(buffer.baseAddress, 1, buffer.count, file)
 
@@ -57,9 +57,9 @@ func hw_decode() throws {
     let input = CommandLine.arguments[3]
     let output = CommandLine.arguments[4]
 
-    guard let deviceType = AVHWDeviceType(name: deviceTypeName) else {
+    guard let deviceType = HardwareDeviceType(name: deviceTypeName) else {
         print("Device type \(deviceTypeName) is not supported.")
-        print(AVHWDeviceType.supportedDeviceTypes())
+        print(HardwareDeviceType.supportedDeviceTypes())
         fatalError()
     }
 
@@ -69,16 +69,16 @@ func hw_decode() throws {
     }
     defer { fclose(file) }
 
-    let fmtCtx = try AVFormatContext(url: input)
+    let fmtCtx = try FormatContext(url: input)
     try fmtCtx.findStreamInfo()
 
     // find the video stream information
     let streamIndex = fmtCtx.findBestStream(type: .video)!
     let stream = fmtCtx.streams[streamIndex]
 
-    let decoder = AVCodec.findDecoderById(stream.codecParameters.codecId)!
+    let decoder = Codec.findDecoderById(stream.codecParameters.codecId)!
     var i = 0
-    var hwPixFmt = AVPixelFormat.none
+    var hwPixFmt = PixelFormat.none
     while true {
         guard let config = decoder.hwConfig(at: i) else {
             fatalError("Decoder \(decoder.name) does not support device type \(deviceTypeName).")
@@ -90,7 +90,7 @@ func hw_decode() throws {
         i += 1
     }
 
-    let decoderCtx = AVCodecContext(codec: decoder)
+    let decoderCtx = CodecContext(codec: decoder)
     decoderCtx.setParameters(stream.codecParameters)
     decoderCtx.getFormat = { ctx, fmts in
         print(fmts)
@@ -101,7 +101,7 @@ func hw_decode() throws {
         return .none
     }
 
-    let deviceCtx = try AVHWDeviceContext(deviceType: deviceType)
+    let deviceCtx = try HardwareDeviceContext(deviceType: deviceType)
     decoderCtx.hwDeviceContext = deviceCtx
 
     try decoderCtx.openCodec()
@@ -109,7 +109,7 @@ func hw_decode() throws {
     // open the file to dump raw data
 
     // actual decoding and dump the raw data
-    let pkt = AVPacket()
+    let pkt = Packet()
     while let _ = try? fmtCtx.readFrame(into: pkt) {
         defer {
             pkt.unref()

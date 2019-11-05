@@ -8,7 +8,7 @@
 import SwiftFFmpeg
 
 func bsf() throws {
-    for filter in AVBitStreamFilter.supportedFilters {
+    for filter in BitStreamFilter.supportedFilters {
         print("\(filter.name): \(filter.codecIds ?? [])")
     }
 }

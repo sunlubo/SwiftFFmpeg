@@ -7,7 +7,7 @@
 
 import CFFmpeg
 
-public final class AVHash {
+public final class Hash {
 
     /// Hash an array of data.
     public static func calculateMD5(for bytes: UnsafeBufferPointer<UInt8>) -> UnsafePointer<UInt8> {
