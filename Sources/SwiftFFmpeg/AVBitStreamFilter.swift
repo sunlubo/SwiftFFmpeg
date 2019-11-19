@@ -99,6 +99,28 @@ public final class AVBitStreamFilterContext {
         abortIfFail(av_bsf_list_parse_str(str, &ptr))
         self.cContextPtr = ptr
     }
+    
+    /// Parameters of the input stream.
+    public var inParameters: AVCodecParameters {
+        return AVCodecParameters(cParametersPtr: cContext.par_in)
+    }
+
+    /// Parameters of the input stream.
+    public var outParameters: AVCodecParameters {
+        return AVCodecParameters(cParametersPtr: cContext.par_out)
+    }
+    
+    /// The timebase used for the timestamps of the input packets.
+    public var time_base_in: AVRational {
+        get { return cContext.time_base_in }
+        set { cContextPtr.pointee.time_base_in = newValue }
+    }
+
+    /// The timebase used for the timestamps of the output packets.
+    public var time_base_out: AVRational {
+        get { return cContext.time_base_out }
+        set { cContextPtr.pointee.time_base_out = newValue }
+    }
 
     /// Prepare the filter for use, after all the parameters and options have been set.
     public func initialize() throws {
