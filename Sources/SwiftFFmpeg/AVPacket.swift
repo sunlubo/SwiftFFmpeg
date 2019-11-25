@@ -214,3 +214,135 @@ extension AVPacket.Flag: CustomStringConvertible {
         return str
     }
 }
+
+// MARK: - AVPacketSideDataType
+
+public typealias AVPacketSideDataType = CFFmpeg.AVPacketSideDataType
+
+extension AVPacketSideDataType {
+    
+    /// An AV_PKT_DATA_PALETTE side data packet contains exactly AVPALETTE_SIZE
+    /// bytes worth of palette. This side data signals that a new palette is present.
+    public static let palette = AV_PKT_DATA_PALETTE
+
+    /// The AV_PKT_DATA_NEW_EXTRADATA is used to notify the codec or the format
+    /// that the extradata buffer was changed and the receiving side should
+    /// act upon it appropriately. The new extradata is embedded in the side
+    /// data buffer and should be immediately used for processing the current
+    /// frame or packet.
+    public static let newExtradata = AV_PKT_DATA_NEW_EXTRADATA
+
+    /// An AV_PKT_DATA_PARAM_CHANGE side data packet. See avcodec.h for layout.
+    public static let paramChange = AV_PKT_DATA_PARAM_CHANGE
+
+    /// An AV_PKT_DATA_H263_MB_INFO side data packet contains a number of
+    /// structures with info about macroblocks relevant to splitting the
+    /// packet into smaller packets on macroblock edges (e.g. as for RFC 2190).
+    /// That is, it does not necessarily contain info about all macroblocks,
+    /// as long as the distance between macroblocks in the info is smaller
+    /// than the target payload size.
+    /// Each MB info structure is 12 bytes. See avcodec.h for layout.
+    public static let h263MbInfo = AV_PKT_DATA_H263_MB_INFO
+
+    /// This side data should be associated with an audio stream and contains
+    /// ReplayGain information in form of the AVReplayGain struct.
+    public static let replayGain = AV_PKT_DATA_REPLAYGAIN
+
+    /// This side data contains a 3x3 transformation matrix describing an affine
+    /// transformation that needs to be applied to the decoded video frames for
+    /// correct presentation.
+    public static let displaymatrix = AV_PKT_DATA_DISPLAYMATRIX
+
+    /// This side data should be associated with a video stream and contains
+    /// Stereoscopic 3D information in form of the AVStereo3D struct.
+    public static let stereo3d = AV_PKT_DATA_STEREO3D
+
+    /// This side data should be associated with an audio stream and corresponds
+    /// to enum AVAudioServiceType.
+    public static let audioServiceType = AV_PKT_DATA_AUDIO_SERVICE_TYPE
+
+    /// This side data contains quality related information from the encoder.
+    /// See avcodec.h for layout.
+    public static let qualityStats = AV_PKT_DATA_QUALITY_STATS
+
+    /// This side data contains an integer value representing the stream index
+    /// of a "fallback" track.  A fallback track indicates an alternate
+    /// track to use when the current track can not be decoded for some reason.
+    /// e.g. no decoder available for codec.
+    public static let fallbackTrack = AV_PKT_DATA_FALLBACK_TRACK
+
+    /// This side data corresponds to the AVCPBProperties struct.
+    public static let cpbProperties = AV_PKT_DATA_CPB_PROPERTIES
+
+    /// Recommmends skipping the specified number of samples
+    /// See avcodec.h for layout.
+    public static let skipSamples = AV_PKT_DATA_SKIP_SAMPLES
+
+    /// An AV_PKT_DATA_JP_DUALMONO side data packet indicates that
+    /// the packet may contain "dual mono" audio specific to Japanese DTV
+    /// and if it is true, recommends only the selected channel to be used.
+    /// See avcodec.h for layout.
+    public static let jpDualmono = AV_PKT_DATA_JP_DUALMONO
+
+    /// A list of zero terminated key/value strings. There is no end marker for
+    /// the list, so it is required to rely on the side data size to stop.
+    public static let stringsMetadata = AV_PKT_DATA_STRINGS_METADATA
+
+    /// Subtitle event position
+    /// See avcodec.h for layout.
+    public static let subtitlePosition = AV_PKT_DATA_SUBTITLE_POSITION
+
+    /// Data found in BlockAdditional element of matroska container. There is
+    /// no end marker for the data, so it is required to rely on the side data
+    /// size to recognize the end. 8 byte id (as found in BlockAddId) followed
+    /// by data.
+    public static let matroskaBlockadditional = AV_PKT_DATA_MATROSKA_BLOCKADDITIONAL
+
+    /// The optional first identifier line of a WebVTT cue.
+    public static let webvttIdentifiers = AV_PKT_DATA_WEBVTT_IDENTIFIER
+
+    /// The optional settings (rendering instructions) that immediately
+    /// follow the timestamp specifier of a WebVTT cue.
+    public static let webvttSettings = AV_PKT_DATA_WEBVTT_SETTINGS
+
+    /// A list of zero terminated key/value strings. There is no end marker for
+    /// the list, so it is required to rely on the side data size to stop. This
+    /// side data includes updated metadata which appeared in the stream.
+    public static let metadataUpdate = AV_PKT_DATA_METADATA_UPDATE
+
+    /// MPEGTS stream ID as uint8_t, this is required to pass the stream ID
+    /// information from the demuxer to the corresponding muxer.
+    public static let mpegtsStreamId = AV_PKT_DATA_MPEGTS_STREAM_ID
+
+    /// Mastering display metadata (based on SMPTE-2086:2014). This metadata
+    /// should be associated with a video stream and contains data in the form
+    /// of the AVMasteringDisplayMetadata struct.
+    public static let masteringDisplayMetadata = AV_PKT_DATA_MASTERING_DISPLAY_METADATA
+
+    /// This side data should be associated with a video stream and corresponds
+    /// to the AVSphericalMapping structure.
+    public static let spherical = AV_PKT_DATA_SPHERICAL
+
+    /// Content light level (based on CTA-861.3). This metadata should be
+    /// associated with a video stream and contains data in the form of the
+    /// AVContentLightMetadata struct.
+    public static let contentLightLevel = AV_PKT_DATA_CONTENT_LIGHT_LEVEL
+
+    /// ATSC A53 Part 4 Closed Captions. This metadata should be associated with
+    /// a video stream. A53 CC bitstream is stored as uint8_t in AVPacketSideData.data.
+    /// The number of bytes of CC data is AVPacketSideData.size.
+    public static let a53Cc = AV_PKT_DATA_A53_CC
+
+    /// This side data is encryption initialization data.
+    /// The format is not part of ABI, use av_encryption_init_info_* methods to
+    /// access.
+    public static let encryptionInitInfo = AV_PKT_DATA_ENCRYPTION_INIT_INFO
+
+    /// This side data contains encryption info for how to decrypt the packet.
+    /// The format is not part of ABI, use av_encryption_info_* methods to access.
+    public static let encryptionInfo = AV_PKT_DATA_ENCRYPTION_INFO
+
+    /// Active Format Description data consisting of a single byte as specified
+    /// in ETSI TS 101 154 using AVActiveFormatDescription enum.
+    public static let afd = AV_PKT_DATA_AFD
+}
