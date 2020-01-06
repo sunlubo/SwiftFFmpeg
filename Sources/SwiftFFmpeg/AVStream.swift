@@ -94,6 +94,14 @@ public final class AVStream {
     public var sampleAspectRatio: AVRational {
         cStream.sample_aspect_ratio
     }
+    
+    /// display aspect ratio (0 if unknown)
+    ///
+    ///- encoding: unused
+    ///- decoding: Set by libavformat to calculate sample_aspect_ratio internally
+    public var displayAspectRatio: AVRational {
+        cStream.display_aspect_ratio
+    }
 
     /// The metadata of the stream.
     public var metadata: [String: String] {
