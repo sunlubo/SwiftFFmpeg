@@ -47,6 +47,17 @@ public final class SwsContext {
         cContextPtr = ptr
     }
 
+    public func setColorspaceDetails(sourceColorspace: SWSColorspace, sourceRange: SWSColorRange, destinationColorspace: SWSColorspace, destinationRange: SWSColorRange) {
+        sws_setColorspaceDetails(cContextPtr,
+                                 sourceColorspace.coefficients,
+                                 sourceRange.rawValue,
+                                 destinationColorspace.coefficients,
+                                 destinationRange.rawValue,
+                                 0,
+                                 65536,
+                                 65536)
+    }
+
     /// Scale the image slice in `src` and put the resulting scaled slice in the image in `dst`.
     ///
     /// A slice is a sequence of consecutive rows in an image.
@@ -186,4 +197,33 @@ extension SwsContext: AVClassSupport, AVOptionSupport {
     ) rethrows -> T {
         try body(UnsafeMutableRawPointer(cContextPtr))
     }
+}
+
+public struct SWSColorspace {
+    public static let ITU709 = SWSColorspace(rawValue: SWS_CS_ITU709)
+    public static let FCC = SWSColorspace(rawValue: SWS_CS_FCC)
+    public static let ITU601 = SWSColorspace(rawValue: SWS_CS_ITU601)
+    public static let ITU624 = SWSColorspace(rawValue: SWS_CS_ITU624)
+    public static let SMPTE170M = SWSColorspace(rawValue: SWS_CS_SMPTE170M)
+    public static let SMPTE240M = SWSColorspace(rawValue: SWS_CS_SMPTE240M)
+    public static let DEFAULT = SWSColorspace(rawValue: SWS_CS_DEFAULT)
+    public static let BT2020 = SWSColorspace(rawValue: SWS_CS_BT2020)
+
+    var coefficients: UnsafePointer<Int32>? {
+        sws_getCoefficients(rawValue)
+    }
+
+    public let rawValue: Int32
+    public init(rawValue: Int32) { self.rawValue = rawValue }
+}
+
+public struct SWSColorRange {
+    /// legal range
+    public static let MPEG = SWSColorRange(rawValue: 0)
+
+    /// full range
+    public static let JPEG = SWSColorRange(rawValue: 1)
+
+    public let rawValue: Int32
+    public init(rawValue: Int32) { self.rawValue = rawValue }
 }
