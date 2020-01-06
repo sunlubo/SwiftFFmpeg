@@ -357,7 +357,7 @@ extension AVFormatContext {
         relatedStreamIndex: Int = -1
     ) -> Int? {
         let ret = av_find_best_stream(cContextPtr, type, Int32(wantedStreamIndex), Int32(relatedStreamIndex), nil, 0)
-        return Int(ret)
+        return ret >= 0 ? Int(ret) : nil
     }
 
     /// Guess the sample aspect ratio of a frame, based on both the stream and the frame aspect ratio.
