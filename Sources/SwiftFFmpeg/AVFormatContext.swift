@@ -64,6 +64,15 @@ public final class AVFormatContext {
         Int(cContext.nb_streams)
     }
 
+    /// The duration field can be estimated through various ways, and this field can be used
+    /// to know how the duration was estimated.
+    ///
+    /// - encoding: unused
+    /// - decoding: Read by user
+    public var durationEstimationMethod: AVDurationEstimationMethod {
+        AVDurationEstimationMethod(rawValue: cContext.duration_estimation_method)
+    }
+
     /// A list of all streams in the file. New streams are created with `addStream(codec:)`.
     ///
     /// - demuxing: Streams are created by libavformat in `openInput(_ url:format:options:)`.
@@ -100,6 +109,14 @@ public final class AVFormatContext {
     public var flags: Flag {
         get { Flag(rawValue: cContext.flags) }
         set { cContextPtr.pointee.flags = newValue.rawValue }
+    }
+
+    /// Maximum size of the data read from input for determining the input container format.
+    ///
+    /// Demuxing only, set by the caller before avformat_open_input().
+    public var probeSize: Int64 {
+        get { cContext.probesize }
+        set { cContextPtr.pointee.probesize = newValue }
     }
 
     /// Metadata that applies to the whole file.
@@ -153,6 +170,22 @@ public final class AVFormatContext {
     deinit {
         avformat_close_input(&cContextPtr)
     }
+}
+
+// MARK: - AVDurationEstimationMethod
+
+public struct AVDurationEstimationMethod: Equatable {
+    /// Duration accurately estimated from PTSes
+    public static let fromPTS = AVDurationEstimationMethod(rawValue: AVFMT_DURATION_FROM_PTS)
+
+    /// Duration estimated from a stream with a known duration
+    public static let fromStream = AVDurationEstimationMethod(rawValue: AVFMT_DURATION_FROM_STREAM)
+
+    /// Duration estimated from bitrate (less accurate)
+    public static let fromBitrate = AVDurationEstimationMethod(rawValue: AVFMT_DURATION_FROM_BITRATE)
+
+    public let rawValue: CFFmpeg.AVDurationEstimationMethod
+    public init(rawValue: CFFmpeg.AVDurationEstimationMethod) { self.rawValue = rawValue }
 }
 
 // MARK: - AVFormatContext.Flag
@@ -357,7 +390,7 @@ extension AVFormatContext {
         relatedStreamIndex: Int = -1
     ) -> Int? {
         let ret = av_find_best_stream(cContextPtr, type, Int32(wantedStreamIndex), Int32(relatedStreamIndex), nil, 0)
-        return Int(ret)
+        return ret >= 0 ? Int(ret) : nil
     }
 
     /// Guess the sample aspect ratio of a frame, based on both the stream and the frame aspect ratio.
