@@ -688,7 +688,7 @@ public struct AVFormatContextInternals {
     }
 }
 extension AVFormatContext {
-    var `internal`: AVFormatContextInternals {
+    public var `internal`: AVFormatContextInternals {
         return AVFormatContextInternals(value: self)
     }
 }
