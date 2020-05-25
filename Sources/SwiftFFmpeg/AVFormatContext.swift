@@ -9,7 +9,7 @@ import CFFmpeg
 
 // MARK: - AVFormatContext
 
-typealias CAVFormatContext = CFFmpeg.AVFormatContext
+public typealias CAVFormatContext = CFFmpeg.AVFormatContext
 
 /// Format I/O context.
 public final class AVFormatContext {
@@ -677,5 +677,18 @@ extension AVFormatContext: AVClassSupport, AVOptionSupport {
         _ body: (UnsafeMutableRawPointer) throws -> T
     ) rethrows -> T {
         try body(cContextPtr)
+    }
+}
+
+// MARK: - AVFormatContextInternals
+public struct AVFormatContextInternals {
+    let value: AVFormatContext
+    public var cContextPtr: UnsafeMutablePointer<CAVFormatContext>! {
+        return value.cContextPtr
+    }
+}
+extension AVFormatContext {
+    var `internal`: AVFormatContextInternals {
+        return AVFormatContextInternals(value: self)
     }
 }
