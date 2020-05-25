@@ -446,6 +446,34 @@ extension AVFormatContext {
     public func seekFrame(to timestamp: Int64, streamIndex: Int, flags: SeekFlag) throws {
         try throwIfFail(av_seek_frame(cContextPtr, Int32(streamIndex), timestamp, flags.rawValue))
     }
+    
+    
+
+   
+    
+    /// Seek to timestamp ts.
+    ///
+    /// - Parameters:
+    ///   - timeStamp: Timestamp in `AVStream.timebase` units or, if no stream is specified,
+    ///     in `AVTimestamp.timebase` units.
+    ///   - streamIndex: If `streamIndex` is -1, a default stream is selected, and timestamp
+    ///     is automatically converted from `AVTimestamp.timebase` units to the stream specific timebase.
+    ///   - minTimeStamp: smallest acceptable timestamp.
+    ///   - maxTimeStamp: largest acceptable timestamp.
+    ///   - flags: flags which select direction and seeking mode.
+    /// - Throws: AVError
+    public func seekFile(to timeStamp: Int64, streamIndex: Int, minTimeStamp: Int64, maxTimeStamp: Int64,flags: SeekFlag) throws {
+        try throwIfFail(
+            avformat_seek_file(
+                cContextPtr,
+                Int32(streamIndex),
+                minTimeStamp,
+                timeStamp,
+                maxTimeStamp,
+                flags.rawValue
+            )
+        )
+    }
 
     /// Discard all internally buffered data. This can be useful when dealing with
     /// discontinuities in the byte stream. Generally works only with formats that
