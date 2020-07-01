@@ -512,10 +512,6 @@ extension AVPixelFormat {
   /// as above, but U and V bytes are swapped
   public static let NV42 = AV_PIX_FMT_NV42
 
-  /// number of pixel formats, __DO NOT USE THIS__ if you want to link with shared `libav*`
-  /// because the number of formats might differ between versions
-  public static let nb = AV_PIX_FMT_NB
-
   /// Return the pixel format corresponding to name.
   ///
   /// If there is no pixel format with name name, then looks for a pixel format with the name
