@@ -380,8 +380,8 @@ extension AVFrame {
 
   /// The picture type of the frame.
   public var pictureType: AVPictureType {
-    get { cFrame.pict_type }
-    set { cFramePtr.pointee.pict_type = newValue }
+    get { AVPictureType(native: cFrame.pict_type) }
+    set { cFramePtr.pointee.pict_type = newValue.native }
   }
 
   /// The sample aspect ratio for the video frame, 0/1 if unknown/unspecified.

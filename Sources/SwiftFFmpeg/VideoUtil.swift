@@ -9,31 +9,42 @@ import CFFmpeg
 
 // MARK: - AVPictureType
 
-public typealias AVPictureType = CFFmpeg.AVPictureType
-
-extension AVPictureType {
+public enum AVPictureType: UInt32 {
   /// Undefined
-  public static let none = AV_PICTURE_TYPE_NONE
+  case none = 0
   /// Intra
-  public static let I = AV_PICTURE_TYPE_I
+  case I
   /// Predicted
-  public static let P = AV_PICTURE_TYPE_P
+  case P
   /// Bi-dir predicted
-  public static let B = AV_PICTURE_TYPE_B
+  case B
   /// S(GMC)-VOP MPEG-4
-  public static let S = AV_PICTURE_TYPE_S
+  case S
   /// Switching Intra
-  public static let SI = AV_PICTURE_TYPE_SI
+  case SI
   /// Switching Predicted
-  public static let SP = AV_PICTURE_TYPE_SP
+  case SP
   /// BI type
-  public static let BI = AV_PICTURE_TYPE_BI
+  case BI
+
+  internal var native: CFFmpeg.AVPictureType {
+    CFFmpeg.AVPictureType(rawValue)
+  }
+
+  internal init(native: CFFmpeg.AVPictureType) {
+    guard let type = AVPictureType(rawValue: native.rawValue) else {
+      fatalError("Unknown picture type: \(native)")
+    }
+    self = type
+  }
 }
+
+// MARK: - AVPictureType + CustomStringConvertible
 
 extension AVPictureType: CustomStringConvertible {
 
   public var description: String {
-    let char = av_get_picture_type_char(self)
+    let char = av_get_picture_type_char(native)
     let scalar = Unicode.Scalar(Int(char))!
     return String(Character(scalar))
   }
