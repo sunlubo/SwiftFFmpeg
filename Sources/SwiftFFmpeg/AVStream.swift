@@ -159,7 +159,7 @@ public final class AVStream {
   }
 }
 
-// MARK: - SideData
+// MARK: - AVStream + SideData
 
 extension AVStream {
 
@@ -172,7 +172,7 @@ extension AVStream {
   public func addSideData(type: AVPacketSideDataType, data: UnsafeMutablePointer<UInt8>, size: Int)
     throws
   {
-    try throwIfFail(av_stream_add_side_data(cStreamPtr, type, data, size))
+    try throwIfFail(av_stream_add_side_data(cStreamPtr, type.native, data, size))
   }
 
   /// Allocate new information from stream.
@@ -182,7 +182,7 @@ extension AVStream {
   ///
   /// - Returns: pointer to fresh allocated data or NULL otherwise
   public func newSideData(type: AVPacketSideDataType, size: Int32) -> UnsafeMutablePointer<UInt8> {
-    return av_stream_new_side_data(cStreamPtr, type, size)
+    return av_stream_new_side_data(cStreamPtr, type.native, size)
   }
 
   /// Get side information from stream.
@@ -194,6 +194,6 @@ extension AVStream {
   public func getSideData(type: AVPacketSideDataType, size: UnsafeMutablePointer<Int32>)
     -> UnsafeMutablePointer<UInt8>
   {
-    return av_stream_get_side_data(cStreamPtr, type, size)
+    return av_stream_get_side_data(cStreamPtr, type.native, size)
   }
 }
