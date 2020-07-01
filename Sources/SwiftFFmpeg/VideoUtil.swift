@@ -701,9 +701,6 @@ extension CFFmpeg.AVColorRange {
   /// the normal     2^n-1   "JPEG" YUV ranges - also known as "Full" range
   public static let JPEG = AVCOL_RANGE_JPEG
 
-  /// Not part of ABI
-  public static let NB = AVCOL_RANGE_NB
-
   /// Return the color range corresponding to name.
   ///
   /// If there is no color range with name name, an error is thrown..
