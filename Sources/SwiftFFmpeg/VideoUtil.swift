@@ -749,8 +749,6 @@ extension CFFmpeg.AVColorPrimaries {
   public static let SMPTE432 = AVCOL_PRI_SMPTE432
   /// JEDEC P22 phosphors
   public static let JEDEC_P22 = AVCOL_PRI_JEDEC_P22
-  /// Not part of ABI
-  public static let NB = AVCOL_PRI_NB
 
   /// Return the color primaries corresponding to name.
   ///
