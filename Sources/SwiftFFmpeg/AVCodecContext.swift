@@ -64,7 +64,7 @@ public final class AVCodecContext {
 
   /// The codec's media type.
   public var mediaType: AVMediaType {
-    cContext.codec_type
+    AVMediaType(native: cContext.codec_type)
   }
 
   public var codec: AVCodec? {

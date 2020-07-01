@@ -9,24 +9,35 @@ import CFFmpeg
 
 // MARK: - AVMediaType
 
-public typealias AVMediaType = CFFmpeg.AVMediaType
-
-extension AVMediaType {
+public enum AVMediaType: Int32 {
   /// Usually treated as `data`
-  public static let unknown = AVMEDIA_TYPE_UNKNOWN
-  public static let video = AVMEDIA_TYPE_VIDEO
-  public static let audio = AVMEDIA_TYPE_AUDIO
+  case unknown = -1
+  case video
+  case audio
   /// Opaque data information usually continuous
-  public static let data = AVMEDIA_TYPE_DATA
-  public static let subtitle = AVMEDIA_TYPE_SUBTITLE
+  case data
+  case subtitle
   /// Opaque data information usually sparse
-  public static let attachment = AVMEDIA_TYPE_ATTACHMENT
+  case attachment
+
+  internal var native: CFFmpeg.AVMediaType {
+    CFFmpeg.AVMediaType(rawValue)
+  }
+
+  internal init(native: CFFmpeg.AVMediaType) {
+    guard let type = AVMediaType(rawValue: native.rawValue) else {
+      fatalError("Unknown media type: \(native)")
+    }
+    self = type
+  }
 }
+
+// MARK: - AVMediaType + CustomStringConvertible
 
 extension AVMediaType: CustomStringConvertible {
 
   public var description: String {
-    String(cString: av_get_media_type_string(self)) ?? "unknown"
+    String(cString: av_get_media_type_string(native)) ?? "unknown"
   }
 }
 

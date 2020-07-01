@@ -390,7 +390,7 @@ extension AVFormatContext {
     relatedStreamIndex: Int = -1
   ) -> Int? {
     let ret = av_find_best_stream(
-      cContextPtr, type, Int32(wantedStreamIndex), Int32(relatedStreamIndex), nil, 0)
+      cContextPtr, type.native, Int32(wantedStreamIndex), Int32(relatedStreamIndex), nil, 0)
     return ret >= 0 ? Int(ret) : nil
   }
 

@@ -27,7 +27,7 @@ public struct AVFilterPad {
 
   /// The media type of the filter pad.
   public var mediaType: AVMediaType {
-    avfilter_pad_get_type(cPadsPtr, index)
+    AVMediaType(native: avfilter_pad_get_type(cPadsPtr, index))
   }
 }
 
@@ -414,7 +414,7 @@ extension AVFilterContext {
 
   /// The media type of the buffer sink.
   public var mediaType: AVMediaType {
-    av_buffersink_get_type(cContextPtr)
+    AVMediaType(native: av_buffersink_get_type(cContextPtr))
   }
 
   /// The timebase of the buffer sink.
@@ -510,7 +510,7 @@ public struct AVFilterLink {
 
   /// The filter's media type.
   public var mediaType: AVMediaType {
-    cLinkPtr.pointee.type
+    AVMediaType(native: cLinkPtr.pointee.type)
   }
 
   /// Define the timebase used by the PTS of the frames/samples which will pass through this link.

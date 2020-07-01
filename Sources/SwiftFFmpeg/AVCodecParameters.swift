@@ -38,8 +38,8 @@ public final class AVCodecParameters {
 
   /// General type of the encoded data.
   public var mediaType: AVMediaType {
-    get { cParameters.codec_type }
-    set { cParametersPtr.pointee.codec_type = newValue }
+    get { AVMediaType(native: cParameters.codec_type) }
+    set { cParametersPtr.pointee.codec_type = newValue.native }
   }
 
   /// Specific type of the encoded data (the codec used).

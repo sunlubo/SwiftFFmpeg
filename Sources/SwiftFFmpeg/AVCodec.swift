@@ -104,7 +104,7 @@ extension AVCodecID {
 
   /// The media type of the codec.
   public var mediaType: AVMediaType {
-    avcodec_get_type(self)
+    AVMediaType(native: avcodec_get_type(self))
   }
 }
 
@@ -190,7 +190,7 @@ public struct AVCodec {
 
   /// The codec's media type.
   public var mediaType: AVMediaType {
-    cCodec.type
+    AVMediaType(native: cCodec.type)
   }
 
   /// The codec's id.
