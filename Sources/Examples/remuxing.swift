@@ -9,8 +9,9 @@ import Foundation
 import SwiftFFmpeg
 
 private func log_packet(_ pkt: AVPacket, fmtCtx: AVFormatContext, tag: String) {
-    let timebase = fmtCtx.streams[pkt.streamIndex].timebase
-    print("""
+  let timebase = fmtCtx.streams[pkt.streamIndex].timebase
+  print(
+    """
     \(tag): \
     pts:\(pkt.pts) pts_time:\(Double(pkt.pts) * timebase.toDouble) \
     dts:\(pkt.dts) dts_time:\(Double(pkt.dts) * timebase.toDouble) \
@@ -21,76 +22,78 @@ private func log_packet(_ pkt: AVPacket, fmtCtx: AVFormatContext, tag: String) {
 
 /// Remux streams from one container format to another.
 func remuxing() throws {
-    if CommandLine.argc < 4 {
-        print("Usage: \(CommandLine.arguments[0]) \(CommandLine.arguments[1]) input_file output_file")
-        return
+  if CommandLine.argc < 4 {
+    print("Usage: \(CommandLine.arguments[0]) \(CommandLine.arguments[1]) input_file output_file")
+    return
+  }
+
+  let input = CommandLine.arguments[2]
+  let output = CommandLine.arguments[3]
+
+  let ifmtCtx = try AVFormatContext(url: input)
+  try ifmtCtx.findStreamInfo()
+  ifmtCtx.dumpFormat(isOutput: false)
+
+  let ofmtCtx = try AVFormatContext(format: nil, filename: output)
+
+  var streamMapping = [Int](repeating: 0, count: ifmtCtx.streamCount)
+  var streamIndex = 0
+  for i in 0..<ifmtCtx.streamCount {
+    let istream = ifmtCtx.streams[i]
+    let icodecpar = istream.codecParameters
+
+    if icodecpar.mediaType != .audio && icodecpar.mediaType != .video
+      && icodecpar.mediaType != .subtitle
+    {
+      streamMapping[i] = -1
+      continue
     }
 
-    let input = CommandLine.arguments[2]
-    let output = CommandLine.arguments[3]
+    streamMapping[i] = streamIndex
+    streamIndex += 1
 
-    let ifmtCtx = try AVFormatContext(url: input)
-    try ifmtCtx.findStreamInfo()
-    ifmtCtx.dumpFormat(isOutput: false)
+    guard let stream = ofmtCtx.addStream() else {
+      fatalError("Failed allocating output stream.")
+    }
+    stream.codecParameters.copy(from: icodecpar)
+    stream.codecParameters.codecTag = 0
+  }
 
-    let ofmtCtx = try AVFormatContext(format: nil, filename: output)
+  ofmtCtx.dumpFormat(url: output, isOutput: true)
 
-    var streamMapping = [Int](repeating: 0, count: ifmtCtx.streamCount)
-    var streamIndex = 0
-    for i in 0..<ifmtCtx.streamCount {
-        let istream = ifmtCtx.streams[i]
-        let icodecpar = istream.codecParameters
+  if !ofmtCtx.outputFormat!.flags.contains(.noFile) {
+    try ofmtCtx.openOutput(url: output, flags: .write)
+  }
 
-        if icodecpar.mediaType != .audio &&
-            icodecpar.mediaType != .video &&
-            icodecpar.mediaType != .subtitle {
-            streamMapping[i] = -1
-            continue
-        }
+  try ofmtCtx.writeHeader()
 
-        streamMapping[i] = streamIndex
-        streamIndex += 1
-
-        guard let stream = ofmtCtx.addStream() else {
-            fatalError("Failed allocating output stream.")
-        }
-        stream.codecParameters.copy(from: icodecpar)
-        stream.codecParameters.codecTag = 0
+  let pkt = AVPacket()
+  while let _ = try? ifmtCtx.readFrame(into: pkt) {
+    defer {
+      pkt.unref()
     }
 
-    ofmtCtx.dumpFormat(url: output, isOutput: true)
-
-    if !ofmtCtx.outputFormat!.flags.contains(.noFile) {
-        try ofmtCtx.openOutput(url: output, flags: .write)
+    let istream = ifmtCtx.streams[pkt.streamIndex]
+    let ostreamIndex = streamMapping[pkt.streamIndex]
+    if ostreamIndex < 0 {
+      continue
     }
 
-    try ofmtCtx.writeHeader()
+    pkt.streamIndex = ostreamIndex
+    let ostream = ofmtCtx.streams[ostreamIndex]
+    log_packet(pkt, fmtCtx: ofmtCtx, tag: "in ")
 
-    let pkt = AVPacket()
-    while let _ = try? ifmtCtx.readFrame(into: pkt) {
-        defer {
-            pkt.unref()
-        }
+    // copy packet
+    pkt.pts = AVMath.rescale(
+      pkt.pts, istream.timebase, ostream.timebase, AVRounding.nearInf.union(.passMinMax))
+    pkt.dts = AVMath.rescale(
+      pkt.dts, istream.timebase, ostream.timebase, AVRounding.nearInf.union(.passMinMax))
+    pkt.duration = AVMath.rescale(pkt.duration, istream.timebase, ostream.timebase)
+    pkt.position = -1
+    log_packet(pkt, fmtCtx: ofmtCtx, tag: "out")
 
-        let istream = ifmtCtx.streams[pkt.streamIndex]
-        let ostreamIndex = streamMapping[pkt.streamIndex]
-        if ostreamIndex < 0 {
-            continue
-        }
+    try ofmtCtx.interleavedWriteFrame(pkt)
+  }
 
-        pkt.streamIndex = ostreamIndex
-        let ostream = ofmtCtx.streams[ostreamIndex]
-        log_packet(pkt, fmtCtx: ofmtCtx, tag: "in ")
-
-        // copy packet
-        pkt.pts = AVMath.rescale(pkt.pts, istream.timebase, ostream.timebase, AVRounding.nearInf.union(.passMinMax))
-        pkt.dts = AVMath.rescale(pkt.dts, istream.timebase, ostream.timebase, AVRounding.nearInf.union(.passMinMax))
-        pkt.duration = AVMath.rescale(pkt.duration, istream.timebase, ostream.timebase)
-        pkt.position = -1
-        log_packet(pkt, fmtCtx: ofmtCtx, tag: "out")
-
-        try ofmtCtx.interleavedWriteFrame(pkt)
-    }
-
-    try ofmtCtx.writeTrailer()
+  try ofmtCtx.writeTrailer()
 }

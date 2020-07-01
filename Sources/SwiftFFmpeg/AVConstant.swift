@@ -8,6 +8,6 @@
 import CFFmpeg
 
 public enum AVConstant {
-    public static let inputBufferPaddingSize = Int(AV_INPUT_BUFFER_PADDING_SIZE)
-    public static let dataPointersNumber = Int(AV_NUM_DATA_POINTERS)
+  public static let inputBufferPaddingSize = Int(AV_INPUT_BUFFER_PADDING_SIZE)
+  public static let dataPointersNumber = Int(AV_NUM_DATA_POINTERS)
 }
