@@ -559,7 +559,7 @@ public enum AVColorPrimaries: UInt32 {
   /// Return the color primaries corresponding to name, or `nil` if the color primaries does not exist.
   ///
   /// - Parameter name: The name of the color primaries.
-  public init?(name: String) throws {
+  public init?(name: String) {
     let primaries = av_color_primaries_from_name(name)
     guard primaries >= 0 else {
       return nil
@@ -627,7 +627,7 @@ public enum AVColorTransferCharacteristic: UInt32 {
   /// Return the color transfer characteristic corresponding to name, or `nil` if the color transfer characteristic does not exist.
   ///
   /// - Parameter name: The name of the color transfer characteristic.
-  public init?(name: String) throws {
+  public init?(name: String) {
     let transfer = av_color_transfer_from_name(name)
     guard transfer >= 0 else {
       return nil
@@ -689,7 +689,7 @@ public enum AVColorSpace: UInt32 {
   /// Return the color space corresponding to name, or `nil` if the color space does not exist.
   ///
   /// - Parameter name: The name of the color space.
-  public init?(name: String) throws {
+  public init?(name: String) {
     let space = av_color_space_from_name(name)
     guard space >= 0 else {
       return nil
