@@ -398,32 +398,32 @@ extension AVFrame {
 
   /// The color range of the picture.
   public var colorRange: AVColorRange {
-    get { cFrame.color_range }
-    set { cFramePtr.pointee.color_range = newValue }
+    get { AVColorRange(native: cFrame.color_range) }
+    set { cFramePtr.pointee.color_range = newValue.native }
   }
 
   /// The color primaries of the picture.
   public var colorPrimaries: AVColorPrimaries {
-    get { cFrame.color_primaries }
-    set { cFramePtr.pointee.color_primaries = newValue }
+    get { AVColorPrimaries(native: cFrame.color_primaries) }
+    set { cFramePtr.pointee.color_primaries = newValue.native }
   }
 
   /// The color transfer characteristic of the picture.
   public var colorTransferCharacteristic: AVColorTransferCharacteristic {
-    get { cFrame.color_trc }
-    set { cFramePtr.pointee.color_trc = newValue }
+    get { AVColorTransferCharacteristic(native: cFrame.color_trc) }
+    set { cFramePtr.pointee.color_trc = newValue.native }
   }
 
   /// The color space of the picture.
   public var colorSpace: AVColorSpace {
-    get { cFrame.colorspace }
-    set { cFramePtr.pointee.colorspace = newValue }
+    get { AVColorSpace(native: cFrame.colorspace) }
+    set { cFramePtr.pointee.colorspace = newValue.native }
   }
 
   /// The chroma location of the picture.
   public var chromaLocation: AVChromaLocation {
-    get { cFrame.chroma_location }
-    set { cFramePtr.pointee.chroma_location = newValue }
+    get { AVChromaLocation(native: cFrame.chroma_location) }
+    set { cFramePtr.pointee.chroma_location = newValue.native }
   }
 }
 

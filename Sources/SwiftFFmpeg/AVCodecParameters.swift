@@ -133,32 +133,32 @@ extension AVCodecParameters {
 
   /// The color range of the video frame.
   public var colorRange: AVColorRange {
-    get { cParameters.color_range }
-    set { cParametersPtr.pointee.color_range = newValue }
+    get { AVColorRange(native: cParameters.color_range) }
+    set { cParametersPtr.pointee.color_range = newValue.native }
   }
 
   /// The color primaries of the video frame.
   public var colorPrimaries: AVColorPrimaries {
-    get { cParameters.color_primaries }
-    set { cParametersPtr.pointee.color_primaries = newValue }
+    get { AVColorPrimaries(native: cParameters.color_primaries) }
+    set { cParametersPtr.pointee.color_primaries = newValue.native }
   }
 
   /// The color transfer characteristic of the video frame.
   public var colorTransferCharacteristic: AVColorTransferCharacteristic {
-    get { cParameters.color_trc }
-    set { cParametersPtr.pointee.color_trc = newValue }
+    get { AVColorTransferCharacteristic(native: cParameters.color_trc) }
+    set { cParametersPtr.pointee.color_trc = newValue.native }
   }
 
   /// The color space of the video frame.
   public var colorSpace: AVColorSpace {
-    get { cParameters.color_space }
-    set { cParametersPtr.pointee.color_space = newValue }
+    get { AVColorSpace(native: cParameters.color_space) }
+    set { cParametersPtr.pointee.color_space = newValue.native }
   }
 
   /// The chroma location of the video frame.
   public var chromaLocation: AVChromaLocation {
-    get { cParameters.chroma_location }
-    set { cParametersPtr.pointee.chroma_location = newValue }
+    get { AVChromaLocation(native: cParameters.chroma_location) }
+    set { cParametersPtr.pointee.chroma_location = newValue.native }
   }
 }
 
