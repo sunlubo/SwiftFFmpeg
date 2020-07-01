@@ -37,8 +37,6 @@ extension AVSampleFormat {
   public static let s64 = AV_SAMPLE_FMT_S64
   /// signed 64 bits, planar
   public static let s64p = AV_SAMPLE_FMT_S64P
-  /// Number of sample formats. __DO NOT USE__ if linking dynamically.
-  public static let nb = AV_SAMPLE_FMT_NB
 
   /// Return a sample format corresponding to name, or `nil` if the sample format does not exist.
   ///
