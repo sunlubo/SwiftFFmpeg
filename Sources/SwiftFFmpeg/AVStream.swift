@@ -9,23 +9,32 @@ import CFFmpeg
 
 // MARK: - AVDiscard
 
-public typealias AVDiscard = CFFmpeg.AVDiscard
-
-extension AVDiscard {
+public enum AVDiscard: Int32 {
   /// discard nothing
-  public static let none = AVDISCARD_NONE
+  case none = -16
   /// discard useless packets like 0 size packets in avi
-  public static let `default` = AVDISCARD_DEFAULT
+  case `default` = 0
   /// discard all non reference
-  public static let nonRef = AVDISCARD_NONREF
+  case nonRef = 8
   /// discard all bidirectional frames
-  public static let bidir = AVDISCARD_BIDIR
+  case bidir = 16
   /// discard all non intra frames
-  public static let nonIntra = AVDISCARD_NONINTRA
+  case nonIntra = 24
   /// discard all frames except keyframes
-  public static let nonKey = AVDISCARD_NONKEY
+  case nonKey = 32
   /// discard all
-  public static let all = AVDISCARD_ALL
+  case all = 48
+
+  internal var native: CFFmpeg.AVDiscard {
+    CFFmpeg.AVDiscard(rawValue)
+  }
+
+  internal init(native: CFFmpeg.AVDiscard) {
+    guard let discard = AVDiscard(rawValue: native.rawValue) else {
+      fatalError("Unknown discard \(native)")
+    }
+    self = discard
+  }
 }
 
 // MARK: - AVStream
@@ -83,8 +92,8 @@ public final class AVStream {
 
   /// Selects which packets can be discarded at will and do not need to be demuxed.
   public var discard: AVDiscard {
-    get { cStream.discard }
-    set { cStreamPtr.pointee.discard = newValue }
+    get { AVDiscard(native: cStream.discard) }
+    set { cStreamPtr.pointee.discard = newValue.native }
   }
 
   /// sample aspect ratio (0 if unknown)
