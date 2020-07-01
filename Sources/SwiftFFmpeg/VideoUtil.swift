@@ -808,8 +808,6 @@ extension CFFmpeg.AVColorTransferCharacteristic {
   public static let SMPTEST428_1 = AVCOL_TRC_SMPTEST428_1
   /// ARIB STD-B67, known as "Hybrid log-gamma"
   public static let ARIB_STD_B67 = AVCOL_TRC_ARIB_STD_B67
-  /// Not part of ABI
-  public static let NB = AVCOL_TRC_NB
 
   /// Return the color transfer characteristic corresponding to name.
   ///
