@@ -9,57 +9,68 @@ import CFFmpeg
 
 // MARK: - AVHWDeviceType
 
-public typealias AVHWDeviceType = CFFmpeg.AVHWDeviceType
-
-extension AVHWDeviceType {
+public enum AVHWDeviceType: UInt32 {
   /// Do not use any hardware acceleration (the default).
-  public static let none = AV_HWDEVICE_TYPE_NONE
+  case none
   /// Use VDPAU (Video Decode and Presentation API for Unix) hardware acceleration.
-  public static let vdpau = AV_HWDEVICE_TYPE_VDPAU
+  case vdpau
   /// Use CUDA (Compute Unified Device Architecture, NVIDIA) hardware acceleration.
-  public static let cuda = AV_HWDEVICE_TYPE_CUDA
+  case cuda
   /// Use DXVA2 (DirectX Video Acceleration) hardware acceleration.
-  public static let dxva2 = AV_HWDEVICE_TYPE_DXVA2
+  case dxva2
   /// Use QSV (Intel Quick Sync Video) hardware acceleration.
-  public static let qsv = AV_HWDEVICE_TYPE_QSV
+  case qsv
   /// Use VideoToolbox (Apple) hardware acceleration.
-  public static let videoToolbox = AV_HWDEVICE_TYPE_VIDEOTOOLBOX
+  case videoToolbox
   /// Use D3D11VA (Direct3D 11 Graphics) hardware acceleration.
-  public static let d3d11va = AV_HWDEVICE_TYPE_D3D11VA
+  case d3d11va
   /// Use DRM (Direct Rendering Manage) hardware acceleration.
-  public static let drm = AV_HWDEVICE_TYPE_DRM
+  case drm
   /// Use OpenCL hardware acceleration.
-  public static let openCL = AV_HWDEVICE_TYPE_OPENCL
+  case openCL
   /// Use MediaCodec (Android) hardware acceleration.
-  public static let mediaCodec = AV_HWDEVICE_TYPE_MEDIACODEC
+  case mediaCodec
+
+  internal var native: CFFmpeg.AVHWDeviceType {
+    CFFmpeg.AVHWDeviceType(rawValue)
+  }
+
+  internal init(native: CFFmpeg.AVHWDeviceType) {
+    guard let type = AVHWDeviceType(rawValue: native.rawValue) else {
+      fatalError("Unknown device type \(native)")
+    }
+    self = type
+  }
 
   /// Return an `AVHWDeviceType` corresponding to name, or `nil` if the device type does not exist.
   ///
   /// - Parameter name: String name of the device type (case-insensitive).
   public init?(name: String) {
     let type = av_hwdevice_find_type_by_name(name)
-    if type == .none {
+    guard type != AV_HWDEVICE_TYPE_NONE else {
       return nil
     }
-    self = type
+    self = AVHWDeviceType(native: type)
   }
 
   /// The name of the device type.
   public var name: String? {
-    String(cString: av_hwdevice_get_type_name(self))
+    String(cString: av_hwdevice_get_type_name(native))
   }
 
   /// Get all supported device types.
   public static func supportedDeviceTypes() -> [AVHWDeviceType] {
     var list = [AVHWDeviceType]()
-    var type = av_hwdevice_iterate_types(.none)
-    while type != .none {
-      list.append(type)
+    var type = av_hwdevice_iterate_types(AV_HWDEVICE_TYPE_NONE)
+    while type != AV_HWDEVICE_TYPE_NONE {
+      list.append(AVHWDeviceType(native: type))
       type = av_hwdevice_iterate_types(type)
     }
     return list
   }
 }
+
+// MARK: - AVHWDeviceType + CustomStringConvertible
 
 extension AVHWDeviceType: CustomStringConvertible {
 
@@ -96,7 +107,7 @@ public struct AVCodecHWConfig {
   /// Must be set for `AVCodecHWConfig.Method.hwDeviceContext` and `AVCodecHWConfig.Method.hwFramesContext`,
   /// otherwise unused.
   public var deviceType: AVHWDeviceType {
-    cConfig.device_type
+    AVHWDeviceType(native: cConfig.device_type)
   }
 }
 
@@ -183,7 +194,7 @@ public final class AVHWDeviceContext {
     defer { av_dict_free(&pm) }
 
     var ptr: UnsafeMutablePointer<AVBufferRef>!
-    try throwIfFail(av_hwdevice_ctx_create(&ptr, deviceType, device, pm, 0))
+    try throwIfFail(av_hwdevice_ctx_create(&ptr, deviceType.native, device, pm, 0))
     self.cBufferPtr = ptr
     self.freeWhenDone = true
   }
@@ -206,7 +217,8 @@ public final class AVHWDeviceContext {
   /// - Throws: AVError
   public init(deviceType: AVHWDeviceType, deviceContext: AVHWDeviceContext) throws {
     var ptr: UnsafeMutablePointer<AVBufferRef>!
-    try throwIfFail(av_hwdevice_ctx_create_derived(&ptr, deviceType, deviceContext.cBufferPtr, 0))
+    try throwIfFail(
+      av_hwdevice_ctx_create_derived(&ptr, deviceType.native, deviceContext.cBufferPtr, 0))
     self.cBufferPtr = ptr
     self.freeWhenDone = true
   }
