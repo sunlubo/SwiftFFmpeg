@@ -57,7 +57,7 @@ public enum AVSampleFormat: Int32 {
 
   internal init(native: CFFmpeg.AVSampleFormat) {
     guard let format = AVSampleFormat(rawValue: native.rawValue) else {
-      fatalError("Unknown sample format \(native)")
+      fatalError("Unknown sample format: \(native)")
     }
     self = format
   }

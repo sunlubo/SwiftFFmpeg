@@ -757,16 +757,16 @@ public enum AVColorRange: UInt32 {
 ///                |             |1 2           1-6 are possible chroma positions
 /// *2nd luma line > |X   X ...    |5 6 X ...     0 is undefined/unknown position
 public enum AVChromaLocation: UInt32 {
-  case UNSPECIFIED
+  case unspecified
   /// MPEG-2/4 4:2:0, H.264 default for 4:2:0
-  case LEFT
+  case left
   /// MPEG-1 4:2:0, JPEG 4:2:0, H.263 4:2:0
-  case CENTER
+  case center
   /// ITU-R 601, SMPTE 274M 296M S314M(DV 4:1:1), mpeg2 4:2:2
-  case TOPLEFT
-  case TOP
-  case BOTTOMLEFT
-  case BOTTOM
+  case topLeft
+  case top
+  case bottomLeft
+  case bottom
 
   internal var native: CFFmpeg.AVChromaLocation {
     CFFmpeg.AVChromaLocation(rawValue)

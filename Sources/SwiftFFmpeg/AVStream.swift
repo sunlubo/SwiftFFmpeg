@@ -31,7 +31,7 @@ public enum AVDiscard: Int32 {
 
   internal init(native: CFFmpeg.AVDiscard) {
     guard let discard = AVDiscard(rawValue: native.rawValue) else {
-      fatalError("Unknown discard \(native)")
+      fatalError("Unknown discard: \(native)")
     }
     self = discard
   }

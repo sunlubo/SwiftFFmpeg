@@ -37,7 +37,7 @@ public enum AVHWDeviceType: UInt32 {
 
   internal init(native: CFFmpeg.AVHWDeviceType) {
     guard let type = AVHWDeviceType(rawValue: native.rawValue) else {
-      fatalError("Unknown device type \(native)")
+      fatalError("Unknown device type: \(native)")
     }
     self = type
   }
