@@ -891,8 +891,6 @@ extension CFFmpeg.AVChromaLocation {
   public static let TOP = AVCHROMA_LOC_TOP
   public static let BOTTOMLEFT = AVCHROMA_LOC_BOTTOMLEFT
   public static let BOTTOM = AVCHROMA_LOC_BOTTOM
-  /// Not part of ABI
-  public static let NB = AVCHROMA_LOC_NB
 
   /// Return the chroma location corresponding to name.
   ///
