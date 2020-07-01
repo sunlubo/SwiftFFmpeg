@@ -34,7 +34,8 @@ public final class AVSamples {
     data.initialize(to: nil)
     var linesize = 0 as Int32
     let ret = av_samples_alloc(
-      data, &linesize, Int32(channelCount), Int32(sampleCount), sampleFormat, Int32(align))
+      data, &linesize, Int32(channelCount), Int32(sampleCount), sampleFormat.native,
+      Int32(align))
     guard ret >= 0 else {
       abort("av_samples_alloc: \(AVError(code: ret))")
     }
@@ -54,7 +55,7 @@ public final class AVSamples {
   /// Fill an audio buffer with silence.
   public func setSilence() {
     av_samples_set_silence(
-      data.baseAddress, 0, Int32(sampleCount), Int32(channelCount), sampleFormat)
+      data.baseAddress, 0, Int32(sampleCount), Int32(channelCount), sampleFormat.native)
   }
 
   /// Reformat samples using the given `SwrContext`.
@@ -96,7 +97,7 @@ extension AVSamples {
       &linesize,
       Int32(channelCount),
       Int32(sampleCount),
-      sampleFormat,
+      sampleFormat.native,
       Int32(align)
     )
     try throwIfFail(ret)
@@ -140,7 +141,7 @@ extension AVSamples {
       buffer,
       Int32(channelCount),
       Int32(sampleCount),
-      sampleFormat,
+      sampleFormat.native,
       Int32(align)
     )
     try throwIfFail(ret)

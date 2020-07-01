@@ -168,7 +168,7 @@ extension AVCodecParameters {
 
   /// The sample format of audio.
   public var sampleFormat: AVSampleFormat {
-    get { AVSampleFormat(cParameters.format) }
+    get { AVSampleFormat(rawValue: cParameters.format)! }
     set { cParametersPtr.pointee.format = newValue.rawValue }
   }
 

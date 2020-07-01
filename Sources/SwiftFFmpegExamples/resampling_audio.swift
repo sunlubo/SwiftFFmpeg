@@ -49,14 +49,14 @@ func resampling_audio() throws {
   let srcChannelLayout = AVChannelLayout.CHL_STEREO
   let srcChannelCount = srcChannelLayout.channelCount
   let srcSampleRate = 48000 as Int64
-  let srcSampleFmt = AVSampleFormat.dbl
+  let srcSampleFmt = AVSampleFormat.double
   let srcSampleCount = 1024
 
   // destination
   let dstChannelLayout = AVChannelLayout.CHL_SURROUND
   let dstChannelCount = dstChannelLayout.channelCount
   let dstSampleRate = 44100 as Int64
-  let dstSampleFmt = AVSampleFormat.s16
+  let dstSampleFmt = AVSampleFormat.int16
   var dstSampleCount = 0
 
   let swrCtx = SwrContext()

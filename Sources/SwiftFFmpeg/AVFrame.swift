@@ -433,7 +433,7 @@ extension AVFrame {
 
   /// The sample format of the audio data.
   public var sampleFormat: AVSampleFormat {
-    get { AVSampleFormat(cFrame.format) }
+    get { AVSampleFormat(rawValue: cFrame.format)! }
     set { cFramePtr.pointee.format = newValue.rawValue }
   }
 

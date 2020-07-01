@@ -672,8 +672,8 @@ extension AVCodecContext {
   /// - encoding: Set by user.
   /// - decoding: Set by libavcodec.
   public var sampleFormat: AVSampleFormat {
-    get { cContext.sample_fmt }
-    set { cContextPtr.pointee.sample_fmt = newValue }
+    get { AVSampleFormat(native: cContext.sample_fmt) }
+    set { cContextPtr.pointee.sample_fmt = newValue.native }
   }
 
   /// Number of samples per channel in an audio frame.

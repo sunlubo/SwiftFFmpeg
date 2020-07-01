@@ -449,7 +449,7 @@ extension AVFilterContext {
 
   /// The sample format of the audio buffer sink.
   public var sampleFormat: AVSampleFormat {
-    AVSampleFormat(rawValue: av_buffersink_get_format(cContextPtr))
+    AVSampleFormat(rawValue: av_buffersink_get_format(cContextPtr))!
   }
 
   /// The sample rate of the audio buffer sink.
@@ -552,7 +552,7 @@ extension AVFilterLink {
 
   /// agreed upon sample format
   public var sampleFormat: AVSampleFormat {
-    AVSampleFormat(cLinkPtr.pointee.format)
+    AVSampleFormat(rawValue: cLinkPtr.pointee.format)!
   }
 
   /// channel layout of current buffer

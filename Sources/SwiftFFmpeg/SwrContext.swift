@@ -40,10 +40,10 @@ public final class SwrContext {
     cContextPtr = swr_alloc_set_opts(
       nil,
       Int64(dstChannelLayout.rawValue),
-      dstSampleFormat,
+      dstSampleFormat.native,
       Int32(dstSampleRate),
       Int64(srcChannelLayout.rawValue),
-      srcSampleFormat,
+      srcSampleFormat.native,
       Int32(srcSampleRate),
       0,
       nil
@@ -77,10 +77,10 @@ public final class SwrContext {
     let ptr = swr_alloc_set_opts(
       cContextPtr,
       Int64(dstChannelLayout.rawValue),
-      dstSampleFormat,
+      dstSampleFormat.native,
       Int32(dstSampleRate),
       Int64(srcChannelLayout.rawValue),
-      srcSampleFormat,
+      srcSampleFormat.native,
       Int32(srcSampleRate),
       0,
       nil

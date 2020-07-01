@@ -292,7 +292,8 @@ extension AVOptionSupport {
     try withUnsafeObjectPointer { objPtr in
       try throwIfFail(
         av_opt_set_image_size(
-          objPtr, key, Int32(size.width), Int32(size.height), searchFlags.rawValue)
+          objPtr, key, Int32(size.width), Int32(size.height), searchFlags.rawValue
+        )
       )
     }
   }
@@ -311,7 +312,7 @@ extension AVOptionSupport {
     _ value: AVSampleFormat, forKey key: String, searchFlags: AVOptionSearchFlag = .children
   ) throws {
     try withUnsafeObjectPointer { objPtr in
-      try throwIfFail(av_opt_set_sample_fmt(objPtr, key, value, searchFlags.rawValue))
+      try throwIfFail(av_opt_set_sample_fmt(objPtr, key, value.native, searchFlags.rawValue))
     }
   }
 
@@ -433,9 +434,9 @@ extension AVOptionSupport {
     forKey key: String, searchFlags: AVOptionSearchFlag = .children
   ) throws -> AVSampleFormat {
     try withUnsafeObjectPointer { objPtr in
-      var outVal = AVSampleFormat.none
-      try throwIfFail(av_opt_get_sample_fmt(objPtr, key, searchFlags.rawValue, &outVal))
-      return outVal
+      var out = AV_SAMPLE_FMT_NONE
+      try throwIfFail(av_opt_get_sample_fmt(objPtr, key, searchFlags.rawValue, &out))
+      return AVSampleFormat(native: out)
     }
   }
 

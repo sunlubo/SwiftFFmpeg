@@ -55,7 +55,7 @@ func filtering_audio() throws {
   let buffersink = AVFilter(name: "abuffersink")!
   let inputs = AVFilterInOut()
   let outputs = AVFilterInOut()
-  let sampleFmts = [AVSampleFormat.s16, AVSampleFormat.none]
+  let sampleFmts = [AVSampleFormat.int16, AVSampleFormat.none]
   let channelLayouts = [AVChannelLayout.CHL_MONO, AVChannelLayout.none]
   let sampleRates = [8000, -1] as [CInt]
   let filterGraph = AVFilterGraph()

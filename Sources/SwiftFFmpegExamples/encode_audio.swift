@@ -49,7 +49,7 @@ func encode_audio() throws {
 
   // set sample parameters
   codecCtx.bitRate = 64000
-  codecCtx.sampleFormat = .s16
+  codecCtx.sampleFormat = .int16
   codecCtx.sampleRate = 44100
   codecCtx.channelLayout = .CHL_STEREO
   codecCtx.channelCount = codecCtx.channelLayout.channelCount
