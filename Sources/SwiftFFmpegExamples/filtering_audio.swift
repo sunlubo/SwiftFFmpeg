@@ -8,9 +8,9 @@
 import SwiftFFmpeg
 
 #if os(macOS) || os(iOS) || os(tvOS) || os(watchOS)
-  import Darwin
+import Darwin
 #else
-  import Glibc
+import Glibc
 #endif
 
 private func print_frame(frame: AVFrame, file: UnsafeMutablePointer<FILE>) throws {

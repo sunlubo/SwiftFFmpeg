@@ -9,9 +9,9 @@ import Dispatch
 import SwiftFFmpeg
 
 #if os(macOS) || os(iOS) || os(tvOS) || os(watchOS)
-  import Darwin
+import Darwin
 #else
-  import Glibc
+import Glibc
 #endif
 
 private let queue = DispatchQueue(label: "http_client", attributes: .concurrent)

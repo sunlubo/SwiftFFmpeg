@@ -8,9 +8,9 @@
 import CFFmpeg
 
 #if os(macOS) || os(iOS) || os(tvOS) || os(watchOS)
-  import Darwin
+import Darwin
 #else
-  import Glibc
+import Glibc
 #endif
 
 public struct AVError: Error, Equatable {
