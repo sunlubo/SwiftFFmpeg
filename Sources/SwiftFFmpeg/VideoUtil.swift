@@ -860,8 +860,6 @@ extension CFFmpeg.AVColorSpace {
   public static let CHROMA_DERIVED_CL = AVCOL_SPC_CHROMA_DERIVED_CL
   /// ITU-R BT.2100-0, ICtCp
   public static let ICTCP = AVCOL_SPC_ICTCP
-  /// Not part of ABI
-  public static let NB = AVCOL_SPC_NB
 
   /// Return the color space corresponding to name.
   ///
