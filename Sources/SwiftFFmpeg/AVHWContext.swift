@@ -233,13 +233,22 @@ public final class AVHWDeviceContext {
 
 // MARK: - AVHWFrameTransferDirection
 
-public typealias AVHWFrameTransferDirection = CFFmpeg.AVHWFrameTransferDirection
-
-extension AVHWFrameTransferDirection {
+public enum AVHWFrameTransferDirection: UInt32 {
   /// Transfer the data from the queried hw frame.
-  public static let from = AV_HWFRAME_TRANSFER_DIRECTION_FROM
+  case from
   /// Transfer the data to the queried hw frame.
-  public static let to = AV_HWFRAME_TRANSFER_DIRECTION_TO
+  case to
+
+  internal var native: CFFmpeg.AVHWFrameTransferDirection {
+    CFFmpeg.AVHWFrameTransferDirection(rawValue)
+  }
+
+  internal init(native: CFFmpeg.AVHWFrameTransferDirection) {
+    guard let direction = AVHWFrameTransferDirection(rawValue: native.rawValue) else {
+      fatalError("Unknown frame transfer direction: \(native)")
+    }
+    self = direction
+  }
 }
 
 // MARK: - AVHWFramesContext
@@ -360,7 +369,7 @@ public final class AVHWFramesContext {
   public func getPixelFormats(_ direction: AVHWFrameTransferDirection) -> [AVPixelFormat]? {
     var ptr: UnsafeMutablePointer<AVPixelFormat>?
     defer { av_free(ptr) }
-    if av_hwframe_transfer_get_formats(cBufferPtr, direction, &ptr, 0) != 0 {
+    if av_hwframe_transfer_get_formats(cBufferPtr, direction.native, &ptr, 0) != 0 {
       return nil
     }
     return values(ptr, until: .none)
