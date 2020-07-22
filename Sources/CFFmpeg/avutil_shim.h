@@ -1,4 +1,6 @@
-#pragma once
+#ifndef AVUTIL_SHIM_H
+#define AVUTIL_SHIM_H
+
 #include <errno.h>
 #include <stddef.h>
 #include <libavutil/avutil.h>
@@ -92,3 +94,5 @@ static const int swift_AVERROR_HTTP_SERVER_ERROR  = AVERROR_HTTP_SERVER_ERROR;
 static inline void swift_log(void *avcl, int level, const char *msg) {
     av_log(avcl, level, msg);
 }
+
+#endif /* AVUTIL_SHIM_H */

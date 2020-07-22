@@ -9,9 +9,10 @@ import Foundation
 import SwiftFFmpeg
 
 if CommandLine.argc < 2 {
-    print("""
+  print(
+    """
     USAGE: \(CommandLine.arguments[0]) subcommand
-    
+
     SUBCOMMANDS:
       avio_dir_cmd        API example program to show how to manipulate resources accessed through AVIOContext.
       avio_reading        API example program to show how to read from a custom buffer accessed through AVIOContext.
@@ -42,49 +43,49 @@ if CommandLine.argc < 2 {
      bsf                  API example about how to use bitstream filter.
      split_stream         API example about how to split stream from a container format.
     """)
-    exit(1)
+  exit(1)
 }
 
 let subcommand = CommandLine.arguments[1]
 switch subcommand {
 case "avio_dir_cmd":
-    try avio_dir_cmd()
+  try avio_dir_cmd()
 case "avio_reading":
-    try avio_reading()
+  try avio_reading()
 case "decode_video":
-    try decode_video()
+  try decode_video()
 case "decode_audio":
-    try decode_audio()
+  try decode_audio()
 case "demuxing_decoding":
-    try demuxing_decoding()
+  try demuxing_decoding()
 case "encode_video":
-    try encode_video()
+  try encode_video()
 case "encode_audio":
-    try encode_audio()
+  try encode_audio()
 case "filter_audio":
-    try filter_audio()
+  try filter_audio()
 case "filtering_video":
-    try filtering_video()
+  try filtering_video()
 case "filtering_audio":
-    try filtering_audio()
+  try filtering_audio()
 case "http_multiclient":
-    try http_multiclient()
+  try http_multiclient()
 case "hw_decode":
-    try hw_decode()
+  try hw_decode()
 case "metadata":
-    try metadata()
+  try metadata()
 case "remuxing":
-    try remuxing()
+  try remuxing()
 case "scaling_video":
-    try scaling_video()
+  try scaling_video()
 case "resampling_audio":
-    try resampling_audio()
+  try resampling_audio()
 case "device_list":
-    try device_list()
+  try device_list()
 case "bsf":
-    try bsf()
+  try bsf()
 case "split_stream":
-    try split_stream()
+  try split_stream()
 default:
-    ()
+  ()
 }

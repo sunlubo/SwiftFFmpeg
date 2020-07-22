@@ -8,140 +8,143 @@
 import CFFmpeg
 
 public final class AVSamples {
-    public let data: UnsafeMutableBufferPointer<UnsafeMutablePointer<UInt8>?>
-    public let size: Int
-    public let linesize: Int
-    public let channelCount: Int
-    public let sampleCount: Int
-    public let sampleFormat: AVSampleFormat
+  public let data: UnsafeMutableBufferPointer<UnsafeMutablePointer<UInt8>?>
+  public let size: Int
+  public let linesize: Int
+  public let channelCount: Int
+  public let sampleCount: Int
+  public let sampleFormat: AVSampleFormat
 
-    /// Create a samples buffer for `sampleCount` samples, and fill data pointers and linesize accordingly.
-    ///
-    /// - Parameters:
-    ///   - data: array to be filled with the pointer for each channel
-    ///   - linesize: aligned size for audio buffer(s)
-    ///   - channelCount: the number of channels
-    ///   - sampleCount: the number of samples in a single channel
-    ///   - sampleFormat: the sample format
-    ///   - align: buffer size alignment (0 = default, 1 = no alignment)
-    public init(
-        channelCount: Int,
-        sampleCount: Int,
-        sampleFormat: AVSampleFormat,
-        align: Int = 0
-    ) {
-        let data = UnsafeMutablePointer<UnsafeMutablePointer<UInt8>?>.allocate(capacity: 4)
-        data.initialize(to: nil)
-        var linesize = 0 as Int32
-        let ret = av_samples_alloc(data, &linesize, Int32(channelCount), Int32(sampleCount), sampleFormat, Int32(align))
-        guard ret >= 0 else {
-            abort("av_samples_alloc: \(AVError(code: ret))")
-        }
-        self.data = UnsafeMutableBufferPointer(start: data, count: 4)
-        self.size = Int(ret)
-        self.linesize = Int(linesize)
-        self.channelCount = channelCount
-        self.sampleCount = sampleCount
-        self.sampleFormat = sampleFormat
+  /// Create a samples buffer for `sampleCount` samples, and fill data pointers and linesize accordingly.
+  ///
+  /// - Parameters:
+  ///   - data: array to be filled with the pointer for each channel
+  ///   - linesize: aligned size for audio buffer(s)
+  ///   - channelCount: the number of channels
+  ///   - sampleCount: the number of samples in a single channel
+  ///   - sampleFormat: the sample format
+  ///   - align: buffer size alignment (0 = default, 1 = no alignment)
+  public init(
+    channelCount: Int,
+    sampleCount: Int,
+    sampleFormat: AVSampleFormat,
+    align: Int = 0
+  ) {
+    let data = UnsafeMutablePointer<UnsafeMutablePointer<UInt8>?>.allocate(capacity: 4)
+    data.initialize(to: nil)
+    var linesize = 0 as Int32
+    let ret = av_samples_alloc(
+      data, &linesize, Int32(channelCount), Int32(sampleCount), sampleFormat.native,
+      Int32(align))
+    guard ret >= 0 else {
+      abort("av_samples_alloc: \(AVError(code: ret))")
     }
+    self.data = UnsafeMutableBufferPointer(start: data, count: 4)
+    self.size = Int(ret)
+    self.linesize = Int(linesize)
+    self.channelCount = channelCount
+    self.sampleCount = sampleCount
+    self.sampleFormat = sampleFormat
+  }
 
-    deinit {
-        av_freep(data.baseAddress)
-        data.deallocate()
-    }
+  deinit {
+    av_freep(data.baseAddress)
+    data.deallocate()
+  }
 
-    /// Fill an audio buffer with silence.
-    public func setSilence() {
-        av_samples_set_silence(data.baseAddress, 0, Int32(sampleCount), Int32(channelCount), sampleFormat)
-    }
+  /// Fill an audio buffer with silence.
+  public func setSilence() {
+    av_samples_set_silence(
+      data.baseAddress, 0, Int32(sampleCount), Int32(channelCount), sampleFormat.native)
+  }
 
-    /// Reformat samples using the given `SwrContext`.
-    ///
-    /// - Returns: number of samples output per channel
-    /// - Throws: AVError
-    @discardableResult
-    public func reformat(using context: SwrContext, to samples: AVSamples) throws -> Int {
-        try data.withMemoryRebound(to: UnsafePointer<UInt8>?.self) { bufPtr in
-            return try context.convert(
-                dst: samples.data.baseAddress!,
-                dstCount: samples.sampleCount,
-                src: bufPtr.baseAddress!,
-                srcCount: sampleCount
-            )
-        }
+  /// Reformat samples using the given `SwrContext`.
+  ///
+  /// - Returns: number of samples output per channel
+  /// - Throws: AVError
+  @discardableResult
+  public func reformat(using context: SwrContext, to samples: AVSamples) throws -> Int {
+    try data.withMemoryRebound(to: UnsafePointer<UInt8>?.self) { bufPtr in
+      return try context.convert(
+        dst: samples.data.baseAddress!,
+        dstCount: samples.sampleCount,
+        src: bufPtr.baseAddress!,
+        srcCount: sampleCount
+      )
     }
+  }
 }
 
 extension AVSamples {
 
-    /// Get the required buffer size for the given audio parameters.
-    ///
-    /// - Parameters:
-    ///   - channelCount: the number of channels
-    ///   - sampleCount: the number of samples in a single channel
-    ///   - sampleFormat: the sample format
-    ///   - align: buffer size alignment (0 = default, 1 = no alignment)
-    /// - Returns: required buffer size and calculated linesize
-    /// - Throws: AVError
-    public static func getBufferSize(
-        channelCount: Int,
-        sampleCount: Int,
-        sampleFormat: AVSampleFormat,
-        align: Int
-    ) throws -> (Int, Int) {
-        var linesize: Int32 = 0
-        let ret = av_samples_get_buffer_size(
-            &linesize,
-            Int32(channelCount),
-            Int32(sampleCount),
-            sampleFormat,
-            Int32(align)
-        )
-        try throwIfFail(ret)
-        return (Int(ret), Int(linesize))
-    }
+  /// Get the required buffer size for the given audio parameters.
+  ///
+  /// - Parameters:
+  ///   - channelCount: the number of channels
+  ///   - sampleCount: the number of samples in a single channel
+  ///   - sampleFormat: the sample format
+  ///   - align: buffer size alignment (0 = default, 1 = no alignment)
+  /// - Returns: required buffer size and calculated linesize
+  /// - Throws: AVError
+  public static func getBufferSize(
+    channelCount: Int,
+    sampleCount: Int,
+    sampleFormat: AVSampleFormat,
+    align: Int
+  ) throws -> (Int, Int) {
+    var linesize: Int32 = 0
+    let ret = av_samples_get_buffer_size(
+      &linesize,
+      Int32(channelCount),
+      Int32(sampleCount),
+      sampleFormat.native,
+      Int32(align)
+    )
+    try throwIfFail(ret)
+    return (Int(ret), Int(linesize))
+  }
 
-    /// Fill plane data pointers and linesize for samples with sample format.
-    ///
-    /// The data array is filled with the pointers to the samples data planes:
-    /// - for planar, set the start point of each channel's data within the buffer,
-    /// - for packed, set the start point of the entire buffer only.
-    ///
-    /// The value pointed to by linesize is set to the aligned size of each channel's data buffer for
-    /// planar layout, or to the aligned size of the buffer for all channels for packed layout.
-    ///
-    /// The buffer in buf must be big enough to contain all the samples (use
-    /// `getBufferSize(channelCount:sampleCount:sampleFormat:align:)` to compute its minimum size),
-    /// otherwise the data pointers will point to invalid data.
-    ///
-    /// - Parameters:
-    ///   - data: array to be filled with the pointer for each channel
-    ///   - buffer: the pointer to a buffer containing the samples
-    ///   - channelCount: the number of channels
-    ///   - sampleCount: the number of samples in a single channel
-    ///   - sampleFormat: the sample format
-    ///   - align: buffer size alignment (0 = default, 1 = no alignment)
-    /// - Returns: the size in bytes required for the audio buffer, calculated linesize,
-    /// - Throws: AVError
-    public static func fillArrays(
-        _ data: UnsafeMutablePointer<UnsafeMutablePointer<UInt8>?>,
-        buffer: UnsafeMutablePointer<UInt8>?,
-        channelCount: Int,
-        sampleCount: Int,
-        sampleFormat: AVSampleFormat,
-        align: Int = 0
-    ) throws -> (Int, Int) {
-        var linesize: Int32 = 0
-        let ret = av_samples_fill_arrays(
-            data,
-            &linesize,
-            buffer,
-            Int32(channelCount),
-            Int32(sampleCount),
-            sampleFormat,
-            Int32(align)
-        )
-        try throwIfFail(ret)
-        return (Int(ret), Int(linesize))
-    }
+  /// Fill plane data pointers and linesize for samples with sample format.
+  ///
+  /// The data array is filled with the pointers to the samples data planes:
+  /// - for planar, set the start point of each channel's data within the buffer,
+  /// - for packed, set the start point of the entire buffer only.
+  ///
+  /// The value pointed to by linesize is set to the aligned size of each channel's data buffer for
+  /// planar layout, or to the aligned size of the buffer for all channels for packed layout.
+  ///
+  /// The buffer in buf must be big enough to contain all the samples (use
+  /// `getBufferSize(channelCount:sampleCount:sampleFormat:align:)` to compute its minimum size),
+  /// otherwise the data pointers will point to invalid data.
+  ///
+  /// - Parameters:
+  ///   - data: array to be filled with the pointer for each channel
+  ///   - buffer: the pointer to a buffer containing the samples
+  ///   - channelCount: the number of channels
+  ///   - sampleCount: the number of samples in a single channel
+  ///   - sampleFormat: the sample format
+  ///   - align: buffer size alignment (0 = default, 1 = no alignment)
+  /// - Returns: the size in bytes required for the audio buffer, calculated linesize,
+  /// - Throws: AVError
+  public static func fillArrays(
+    _ data: UnsafeMutablePointer<UnsafeMutablePointer<UInt8>?>,
+    buffer: UnsafeMutablePointer<UInt8>?,
+    channelCount: Int,
+    sampleCount: Int,
+    sampleFormat: AVSampleFormat,
+    align: Int = 0
+  ) throws -> (Int, Int) {
+    var linesize: Int32 = 0
+    let ret = av_samples_fill_arrays(
+      data,
+      &linesize,
+      buffer,
+      Int32(channelCount),
+      Int32(sampleCount),
+      sampleFormat.native,
+      Int32(align)
+    )
+    try throwIfFail(ret)
+    return (Int(ret), Int(linesize))
+  }
 }

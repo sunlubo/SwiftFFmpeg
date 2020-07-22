@@ -9,33 +9,33 @@ import CFFmpeg
 
 extension UnsafePointer {
 
-    var mutable: UnsafeMutablePointer<Pointee> {
-        UnsafeMutablePointer(mutating: self)
-    }
+  var mutable: UnsafeMutablePointer<Pointee> {
+    UnsafeMutablePointer(mutating: self)
+  }
 }
 
 extension UnsafeBufferPointer {
 
-    var mutable: UnsafeMutableBufferPointer<Element> {
-        UnsafeMutableBufferPointer(mutating: self)
-    }
+  var mutable: UnsafeMutableBufferPointer<Element> {
+    UnsafeMutableBufferPointer(mutating: self)
+  }
 }
 
 extension String {
 
-    init?(cString: UnsafePointer<CChar>?) {
-        guard let cString = cString else { return nil }
-        self.init(cString: cString)
-    }
+  init?(cString: UnsafePointer<CChar>?) {
+    guard let cString = cString else { return nil }
+    self.init(cString: cString)
+  }
 }
 
 extension Dictionary where Key == String, Value == String {
 
-    func toAVDict() -> OpaquePointer? {
-        var pm: OpaquePointer?
-        for (k, v) in self {
-            av_dict_set(&pm, k, v, 0)
-        }
-        return pm
+  func toAVDict() -> OpaquePointer? {
+    var pm: OpaquePointer?
+    for (k, v) in self {
+      av_dict_set(&pm, k, v, 0)
     }
+    return pm
+  }
 }
