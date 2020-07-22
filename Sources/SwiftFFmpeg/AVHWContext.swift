@@ -16,6 +16,8 @@ public enum AVHWDeviceType: UInt32 {
   case vdpau
   /// Use CUDA (Compute Unified Device Architecture, NVIDIA) hardware acceleration.
   case cuda
+  /// Use VA-API (Video Acceleration API) hardware acceleration.
+  case vaapi
   /// Use DXVA2 (DirectX Video Acceleration) hardware acceleration.
   case dxva2
   /// Use QSV (Intel Quick Sync Video) hardware acceleration.
