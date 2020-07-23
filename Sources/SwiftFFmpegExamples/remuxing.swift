@@ -85,9 +85,9 @@ func remuxing() throws {
 
     // copy packet
     pkt.pts = AVMath.rescale(
-      pkt.pts, istream.timebase, ostream.timebase, AVRounding.nearInf.union(.passMinMax))
+      pkt.pts, istream.timebase, ostream.timebase, rounding: .nearInf, passMinMax: true)
     pkt.dts = AVMath.rescale(
-      pkt.dts, istream.timebase, ostream.timebase, AVRounding.nearInf.union(.passMinMax))
+      pkt.dts, istream.timebase, ostream.timebase, rounding: .nearInf, passMinMax: true)
     pkt.duration = AVMath.rescale(pkt.duration, istream.timebase, ostream.timebase)
     pkt.position = -1
     log_packet(pkt, fmtCtx: ofmtCtx, tag: "out")

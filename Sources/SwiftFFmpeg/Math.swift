@@ -69,42 +69,6 @@ public enum AVRounding: UInt32 {
   case up = 3
   /// Round to nearest and halfway cases away from zero.
   case nearInf = 5
-  /// Flag telling rescaling functions to pass `INT64_MIN`/`MAX` through
-  /// unchanged, avoiding special cases for #AV_NOPTS_VALUE.
-  ///
-  /// Unlike other values of the enumeration `AVRounding`, this value is a
-  /// bitmask that must be used in conjunction with another value of the
-  /// enumeration through a bitwise OR, in order to set behavior for normal
-  /// cases.
-  ///
-  ///     av_rescale_rnd(3, 1, 2, AV_ROUND_UP | AV_ROUND_PASS_MINMAX);
-  ///     // Rescaling 3:
-  ///     //     Calculating 3 * 1 / 2
-  ///     //     3 / 2 is rounded up to 2
-  ///     //     => 2
-  ///
-  ///     av_rescale_rnd(AV_NOPTS_VALUE, 1, 2, AV_ROUND_UP | AV_ROUND_PASS_MINMAX);
-  ///     // Rescaling AV_NOPTS_VALUE:
-  ///     //     AV_NOPTS_VALUE == INT64_MIN
-  ///     //     AV_NOPTS_VALUE is passed through
-  ///     //     => AV_NOPTS_VALUE
-  case passMinMax = 8192
-
-  internal var native: CFFmpeg.AVRounding {
-    CFFmpeg.AVRounding(rawValue)
-  }
-
-  internal init(native: CFFmpeg.AVRounding) {
-    guard let rounding = AVRounding(rawValue: native.rawValue) else {
-      fatalError("Unknown rounding: \(native)")
-    }
-    self = rounding
-  }
-
-  public func union(_ other: AVRounding) -> AVRounding {
-    if other != .passMinMax { return self }
-    return AVRounding(rawValue: rawValue | other.rawValue)!
-  }
 }
 
 public enum AVMath {
@@ -115,9 +79,14 @@ public enum AVMath {
   /// directly can overflow, and does not support different rounding methods.
   public static func rescale<T: BinaryInteger>(
     _ a: T, _ b: T, _ c: T,
-    _ rounding: AVRounding = .inf
+    rounding: AVRounding = .inf,
+    passMinMax: Bool = false
   ) -> Int64 {
-    av_rescale_rnd(Int64(a), Int64(b), Int64(c), rounding.native)
+    av_rescale_rnd(
+      Int64(a), Int64(b), Int64(c),
+      CFFmpeg.AVRounding(
+        rawValue: passMinMax ? rounding.rawValue | AV_ROUND_PASS_MINMAX.rawValue : rounding.rawValue
+      ))
   }
 
   /// Rescale a integer by 2 rational numbers with specified rounding.
@@ -125,8 +94,13 @@ public enum AVMath {
   /// The operation is mathematically equivalent to `a * bq / cq`.
   public static func rescale<T: BinaryInteger>(
     _ a: T, _ b: AVRational, _ c: AVRational,
-    _ rounding: AVRounding = .inf
+    rounding: AVRounding = .inf,
+    passMinMax: Bool = false
   ) -> Int64 {
-    av_rescale_q_rnd(Int64(a), b, c, rounding.native)
+    av_rescale_q_rnd(
+      Int64(a), b, c,
+      CFFmpeg.AVRounding(
+        rawValue: passMinMax ? rounding.rawValue | AV_ROUND_PASS_MINMAX.rawValue : rounding.rawValue
+      ))
   }
 }
