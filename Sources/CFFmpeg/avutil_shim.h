@@ -50,11 +50,11 @@ static const uint64_t swift_AV_CH_LAYOUT_STEREO_DOWNMIX    = AV_CH_LAYOUT_STEREO
 
 /* error handling */
 static inline int swift_AVERROR(int errnum) {
-    return AVERROR(errnum);
+  return AVERROR(errnum);
 }
 
 static inline int swift_AVUNERROR(int errnum) {
-    return AVUNERROR(errnum);
+  return AVUNERROR(errnum);
 }
 
 static const int swift_AVERROR_BSF_NOT_FOUND      = AVERROR_BSF_NOT_FOUND; ///< Bitstream filter not found
@@ -92,7 +92,7 @@ static const int swift_AVERROR_HTTP_OTHER_4XX     = AVERROR_HTTP_OTHER_4XX;
 static const int swift_AVERROR_HTTP_SERVER_ERROR  = AVERROR_HTTP_SERVER_ERROR;
 
 static inline void swift_log(void *avcl, int level, const char *msg) {
-    av_log(avcl, level, msg);
+  av_log(avcl, level, msg);
 }
 
 #endif /* AVUTIL_SHIM_H */
