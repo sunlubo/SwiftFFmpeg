@@ -38,3 +38,13 @@ func values<T>(_ ptr: UnsafePointer<T>?, until predicate: (T) -> Bool) -> [T]? {
   guard end > start else { return [] }
   return Array(UnsafeBufferPointer(start: start, count: end - start))
 }
+
+func toDictionary(_ native: OpaquePointer) -> [String: String] {
+  var dict = [String: String]()
+  var prev: UnsafeMutablePointer<AVDictionaryEntry>?
+  while let tag = av_dict_get(native, "", prev, AV_DICT_IGNORE_SUFFIX) {
+    dict[String(cString: tag.pointee.key)] = String(cString: tag.pointee.value)
+    prev = tag
+  }
+  return dict
+}

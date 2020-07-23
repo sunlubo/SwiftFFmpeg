@@ -119,6 +119,38 @@ public final class AVFormatContext {
     set { cContextPtr.pointee.probesize = newValue }
   }
 
+  /// When muxing, chapters are normally written in the file header,
+  /// so nb_chapters should normally be initialized before `writeHeader`
+  /// is called. Some muxers (e.g. mov and mkv) can also write chapters
+  /// in the trailer. To write chapters in the trailer, nb_chapters
+  /// must be zero when `writeHeader` is called and non-zero when
+  /// `writeTrailer` is called.
+  ///
+  /// - muxing: set by user
+  /// - demuxing: set by libavformat
+  public var chapters: [AVChapter] {
+    get {
+      var list = [AVChapter]()
+      for i in 0..<cContext.nb_chapters {
+        let chapter = cContext.chapters.advanced(by: Int(i)).pointee!
+        list.append(AVChapter(native: chapter))
+      }
+      return list
+    }
+    set {
+      let cchapters = UnsafeMutablePointer<UnsafeMutablePointer<CAVChapter>?>.allocate(
+        capacity: newValue.count
+      )
+      for (index, chapter) in newValue.enumerated() {
+        let cchapter = UnsafeMutablePointer<CAVChapter>.allocate(capacity: 1)
+        cchapter.initialize(to: chapter.native)
+        cchapters.advanced(by: index).pointee = cchapter
+      }
+      cContextPtr.pointee.chapters = cchapters
+      cContextPtr.pointee.nb_chapters = UInt32(newValue.count)
+    }
+  }
+
   /// Metadata that applies to the whole file.
   ///
   /// - demuxing: Set by libavformat in `openInput(_ url:format:options:)`.
