@@ -34,7 +34,7 @@ let package = Package(
         .linkedLibrary("bz2"),
         .linkedLibrary("iconv"),
         .linkedLibrary("lzma"),
-        .linkedLibrary("Security"),
+        .linkedFramework("Security"),
         .linkedFramework("CoreMedia"),
         .linkedFramework("CoreVideo"),
         .linkedFramework("AudioToolbox"),
