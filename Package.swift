@@ -5,7 +5,7 @@ import PackageDescription
 
 let package = Package(
   name: "SwiftFFmpeg",
-  platforms: [.iOS(.v9), .macOS(.v10_11), .tvOS(.v10)],
+  platforms: [.iOS(.v9), .macOS(.v10_10), .tvOS(.v10)],
   products: [
     .library(
       name: "SwiftFFmpeg",
