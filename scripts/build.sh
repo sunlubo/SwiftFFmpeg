@@ -1,8 +1,10 @@
 #!/bin/bash
 
-FFMPEG_VERSION=4.2.2
+FFMPEG_VERSION=4.3.1
 FFMPEG_SOURCE_DIR=FFmpeg-n$FFMPEG_VERSION
+FFMPEG_LIBS="libavcodec libavformat libavutil libswresample libswscale"
 PREFIX=`pwd`/output
+ARCH="x86_64"
 
 if [ ! -d $FFMPEG_SOURCE_DIR ]; then
   echo "Start downloading FFmpeg..."
@@ -22,10 +24,27 @@ cd $FFMPEG_SOURCE_DIR
   --enable-version3 \
   --disable-programs \
   --disable-doc \
-  --extra-cflags="-march=native -fno-stack-check" \
+  --disable-avdevice \
+  --disable-postproc \
+  --disable-avfilter \
+  --disable-network \
+  --disable-encoders \
+  --disable-decoders \
+  --disable-muxers \
+  --disable-demuxers \
+  --disable-parsers \
+  --disable-protocols \
+  --arch=$ARCH \
+  --extra-cflags="-arch $ARCH -march=native -fno-stack-check" \
   --disable-debug || exit 1
 
 make clean
 make -j8 install || exit 1
+
+cd ..
+
+for LIB in $FFMPEG_LIBS; do
+  ./build_framework.sh $PREFIX $LIB $FFMPEG_VERSION || exit 1
+done
 
 echo "The compilation of FFmpeg is completed."
