@@ -2,7 +2,7 @@
 
 FFMPEG_VERSION=4.3.1
 FFMPEG_SOURCE_DIR=FFmpeg-n$FFMPEG_VERSION
-FFMPEG_LIBS="libavcodec libavformat libavutil libswresample libswscale"
+FFMPEG_LIBS="libavcodec libavdevice libavfilter libavformat libavutil libpostproc libswresample libswscale"
 PREFIX=`pwd`/output
 ARCH="x86_64"
 
