@@ -3,54 +3,70 @@
 //  SwiftFFmpegExamples
 //
 //  Created by sunlubo on 2019/1/9.
+//  Copyright © 2019-2020 sun. All rights reserved.
 //
 
+import Foundation
 import SwiftFFmpeg
 
-#if canImport(Darwin)
-import Darwin
-#else
-import Glibc
-#endif
+class DecodeVideo {
+  var codecContext: AVCodecContext
+  var frame = AVFrame()
 
-private func saveToPGM(
-  _ buf: UnsafeMutablePointer<UInt8>,
-  _ wrap: Int,
-  _ xsize: Int,
-  _ ysize: Int,
-  _ filename: String
-) {
-  let file = fopen(filename, "w")
-  defer { fclose(file) }
+  init() {
+    let codec = AVCodec.findDecoderById(.H264)!
+    codecContext = AVCodecContext(codec: codec)
+  }
 
-  let header = String(format: "P5\n%d %d\n%d\n", xsize, ysize, 255)
-  fwrite(header, 1, header.utf8.count, file)
-  for i in 0..<ysize {
-    fwrite(buf.advanced(by: i * wrap), 1, xsize, file)
+  func save() throws {
+    try codecContext.openCodec()
+
+    let parser = try AVCodecParser(codecContext: codecContext, delegate: self)
+    let raw = try Data(contentsOf: URL(string: "file://\(CommandLine.arguments[2])")!)
+    raw.withUnsafeBytes { ptr in
+      parser.parse(data: ptr.bindMemory(to: UInt8.self))
+    }
+    // flush
+    parser.parse(data: UnsafeBufferPointer(start: nil, count: 0))
   }
 }
 
-private func decode(
-  codecCtx: AVCodecContext,
-  frame: AVFrame,
-  pkt: AVPacket?,
-  output: String
-) throws {
-  try codecCtx.sendPacket(pkt)
+// MARK: - DecodeVideo + AVCodecParserDelegate
 
-  while true {
+extension DecodeVideo: AVCodecParserDelegate {
+
+  func packetParsed(_ packet: AVPacket) {
     do {
-      try codecCtx.receiveFrame(frame)
-    } catch let err as AVError where err == .tryAgain || err == .eof {
-      break
+      try decode(packet)
+    } catch {
+      print(error)
     }
+  }
 
-    let filename = "\(output)-\(codecCtx.frameNumber).pgm"
-    print("saving frame \(filename)")
+  func decode(_ packet: AVPacket) throws {
+    try codecContext.sendPacket(packet)
+    while true {
+      do {
+        try codecContext.receiveFrame(frame)
+      } catch let err as AVError where err == .tryAgain || err == .eof {
+        break
+      }
 
-    saveToPGM(frame.data[0]!, Int(frame.linesize[0]), frame.width, frame.height, filename)
+      var data = Data()
+      var header = String(format: "P5\n%d %d\n%d\n", frame.width, frame.height, 255)
+      header.withUTF8 { ptr in
+        data.append(contentsOf: ptr)
+      }
+      for i in 0..<frame.height {
+        data.append(frame.data[0]!.advanced(by: i * Int(frame.linesize[0])), count: frame.width)
+      }
 
-    frame.unref()
+      let filename = "\(CommandLine.arguments[3])-\(codecContext.frameNumber).pgm"
+      try data.write(to: URL(string: "file://\(filename)")!)
+      print("Save \(filename)")
+
+      frame.unref()
+    }
   }
 }
 
@@ -60,53 +76,5 @@ func decode_video() throws {
     return
   }
 
-  let input = CommandLine.arguments[2]
-  let output = CommandLine.arguments[3]
-
-  let codec = AVCodec.findDecoderById(.H264)!
-  let codecCtx = AVCodecContext(codec: codec)
-  try codecCtx.openCodec()
-
-  let parser = AVCodecParserContext(codecContext: codecCtx)!
-
-  guard let file = fopen(input, "rb") else {
-    print("Could not open \(input).")
-    exit(1)
-  }
-  defer { fclose(file) }
-
-  let pkt = AVPacket()
-  let frame = AVFrame()
-
-  let inbufSize = 4096
-  let inbuf = UnsafeMutablePointer<UInt8>.allocate(
-    capacity: inbufSize + AVConstant.inputBufferPaddingSize)
-  inbuf.initialize(to: 0)
-  defer { inbuf.deallocate() }
-
-  while feof(file) == 0 {
-    // read raw data from the input file
-    var size = fread(inbuf, 1, inbufSize, file)
-    if size == 0 {
-      break
-    }
-
-    // use the parser to split the data into frames
-    var data = inbuf
-    while size > 0 {
-      let (buf, bufSize, used) = try parser.parse(data: data, size: size)
-      pkt.data = buf
-      pkt.size = bufSize
-
-      data = data.advanced(by: used)
-      size -= used
-
-      if pkt.size > 0 {
-        try decode(codecCtx: codecCtx, frame: frame, pkt: pkt, output: output)
-      }
-    }
-  }
-
-  // flush the decoder
-  try decode(codecCtx: codecCtx, frame: frame, pkt: nil, output: output)
+  try DecodeVideo().save()
 }
