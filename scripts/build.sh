@@ -2,7 +2,7 @@
 
 FFMPEG_VERSION=4.3.1
 FFMPEG_SOURCE_DIR=FFmpeg-n$FFMPEG_VERSION
-FFMPEG_LIBS="libavcodec libavdevice libavfilter libavformat libavutil libpostproc libswresample libswscale"
+FFMPEG_LIBS="libavcodec libavdevice libavfilter libavformat libavutil libswresample libswscale"
 PREFIX=`pwd`/output
 ARCH="x86_64"
 
@@ -20,12 +20,11 @@ cd $FFMPEG_SOURCE_DIR
 
 ./configure \
   --prefix=$PREFIX \
-  --enable-gpl \
   --enable-version3 \
   --disable-programs \
   --disable-doc \
   --arch=$ARCH \
-  --extra-cflags="-arch $ARCH -march=native -fno-stack-check" \
+  --extra-cflags="-fno-stack-check" \
   --disable-debug || exit 1
 
 make clean
