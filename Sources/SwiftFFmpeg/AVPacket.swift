@@ -28,11 +28,10 @@ typealias CAVPacket = CFFmpeg.AVPacket
 ///
 /// The side data is always allocated with `AVIO.malloc(size:)`, copied by `ref(from:)` and freed `unref()`.
 public final class AVPacket {
-  let cPacketPtr: UnsafeMutablePointer<CAVPacket>
-  var cPacket: CAVPacket { cPacketPtr.pointee }
+  var native: UnsafeMutablePointer<CAVPacket>!
 
-  init(cPacketPtr: UnsafeMutablePointer<CAVPacket>) {
-    self.cPacketPtr = cPacketPtr
+  init(native: UnsafeMutablePointer<CAVPacket>) {
+    self.native = native
   }
 
   /// Create an `AVPacket` and set its fields to default values.
@@ -40,22 +39,23 @@ public final class AVPacket {
   /// - Note: This only allocates the `AVPacket` itself, not the data buffers.
   ///   Those must be allocated through other means such as `av_new_packet`.
   public init() {
-    guard let packetPtr = av_packet_alloc() else {
-      abort("av_packet_alloc")
-    }
-    self.cPacketPtr = packetPtr
+    self.native = av_packet_alloc()
+  }
+
+  deinit {
+    av_packet_free(&native)
   }
 
   /// A reference to the reference-counted buffer where the packet data is stored.
   /// May be `nil`, then the packet data is not reference-counted.
   public var buffer: AVBuffer? {
     get {
-      if let bufPtr = cPacket.buf {
-        return AVBuffer(cBufferPtr: bufPtr)
+      if let ptr = native.pointee.buf {
+        return AVBuffer(native: ptr)
       }
       return nil
     }
-    set { cPacketPtr.pointee.buf = newValue?.cBufferPtr }
+    set { native.pointee.buf = newValue?.native }
   }
 
   /// Presentation timestamp in `AVStream.timebase` units; the time at which the decompressed packet
@@ -63,49 +63,49 @@ public final class AVPacket {
   ///
   /// Can be `AVTimestamp.noPTS` if it is not stored in the file.
   public var pts: Int64 {
-    get { cPacket.pts }
-    set { cPacketPtr.pointee.pts = newValue }
+    get { native.pointee.pts }
+    set { native.pointee.pts = newValue }
   }
 
   /// Decompression timestamp in `AVStream.timebase` units; the time at which the packet is decompressed.
   ///
   /// Can be `AVTimestamp.noPTS` if it is not stored in the file.
   public var dts: Int64 {
-    get { cPacket.dts }
-    set { cPacketPtr.pointee.dts = newValue }
+    get { native.pointee.dts }
+    set { native.pointee.dts = newValue }
   }
 
   public var data: UnsafeMutablePointer<UInt8>? {
-    get { cPacket.data }
-    set { cPacketPtr.pointee.data = newValue }
+    get { native.pointee.data }
+    set { native.pointee.data = newValue }
   }
 
   public var size: Int {
-    get { Int(cPacket.size) }
-    set { cPacketPtr.pointee.size = Int32(newValue) }
+    get { Int(native.pointee.size) }
+    set { native.pointee.size = Int32(newValue) }
   }
 
   public var streamIndex: Int {
-    get { Int(cPacket.stream_index) }
-    set { cPacketPtr.pointee.stream_index = Int32(newValue) }
+    get { Int(native.pointee.stream_index) }
+    set { native.pointee.stream_index = Int32(newValue) }
   }
 
   public var flags: Flag {
-    get { Flag(rawValue: cPacket.flags) }
-    set { cPacketPtr.pointee.flags = newValue.rawValue }
+    get { Flag(rawValue: native.pointee.flags) }
+    set { native.pointee.flags = newValue.rawValue }
   }
 
   /// Duration of this packet in `AVStream.timebase` units, 0 if unknown.
   /// Equals `next_pts - this_pts` in presentation order.
   public var duration: Int64 {
-    get { cPacket.duration }
-    set { cPacketPtr.pointee.duration = newValue }
+    get { native.pointee.duration }
+    set { native.pointee.duration = newValue }
   }
 
   /// Byte position in stream, -1 if unknown.
   public var position: Int64 {
-    get { cPacket.pos }
-    set { cPacketPtr.pointee.pos = newValue }
+    get { native.pointee.pos }
+    set { native.pointee.pos = newValue }
   }
 
   /// Convert valid timing fields (timestamps / durations) in a packet from one timebase to another.
@@ -115,7 +115,7 @@ public final class AVPacket {
   ///   - src: source timebase, in which the timing fields in pkt are expressed.
   ///   - dst: destination timebase, to which the timing fields will be converted.
   public func rescaleTimestamp(from src: AVRational, to dst: AVRational) {
-    av_packet_rescale_ts(cPacketPtr, src, dst)
+    av_packet_rescale_ts(native, src, dst)
   }
 
   /// Setup a new reference to the data described by a given packet.
@@ -128,7 +128,7 @@ public final class AVPacket {
   /// - Parameter src: the source packet
   /// - Throws: AVerror
   public func ref(from src: AVPacket) throws {
-    try throwIfFail(av_packet_ref(cPacketPtr, src.cPacketPtr))
+    try throwIfFail(av_packet_ref(native, src.native))
   }
 
   /// Wipe the packet.
@@ -136,14 +136,14 @@ public final class AVPacket {
   /// Unreference the buffer referenced by the packet and reset the remaining packet fields
   /// to their default values.
   public func unref() {
-    av_packet_unref(cPacketPtr)
+    av_packet_unref(native)
   }
 
   /// Move every field in `src` to this packet and reset `src`.
   ///
   /// - Parameter src: the source packet
   public func moveRef(from src: AVPacket) {
-    av_packet_move_ref(cPacketPtr, src.cPacketPtr)
+    av_packet_move_ref(native, src.native)
   }
 
   /// Create a new packet that references the same data as this packet.
@@ -152,8 +152,8 @@ public final class AVPacket {
   ///
   /// - Returns: newly created `AVPacket` on success, `nil` on error.
   public func clone() -> AVPacket? {
-    if let ptr = av_packet_clone(cPacketPtr) {
-      return AVPacket(cPacketPtr: ptr)
+    if let ptr = av_packet_clone(native) {
+      return AVPacket(native: ptr)
     }
     return nil
   }
@@ -163,19 +163,13 @@ public final class AVPacket {
   ///
   /// - Throws: AVError
   public func makeWritable() throws {
-    try throwIfFail(av_packet_make_writable(cPacketPtr))
-  }
-
-  deinit {
-    var ptr: UnsafeMutablePointer<CAVPacket>? = cPacketPtr
-    av_packet_free(&ptr)
+    try throwIfFail(av_packet_make_writable(native))
   }
 }
 
 // MARK: - AVPacket.Flag
 
 extension AVPacket {
-
   public struct Flag: OptionSet {
     /// The packet contains a keyframe.
     public static let key = Flag(rawValue: AV_PKT_FLAG_KEY)
@@ -199,7 +193,6 @@ extension AVPacket {
 }
 
 extension AVPacket.Flag: CustomStringConvertible {
-
   public var description: String {
     var str = "["
     if contains(.key) { str += "key, " }
@@ -218,7 +211,6 @@ extension AVPacket.Flag: CustomStringConvertible {
 // MARK: - AVPacketSideDataType
 
 public enum AVPacketSideDataType: UInt32 {
-
   /// An AV_PKT_DATA_PALETTE side data packet contains exactly AVPALETTE_SIZE
   /// bytes worth of palette. This side data signals that a new palette is present.
   case palette
@@ -344,11 +336,11 @@ public enum AVPacketSideDataType: UInt32 {
   /// in ETSI TS 101 154 using AVActiveFormatDescription enum.
   case afd
 
-  internal var native: CFFmpeg.AVPacketSideDataType {
+  var native: CFFmpeg.AVPacketSideDataType {
     CFFmpeg.AVPacketSideDataType(rawValue)
   }
 
-  internal init(native: CFFmpeg.AVPacketSideDataType) {
+  init(native: CFFmpeg.AVPacketSideDataType) {
     guard let type = AVPacketSideDataType(rawValue: native.rawValue) else {
       fatalError("Unknown packet side data type: \(native)")
     }

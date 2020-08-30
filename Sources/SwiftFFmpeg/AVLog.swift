@@ -10,7 +10,6 @@ import CFFmpeg
 // MARK: - AVLog
 
 public enum AVLog {
-
   /// Get/set the log level.
   public static var level: Level {
     get { Level(rawValue: av_log_get_level()) }
@@ -39,7 +38,7 @@ public enum AVLog {
 // MARK: - AVLog.Level
 
 extension AVLog {
-
+  /// Log level
   public struct Level: OptionSet {
     /// Print no output.
     public static let quiet = Level(rawValue: AV_LOG_QUIET)

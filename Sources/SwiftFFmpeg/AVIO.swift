@@ -10,7 +10,6 @@ import CFFmpeg
 // MARK: - AVIO
 
 public enum AVIO {
-
   /// Allocate a memory block with alignment suitable for all memory accesses
   /// (including vectors if available on the CPU).
   ///
@@ -117,7 +116,7 @@ typealias CAVIODirEntry = CFFmpeg.AVIODirEntry
 /// Only name and type fields are guaranteed be set.
 /// Rest of fields are protocol or/and platform dependent and might be unknown.
 public final class AVIODirEntry {
-  var cEntryPtr: UnsafeMutablePointer<CAVIODirEntry>!
+  var native: UnsafeMutablePointer<CAVIODirEntry>!
 
   /// Filename.
   public let name: String
@@ -138,21 +137,21 @@ public final class AVIODirEntry {
   /// Unix file mode, -1 if unknown.
   public let filemode: Int64
 
-  init(cEntryPtr: UnsafeMutablePointer<CAVIODirEntry>) {
-    self.cEntryPtr = cEntryPtr
-    self.name = String(cString: cEntryPtr.pointee.name)
-    self.type = Kind(rawValue: UInt32(cEntryPtr.pointee.type))!
-    self.size = cEntryPtr.pointee.size
-    self.modificationTimestamp = cEntryPtr.pointee.modification_timestamp
-    self.accessTimestamp = cEntryPtr.pointee.access_timestamp
-    self.statusChangeTimestamp = cEntryPtr.pointee.status_change_timestamp
-    self.userId = cEntryPtr.pointee.user_id
-    self.groupId = cEntryPtr.pointee.group_id
-    self.filemode = cEntryPtr.pointee.filemode
+  init(native: UnsafeMutablePointer<CAVIODirEntry>) {
+    self.native = native
+    self.name = String(cString: native.pointee.name)
+    self.type = Kind(rawValue: UInt32(native.pointee.type))!
+    self.size = native.pointee.size
+    self.modificationTimestamp = native.pointee.modification_timestamp
+    self.accessTimestamp = native.pointee.access_timestamp
+    self.statusChangeTimestamp = native.pointee.status_change_timestamp
+    self.userId = native.pointee.user_id
+    self.groupId = native.pointee.group_id
+    self.filemode = native.pointee.filemode
   }
 
   deinit {
-    avio_free_directory_entry(&cEntryPtr)
+    avio_free_directory_entry(&native)
   }
 }
 
@@ -211,13 +210,11 @@ extension AVIODirEntry.Kind: CustomStringConvertible {
 typealias CAVIODirContext = CFFmpeg.AVIODirContext
 
 public final class AVIODirContext {
-  let cContextPtr: UnsafeMutablePointer<CAVIODirContext>
-  var cContext: CAVIODirContext { cContextPtr.pointee }
+  var native: UnsafeMutablePointer<CAVIODirContext>!
+  var isOpen = false
 
-  private var isOpen: Bool = false
-
-  init(cContextPtr: UnsafeMutablePointer<CAVIODirContext>) {
-    self.cContextPtr = cContextPtr
+  init(native: UnsafeMutablePointer<CAVIODirContext>) {
+    self.native = native
   }
 
   /// Open directory for reading.
@@ -226,13 +223,11 @@ public final class AVIODirContext {
   ///   - url: directory to be listed.
   ///   - options: A dictionary filled with protocol-private options.
   /// - Throws: AVError
-  public convenience init(url: String, options: [String: String]? = nil) throws {
+  public init(url: String, options: [String: String]? = nil) throws {
     var pm: OpaquePointer? = options?.toAVDict()
     defer { av_dict_free(&pm) }
 
-    var pb: UnsafeMutablePointer<CAVIODirContext>!
-    try throwIfFail(avio_open_dir(&pb, url, &pm))
-    self.init(cContextPtr: pb)
+    try throwIfFail(avio_open_dir(&native, url, &pm))
     self.isOpen = true
 
     dumpUnrecognizedOptions(pm)
@@ -241,8 +236,7 @@ public final class AVIODirContext {
   /// Close directory.
   public func close() {
     if isOpen {
-      var pb: UnsafeMutablePointer<CAVIODirContext>? = cContextPtr
-      avio_close_dir(&pb)
+      avio_close_dir(&native)
       isOpen = false
     }
   }
@@ -255,16 +249,16 @@ public final class AVIODirContext {
 extension AVIODirContext: Sequence {
 
   public struct Iterator: IteratorProtocol {
-    private let dirCtx: AVIODirContext
-    private var nextEntry: UnsafeMutablePointer<CAVIODirEntry>?
+    let dirCtx: AVIODirContext
+    var nextEntry: UnsafeMutablePointer<CAVIODirEntry>?
 
     init(dirCtx: AVIODirContext) {
       self.dirCtx = dirCtx
     }
 
     public mutating func next() -> AVIODirEntry? {
-      if avio_read_dir(dirCtx.cContextPtr, &nextEntry) >= 0, let entryPtr = nextEntry {
-        return AVIODirEntry(cEntryPtr: entryPtr)
+      if avio_read_dir(dirCtx.native, &nextEntry) >= 0, let ptr = nextEntry {
+        return AVIODirEntry(native: ptr)
       }
       return nil
     }
@@ -301,15 +295,13 @@ typealias IOBox = Box<IOBoxValue>
 
 /// Bytestream IO Context.
 public final class AVIOContext {
-  let cContextPtr: UnsafeMutablePointer<CAVIOContext>
-  var cContext: CAVIOContext { cContextPtr.pointee }
+  var native: UnsafeMutablePointer<CAVIOContext>!
+  var opaque: IOBox?
+  var owned = false
+  var isOpen = false
 
-  private var opaque: IOBox?
-  private var freeWhenDone: Bool = false
-  private var isOpen: Bool = false
-
-  init(cContextPtr: UnsafeMutablePointer<CAVIOContext>) {
-    self.cContextPtr = cContextPtr
+  init(native: UnsafeMutablePointer<CAVIOContext>) {
+    self.native = native
   }
 
   /// Allocate and initialize an `AVIOContext` for buffered I/O.
@@ -325,7 +317,7 @@ public final class AVIOContext {
   ///   - writeHandler: A handler for writing the buffer contents, may be `nil`.
   ///     The function may not change the input buffers content.
   ///   - seekHandler: A handler for seeking to specified byte position, may be `nil`.
-  public convenience init(
+  public init(
     buffer: UnsafeMutablePointer<UInt8>,
     size: Int,
     writable: Bool,
@@ -373,9 +365,9 @@ public final class AVIOContext {
     guard let ctxPtr = ptr else {
       abort("avio_alloc_context")
     }
-    self.init(cContextPtr: ctxPtr)
+    self.native = ctxPtr
     self.opaque = box
-    self.freeWhenDone = true
+    self.owned = true
   }
 
   /// Create and initialize a `AVIOContext` for accessing the resource indicated by url.
@@ -404,30 +396,29 @@ public final class AVIOContext {
     } else {
       try throwIfFail(avio_open2(&pb, url, flags.rawValue, nil, &pm))
     }
-    self.init(cContextPtr: pb)
+    self.init(native: pb)
     self.isOpen = true
 
     dumpUnrecognizedOptions(pm)
   }
 
   deinit {
-    if freeWhenDone {
-      av_free(cContext.buffer)
-      var pb: UnsafeMutablePointer<CAVIOContext>? = cContextPtr
-      avio_context_free(&pb)
+    if owned {
+      av_free(native.pointee.buffer)
+      avio_context_free(&native)
     }
   }
 
   /// Writes the contents of a provided data buffer to the receiver.
   public func write(_ buffer: UnsafePointer<UInt8>, size: Int) {
-    avio_write(cContextPtr, buffer, Int32(size))
+    avio_write(native, buffer, Int32(size))
   }
 
   /// Sets the file position indicator for the file stream to the value pointed to by offset.
   ///
   /// - Throws: AVError
   public func seek(to offset: Int64, whence: SeekWhence) throws -> Int {
-    let ret = avio_seek(cContextPtr, offset, whence.rawValue)
+    let ret = avio_seek(native, offset, whence.rawValue)
     try throwIfFail(Int32(ret))
     return Int(ret)
   }
@@ -436,7 +427,7 @@ public final class AVIOContext {
   ///
   /// - Throws: AVError
   public func skip(to offset: Int64) throws -> Int {
-    let ret = avio_skip(cContextPtr, offset)
+    let ret = avio_skip(native, offset)
     try throwIfFail(Int32(ret))
     return Int(ret)
   }
@@ -445,7 +436,7 @@ public final class AVIOContext {
   ///
   /// - Throws: AVError
   public func tell() throws -> Int {
-    let ret = avio_tell(cContextPtr)
+    let ret = avio_tell(native)
     try throwIfFail(Int32(ret))
     return Int(ret)
   }
@@ -454,14 +445,14 @@ public final class AVIOContext {
   ///
   /// - Throws: AVError
   public func size() throws -> Int64 {
-    let ret = avio_size(cContextPtr)
+    let ret = avio_size(native)
     try throwIfFail(Int32(ret))
     return ret
   }
 
   /// Checks if the end of the given file stream has been reached.
   public func feof() -> Bool {
-    avio_feof(cContextPtr) != 0
+    avio_feof(native) != 0
   }
 
   /// Force flushing of buffered data.
@@ -473,7 +464,7 @@ public final class AVIOContext {
   /// position to that of the underlying stream. This does not read new data, and does not
   /// perform any seeks.
   public func flush() {
-    avio_flush(cContextPtr)
+    avio_flush(native)
   }
 
   /// Read size bytes from `AVIOContext` into buffer.
@@ -484,7 +475,7 @@ public final class AVIOContext {
   /// - Returns: The total number of bytes read into the buffer.
   /// - Throws: AVError
   public func read(_ buffer: UnsafeMutablePointer<UInt8>, size: Int) throws -> Int {
-    let ret = avio_read(cContextPtr, buffer, Int32(size))
+    let ret = avio_read(native, buffer, Int32(size))
     try throwIfFail(ret)
     return Int(ret)
   }
@@ -500,7 +491,7 @@ public final class AVIOContext {
   /// - Returns: number of bytes read
   /// - Throws: AVError
   public func partialRead(_ buffer: UnsafeMutablePointer<UInt8>, size: Int) throws -> Int {
-    let ret = avio_read_partial(cContextPtr, buffer, Int32(size))
+    let ret = avio_read_partial(native, buffer, Int32(size))
     try throwIfFail(ret)
     return Int(ret)
   }
@@ -511,7 +502,7 @@ public final class AVIOContext {
   ///
   /// - Throws: AVError
   public func pause() throws {
-    try throwIfFail(avio_pause(cContextPtr, 1))
+    try throwIfFail(avio_pause(native, 1))
   }
 
   /// Resume playing.
@@ -520,7 +511,7 @@ public final class AVIOContext {
   ///
   /// - Throws: AVError
   public func resume() throws {
-    try throwIfFail(avio_pause(cContextPtr, 0))
+    try throwIfFail(avio_pause(native, 0))
   }
 
   /// Seek to a given timestamp relative to some component stream.
@@ -542,7 +533,7 @@ public final class AVIOContext {
   public func seek(to timestamp: Int64, streamIndex: Int64, flags: AVFormatContext.SeekFlag) throws
     -> Int
   {
-    let ret = avio_seek_time(cContextPtr, Int32(streamIndex), timestamp, flags.rawValue)
+    let ret = avio_seek_time(native, Int32(streamIndex), timestamp, flags.rawValue)
     try throwIfFail(Int32(ret))
     return Int(ret)
   }
@@ -551,9 +542,9 @@ public final class AVIOContext {
   ///
   /// - Throws: AVError
   public func accept() throws -> AVIOContext {
-    var ctxPtr: UnsafeMutablePointer<CAVIOContext>!
-    try throwIfFail(avio_accept(cContextPtr, &ctxPtr))
-    return AVIOContext(cContextPtr: ctxPtr)
+    var ptr: UnsafeMutablePointer<CAVIOContext>!
+    try throwIfFail(avio_accept(native, &ptr))
+    return AVIOContext(native: ptr)
   }
 
   /// Perform one step of the protocol handshake to accept a new client.
@@ -570,7 +561,7 @@ public final class AVIOContext {
   ///   but is not complete.
   /// - Throws: AVError
   public func handshake() throws -> Bool {
-    let ret = avio_handshake(cContextPtr)
+    let ret = avio_handshake(native)
     try throwIfFail(ret)
     return ret == 0
   }
@@ -579,7 +570,7 @@ public final class AVIOContext {
   ///
   /// The internal buffer is automatically flushed before closing the resource.
   public func close() {
-    avio_close(cContextPtr)
+    avio_close(native)
     isOpen = false
   }
 
@@ -616,14 +607,13 @@ extension AVIOContext: AVOptionSupport {
   public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows
     -> T
   {
-    try body(cContextPtr)
+    try body(native)
   }
 }
 
 // MARK: - AVIOContext.Flag
 
 extension AVIOContext {
-
   /// URL open modes
   ///
   /// The flags argument to avio_open must be one of the following constants, optionally ORed with other flags.
@@ -657,7 +647,6 @@ extension AVIOContext {
 }
 
 extension AVIOContext.Flag: CustomStringConvertible {
-
   public var description: String {
     var str = "["
     if contains(.read) { str += "read, " }
@@ -676,7 +665,6 @@ extension AVIOContext.Flag: CustomStringConvertible {
 // MARK: - AVIOContext.SeekWhence
 
 extension AVIOContext {
-
   public struct SeekWhence {
     /// ORing this as the "whence" parameter to a seek function causes it to
     /// return the filesize without seeking anywhere. Supporting this is optional.

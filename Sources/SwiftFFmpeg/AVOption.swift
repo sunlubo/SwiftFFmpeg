@@ -12,23 +12,23 @@ import CFFmpeg
 typealias CAVOption = CFFmpeg.AVOption
 
 public struct AVOption {
-  public let name: String
+  public var name: String
   /// The short English help text about the option.
-  public let help: String?
+  public var help: String?
   /// The offset relative to the context structure where the option value is stored.
   /// It should be 0 for named constants.
-  public let offset: Int
-  public let type: Kind
+  public var offset: Int
+  public var type: Kind
   /// The default value for scalar options.
-  public let defaultValue: Any
+  public var defaultValue: Any
   /// The minimum valid value for the option.
-  public let min: Double
+  public var min: Double
   /// The maximum valid value for the option.
-  public let max: Double
-  public let flags: Flag
+  public var max: Double
+  public var flags: Flag
   /// The logical unit to which the option belongs.
   /// Non-constant options and corresponding named constants share the same unit.
-  public let unit: String?
+  public var unit: String?
 
   init(cOption: CAVOption) {
     self.name = String(cString: cOption.name)
@@ -60,7 +60,6 @@ public struct AVOption {
 }
 
 extension AVOption: CustomStringConvertible {
-
   public var description: String {
     var str = "{name: \"\(name)\", "
     if let help = help {
@@ -86,7 +85,6 @@ extension AVOption: CustomStringConvertible {
 // MARK: - AVOption.Kind
 
 extension AVOption {
-
   // https://github.com/FFmpeg/FFmpeg/blob/master/libavutil/opt.h#L221
   public enum Kind: UInt32 {
     case flags
@@ -112,11 +110,9 @@ extension AVOption {
     case channelLayout
     case bool
   }
-
 }
 
 extension AVOption.Kind: CustomStringConvertible {
-
   public var description: String {
     switch self {
     case .flags:
@@ -158,7 +154,6 @@ extension AVOption.Kind: CustomStringConvertible {
 // MARK: - AVOption.Flag
 
 extension AVOption {
-
   // https://github.com/FFmpeg/FFmpeg/blob/master/libavutil/opt.h#L221
   public struct Flag: OptionSet {
     /// A generic parameter which can be set by the user for muxing or encoding.
@@ -187,7 +182,6 @@ extension AVOption {
 }
 
 extension AVOption.Flag: CustomStringConvertible {
-
   public var description: String {
     var str = "["
     if contains(.encoding) { str += "encoding, " }

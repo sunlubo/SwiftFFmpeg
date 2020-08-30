@@ -506,8 +506,8 @@ extension AVPixelFormat {
 
   /// The pixel format descriptor of the pixel format.
   public var descriptor: AVPixelFormatDescriptor? {
-    if let desc = av_pix_fmt_desc_get(self) {
-      return AVPixelFormatDescriptor(cDescriptorPtr: desc)
+    if let ptr = av_pix_fmt_desc_get(self) {
+      return AVPixelFormatDescriptor(native: ptr)
     } else {
       return nil
     }
@@ -545,11 +545,11 @@ public enum AVColorPrimaries: UInt32 {
   /// EBU Tech. 3213-E / JEDEC P22 phosphors
   case JEDEC_P22  // EBU3213
 
-  internal var native: CFFmpeg.AVColorPrimaries {
+  var native: CFFmpeg.AVColorPrimaries {
     CFFmpeg.AVColorPrimaries(rawValue)
   }
 
-  internal init(native: CFFmpeg.AVColorPrimaries) {
+  init(native: CFFmpeg.AVColorPrimaries) {
     guard let primaries = AVColorPrimaries(rawValue: native.rawValue) else {
       fatalError("Unknown color primaries: \(native)")
     }
@@ -613,11 +613,11 @@ public enum AVColorTransferCharacteristic: UInt32 {
   /// ARIB STD-B67, known as "Hybrid log-gamma"
   case ARIB_STD_B67
 
-  internal var native: CFFmpeg.AVColorTransferCharacteristic {
+  var native: CFFmpeg.AVColorTransferCharacteristic {
     CFFmpeg.AVColorTransferCharacteristic(rawValue)
   }
 
-  internal init(native: CFFmpeg.AVColorTransferCharacteristic) {
+  init(native: CFFmpeg.AVColorTransferCharacteristic) {
     guard let transfer = AVColorTransferCharacteristic(rawValue: native.rawValue) else {
       fatalError("Unknown color transfer characteristic: \(native)")
     }
@@ -675,11 +675,11 @@ public enum AVColorSpace: UInt32 {
   /// ITU-R BT.2100-0, ICtCp
   case ICTCP
 
-  internal var native: CFFmpeg.AVColorSpace {
+  var native: CFFmpeg.AVColorSpace {
     CFFmpeg.AVColorSpace(rawValue)
   }
 
-  internal init(native: CFFmpeg.AVColorSpace) {
+  init(native: CFFmpeg.AVColorSpace) {
     guard let space = AVColorSpace(rawValue: native.rawValue) else {
       fatalError("Unknown color space: \(native)")
     }
@@ -713,11 +713,11 @@ public enum AVColorRange: UInt32 {
   /// The normal     2^n-1   "JPEG" YUV ranges - also known as "Full" range
   case jpeg
 
-  internal var native: CFFmpeg.AVColorRange {
+  var native: CFFmpeg.AVColorRange {
     CFFmpeg.AVColorRange(rawValue)
   }
 
-  internal init(native: CFFmpeg.AVColorRange) {
+  init(native: CFFmpeg.AVColorRange) {
     guard let range = AVColorRange(rawValue: native.rawValue) else {
       fatalError("Unknown color range: \(native)")
     }
@@ -768,11 +768,11 @@ public enum AVChromaLocation: UInt32 {
   case bottomLeft
   case bottom
 
-  internal var native: CFFmpeg.AVChromaLocation {
+  var native: CFFmpeg.AVChromaLocation {
     CFFmpeg.AVChromaLocation(rawValue)
   }
 
-  internal init(native: CFFmpeg.AVChromaLocation) {
+  init(native: CFFmpeg.AVChromaLocation) {
     guard let location = AVChromaLocation(rawValue: native.rawValue) else {
       fatalError("Unknown chroma location: \(native)")
     }

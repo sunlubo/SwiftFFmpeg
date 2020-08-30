@@ -1,7 +1,11 @@
 {
+    "lineLength": 100,
     "indentation": {
         "spaces": 2
     },
-    "lineLength": 100,
-    "indentConditionalCompilationBlocks": false
+    "maximumBlankLines": 1,
+    "lineBreakBeforeControlFlowKeywords": false,
+    "lineBreakBeforeEachArgument": false,
+    "indentConditionalCompilationBlocks": false,
+    "lineBreakAroundMultilineExpressionChainComponents": false
 }

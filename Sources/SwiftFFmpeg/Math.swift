@@ -72,7 +72,6 @@ public enum AVRounding: UInt32 {
 }
 
 public enum AVMath {
-
   /// Rescale a integer with specified rounding.
   ///
   /// The operation is mathematically equivalent to `a * b / c`, but writing that

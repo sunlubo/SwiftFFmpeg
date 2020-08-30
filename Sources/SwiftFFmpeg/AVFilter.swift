@@ -12,22 +12,22 @@ import CFFmpeg
 // MARK: - AVFilterPad
 
 public struct AVFilterPad {
-  let cPadsPtr: OpaquePointer
+  let native: OpaquePointer
   let index: Int32
 
-  init(cPadsPtr: OpaquePointer, index: Int32) {
-    self.cPadsPtr = cPadsPtr
+  init(native: OpaquePointer, index: Int32) {
+    self.native = native
     self.index = index
   }
 
   /// The name of the filter pad.
   public var name: String {
-    String(cString: avfilter_pad_get_name(cPadsPtr, index))
+    String(cString: avfilter_pad_get_name(native, index))
   }
 
   /// The media type of the filter pad.
   public var mediaType: AVMediaType {
-    AVMediaType(native: avfilter_pad_get_type(cPadsPtr, index))
+    AVMediaType(native: avfilter_pad_get_type(native, index))
   }
 }
 
@@ -43,11 +43,10 @@ extension AVFilterPad: CustomStringConvertible {
 typealias CAVFilter = CFFmpeg.AVFilter
 
 public struct AVFilter {
-  let cFilterPtr: UnsafePointer<CAVFilter>
-  var cFilter: CAVFilter { cFilterPtr.pointee }
+  let native: UnsafePointer<CAVFilter>
 
-  init(cFilterPtr: UnsafePointer<CAVFilter>) {
-    self.cFilterPtr = cFilterPtr
+  init(native: UnsafePointer<CAVFilter>) {
+    self.native = native
   }
 
   /// Get a filter definition matching the given name.
@@ -55,15 +54,15 @@ public struct AVFilter {
   /// - Parameter name: the filter name to find
   /// - Returns: the filter definition, or `nil` if none found
   public init?(name: String) {
-    guard let filterPtr = avfilter_get_by_name(name) else {
+    guard let ptr = avfilter_get_by_name(name) else {
       return nil
     }
-    self.cFilterPtr = filterPtr
+    self.native = ptr
   }
 
   /// The name of the filter.
   public var name: String {
-    String(cString: cFilter.name)
+    String(cString: native.pointee.name)
   }
 
   /// The inputs of the filter.
@@ -72,11 +71,11 @@ public struct AVFilter {
   /// Instances of filters with `AVFilter.Flag.dynamicInputs` set may have more inputs
   /// than present in this list.
   public var inputs: [AVFilterPad]? {
-    guard let start = cFilter.inputs else {
+    guard let start = native.pointee.inputs else {
       return nil
     }
-    let count = avfilter_pad_count(cFilter.inputs)
-    let list = (0..<count).map({ AVFilterPad(cPadsPtr: start, index: $0) })
+    let count = avfilter_pad_count(native.pointee.inputs)
+    let list = (0..<count).map({ AVFilterPad(native: start, index: $0) })
     return list
   }
 
@@ -86,17 +85,17 @@ public struct AVFilter {
   /// Instances of filters with `AVFilter.Flag.dynamicOutputs` set may have more outputs
   /// than present in this list.
   public var outputs: [AVFilterPad]? {
-    guard let start = cFilter.outputs else {
+    guard let start = native.pointee.outputs else {
       return nil
     }
-    let count = avfilter_pad_count(cFilter.outputs)
-    let list = (0..<count).map({ AVFilterPad(cPadsPtr: start, index: $0) })
+    let count = avfilter_pad_count(native.pointee.outputs)
+    let list = (0..<count).map({ AVFilterPad(native: start, index: $0) })
     return list
   }
 
   /// The flags of the filter.
   public var flags: Flag {
-    Flag(rawValue: cFilter.flags)
+    Flag(rawValue: native.pointee.flags)
   }
 
   /// Get all registered filters.
@@ -104,7 +103,7 @@ public struct AVFilter {
     var list = [AVFilter]()
     var state: UnsafeMutableRawPointer?
     while let filter = av_filter_iterate(&state) {
-      list.append(AVFilter(cFilterPtr: filter))
+      list.append(AVFilter(native: filter))
     }
     return list
   }
@@ -113,14 +112,13 @@ public struct AVFilter {
 extension AVFilter: CustomStringConvertible {
 
   public var description: String {
-    "\(name): \(String(cString: cFilter.description) ?? "")"
+    "\(name): \(String(cString: native.pointee.description) ?? "")"
   }
 }
 
 // MARK: - AVFilter.Flag
 
 extension AVFilter {
-
   public struct Flag: OptionSet {
     /// The number of the filter inputs is not determined just by `AVFilter.inputs`.
     /// The filter might add additional inputs during initialization depending on the
@@ -159,7 +157,6 @@ extension AVFilter {
 }
 
 extension AVFilter.Flag: CustomStringConvertible {
-
   public var description: String {
     var str = "["
     if contains(.dynamicInputs) { str += "dynamicInputs, " }
@@ -181,7 +178,7 @@ extension AVFilter: AVOptionSupport {
   public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows
     -> T
   {
-    var tmp = cFilter.priv_class
+    var tmp = native.pointee.priv_class
     return try withUnsafeMutablePointer(to: &tmp) { ptr in
       try body(ptr)
     }
@@ -194,11 +191,10 @@ typealias CAVFilterContext = CFFmpeg.AVFilterContext
 
 /// An instance of a filter.
 public final class AVFilterContext {
-  let cContextPtr: UnsafeMutablePointer<CAVFilterContext>
-  var cContext: CAVFilterContext { cContextPtr.pointee }
+  let native: UnsafeMutablePointer<CAVFilterContext>
 
-  init(cContextPtr: UnsafeMutablePointer<CAVFilterContext>) {
-    self.cContextPtr = cContextPtr
+  init(native: UnsafeMutablePointer<CAVFilterContext>) {
+    self.native = native
   }
 
   /// Create a new filter instance in a filter graph.
@@ -212,55 +208,51 @@ public final class AVFilterContext {
   /// - Returns: the context of the newly created filter instance (note that it is also
   ///   retrievable directly through `AVFilterGraph.filters` or with `avfilter_graph_get_filter()`).
   public init(graph: AVFilterGraph, filter: AVFilter, name: String? = nil) {
-    guard let ctxPtr = avfilter_graph_alloc_filter(graph.cGraphPtr, filter.cFilterPtr, name)
-    else {
-      abort("avfilter_graph_alloc_filter")
-    }
-    self.cContextPtr = ctxPtr
+    self.native = avfilter_graph_alloc_filter(graph.native, filter.native, name)
   }
 
   /// The `AVFilter` of which this is an instance.
   public var filter: AVFilter {
-    get { AVFilter(cFilterPtr: cContext.filter) }
-    set { cContextPtr.pointee.filter = newValue.cFilterPtr }
+    get { AVFilter(native: native.pointee.filter) }
+    set { native.pointee.filter = newValue.native }
   }
 
   /// The name of this filter instance.
   public var name: String {
-    String(cString: cContext.name)
+    String(cString: native.pointee.name)
   }
 
   /// The input links of this filter instance.
   public var inputs: [AVFilterLink] {
     var list = [AVFilterLink]()
     for i in 0..<inputCount {
-      list.append(AVFilterLink(cLinkPtr: cContext.inputs[i]!))
+      list.append(AVFilterLink(native: native.pointee.inputs[i]!))
     }
     return list
   }
 
   /// The number of input pads.
   public var inputCount: Int {
-    Int(cContext.nb_inputs)
+    Int(native.pointee.nb_inputs)
   }
 
   /// The output links of this filter instance.
   public var outputs: [AVFilterLink] {
     var list = [AVFilterLink]()
     for i in 0..<outputCount {
-      list.append(AVFilterLink(cLinkPtr: cContext.outputs[i]!))
+      list.append(AVFilterLink(native: native.pointee.outputs[i]!))
     }
     return list
   }
 
   /// The number of input pads.
   public var outputCount: Int {
-    Int(cContext.nb_outputs)
+    Int(native.pointee.nb_outputs)
   }
 
   /// The filtergraph this filter belongs to.
   public var graph: AVFilterGraph {
-    AVFilterGraph(cGraphPtr: cContext.graph)
+    AVFilterGraph(native: native.pointee.graph)
   }
 
   /// Initialize a filter with the supplied parameters.
@@ -271,7 +263,7 @@ public final class AVFilterContext {
   ///   or there are no options that need to be set. The default is `nil`.
   /// - Throws: AVError
   public func initialize(args: String? = nil) throws {
-    try throwIfFail(avfilter_init_str(cContextPtr, args))
+    try throwIfFail(avfilter_init_str(native, args))
   }
 
   /// Initialize a filter with the supplied dictionary of options.
@@ -289,7 +281,7 @@ public final class AVFilterContext {
     var pm: OpaquePointer? = args.toAVDict()
     defer { av_dict_free(&pm) }
 
-    try throwIfFail(avfilter_init_dict(cContextPtr, &pm))
+    try throwIfFail(avfilter_init_dict(native, &pm))
 
     dumpUnrecognizedOptions(pm)
   }
@@ -308,18 +300,18 @@ public final class AVFilterContext {
     dst: AVFilterContext,
     dstPad: UInt = 0
   ) throws -> AVFilterContext {
-    try throwIfFail(avfilter_link(cContextPtr, UInt32(srcPad), dst.cContextPtr, UInt32(dstPad)))
+    try throwIfFail(avfilter_link(native, UInt32(srcPad), dst.native, UInt32(dstPad)))
     return dst
   }
 }
 
 extension AVFilterContext: AVClassSupport, AVOptionSupport {
-  public static let `class` = AVClass(cClassPtr: avfilter_get_class())
+  public static let `class` = AVClass(native: avfilter_get_class())
 
   public func withUnsafeObjectPointer<T>(
     _ body: (UnsafeMutableRawPointer) throws -> T
   ) rethrows -> T {
-    try body(cContextPtr)
+    try body(native)
   }
 }
 
@@ -342,7 +334,6 @@ public struct AVBufferSourceFlag: OptionSet {
 }
 
 extension AVBufferSourceFlag: CustomStringConvertible {
-
   public var description: String {
     var str = "["
     if contains(.noCheckFormat) { str += "noCheckFormat, " }
@@ -373,7 +364,7 @@ extension AVFilterContext {
   ///   - flags: a combination of `AVBufferSourceFlag` flags
   /// - Throws: AVError
   public func addFrame(_ frame: AVFrame?, flags: AVBufferSourceFlag = .init(rawValue: 0)) throws {
-    try throwIfFail(av_buffersrc_add_frame_flags(cContextPtr, frame?.cFramePtr, flags.rawValue))
+    try throwIfFail(av_buffersrc_add_frame_flags(native, frame?.native, flags.rawValue))
   }
 }
 
@@ -395,7 +386,6 @@ public struct AVBufferSinkFlag: OptionSet {
 }
 
 extension AVBufferSinkFlag: CustomStringConvertible {
-
   public var description: String {
     var str = "["
     if contains(.peek) { str += "peek, " }
@@ -411,60 +401,59 @@ extension AVBufferSinkFlag: CustomStringConvertible {
 // MARK: - Buffer Sink
 
 extension AVFilterContext {
-
   /// The media type of the buffer sink.
   public var mediaType: AVMediaType {
-    AVMediaType(native: av_buffersink_get_type(cContextPtr))
+    AVMediaType(native: av_buffersink_get_type(native))
   }
 
   /// The timebase of the buffer sink.
   public var timebase: AVRational {
-    av_buffersink_get_time_base(cContextPtr)
+    av_buffersink_get_time_base(native)
   }
 
   /// The pixel format of the video buffer sink.
   public var pixelFormat: AVPixelFormat {
-    AVPixelFormat(rawValue: av_buffersink_get_format(cContextPtr))
+    AVPixelFormat(rawValue: av_buffersink_get_format(native))
   }
 
   /// The frame rate of the video buffer sink.
   public var frameRate: AVRational {
-    av_buffersink_get_frame_rate(cContextPtr)
+    av_buffersink_get_frame_rate(native)
   }
 
   /// The width of the video buffer sink.
   public var width: Int {
-    Int(av_buffersink_get_w(cContextPtr))
+    Int(av_buffersink_get_w(native))
   }
 
   /// The height of the video buffer sink.
   public var height: Int {
-    Int(av_buffersink_get_h(cContextPtr))
+    Int(av_buffersink_get_h(native))
   }
 
   /// The sample aspect ratio of the video buffer sink.
   public var sampleAspectRatio: AVRational {
-    av_buffersink_get_sample_aspect_ratio(cContextPtr)
+    av_buffersink_get_sample_aspect_ratio(native)
   }
 
   /// The sample format of the audio buffer sink.
   public var sampleFormat: AVSampleFormat {
-    AVSampleFormat(rawValue: av_buffersink_get_format(cContextPtr))!
+    AVSampleFormat(rawValue: av_buffersink_get_format(native))!
   }
 
   /// The sample rate of the audio buffer sink.
   public var sampleRate: Int {
-    Int(av_buffersink_get_sample_rate(cContextPtr))
+    Int(av_buffersink_get_sample_rate(native))
   }
 
   /// The number of channels in the audio buffer sink.
   public var channelCount: Int {
-    Int(av_buffersink_get_channels(cContextPtr))
+    Int(av_buffersink_get_channels(native))
   }
 
   /// The channel layout of the audio buffer sink.
   public var channelLayout: AVChannelLayout {
-    AVChannelLayout(rawValue: av_buffersink_get_channel_layout(cContextPtr))
+    AVChannelLayout(rawValue: av_buffersink_get_channel_layout(native))
   }
 
   /// Get a frame with filtered data from sink and put it in frame.
@@ -479,7 +468,7 @@ extension AVFilterContext {
   ///     - `AVError.eof` if there will be no more output frames on this sink.
   ///     - A different `AVError` in other failure cases.
   public func getFrame(_ frame: AVFrame, flags: AVBufferSinkFlag = .init(rawValue: 0)) throws {
-    try throwIfFail(av_buffersink_get_frame_flags(cContextPtr, frame.cFramePtr, flags.rawValue))
+    try throwIfFail(av_buffersink_get_frame_flags(native, frame.native, flags.rawValue))
   }
 }
 
@@ -492,77 +481,75 @@ typealias CAVFilterLink = CFFmpeg.AVFilterLink
 /// In addition, this link also contains the parameters which have been negotiated and
 /// agreed upon between the filter, such as image dimensions, format, etc.
 public struct AVFilterLink {
-  let cLinkPtr: UnsafeMutablePointer<CAVFilterLink>
+  let native: UnsafeMutablePointer<CAVFilterLink>
 
-  init(cLinkPtr: UnsafeMutablePointer<CAVFilterLink>) {
-    self.cLinkPtr = cLinkPtr
+  init(native: UnsafeMutablePointer<CAVFilterLink>) {
+    self.native = native
   }
 
   /// The source filter.
   public var source: AVFilterContext {
-    AVFilterContext(cContextPtr: cLinkPtr.pointee.src)
+    AVFilterContext(native: native.pointee.src)
   }
 
   /// The destination filter.
   public var destination: AVFilterContext {
-    AVFilterContext(cContextPtr: cLinkPtr.pointee.dst)
+    AVFilterContext(native: native.pointee.dst)
   }
 
   /// The filter's media type.
   public var mediaType: AVMediaType {
-    AVMediaType(native: cLinkPtr.pointee.type)
+    AVMediaType(native: native.pointee.type)
   }
 
   /// Define the timebase used by the PTS of the frames/samples which will pass through this link.
   /// During the configuration stage, each filter is supposed to change only the output timebase,
   /// while the timebase of the input link is assumed to be an unchangeable property.
   public var timebase: AVRational {
-    cLinkPtr.pointee.time_base
+    native.pointee.time_base
   }
 }
 
 // MARK: - Video
 
 extension AVFilterLink {
-
   /// agreed upon pixel format
   public var pixelFormat: AVPixelFormat {
-    AVPixelFormat(cLinkPtr.pointee.format)
+    AVPixelFormat(native.pointee.format)
   }
 
   /// agreed upon image width
   public var width: Int {
-    Int(cLinkPtr.pointee.w)
+    Int(native.pointee.w)
   }
 
   /// agreed upon image height
   public var height: Int {
-    Int(cLinkPtr.pointee.h)
+    Int(native.pointee.h)
   }
 
   /// agreed upon sample aspect ratio
   public var sampleAspectRatio: AVRational {
-    cLinkPtr.pointee.sample_aspect_ratio
+    native.pointee.sample_aspect_ratio
   }
 }
 
 // MARK: - Audio
 
 extension AVFilterLink {
-
   /// agreed upon sample format
   public var sampleFormat: AVSampleFormat {
-    AVSampleFormat(rawValue: cLinkPtr.pointee.format)!
+    AVSampleFormat(rawValue: native.pointee.format)!
   }
 
   /// channel layout of current buffer
   public var channelLayout: AVChannelLayout {
-    AVChannelLayout(rawValue: cLinkPtr.pointee.channel_layout)
+    AVChannelLayout(rawValue: native.pointee.channel_layout)
   }
 
   /// samples per second
   public var sampleRate: Int {
-    Int(cLinkPtr.pointee.sample_rate)
+    Int(native.pointee.sample_rate)
   }
 }
 
@@ -571,34 +558,38 @@ extension AVFilterLink {
 typealias CAVFilterGraph = CFFmpeg.AVFilterGraph
 
 public final class AVFilterGraph {
-  let cGraphPtr: UnsafeMutablePointer<CAVFilterGraph>
-  var cGraph: CAVFilterGraph { cGraphPtr.pointee }
+  var native: UnsafeMutablePointer<CAVFilterGraph>!
+  var owned = false
 
-  init(cGraphPtr: UnsafeMutablePointer<CAVFilterGraph>) {
-    self.cGraphPtr = cGraphPtr
+  init(native: UnsafeMutablePointer<CAVFilterGraph>) {
+    self.native = native
   }
 
   /// Create a filter graph.
   public init() {
-    guard let ptr = avfilter_graph_alloc() else {
-      abort("avfilter_graph_alloc")
+    self.native = avfilter_graph_alloc()
+    self.owned = true
+  }
+
+  deinit {
+    if owned {
+      avfilter_graph_free(&native)
     }
-    self.cGraphPtr = ptr
   }
 
   /// The filter list in the graph.
   public var filters: [AVFilterContext] {
     var list = [AVFilterContext]()
     for i in 0..<filterCount {
-      let filter = cGraph.filters.advanced(by: i).pointee!
-      list.append(AVFilterContext(cContextPtr: filter))
+      let filter = native.pointee.filters.advanced(by: i).pointee!
+      list.append(AVFilterContext(native: filter))
     }
     return list
   }
 
   /// The number of filters in the graph.
   public var filterCount: Int {
-    Int(cGraph.nb_filters)
+    Int(native.pointee.nb_filters)
   }
 
   /// Create and add a filter instance into an existing graph.
@@ -616,10 +607,10 @@ public final class AVFilterGraph {
   public func addFilter(_ filter: AVFilter, name: String, args: String? = nil) throws
     -> AVFilterContext
   {
-    var ctxPtr: UnsafeMutablePointer<CAVFilterContext>!
-    let ret = avfilter_graph_create_filter(&ctxPtr, filter.cFilterPtr, name, args, nil, cGraphPtr)
+    var ptr: UnsafeMutablePointer<CAVFilterContext>!
+    let ret = avfilter_graph_create_filter(&ptr, filter.native, name, args, nil, native)
     try throwIfFail(ret)
-    return AVFilterContext(cContextPtr: ctxPtr)
+    return AVFilterContext(native: ptr)
   }
 
   /// Add a graph described by a string to a graph.
@@ -638,30 +629,25 @@ public final class AVFilterGraph {
   ///     after the parsing, should be freed with avfilter_inout_free().
   /// - Throws: AVError
   public func parse(filters: String, inputs: AVFilterInOut, outputs: AVFilterInOut) throws {
-    inputs.freeWhenDone = false
-    outputs.freeWhenDone = false
-    var inputsPtr: UnsafeMutablePointer<CAVFilterInOut>? = inputs.cInOutPtr
-    var outputPtr: UnsafeMutablePointer<CAVFilterInOut>? = outputs.cInOutPtr
-    try throwIfFail(avfilter_graph_parse_ptr(cGraphPtr, filters, &inputsPtr, &outputPtr, nil))
+    inputs.owned = false
+    outputs.owned = false
+    var inputsPtr: UnsafeMutablePointer<CAVFilterInOut>? = inputs.native
+    var outputPtr: UnsafeMutablePointer<CAVFilterInOut>? = outputs.native
+    try throwIfFail(avfilter_graph_parse_ptr(native, filters, &inputsPtr, &outputPtr, nil))
   }
 
   /// Check validity and configure all the links and formats in the graph.
   ///
   /// - Throws: AVError
   public func configure() throws {
-    try throwIfFail(avfilter_graph_config(cGraphPtr, nil))
-  }
-
-  deinit {
-    var pb: UnsafeMutablePointer<CAVFilterGraph>? = cGraphPtr
-    avfilter_graph_free(&pb)
+    try throwIfFail(avfilter_graph_config(native, nil))
   }
 }
 
 extension AVFilterGraph: CustomStringConvertible {
 
   public var description: String {
-    let cstr = avfilter_graph_dump(cGraphPtr, nil)
+    let cstr = avfilter_graph_dump(native, nil)
     defer { av_free(cstr) }
     return String(cString: cstr)!
   }
@@ -672,7 +658,7 @@ extension AVFilterGraph: AVOptionSupport {
   public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows
     -> T
   {
-    try body(cGraphPtr)
+    try body(native)
   }
 }
 
@@ -688,58 +674,52 @@ typealias CAVFilterInOut = CFFmpeg.AVFilterInOut
 /// This struct specifies, per each not connected pad contained in the graph, the
 /// filter context and the pad index required for establishing a link.
 public final class AVFilterInOut {
-  let cInOutPtr: UnsafeMutablePointer<CAVFilterInOut>
-  var cInOut: CAVFilterInOut { cInOutPtr.pointee }
+  var native: UnsafeMutablePointer<CAVFilterInOut>!
+  var owned = false
 
-  var freeWhenDone: Bool = false
-
-  init(cInOutPtr: UnsafeMutablePointer<CAVFilterInOut>) {
-    self.cInOutPtr = cInOutPtr
+  init(native: UnsafeMutablePointer<CAVFilterInOut>) {
+    self.native = native
   }
 
   /// Create a single `AVFilterInOut` entry.
   public init() {
-    guard let inOutPtr = avfilter_inout_alloc() else {
-      abort("avfilter_inout_alloc")
+    self.native = avfilter_inout_alloc()
+    self.owned = true
+  }
+
+  deinit {
+    if owned {
+      avfilter_inout_free(&native)
     }
-    self.cInOutPtr = inOutPtr
-    self.freeWhenDone = true
   }
 
   /// The unique name for this input/output in the list.
   public var name: String {
-    get { String(cString: cInOut.name) }
-    set { cInOutPtr.pointee.name = av_strdup(newValue) }
+    get { String(cString: native.pointee.name) }
+    set { native.pointee.name = av_strdup(newValue) }
   }
 
   /// The filter context associated to this input/output.
   public var filterContext: AVFilterContext {
-    get { AVFilterContext(cContextPtr: cInOut.filter_ctx) }
-    set { cInOutPtr.pointee.filter_ctx = newValue.cContextPtr }
+    get { AVFilterContext(native: native.pointee.filter_ctx) }
+    set { native.pointee.filter_ctx = newValue.native }
   }
 
   /// The index of the filter context pad to use for linking.
   public var padIndex: Int {
-    get { Int(cInOut.pad_idx) }
-    set { cInOutPtr.pointee.pad_idx = Int32(newValue) }
+    get { Int(native.pointee.pad_idx) }
+    set { native.pointee.pad_idx = Int32(newValue) }
   }
 
   /// The next input/input in the list, `nil` if this is the last.
   public var next: AVFilterInOut? {
     get {
-      if let ptr = cInOut.next {
-        return AVFilterInOut(cInOutPtr: ptr)
+      if let ptr = native.pointee.next {
+        return AVFilterInOut(native: ptr)
       }
       return nil
     }
-    set { cInOutPtr.pointee.next = newValue?.cInOutPtr }
-  }
-
-  deinit {
-    if freeWhenDone {
-      var pb: UnsafeMutablePointer<CAVFilterInOut>? = cInOutPtr
-      avfilter_inout_free(&pb)
-    }
+    set { native.pointee.next = newValue?.native }
   }
 }
 #endif

@@ -13,18 +13,18 @@ typealias CAVClass = CFFmpeg.AVClass
 
 public struct AVClass {
   /// The name of the class.
-  public let name: String
+  public var name: String
   /// The options of the class.
-  public let options: [AVOption]?
+  public var options: [AVOption]?
   /// The category of the class. It's used for visualization (like color).
   ///
   /// This is only set if the category is equal for all objects using this class.
-  public let category: Category
+  public var category: Category
 
-  init(cClassPtr: UnsafePointer<CAVClass>) {
-    self.name = String(cString: cClassPtr.pointee.class_name)
-    self.category = Category(rawValue: cClassPtr.pointee.category.rawValue)!
-    self.options = values(cClassPtr.pointee.option, until: { $0.name == nil })?.map(
+  init(native: UnsafePointer<CAVClass>) {
+    self.name = String(cString: native.pointee.class_name)
+    self.category = Category(rawValue: native.pointee.category.rawValue)!
+    self.options = values(native.pointee.option, until: { $0.name == nil })?.map(
       AVOption.init(cOption:))
   }
 }
@@ -32,7 +32,6 @@ public struct AVClass {
 // MARK: - AVClass.Category
 
 extension AVClass {
-
   // https://github.com/FFmpeg/FFmpeg/blob/master/libavutil/log.h#L48
   public enum Category: UInt32 {
     case input = 1
@@ -67,7 +66,6 @@ extension AVClass {
 }
 
 extension AVClass.Category: CustomStringConvertible {
-
   public var description: String {
     switch self {
     case .input:

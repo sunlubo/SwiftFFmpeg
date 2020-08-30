@@ -27,11 +27,10 @@ typealias CAVFrame = CFFmpeg.AVFrame
 /// There may be a single buffer for all the data, or one separate buffer for
 /// each plane, or anything in between.
 public final class AVFrame {
-  let cFramePtr: UnsafeMutablePointer<CAVFrame>
-  var cFrame: CAVFrame { cFramePtr.pointee }
+  var native: UnsafeMutablePointer<CAVFrame>!
 
-  init(cFramePtr: UnsafeMutablePointer<CAVFrame>) {
-    self.cFramePtr = cFramePtr
+  init(native: UnsafeMutablePointer<CAVFrame>) {
+    self.native = native
   }
 
   /// Creates an `AVFrame` and set its fields to default values.
@@ -39,21 +38,22 @@ public final class AVFrame {
   /// - Note: This only allocates the `AVFrame` itself, not the data buffers.
   ///   Those must be allocated through other means, e.g. with `allocBuffer(align:)` or manually.
   public init() {
-    guard let framePtr = av_frame_alloc() else {
-      abort("av_frame_alloc")
-    }
-    self.cFramePtr = framePtr
+    self.native = av_frame_alloc()
+  }
+
+  deinit {
+    av_frame_free(&native)
   }
 
   /// Pointer to the picture/channel planes.
   public var data: UnsafeMutableBufferPointer<UnsafeMutablePointer<UInt8>?> {
     get {
-      return withUnsafeMutableBytes(of: &cFramePtr.pointee.data) { ptr in
+      return withUnsafeMutableBytes(of: &native.pointee.data) { ptr in
         return ptr.bindMemory(to: UnsafeMutablePointer<UInt8>?.self)
       }
     }
     set {
-      withUnsafeMutableBytes(of: &cFramePtr.pointee.data) { ptr in
+      withUnsafeMutableBytes(of: &native.pointee.data) { ptr in
         ptr.copyMemory(from: UnsafeRawBufferPointer(newValue))
       }
     }
@@ -73,12 +73,12 @@ public final class AVFrame {
   ///   for performance reasons.
   public var linesize: UnsafeMutableBufferPointer<Int32> {
     get {
-      return withUnsafeMutableBytes(of: &cFramePtr.pointee.linesize) { ptr in
+      return withUnsafeMutableBytes(of: &native.pointee.linesize) { ptr in
         return ptr.bindMemory(to: Int32.self)
       }
     }
     set {
-      withUnsafeMutableBytes(of: &cFramePtr.pointee.linesize) { ptr in
+      withUnsafeMutableBytes(of: &native.pointee.linesize) { ptr in
         ptr.copyMemory(from: UnsafeRawBufferPointer(newValue))
       }
     }
@@ -99,32 +99,32 @@ public final class AVFrame {
   public var extendedData: UnsafeMutableBufferPointer<UnsafeMutablePointer<UInt8>?> {
     get {
       let count = pixelFormat != .none ? 4 : channelCount
-      return UnsafeMutableBufferPointer(start: cFrame.extended_data, count: count)
+      return UnsafeMutableBufferPointer(start: native.pointee.extended_data, count: count)
     }
-    set { cFramePtr.pointee.extended_data = newValue.baseAddress }
+    set { native.pointee.extended_data = newValue.baseAddress }
   }
 
   /// Presentation timestamp in timebase units (time when frame should be shown to user).
   public var pts: Int64 {
-    get { cFrame.pts }
-    set { cFramePtr.pointee.pts = newValue }
+    get { native.pointee.pts }
+    set { native.pointee.pts = newValue }
   }
 
   /// DTS copied from the `AVPacket` that triggered returning this frame. (if frame threading isn't used)
   /// This is also the presentation time of this `AVFrame` calculated from only `AVPacket.dts` values
   /// without pts values.
   public var dts: Int64 {
-    cFrame.pkt_dts
+    native.pointee.pkt_dts
   }
 
   /// Picture number in bitstream order.
   public var codedPictureNumber: Int {
-    Int(cFrame.coded_picture_number)
+    Int(native.pointee.coded_picture_number)
   }
 
   /// Picture number in display order.
   public var displayPictureNumber: Int {
-    Int(cFrame.display_picture_number)
+    Int(native.pointee.display_picture_number)
   }
 
   /// `AVBuffer` references backing the data for this frame.
@@ -139,10 +139,10 @@ public final class AVFrame {
   /// `AVBuffer` are stored in the `extendedBuffer` array.
   public var buffer: [AVBuffer?] {
     let list = [
-      cFrame.buf.0, cFrame.buf.1, cFrame.buf.2, cFrame.buf.3,
-      cFrame.buf.4, cFrame.buf.5, cFrame.buf.6, cFrame.buf.7,
+      native.pointee.buf.0, native.pointee.buf.1, native.pointee.buf.2, native.pointee.buf.3,
+      native.pointee.buf.4, native.pointee.buf.5, native.pointee.buf.6, native.pointee.buf.7,
     ]
-    return list.map({ $0 != nil ? AVBuffer(cBufferPtr: $0!) : nil })
+    return list.map({ $0 != nil ? AVBuffer(native: $0!) : nil })
   }
 
   /// For planar audio which requires more than `AVConstant.dataPointersNumber` `AVBuffer`,
@@ -153,14 +153,14 @@ public final class AVFrame {
   public var extendedBuffer: [AVBuffer] {
     var list = [AVBuffer]()
     for i in 0..<extendedBufferCount {
-      list.append(AVBuffer(cBufferPtr: cFrame.extended_buf[i]!))
+      list.append(AVBuffer(native: native.pointee.extended_buf[i]!))
     }
     return list
   }
 
   /// The number of elements in `extendedBuffer`.
   public var extendedBufferCount: Int {
-    Int(cFrame.nb_extended_buf)
+    Int(native.pointee.nb_extended_buf)
   }
 
   /// The frame timestamp estimated using various heuristics, in stream timebase.
@@ -168,7 +168,7 @@ public final class AVFrame {
   /// - encoding: Unused.
   /// - decoding: Set by libavcodec, read by user.
   public var bestEffortTimestamp: Int64 {
-    cFrame.best_effort_timestamp
+    native.pointee.best_effort_timestamp
   }
 
   /// Reordered pos from the last `AVPacket` that has been input into the decoder.
@@ -176,7 +176,7 @@ public final class AVFrame {
   /// - encoding: Unused.
   /// - decoding: Set by libavcodec, read by user.
   public var pktPosition: Int64 {
-    cFrame.pkt_pos
+    native.pointee.pkt_pos
   }
 
   /// Duration of the corresponding packet, expressed in `AVStream.timebase` units, 0 if unknown.
@@ -184,7 +184,7 @@ public final class AVFrame {
   /// - encoding: Unused.
   /// - decoding: Set by libavcodec, read by user.
   public var pktDuration: Int64 {
-    cFrame.pkt_duration
+    native.pointee.pkt_duration
   }
 
   /// Size of the corresponding packet containing the compressed frame.
@@ -193,7 +193,7 @@ public final class AVFrame {
   /// - encoding: Unused.
   /// - decoding: Set by libavcodec, read by user.
   public var pktSize: Int {
-    Int(cFrame.pkt_size)
+    Int(native.pointee.pkt_size)
   }
 
   /// The metadata of the frame.
@@ -204,18 +204,18 @@ public final class AVFrame {
     get {
       var dict = [String: String]()
       var tag: UnsafeMutablePointer<AVDictionaryEntry>?
-      while let next = av_dict_get(cFrame.metadata, "", tag, AV_DICT_IGNORE_SUFFIX) {
+      while let next = av_dict_get(native.pointee.metadata, "", tag, AV_DICT_IGNORE_SUFFIX) {
         dict[String(cString: next.pointee.key)] = String(cString: next.pointee.value)
         tag = next
       }
       return dict
     }
     set {
-      var ptr = cFramePtr.pointee.metadata
+      var ptr = native.pointee.metadata
       for (k, v) in newValue {
         av_dict_set(&ptr, k, v, AV_OPT_SEARCH_CHILDREN)
       }
-      cFramePtr.pointee.metadata = ptr
+      native.pointee.metadata = ptr
     }
   }
 
@@ -224,7 +224,7 @@ public final class AVFrame {
   /// `true` if the frame data is writable (which is `true` if and only if each of the
   /// underlying buffers has only one reference, namely the one stored in this frame).
   public var isWritable: Bool {
-    av_frame_is_writable(cFramePtr) > 0
+    av_frame_is_writable(native) > 0
   }
 
   /// Allocate new buffer(s) for audio or video data.
@@ -246,7 +246,7 @@ public final class AVFrame {
   ///   It is highly recommended to pass 0 here unless you know what you are doing.
   /// - Throws: AVError
   public func allocBuffer(align: Int = 0) throws {
-    try throwIfFail(av_frame_get_buffer(cFramePtr, Int32(align)))
+    try throwIfFail(av_frame_get_buffer(native, Int32(align)))
   }
 
   /// Set up a new reference to the data described by the source frame.
@@ -261,12 +261,12 @@ public final class AVFrame {
   /// - Parameter src: the source frame
   /// - Throws: AVError
   public func ref(from src: AVFrame) throws {
-    try throwIfFail(av_frame_ref(cFramePtr, src.cFramePtr))
+    try throwIfFail(av_frame_ref(native, src.native))
   }
 
   /// Unreference all the buffers referenced by frame and reset the frame fields.
   public func unref() {
-    av_frame_unref(cFramePtr)
+    av_frame_unref(native)
   }
 
   /// Move everything contained in `src` to this frame and reset `src`.
@@ -277,7 +277,7 @@ public final class AVFrame {
   ///
   /// - Parameter src: the source frame
   public func moveRef(from src: AVFrame) {
-    av_frame_move_ref(cFramePtr, src.cFramePtr)
+    av_frame_move_ref(native, src.native)
   }
 
   /// Create a new frame that references the same data as this frame.
@@ -286,8 +286,8 @@ public final class AVFrame {
   ///
   /// - Returns: newly created `AVFrame` on success, `nil` on error.
   public func clone() -> AVFrame? {
-    if let ptr = av_frame_clone(cFramePtr) {
-      return AVFrame(cFramePtr: ptr)
+    if let ptr = av_frame_clone(native) {
+      return AVFrame(native: ptr)
     }
     return nil
   }
@@ -298,7 +298,7 @@ public final class AVFrame {
   ///
   /// - Throws: AVError
   public func makeWritable() throws {
-    try throwIfFail(av_frame_make_writable(cFramePtr))
+    try throwIfFail(av_frame_make_writable(native))
   }
 
   /// Copy the frame data from `src` to this frame.
@@ -312,7 +312,7 @@ public final class AVFrame {
   /// - Parameter src: the source frame
   /// - Throws: AVError
   public func copy(from src: AVFrame) throws {
-    try throwIfFail(av_frame_copy(cFramePtr, src.cFramePtr))
+    try throwIfFail(av_frame_copy(native, src.native))
   }
 
   /// Copy only "metadata" fields from `src` to this frame.
@@ -325,7 +325,7 @@ public final class AVFrame {
   /// - Parameter src: the source frame
   /// - Throws: AVError
   public func copyProperties(from src: AVFrame) throws {
-    try throwIfFail(av_frame_copy_props(cFramePtr, src.cFramePtr))
+    try throwIfFail(av_frame_copy_props(native, src.native))
   }
 
   /// Get the buffer reference a given data plane is stored in.
@@ -333,126 +333,119 @@ public final class AVFrame {
   /// - Parameter plane: index of the data plane of interest in `extendedData`.
   /// - Returns: the buffer reference that contains the plane or `nil` if the input frame is not valid.
   public func planeBuffer(at plane: Int) -> AVBuffer? {
-    if let ptr = av_frame_get_plane_buffer(cFramePtr, Int32(plane)) {
-      return AVBuffer(cBufferPtr: ptr)
+    if let ptr = av_frame_get_plane_buffer(native, Int32(plane)) {
+      return AVBuffer(native: ptr)
     }
     return nil
-  }
-
-  deinit {
-    var ptr: UnsafeMutablePointer<CAVFrame>? = cFramePtr
-    av_frame_free(&ptr)
   }
 }
 
 // MARK: - Video
 
 extension AVFrame {
-
   /// The pixel format of the picture.
   public var pixelFormat: AVPixelFormat {
-    get { AVPixelFormat(cFrame.format) }
-    set { cFramePtr.pointee.format = newValue.rawValue }
+    get { AVPixelFormat(native.pointee.format) }
+    set { native.pointee.format = newValue.rawValue }
   }
 
   /// The width of the picture, in pixels.
   public var width: Int {
-    get { Int(cFrame.width) }
-    set { cFramePtr.pointee.width = Int32(newValue) }
+    get { Int(native.pointee.width) }
+    set { native.pointee.width = Int32(newValue) }
   }
 
   /// The height of the picture, in pixels.
   public var height: Int {
-    get { Int(cFrame.height) }
-    set { cFramePtr.pointee.height = Int32(newValue) }
+    get { Int(native.pointee.height) }
+    set { native.pointee.height = Int32(newValue) }
   }
 
   /// A Boolean value indicating whether this frame is key frame.
   public var isKeyFrame: Bool {
-    get { cFrame.key_frame == 1 }
-    set { cFramePtr.pointee.key_frame = newValue ? 1 : 0 }
+    get { native.pointee.key_frame == 1 }
+    set { native.pointee.key_frame = newValue ? 1 : 0 }
   }
 
   /// A Boolean value indicating whether this frame is interlaced or progressive frame.
   public var isInterlacedFrame: Bool {
-    cFrame.interlaced_frame == 1
+    native.pointee.interlaced_frame == 1
   }
 
   /// The picture type of the frame.
   public var pictureType: AVPictureType {
-    get { AVPictureType(native: cFrame.pict_type) }
-    set { cFramePtr.pointee.pict_type = newValue.native }
+    get { AVPictureType(native: native.pointee.pict_type) }
+    set { native.pointee.pict_type = newValue.native }
   }
 
   /// The sample aspect ratio for the video frame, 0/1 if unknown/unspecified.
   public var sampleAspectRatio: AVRational {
-    get { cFrame.sample_aspect_ratio }
-    set { cFramePtr.pointee.sample_aspect_ratio = newValue }
+    get { native.pointee.sample_aspect_ratio }
+    set { native.pointee.sample_aspect_ratio = newValue }
   }
 
   /// When decoding, this signals how much the picture must be delayed.
   /// ```extra_delay = repeat_pict / (2*fps)```
   public var repeatPicture: Int {
-    Int(cFrame.repeat_pict)
+    Int(native.pointee.repeat_pict)
   }
 
   /// The color range of the picture.
   public var colorRange: AVColorRange {
-    get { AVColorRange(native: cFrame.color_range) }
-    set { cFramePtr.pointee.color_range = newValue.native }
+    get { AVColorRange(native: native.pointee.color_range) }
+    set { native.pointee.color_range = newValue.native }
   }
 
   /// The color primaries of the picture.
   public var colorPrimaries: AVColorPrimaries {
-    get { AVColorPrimaries(native: cFrame.color_primaries) }
-    set { cFramePtr.pointee.color_primaries = newValue.native }
+    get { AVColorPrimaries(native: native.pointee.color_primaries) }
+    set { native.pointee.color_primaries = newValue.native }
   }
 
   /// The color transfer characteristic of the picture.
   public var colorTransferCharacteristic: AVColorTransferCharacteristic {
-    get { AVColorTransferCharacteristic(native: cFrame.color_trc) }
-    set { cFramePtr.pointee.color_trc = newValue.native }
+    get { AVColorTransferCharacteristic(native: native.pointee.color_trc) }
+    set { native.pointee.color_trc = newValue.native }
   }
 
   /// The color space of the picture.
   public var colorSpace: AVColorSpace {
-    get { AVColorSpace(native: cFrame.colorspace) }
-    set { cFramePtr.pointee.colorspace = newValue.native }
+    get { AVColorSpace(native: native.pointee.colorspace) }
+    set { native.pointee.colorspace = newValue.native }
   }
 
   /// The chroma location of the picture.
   public var chromaLocation: AVChromaLocation {
-    get { AVChromaLocation(native: cFrame.chroma_location) }
-    set { cFramePtr.pointee.chroma_location = newValue.native }
+    get { AVChromaLocation(native: native.pointee.chroma_location) }
+    set { native.pointee.chroma_location = newValue.native }
   }
 }
 
 // MARK: - Audio
 
 extension AVFrame {
-
   /// The sample format of the audio data.
   public var sampleFormat: AVSampleFormat {
-    get { AVSampleFormat(rawValue: cFrame.format)! }
-    set { cFramePtr.pointee.format = newValue.rawValue }
+    get { AVSampleFormat(rawValue: native.pointee.format)! }
+    set { native.pointee.format = newValue.rawValue }
   }
 
   /// The sample rate of the audio data.
   public var sampleRate: Int {
-    get { Int(cFrame.sample_rate) }
-    set { cFramePtr.pointee.sample_rate = Int32(newValue) }
+    get { Int(native.pointee.sample_rate) }
+    set { native.pointee.sample_rate = Int32(newValue) }
   }
 
   /// The channel layout of the audio data.
   public var channelLayout: AVChannelLayout {
-    get { AVChannelLayout(rawValue: cFrame.channel_layout) }
-    set { cFramePtr.pointee.channel_layout = newValue.rawValue }
+    get { AVChannelLayout(rawValue: native.pointee.channel_layout) }
+    set { native.pointee.channel_layout = newValue.rawValue }
   }
 
   /// The number of audio samples (per channel) described by this frame.
   public var sampleCount: Int {
-    get { Int(cFrame.nb_samples) }
-    set { cFramePtr.pointee.nb_samples = Int32(newValue) }
+    get { Int(native.pointee.nb_samples) }
+    set { native.pointee.nb_samples = Int32(newValue) }
   }
 
   /// The number of audio channels.
@@ -460,13 +453,13 @@ extension AVFrame {
   /// - encoding: Unused.
   /// - decoding: Read by user.
   public var channelCount: Int {
-    get { Int(cFrame.channels) }
-    set { cFramePtr.pointee.channels = Int32(newValue) }
+    get { Int(native.pointee.channels) }
+    set { native.pointee.channels = Int32(newValue) }
   }
 }
 
 extension AVFrame: AVClassSupport {
-  public static let `class` = AVClass(cClassPtr: avcodec_get_frame_class())
+  public static let `class` = AVClass(native: avcodec_get_frame_class())
 
   public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows
     -> T

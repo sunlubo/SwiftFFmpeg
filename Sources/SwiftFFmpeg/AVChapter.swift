@@ -19,12 +19,12 @@ public struct AVChapter {
   public var end: Int64
   public var metadata: [String: String]
 
-  internal var native: CAVChapter {
+  var native: CAVChapter {
     CAVChapter(
       id: Int32(id), time_base: timeBase, start: start, end: end, metadata: metadata.toAVDict())
   }
 
-  internal init(native: UnsafeMutablePointer<CAVChapter>) {
+  init(native: UnsafeMutablePointer<CAVChapter>) {
     self.id = Int(native.pointee.id)
     self.timeBase = native.pointee.time_base
     self.start = native.pointee.start
