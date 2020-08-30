@@ -43,7 +43,7 @@ extension AVFilterPad: CustomStringConvertible {
 typealias CAVFilter = CFFmpeg.AVFilter
 
 public struct AVFilter {
-  let native: UnsafePointer<CAVFilter>
+  var native: UnsafePointer<CAVFilter>
 
   init(native: UnsafePointer<CAVFilter>) {
     self.native = native
@@ -278,7 +278,7 @@ public final class AVFilterContext {
   /// - Parameter args: A Dictionary filled with options for this filter.
   /// - Throws: AVError
   public func initialize(args: [String: String]) throws {
-    var pm: OpaquePointer? = args.toAVDict()
+    var pm: OpaquePointer? = args.avDict
     defer { av_dict_free(&pm) }
 
     try throwIfFail(avfilter_init_dict(native, &pm))
@@ -713,12 +713,7 @@ public final class AVFilterInOut {
 
   /// The next input/input in the list, `nil` if this is the last.
   public var next: AVFilterInOut? {
-    get {
-      if let ptr = native.pointee.next {
-        return AVFilterInOut(native: ptr)
-      }
-      return nil
-    }
+    get { native.pointee.next.map(AVFilterInOut.init(native:)) }
     set { native.pointee.next = newValue?.native }
   }
 }

@@ -49,12 +49,7 @@ public final class AVPacket {
   /// A reference to the reference-counted buffer where the packet data is stored.
   /// May be `nil`, then the packet data is not reference-counted.
   public var buffer: AVBuffer? {
-    get {
-      if let ptr = native.pointee.buf {
-        return AVBuffer(native: ptr)
-      }
-      return nil
-    }
+    get { native.pointee.buf.map(AVBuffer.init(native:)) }
     set { native.pointee.buf = newValue?.native }
   }
 
@@ -152,10 +147,7 @@ public final class AVPacket {
   ///
   /// - Returns: newly created `AVPacket` on success, `nil` on error.
   public func clone() -> AVPacket? {
-    if let ptr = av_packet_clone(native) {
-      return AVPacket(native: ptr)
-    }
-    return nil
+    av_packet_clone(native).map(AVPacket.init(native:))
   }
 
   /// Create a writable reference for the data described by a given packet,

@@ -119,7 +119,7 @@ extension AVCodecID: CustomStringConvertible {
 typealias CAVCodec = CFFmpeg.AVCodec
 
 public struct AVCodec {
-  var native: UnsafeMutablePointer<CAVCodec>
+  var native: UnsafePointer<CAVCodec>
 
   /// Find a registered decoder with a matching codec ID.
   ///
@@ -172,7 +172,7 @@ public struct AVCodec {
     String(cString: avcodec_profile_name(codecID, profile))
   }
 
-  init(native: UnsafeMutablePointer<CAVCodec>) {
+  init(native: UnsafePointer<CAVCodec>) {
     self.native = native
   }
 
@@ -247,10 +247,7 @@ public struct AVCodec {
   /// all other values return `nil`.
   /// If the codec does not support any hardware configurations then it will always return `nil`.
   public func hwConfig(at index: Int) -> AVCodecHWConfig? {
-    if let ptr = avcodec_get_hw_config(native, Int32(index)) {
-      return AVCodecHWConfig(native: ptr)
-    }
-    return nil
+    avcodec_get_hw_config(native, Int32(index)).map(AVCodecHWConfig.init(native:))
   }
 
   /// Returns a name for the specified profile, if available.

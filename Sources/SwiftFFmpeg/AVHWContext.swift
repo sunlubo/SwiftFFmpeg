@@ -188,7 +188,7 @@ public final class AVHWDeviceContext {
     device: String? = nil,
     options: [String: String]? = nil
   ) throws {
-    var pm: OpaquePointer? = options?.toAVDict()
+    var pm = options?.avDict
     defer { av_dict_free(&pm) }
 
     try throwIfFail(av_hwdevice_ctx_create(&native, deviceType.native, device, pm, 0))
@@ -374,10 +374,7 @@ extension AVFrame {
   /// For hwaccel-format frames, this should be a reference to the `AVHWFramesContext`
   /// describing the frame.
   public var hwFramesContext: AVHWFramesContext? {
-    if let ptr = native.pointee.hw_frames_ctx {
-      return AVHWFramesContext(nativeBuffer: ptr)
-    }
-    return nil
+    native.pointee.hw_frames_ctx.map(AVHWFramesContext.init(nativeBuffer:))
   }
 
   /// Copy data from a hw surface.

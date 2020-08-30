@@ -33,7 +33,7 @@ public final class AVFormatContext {
     format: AVInputFormat? = nil,
     options: [String: String]? = nil
   ) throws {
-    var pm: OpaquePointer? = options?.toAVDict()
+    var pm: OpaquePointer? = options?.avDict
     defer { av_dict_free(&pm) }
 
     try throwIfFail(avformat_open_input(&native, url, format?.native, &pm))
@@ -78,12 +78,7 @@ public final class AVFormatContext {
   ///   or set by `openInput(_ url:format:options:)`.
   /// - muxing: Set by the user before `writeHeader(options:)`. The caller must take care of closing the IO context.
   public var pb: AVIOContext? {
-    get {
-      if let ptr = native.pointee.pb {
-        return AVIOContext(native: ptr)
-      }
-      return nil
-    }
+    get { native.pointee.pb.map(AVIOContext.init(native:)) }
     set {
       ioContext = newValue
       return native.pointee.pb = newValue?.native
@@ -119,16 +114,25 @@ public final class AVFormatContext {
   }
 
   /// The first video stream in the file.
+  @available(
+    *, deprecated, message: "Use AVStream.streams"
+  )
   public var videoStream: AVStream? {
     streams.first { $0.mediaType == .video }
   }
 
   /// The first audio stream in the file.
+  @available(
+    *, deprecated, message: "Use AVStream.streams"
+  )
   public var audioStream: AVStream? {
     streams.first { $0.mediaType == .audio }
   }
 
   /// The first subtitle stream in the file.
+  @available(
+    *, deprecated, message: "Use AVStream.streams"
+  )
   public var subtitleStream: AVStream? {
     streams.first { $0.mediaType == .subtitle }
   }
@@ -196,7 +200,7 @@ public final class AVFormatContext {
       }
       return dict
     }
-    set { native.pointee.metadata = newValue.toAVDict() }
+    set { native.pointee.metadata = newValue.avDict }
   }
 
   /// Custom interrupt callbacks for the I/O layer.
@@ -213,6 +217,9 @@ public final class AVFormatContext {
   ///
   /// - Parameter mediaType: media type
   /// - Returns: stream index if it exists
+  @available(
+    *, deprecated, message: "Use AVStream.streams"
+  )
   public func streamIndex(for mediaType: AVMediaType) -> Int? {
     if let index = streams.firstIndex(where: { $0.codecParameters.mediaType == mediaType }) {
       return index
@@ -328,12 +335,7 @@ extension AVFormatContext.Flag: CustomStringConvertible {
 extension AVFormatContext {
   /// The input container format.
   public var inputFormat: AVInputFormat? {
-    get {
-      if let ptr = native.pointee.iformat {
-        return AVInputFormat(native: ptr)
-      }
-      return nil
-    }
+    get { native.pointee.iformat.map(AVInputFormat.init(native:)) }
     set { native.pointee.iformat = newValue?.native }
   }
 
@@ -354,10 +356,7 @@ extension AVFormatContext {
 
   /// The size of the file.
   public var size: Int64 {
-    if let pb = pb {
-      return (try? pb.size()) ?? 0
-    }
-    return 0
+    (try? pb?.size()) ?? 0
   }
 
   /// Open an input stream and read the header.
@@ -372,7 +371,7 @@ extension AVFormatContext {
     format: AVInputFormat? = nil,
     options: [String: String]? = nil
   ) throws {
-    var pm: OpaquePointer? = options?.toAVDict()
+    var pm: OpaquePointer? = options?.avDict
     defer { av_dict_free(&pm) }
 
     try throwIfFail(avformat_open_input(&native, url, format?.native, &pm))
@@ -398,7 +397,7 @@ extension AVFormatContext {
     if let options = options, !options.isEmpty {
       var pms = [OpaquePointer?](repeating: nil, count: streamCount)
       for (i, opt) in options.enumerated() where i < streamCount {
-        pms[i] = opt.toAVDict()
+        pms[i] = opt.avDict
       }
       try throwIfFail(avformat_find_stream_info(native, &pms))
       pms.forEach { pm in
@@ -538,12 +537,7 @@ extension AVFormatContext {
 extension AVFormatContext {
   /// The output container format.
   public var outputFormat: AVOutputFormat? {
-    get {
-      if let ptr = native.pointee.oformat {
-        return AVOutputFormat(native: ptr)
-      }
-      return nil
-    }
+    get { native.pointee.oformat.map(AVOutputFormat.init(native:)) }
     set { native.pointee.oformat = newValue?.native }
   }
 
@@ -564,10 +558,7 @@ extension AVFormatContext {
   ///   so codec should be provided if it is known.
   /// - Returns: newly created stream or `nil` on error.
   public func addStream(codec: AVCodec? = nil) -> AVStream? {
-    if let ptr = avformat_new_stream(native, codec?.native) {
-      return AVStream(native: ptr)
-    }
-    return nil
+    avformat_new_stream(native, codec?.native).map(AVStream.init(native:))
   }
 
   /// Allocate the stream private data and write the stream header to an output media file.
@@ -578,7 +569,7 @@ extension AVFormatContext {
   /// - Parameter options: the `AVFormatContext` and muxer-private options
   /// - Throws: AVError
   public func writeHeader(options: [String: String]? = nil) throws {
-    var pm: OpaquePointer? = options?.toAVDict()
+    var pm = options?.avDict
     defer { av_dict_free(&pm) }
 
     try throwIfFail(avformat_write_header(native, &pm))

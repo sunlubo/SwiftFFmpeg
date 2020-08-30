@@ -62,12 +62,7 @@ public final class AVCodecContext {
   }
 
   public var codec: AVCodec? {
-    get {
-      if let ptr = native.pointee.codec {
-        return AVCodec(native: ptr.mutable)
-      }
-      return nil
-    }
+    get { native.pointee.codec.map(AVCodec.init(native:)) }
     set { native.pointee.codec = UnsafePointer(newValue?.native) }
   }
 
@@ -211,12 +206,7 @@ public final class AVCodecContext {
   ///   If the default `get_buffer2()` is used with a hwaccel pixel format,
   ///   then this `AVHWFramesContext` will be used for allocating the frame buffers.
   public var hwFramesContext: AVHWFramesContext? {
-    get {
-      if let ptr = native.pointee.hw_frames_ctx {
-        return AVHWFramesContext(nativeBuffer: ptr)
-      }
-      return nil
-    }
+    get { native.pointee.hw_frames_ctx.map(AVHWFramesContext.init(nativeBuffer:)) }
     set { native.pointee.hw_frames_ctx = av_buffer_ref(newValue?.nativeBuffer) }
   }
 
@@ -239,12 +229,7 @@ public final class AVCodecContext {
   /// order to support `hwFramesContext` at all - in that case, all frames
   /// contexts used must be created on the same device.
   public var hwDeviceContext: AVHWDeviceContext? {
-    get {
-      if let ptr = native.pointee.hw_device_ctx {
-        return AVHWDeviceContext(native: ptr)
-      }
-      return nil
-    }
+    get { native.pointee.hw_device_ctx.map(AVHWDeviceContext.init(native:)) }
     set { native.pointee.hw_device_ctx = av_buffer_ref(newValue?.native) }
   }
 
@@ -269,7 +254,7 @@ public final class AVCodecContext {
   ///   - options: A dictionary filled with `AVCodecContext` and codec-private options.
   /// - Throws: AVError
   public func openCodec(_ codec: AVCodec? = nil, options: [String: String]? = nil) throws {
-    var pm: OpaquePointer? = options?.toAVDict()
+    var pm = options?.avDict
     defer { av_dict_free(&pm) }
 
     try throwIfFail(avcodec_open2(native, codec?.native ?? self.codec?.native, &pm))

@@ -489,7 +489,9 @@ extension AVPixelFormat {
   /// Finally if no pixel format has been found, returns `nil`.
   public init?(name: String) {
     let type = av_get_pix_fmt(name)
-    if type == .none { return nil }
+    guard type != .none else {
+      return nil
+    }
     self = type
   }
 
@@ -500,17 +502,12 @@ extension AVPixelFormat {
 
   /// The number of planes in the pixel format.
   public var planeCount: Int {
-    let count = Int(av_pix_fmt_count_planes(self))
-    return count >= 0 ? count : 0
+    max(Int(av_pix_fmt_count_planes(self)), 0)
   }
 
   /// The pixel format descriptor of the pixel format.
   public var descriptor: AVPixelFormatDescriptor? {
-    if let ptr = av_pix_fmt_desc_get(self) {
-      return AVPixelFormatDescriptor(native: ptr)
-    } else {
-      return nil
-    }
+    av_pix_fmt_desc_get(self).map(AVPixelFormatDescriptor.init(native:))
   }
 }
 

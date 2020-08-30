@@ -122,7 +122,7 @@ public final class AVStream {
       }
       return dict
     }
-    set { native.pointee.metadata = newValue.toAVDict() }
+    set { native.pointee.metadata = newValue.avDict }
   }
 
   /// Average framerate.

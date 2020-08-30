@@ -261,7 +261,7 @@ public final class AVDeviceCapabilitiesQuery {
   ///     or at any other place that affects device-private options.
   /// - Throws: AVError
   public init(formatContext: AVFormatContext, options: [String: String]? = nil) throws {
-    var pm: OpaquePointer? = options?.toAVDict()
+    var pm: OpaquePointer? = options?.avDict
     defer { av_dict_free(&pm) }
 
     let ret = avdevice_capabilities_create(&native, formatContext.native, &pm)
@@ -416,7 +416,7 @@ public final class AVDeviceInfoList {
     deviceName: String?,
     options: [String: String]? = nil
   ) throws -> AVDeviceInfoList {
-    var pm: OpaquePointer? = options?.toAVDict()
+    var pm = options?.avDict
     defer { av_dict_free(&pm) }
 
     var ptr: UnsafeMutablePointer<CAVDeviceInfoList>!
@@ -430,7 +430,7 @@ public final class AVDeviceInfoList {
     deviceName: String? = nil,
     options: [String: String]? = nil
   ) throws -> AVDeviceInfoList {
-    var pm: OpaquePointer? = options?.toAVDict()
+    var pm = options?.avDict
     defer { av_dict_free(&pm) }
 
     var ptr: UnsafeMutablePointer<CAVDeviceInfoList>!

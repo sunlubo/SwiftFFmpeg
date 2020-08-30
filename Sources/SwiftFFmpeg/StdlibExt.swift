@@ -40,14 +40,15 @@ extension UnsafeBufferPointer where Element == UInt8 {
 extension String {
 
   init?(cString: UnsafePointer<CChar>?) {
-    guard let cString = cString else { return nil }
+    guard let cString = cString else {
+      return nil
+    }
     self.init(cString: cString)
   }
 }
 
 extension Dictionary where Key == String, Value == String {
-
-  func toAVDict() -> OpaquePointer? {
+  var avDict: OpaquePointer? {
     var pm: OpaquePointer?
     for (k, v) in self {
       av_dict_set(&pm, k, v, 0)

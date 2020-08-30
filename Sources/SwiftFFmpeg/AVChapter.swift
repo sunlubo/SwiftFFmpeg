@@ -21,7 +21,7 @@ public struct AVChapter {
 
   var native: CAVChapter {
     CAVChapter(
-      id: Int32(id), time_base: timeBase, start: start, end: end, metadata: metadata.toAVDict())
+      id: Int32(id), time_base: timeBase, start: start, end: end, metadata: metadata.avDict)
   }
 
   init(native: UnsafeMutablePointer<CAVChapter>) {

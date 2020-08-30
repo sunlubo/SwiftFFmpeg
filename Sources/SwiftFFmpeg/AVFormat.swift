@@ -56,10 +56,7 @@ public struct AVInputFormat {
 
   /// `AVClass` for the private context.
   public var privClass: AVClass? {
-    if let ptr = native.pointee.priv_class {
-      return AVClass(native: ptr)
-    }
-    return nil
+    native.pointee.priv_class.map(AVClass.init(native:))
   }
 
   /// Get all registered demuxers.
@@ -132,8 +129,7 @@ extension AVInputFormat: AVOptionSupport {
   public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows
     -> T
   {
-    var tmp = native.pointee.priv_class
-    return try withUnsafeMutablePointer(to: &tmp) { ptr in
+    try withUnsafeMutablePointer(to: &native.pointee.priv_class) { ptr in
       try body(ptr)
     }
   }
@@ -203,10 +199,7 @@ public struct AVOutputFormat {
 
   /// `AVClass` for the private context.
   public var privClass: AVClass? {
-    if let ptr = native.pointee.priv_class {
-      return AVClass(native: ptr)
-    }
-    return nil
+    native.pointee.priv_class.map(AVClass.init(native:))
   }
 
   /// Get all registered muxers.
@@ -284,8 +277,7 @@ extension AVOutputFormat: AVOptionSupport {
   public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows
     -> T
   {
-    var tmp = native.pointee.priv_class
-    return try withUnsafeMutablePointer(to: &tmp) { ptr in
+    try withUnsafeMutablePointer(to: &native.pointee.priv_class) { ptr in
       try body(ptr)
     }
   }

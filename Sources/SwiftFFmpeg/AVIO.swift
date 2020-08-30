@@ -224,7 +224,7 @@ public final class AVIODirContext {
   ///   - options: A dictionary filled with protocol-private options.
   /// - Throws: AVError
   public init(url: String, options: [String: String]? = nil) throws {
-    var pm: OpaquePointer? = options?.toAVDict()
+    var pm = options?.avDict
     defer { av_dict_free(&pm) }
 
     try throwIfFail(avio_open_dir(&native, url, &pm))
@@ -387,7 +387,7 @@ public final class AVIOContext {
     interruptCallback: AVIOInterruptCallback? = nil,
     options: [String: String]? = nil
   ) throws {
-    var pm: OpaquePointer? = options?.toAVDict()
+    var pm = options?.avDict
     defer { av_dict_free(&pm) }
 
     var pb: UnsafeMutablePointer<CAVIOContext>!

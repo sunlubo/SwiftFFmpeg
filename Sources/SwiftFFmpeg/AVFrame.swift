@@ -286,10 +286,7 @@ public final class AVFrame {
   ///
   /// - Returns: newly created `AVFrame` on success, `nil` on error.
   public func clone() -> AVFrame? {
-    if let ptr = av_frame_clone(native) {
-      return AVFrame(native: ptr)
-    }
-    return nil
+    av_frame_clone(native).map(AVFrame.init(native:))
   }
 
   /// Ensure that the frame data is writable, avoiding data copy if possible.
@@ -333,10 +330,7 @@ public final class AVFrame {
   /// - Parameter plane: index of the data plane of interest in `extendedData`.
   /// - Returns: the buffer reference that contains the plane or `nil` if the input frame is not valid.
   public func planeBuffer(at plane: Int) -> AVBuffer? {
-    if let ptr = av_frame_get_plane_buffer(native, Int32(plane)) {
-      return AVBuffer(native: ptr)
-    }
-    return nil
+    av_frame_get_plane_buffer(native, Int32(plane)).map(AVBuffer.init(native:))
   }
 }
 
