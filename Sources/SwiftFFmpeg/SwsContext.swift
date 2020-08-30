@@ -12,26 +12,26 @@ import CFFmpeg
 public final class SwsContext {
   /// Returns a Boolean value indicating whether the pixel format is a supported input format.
   ///
-  /// - Parameter pixFmt: pixel format
-  /// - Returns: `true` if it is supported; otherwise `false`.
-  public static func supportsInput(_ pixFmt: AVPixelFormat) -> Bool {
-    sws_isSupportedInput(pixFmt) > 0
+  /// - Parameter pixelFormat: pixel format
+  /// - Returns: `true` if it is supported, or `false` otherwise.
+  public static func isSupportedInput(_ pixelFormat: AVPixelFormat) -> Bool {
+    sws_isSupportedInput(pixelFormat) > 0
   }
 
   /// Returns a Boolean value indicating whether the pixel format is a supported output format.
   ///
-  /// - Parameter pixFmt: pixel format
-  /// - Returns: `true` if it is supported; otherwise `false`.
-  public static func supportsOutput(_ pixFmt: AVPixelFormat) -> Bool {
-    sws_isSupportedOutput(pixFmt) > 0
+  /// - Parameter pixelFormat: pixel format
+  /// - Returns: `true` if it is supported, or `false` otherwise.
+  public static func isSupportedOutput(_ pixelFormat: AVPixelFormat) -> Bool {
+    sws_isSupportedOutput(pixelFormat) > 0
   }
 
-  /// Returns a Boolean value indicating whether an endianness conversion is supported.
+  /// Returns a Boolean value indicating whether an endianness conversion for pixel format is supported.
   ///
-  /// - Parameter pixFmt: pixel format
-  /// - Returns: `true` if it is supported; otherwise `false`.
-  public static func supportsEndiannessConversion(_ pixFmt: AVPixelFormat) -> Bool {
-    sws_isSupportedEndiannessConversion(pixFmt) > 0
+  /// - Parameter pixelFormat: pixel format
+  /// - Returns: `true` if it is supported, or `false` otherwise.
+  public static func isSupportedEndiannessConversion(_ pixelFormat: AVPixelFormat) -> Bool {
+    sws_isSupportedEndiannessConversion(pixelFormat) > 0
   }
 
   let native: OpaquePointer
@@ -123,7 +123,7 @@ public final class SwsContext {
 }
 
 extension SwsContext {
-
+  ///
   public struct Flag: OptionSet {
     /// Select fast bilinear scaling algorithm.
     public static let fastBilinear = Flag(rawValue: SWS_FAST_BILINEAR)
