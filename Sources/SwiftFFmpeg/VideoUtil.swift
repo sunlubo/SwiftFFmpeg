@@ -192,3 +192,23 @@ extension AVPixelFormat: CustomStringConvertible {
     name
   }
 }
+
+public typealias AVFieldOrder = CFFmpeg.AVFieldOrder
+
+extension CFFmpeg.AVFieldOrder {
+    public static let UNKNOWN = AV_FIELD_UNKNOWN
+    
+    public static let PROGRESSIVE = AV_FIELD_PROGRESSIVE
+    
+    /// Top coded_first, top displayed first
+    public static let TT = AV_FIELD_TT
+    
+    /// Bottom coded first, bottom displayed first
+    public static let BB = AV_FIELD_BB
+    
+    /// Top coded first, bottom displayed first
+    public static let TB = AV_FIELD_TB
+    
+    /// Bottom coded first, top displayed first
+    public static let BT = AV_FIELD_BT
+}

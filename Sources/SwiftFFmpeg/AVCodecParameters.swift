@@ -123,6 +123,12 @@ extension AVCodecParameters {
     get { Int(native.pointee.video_delay) }
     set { native.pointee.video_delay = Int32(newValue) }
   }
+    
+  /// The field order of the video frame.
+  public var fieldOrder: AVFieldOrder {
+    get { native.pointee.field_order }
+    set { native.pointee.field_order = newValue }
+  }
 
   /// The color range of the video frame.
   public var colorRange: AVColorRange {
