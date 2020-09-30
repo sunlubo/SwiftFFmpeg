@@ -8,16 +8,13 @@
 import CFFmpeg
 
 public final class SwrContext {
-  let cContextPtr: OpaquePointer
+  var native: OpaquePointer!
 
   /// Create `SwrContext`.
   ///
   /// If you use this function you will need to set the parameters before calling `initialize()`.
   public init() {
-    guard let ctxPtr = swr_alloc() else {
-      abort("swr_alloc")
-    }
-    self.cContextPtr = ctxPtr
+    self.native = swr_alloc()
   }
 
   /// Create `SwrContext` if needed and set/reset common parameters.
@@ -37,7 +34,7 @@ public final class SwrContext {
     srcSampleFormat: AVSampleFormat,
     srcSampleRate: Int
   ) {
-    cContextPtr = swr_alloc_set_opts(
+    native = swr_alloc_set_opts(
       nil,
       Int64(dstChannelLayout.rawValue),
       dstSampleFormat.native,
@@ -50,9 +47,13 @@ public final class SwrContext {
     )
   }
 
+  deinit {
+    swr_free(&native)
+  }
+
   /// A Boolean value indicating whether the context has been initialized or not.
   public var isInitialized: Bool {
-    swr_is_initialized(cContextPtr) > 0
+    swr_is_initialized(native) > 0
   }
 
   /// Set/reset common parameters.
@@ -75,7 +76,7 @@ public final class SwrContext {
     srcSampleRate: Int
   ) throws {
     let ptr = swr_alloc_set_opts(
-      cContextPtr,
+      native,
       Int64(dstChannelLayout.rawValue),
       dstSampleFormat.native,
       Int32(dstSampleRate),
@@ -94,7 +95,7 @@ public final class SwrContext {
   ///
   /// - Throws: AVError
   public func initialize() throws {
-    try throwIfFail(swr_init(cContextPtr))
+    try throwIfFail(swr_init(native))
   }
 
   /// Closes the context so that `isInitialized` returns `false`.
@@ -104,7 +105,7 @@ public final class SwrContext {
   /// This function is mainly provided for simplifying the usecase
   /// where one tries to support libavresample and libswresample.
   public func close() {
-    swr_close(cContextPtr)
+    swr_close(native)
   }
 
   /// Gets the delay the next input sample will experience relative to the next output sample.
@@ -118,7 +119,7 @@ public final class SwrContext {
   ///     `out_sample_rate` then an exact rounding-free delay will be returned
   /// - Returns: the delay in 1 / base units.
   public func getDelay(_ timebase: Int64) -> Int {
-    Int(swr_get_delay(cContextPtr, timebase))
+    Int(swr_get_delay(native, timebase))
   }
 
   /// Find an upper bound on the number of samples that the next `convert(dst:dstCount:src:srcCount:)`
@@ -138,7 +139,7 @@ public final class SwrContext {
   ///   will output
   /// - Throws: AVError
   public func getOutSamples(_ sampleCount: Int64) throws -> Int {
-    let ret = swr_get_out_samples(cContextPtr, Int32(sampleCount))
+    let ret = swr_get_out_samples(native, Int32(sampleCount))
     try throwIfFail(ret)
     return Int()
   }
@@ -166,23 +167,18 @@ public final class SwrContext {
     src: UnsafeMutablePointer<UnsafePointer<UInt8>?>,
     srcCount: Int
   ) throws -> Int {
-    let ret = swr_convert(cContextPtr, dst, Int32(dstCount), src, Int32(srcCount))
+    let ret = swr_convert(native, dst, Int32(dstCount), src, Int32(srcCount))
     try throwIfFail(ret)
     return Int(ret)
-  }
-
-  deinit {
-    var ptr: OpaquePointer? = cContextPtr
-    swr_free(&ptr)
   }
 }
 
 extension SwrContext: AVClassSupport, AVOptionSupport {
-  public static let `class` = AVClass(cClassPtr: swr_get_class())
+  public static let `class` = AVClass(native: swr_get_class())
 
   public func withUnsafeObjectPointer<T>(
     _ body: (UnsafeMutableRawPointer) throws -> T
   ) rethrows -> T {
-    try body(UnsafeMutableRawPointer(cContextPtr))
+    try body(UnsafeMutableRawPointer(native))
   }
 }

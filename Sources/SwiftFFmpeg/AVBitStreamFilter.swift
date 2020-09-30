@@ -3,6 +3,7 @@
 //  SwiftFFmpeg
 //
 //  Created by sunlubo on 2019/1/18.
+//  Copyright © 2020 sunlubo. All rights reserved.
 //
 
 import CFFmpeg
@@ -11,33 +12,34 @@ import CFFmpeg
 
 typealias CAVBitStreamFilter = CFFmpeg.AVBitStreamFilter
 
+/// A bitstream filter operates on the encoded stream data, and performs bitstream level modifications without performing decoding.
 public struct AVBitStreamFilter {
-  let cFilterPtr: UnsafePointer<CAVBitStreamFilter>
-  var cFilter: CAVBitStreamFilter { cFilterPtr.pointee }
+  var native: UnsafePointer<CAVBitStreamFilter>
 
-  init(cFilterPtr: UnsafePointer<CAVBitStreamFilter>) {
-    self.cFilterPtr = cFilterPtr
+  init(native: UnsafePointer<CAVBitStreamFilter>) {
+    self.native = native
   }
 
   /// Find a bitstream filter with the specified name.
   ///
-  /// - Parameter name: The name of the bitstream filter.
+  /// - Parameter name: The name of the filter.
   public init?(name: String) {
     guard let ptr = av_bsf_get_by_name(name) else {
       return nil
     }
-    self.cFilterPtr = ptr
+    self.native = ptr
   }
 
-  /// The name of the bitstream filter.
+  /// The name of the filter.
   public var name: String {
-    String(cString: cFilter.name)
+    String(cString: native.pointee.name)
   }
 
-  /// A list of codec ids supported by the bitstream filter.
-  /// May be `nil`, in that case the bitstream filter works with any codec id.
-  public var codecIds: [AVCodecID]? {
-    values(cFilter.codec_ids, until: .none)
+  /// The list of codec ids supported by the filter.
+  ///
+  /// May be empty, in that case the filter works with any codec id.
+  public var supportedCodecIds: [AVCodecID] {
+    values(native.pointee.codec_ids, until: .none) ?? []
   }
 
   /// Get all registered bitstream filters.
@@ -45,112 +47,98 @@ public struct AVBitStreamFilter {
     var list = [AVBitStreamFilter]()
     var state: UnsafeMutableRawPointer?
     while let ptr = av_bsf_iterate(&state) {
-      list.append(AVBitStreamFilter(cFilterPtr: ptr))
+      list.append(AVBitStreamFilter(native: ptr))
     }
     return list
   }
 }
 
-extension AVBitStreamFilter: CustomStringConvertible {
-
-  public var description: String {
-    name
-  }
-}
-
-// MARK: - AVBSFContext
+// MARK: - AVBitStreamFilterContext
 
 typealias CAVBSFContext = CFFmpeg.AVBSFContext
 
 /// The bitstream filter state.
 public final class AVBitStreamFilterContext {
-  let cContextPtr: UnsafeMutablePointer<CAVBSFContext>
-  var cContext: CAVBSFContext { cContextPtr.pointee }
+  var native: UnsafeMutablePointer<CAVBSFContext>!
 
-  init(cContextPtr: UnsafeMutablePointer<CAVBSFContext>) {
-    self.cContextPtr = cContextPtr
-  }
-
-  /// Get null/pass-through bitstream filter.
+  /// Creates a null/pass-through context.
   public init() {
-    var ptr: UnsafeMutablePointer<CAVBSFContext>!
-    abortIfFail(av_bsf_get_null_filter(&ptr))
-    self.cContextPtr = ptr
+    abortIfFail(av_bsf_get_null_filter(&native))
   }
 
-  /// Allocate a context for a given bitstream filter.
-  /// The caller must fill in the context parameters as described in the documentation
-  /// and then call `initialize()` before sending any data to the filter.
+  /// Creates a context for a given bitstream filter.
   ///
-  /// - Parameter filter: the filter for which to allocate an instance.
+  /// - Parameter filter: The filter for which to allocate an instance.
   public init(filter: AVBitStreamFilter) {
-    var ptr: UnsafeMutablePointer<CAVBSFContext>!
-    abortIfFail(av_bsf_alloc(filter.cFilterPtr, &ptr))
-    self.cContextPtr = ptr
+    abortIfFail(av_bsf_alloc(filter.native, &native))
   }
 
-  /// Parse string describing list of bitstream filters and create single
-  /// `AVBSFContext` describing the whole chain of bitstream filters.
+  /// Creates a context from the given bitstream filters description string.
   ///
-  /// - Parameter str: String describing chain of bitstream filters in format
-  ///   `bsf1[=opt1=val1:opt2=val2][,bsf2]`.
-  public init(str: String) {
-    var ptr: UnsafeMutablePointer<CAVBSFContext>!
-    abortIfFail(av_bsf_list_parse_str(str, &ptr))
-    self.cContextPtr = ptr
+  /// Bitstream filters description syntax:
+  ///
+  ///     bsf1[=opt1=val1:opt2=val2][,bsf2]
+  ///
+  /// - Parameter string: The bitstream filters description string.
+  public init(description string: String) throws {
+    try throwIfFail(av_bsf_list_parse_str(string, &native))
+  }
+
+  deinit {
+    av_bsf_free(&native)
   }
 
   /// Parameters of the input stream.
-  public var inParameters: AVCodecParameters {
-    return AVCodecParameters(cParametersPtr: cContext.par_in)
+  public var inputParameters: AVCodecParameters {
+    AVCodecParameters(native: native.pointee.par_in)
   }
 
-  /// Parameters of the input stream.
-  public var outParameters: AVCodecParameters {
-    return AVCodecParameters(cParametersPtr: cContext.par_out)
+  /// Parameters of the output stream.
+  public var outputParameters: AVCodecParameters {
+    AVCodecParameters(native: native.pointee.par_out)
   }
 
   /// The timebase used for the timestamps of the input packets.
-  public var time_base_in: AVRational {
-    get { return cContext.time_base_in }
-    set { cContextPtr.pointee.time_base_in = newValue }
+  public var inputTimeBase: AVRational {
+    get { native.pointee.time_base_in }
+    set { native.pointee.time_base_in = newValue }
   }
 
   /// The timebase used for the timestamps of the output packets.
-  public var time_base_out: AVRational {
-    get { return cContext.time_base_out }
-    set { cContextPtr.pointee.time_base_out = newValue }
+  public var outputTimeBase: AVRational {
+    get { native.pointee.time_base_out }
+    set { native.pointee.time_base_out = newValue }
   }
 
   /// Prepare the filter for use, after all the parameters and options have been set.
   public func initialize() throws {
-    try throwIfFail(av_bsf_init(cContextPtr))
+    try throwIfFail(av_bsf_init(native))
   }
 
   /// Submit a packet for filtering.
   ///
   /// After sending each packet, the filter must be completely drained by calling
-  /// `receivePacket(_:)` repeatedly until it returns `AVError.tryAgain` or `AVError.eof`.
+  /// `receivePacket(_:)` repeatedly until it throws `AVError.tryAgain` or `AVError.eof`.
   ///
-  /// - Parameter packet: the packet to filter. The bitstream filter will take ownership of
+  /// - Parameter packet: The packet to filter. The bitstream filter will take ownership of
   ///   the packet and reset the contents of pkt. pkt is not touched if an error occurs.
   ///   This parameter may be `nil`, which signals the end of the stream (i.e. no more
   ///   packets will be sent). That will cause the filter to output any packets it
   ///   may have buffered internally.
   /// - Throws: AVError
   public func sendPacket(_ packet: AVPacket?) throws {
-    try throwIfFail(av_bsf_send_packet(cContextPtr, packet?.cPacketPtr))
+    try throwIfFail(av_bsf_send_packet(native, packet?.native))
   }
 
   /// Retrieve a filtered packet.
   ///
-  /// - Note: one input packet may result in several output packets, so after sending
+  /// - Note: One input packet may result in several output packets, so after sending
   /// a packet with `sendPacket(_:)`, this function needs to be called
   /// repeatedly until it stops returning 0. It is also possible for a filter to
   /// output fewer packets than were sent to it, so this function may return
   /// `AVError.tryAgain` immediately after a successful `sendPacket(_:)` call.
   ///
-  /// - Parameter packet: this struct will be filled with the contents of the filtered packet.
+  /// - Parameter packet: This struct will be filled with the contents of the filtered packet.
   ///   It is owned by the caller and must be freed using `AVPacket.unref()` when it is no longer needed.
   ///   This parameter should be "clean" (i.e. freshly allocated with `AVPacket.init()` or unreffed with
   ///   `AVPacket.unref()`) when this function is called.
@@ -161,26 +149,21 @@ public final class AVBitStreamFilterContext {
   ///   - `AVError.eof` if there will be no further output from the filter.
   ///   - othrer errors.
   public func receivePacket(_ packet: AVPacket) throws {
-    try throwIfFail(av_bsf_receive_packet(cContextPtr, packet.cPacketPtr))
+    try throwIfFail(av_bsf_receive_packet(native, packet.native))
   }
 
   /// Reset the internal bitstream filter state / flush internal buffers.
   public func flush() {
-    av_bsf_flush(cContextPtr)
-  }
-
-  deinit {
-    var pb: UnsafeMutablePointer<CAVBSFContext>? = cContextPtr
-    av_bsf_free(&pb)
+    av_bsf_flush(native)
   }
 }
 
 extension AVBitStreamFilterContext: AVClassSupport, AVOptionSupport {
-  public static let `class` = AVClass(cClassPtr: av_bsf_get_class())
+  public static let `class` = AVClass(native: av_bsf_get_class())
 
   public func withUnsafeObjectPointer<T>(
     _ body: (UnsafeMutableRawPointer) throws -> T
   ) rethrows -> T {
-    try body(cContextPtr)
+    try body(native)
   }
 }

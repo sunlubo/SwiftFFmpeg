@@ -25,11 +25,11 @@ public enum AVDiscard: Int32 {
   /// discard all
   case all = 48
 
-  internal var native: CFFmpeg.AVDiscard {
+  var native: CFFmpeg.AVDiscard {
     CFFmpeg.AVDiscard(rawValue)
   }
 
-  internal init(native: CFFmpeg.AVDiscard) {
+  init(native: CFFmpeg.AVDiscard) {
     guard let discard = AVDiscard(rawValue: native.rawValue) else {
       fatalError("Unknown discard: \(native)")
     }
@@ -43,16 +43,15 @@ typealias CAVStream = CFFmpeg.AVStream
 
 /// Stream structure.
 public final class AVStream {
-  let cStreamPtr: UnsafeMutablePointer<CAVStream>
-  var cStream: CAVStream { cStreamPtr.pointee }
+  let native: UnsafeMutablePointer<CAVStream>
 
-  init(cStreamPtr: UnsafeMutablePointer<CAVStream>) {
-    self.cStreamPtr = cStreamPtr
+  init(native: UnsafeMutablePointer<CAVStream>) {
+    self.native = native
   }
 
   /// Stream index in `AVFormatContext`.
   public var index: Int {
-    Int(cStream.index)
+    Int(native.pointee.index)
   }
 
   /// Format-specific stream ID.
@@ -60,8 +59,8 @@ public final class AVStream {
   /// - encoding: Set by the user, replaced by libavformat if left unset.
   /// - decoding: Set by libavformat.
   public var id: Int32 {
-    get { cStream.id }
-    set { cStreamPtr.pointee.id = newValue }
+    get { native.pointee.id }
+    set { native.pointee.id = newValue }
   }
 
   /// This is the fundamental unit of time (in seconds) in terms of which frame timestamps are represented.
@@ -72,28 +71,28 @@ public final class AVStream {
   ///   file (which may or may not be related to the user-provided one, depending on the format).
   /// - decoding: Set by libavformat.
   public var timebase: AVRational {
-    get { cStream.time_base }
-    set { cStreamPtr.pointee.time_base = newValue }
+    get { native.pointee.time_base }
+    set { native.pointee.time_base = newValue }
   }
 
   /// pts of the first frame of the stream in presentation order, in stream timebase.
   public var startTime: Int64 {
-    cStream.start_time
+    native.pointee.start_time
   }
 
   public var duration: Int64 {
-    cStream.duration
+    native.pointee.duration
   }
 
   /// Number of frames in this stream if known or 0.
   public var frameCount: Int {
-    Int(cStream.nb_frames)
+    Int(native.pointee.nb_frames)
   }
 
   /// Selects which packets can be discarded at will and do not need to be demuxed.
   public var discard: AVDiscard {
-    get { AVDiscard(native: cStream.discard) }
-    set { cStreamPtr.pointee.discard = newValue.native }
+    get { AVDiscard(native: native.pointee.discard) }
+    set { native.pointee.discard = newValue.native }
   }
 
   /// sample aspect ratio (0 if unknown)
@@ -101,7 +100,7 @@ public final class AVStream {
   /// - encoding: Set by user.
   /// - decoding: Set by libavformat.
   public var sampleAspectRatio: AVRational {
-    cStream.sample_aspect_ratio
+    native.pointee.sample_aspect_ratio
   }
 
   /// display aspect ratio (0 if unknown)
@@ -109,7 +108,7 @@ public final class AVStream {
   ///- encoding: unused
   ///- decoding: Set by libavformat to calculate sample_aspect_ratio internally
   public var displayAspectRatio: AVRational {
-    cStream.display_aspect_ratio
+    native.pointee.display_aspect_ratio
   }
 
   /// The metadata of the stream.
@@ -117,13 +116,13 @@ public final class AVStream {
     get {
       var dict = [String: String]()
       var prev: UnsafeMutablePointer<AVDictionaryEntry>?
-      while let tag = av_dict_get(cStream.metadata, "", prev, AV_DICT_IGNORE_SUFFIX) {
+      while let tag = av_dict_get(native.pointee.metadata, "", prev, AV_DICT_IGNORE_SUFFIX) {
         dict[String(cString: tag.pointee.key)] = String(cString: tag.pointee.value)
         prev = tag
       }
       return dict
     }
-    set { cStreamPtr.pointee.metadata = newValue.toAVDict() }
+    set { native.pointee.metadata = newValue.avDict }
   }
 
   /// Average framerate.
@@ -132,8 +131,8 @@ public final class AVStream {
   ///   `AVFormatContext.findStreamInfo(options:)`.
   /// - muxing: May be set by the caller before `AVFormatContext.writeHeader(options:)`.
   public var averageFramerate: AVRational {
-    get { cStream.avg_frame_rate }
-    set { cStreamPtr.pointee.avg_frame_rate = newValue }
+    get { native.pointee.avg_frame_rate }
+    set { native.pointee.avg_frame_rate = newValue }
   }
 
   /// Real base framerate of the stream.
@@ -142,7 +141,7 @@ public final class AVStream {
   /// For example, if the timebase is 1/90000 and all frames have either approximately 3600 or 1800 timer ticks,
   /// then realFramerate will be 50/1.
   public var realFramerate: AVRational {
-    cStream.r_frame_rate
+    native.pointee.r_frame_rate
   }
 
   /// Codec parameters associated with this stream.
@@ -150,7 +149,7 @@ public final class AVStream {
   /// - demuxing: Filled by libavformat on stream creation or in `AVFormatContext.findStreamInfo(options:)`.
   /// - muxing: Filled by the caller before `AVFormatContext.writeHeader(options:)`.
   public var codecParameters: AVCodecParameters {
-    AVCodecParameters(cParametersPtr: cStream.codecpar)
+    AVCodecParameters(native: native.pointee.codecpar)
   }
 
   /// The media type of the stream.
@@ -162,7 +161,6 @@ public final class AVStream {
 // MARK: - AVStream + SideData
 
 extension AVStream {
-
   /// Wrap an existing array as stream side data.
   ///
   /// - Parameter type: type side information type
@@ -172,7 +170,7 @@ extension AVStream {
   public func addSideData(type: AVPacketSideDataType, data: UnsafeMutablePointer<UInt8>, size: Int)
     throws
   {
-    try throwIfFail(av_stream_add_side_data(cStreamPtr, type.native, data, size))
+    try throwIfFail(av_stream_add_side_data(native, type.native, data, size))
   }
 
   /// Allocate new information from stream.
@@ -182,7 +180,7 @@ extension AVStream {
   ///
   /// - Returns: pointer to fresh allocated data or NULL otherwise
   public func newSideData(type: AVPacketSideDataType, size: Int32) -> UnsafeMutablePointer<UInt8> {
-    return av_stream_new_side_data(cStreamPtr, type.native, size)
+    return av_stream_new_side_data(native, type.native, size)
   }
 
   /// Get side information from stream.
@@ -194,6 +192,6 @@ extension AVStream {
   public func getSideData(type: AVPacketSideDataType, size: UnsafeMutablePointer<Int32>)
     -> UnsafeMutablePointer<UInt8>
   {
-    return av_stream_get_side_data(cStreamPtr, type.native, size)
+    return av_stream_get_side_data(native, type.native, size)
   }
 }

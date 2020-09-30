@@ -12,23 +12,23 @@ import CFFmpeg
 typealias CAVOption = CFFmpeg.AVOption
 
 public struct AVOption {
-  public let name: String
+  public var name: String
   /// The short English help text about the option.
-  public let help: String?
+  public var help: String?
   /// The offset relative to the context structure where the option value is stored.
   /// It should be 0 for named constants.
-  public let offset: Int
-  public let type: Kind
+  public var offset: Int
+  public var type: Kind
   /// The default value for scalar options.
-  public let defaultValue: Any
+  public var defaultValue: Any
   /// The minimum valid value for the option.
-  public let min: Double
+  public var min: Double
   /// The maximum valid value for the option.
-  public let max: Double
-  public let flags: Flag
+  public var max: Double
+  public var flags: Flag
   /// The logical unit to which the option belongs.
   /// Non-constant options and corresponding named constants share the same unit.
-  public let unit: String?
+  public var unit: String?
 
   init(cOption: CAVOption) {
     self.name = String(cString: cOption.name)
@@ -60,7 +60,6 @@ public struct AVOption {
 }
 
 extension AVOption: CustomStringConvertible {
-
   public var description: String {
     var str = "{name: \"\(name)\", "
     if let help = help {
@@ -86,7 +85,6 @@ extension AVOption: CustomStringConvertible {
 // MARK: - AVOption.Kind
 
 extension AVOption {
-
   // https://github.com/FFmpeg/FFmpeg/blob/master/libavutil/opt.h#L221
   public enum Kind: UInt32 {
     case flags
@@ -112,11 +110,9 @@ extension AVOption {
     case channelLayout
     case bool
   }
-
 }
 
 extension AVOption.Kind: CustomStringConvertible {
-
   public var description: String {
     switch self {
     case .flags:
@@ -158,7 +154,6 @@ extension AVOption.Kind: CustomStringConvertible {
 // MARK: - AVOption.Flag
 
 extension AVOption {
-
   // https://github.com/FFmpeg/FFmpeg/blob/master/libavutil/opt.h#L221
   public struct Flag: OptionSet {
     /// A generic parameter which can be set by the user for muxing or encoding.
@@ -187,7 +182,6 @@ extension AVOption {
 }
 
 extension AVOption.Flag: CustomStringConvertible {
-
   public var description: String {
     var str = "["
     if contains(.encoding) { str += "encoding, " }
@@ -209,15 +203,27 @@ extension AVOption.Flag: CustomStringConvertible {
 
 // MARK: - AVOptionSearchFlag
 
-// https://github.com/FFmpeg/FFmpeg/blob/master/libavutil/opt.h#L556
-public enum AVOptionSearchFlag: Int32 {
-  /// Search in possible children of the given object first.
-  case children = 1
-  /// The obj passed to `av_opt_find()` is fake – only a double pointer to `AVClass`
-  /// instead of a required pointer to a struct containing `AVClass`.
-  /// This is useful for searching for options without needing to allocate the corresponding object.
-  case fakeObject = 2
+extension AVOption {
+  // https://github.com/FFmpeg/FFmpeg/blob/master/libavutil/opt.h#L556
+  public struct SearchFlag: OptionSet {
+    /// Search in possible children of the given object first.
+    public static let children = SearchFlag(rawValue: 1 << 0)
+    /// The obj passed to `av_opt_find()` is fake – only a double pointer to `AVClass`
+    /// instead of a required pointer to a struct containing `AVClass`.
+    /// This is useful for searching for options without needing to allocate the corresponding object.
+    public static let fakeObject = SearchFlag(rawValue: 1 << 1)
+    /// In av_opt_get, return NULL if the option has a pointer type and is set to NULL,
+    /// rather than returning an empty string.
+    public static let nullable = SearchFlag(rawValue: 1 << 2)
+
+    public let rawValue: Int32
+
+    public init(rawValue: Int32) { self.rawValue = rawValue }
+  }
 }
+
+@available(*, deprecated, renamed: "AVOption.SearchFlag")
+public typealias AVOptionSearchFlag = AVOption.SearchFlag
 
 // MARK: - AVOptionSupport
 
@@ -225,253 +231,368 @@ public protocol AVOptionSupport {
   func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T
 }
 
-// MARK: - Option setting functions
+extension AVOptionSupport {
+  /// Returns an array of the options supported by the type.
+  public var supportedOptions: [AVOption] {
+    withUnsafeObjectPointer { ptr in
+      var list = [AVOption]()
+      var prev: UnsafePointer<CAVOption>?
+      while let option = av_opt_next(ptr, prev) {
+        list.append(AVOption(cOption: option.pointee))
+        prev = option
+      }
+      return list
+    }
+  }
+}
+
+// MARK: - Option Getter
 
 extension AVOptionSupport {
-
-  /// Set the field of obj with the given name to value.
+  /// Returns the string value associated with the specified key.
   ///
-  /// `av_opt_set`
+  /// - Parameters:
+  ///   - key: The name of the option to get.
+  ///   - searchFlags: The flags passed to av_opt_find2.
+  /// - Returns: The string value associated with the specified key.
+  /// - Throws: AVError
+  public func string(
+    forKey key: String, searchFlags: AVOption.SearchFlag = .children
+  ) throws -> String {
+    try withUnsafeObjectPointer { ptr in
+      var value: UnsafeMutablePointer<UInt8>!
+      defer { av_free(value) }
+      try throwIfFail(av_opt_get(ptr, key, searchFlags.rawValue, &value))
+      return String(cString: value)
+    }
+  }
+
+  /// Returns the integer value associated with the specified key.
+  ///
+  /// - Parameters:
+  ///   - key: The name of the option to get.
+  ///   - searchFlags: The flags passed to av_opt_find2.
+  /// - Returns: The integer value associated with the specified key.
+  /// - Throws: AVError
+  public func integer<T: FixedWidthInteger>(
+    forKey key: String, searchFlags: AVOption.SearchFlag = .children
+  ) throws -> T {
+    try withUnsafeObjectPointer { ptr in
+      var value: Int64 = 0
+      try throwIfFail(av_opt_get_int(ptr, key, searchFlags.rawValue, &value))
+      return T(value)
+    }
+  }
+
+  /// Returns the double value associated with the specified key.
+  ///
+  /// - Parameters:
+  ///   - key: The name of the option to get.
+  ///   - searchFlags: The flags passed to av_opt_find2.
+  /// - Returns: The double value associated with the specified key.
+  /// - Throws: AVError
+  public func double(
+    forKey key: String, searchFlags: AVOption.SearchFlag = .children
+  ) throws -> Double {
+    try withUnsafeObjectPointer { ptr in
+      var value: Double = 0
+      try throwIfFail(av_opt_get_double(ptr, key, searchFlags.rawValue, &value))
+      return value
+    }
+  }
+
+  /// Returns the rational value associated with the specified key.
+  ///
+  /// - Parameters:
+  ///   - key: The name of the option to get.
+  ///   - searchFlags: The flags passed to av_opt_find2.
+  /// - Returns: The rational value associated with the specified key.
+  /// - Throws: AVError
+  public func rational(
+    forKey key: String, searchFlags: AVOption.SearchFlag = .children
+  ) throws -> AVRational {
+    try withUnsafeObjectPointer { ptr in
+      var value = AVRational(num: 0, den: 0)
+      try throwIfFail(av_opt_get_q(ptr, key, searchFlags.rawValue, &value))
+      return value
+    }
+  }
+
+  /// Returns the image size associated with the specified key.
+  ///
+  /// - Parameters:
+  ///   - key: The name of the option to get.
+  ///   - searchFlags: The flags passed to av_opt_find2.
+  /// - Returns: The image size associated with the specified key.
+  /// - Throws: AVError
+  public func size(
+    forKey key: String, searchFlags: AVOption.SearchFlag = .children
+  ) throws -> (width: Int, height: Int) {
+    try withUnsafeObjectPointer { ptr in
+      var width: Int32 = 0
+      var height: Int32 = 0
+      try throwIfFail(av_opt_get_image_size(ptr, key, searchFlags.rawValue, &width, &height))
+      return (Int(width), Int(height))
+    }
+  }
+
+  /// Returns the pixel format associated with the specified key.
+  ///
+  /// - Parameters:
+  ///   - key: The name of the option to get.
+  ///   - searchFlags: The flags passed to av_opt_find2.
+  /// - Returns: The pixel format associated with the specified key.
+  /// - Throws: AVError
+  public func pixelFormat(
+    forKey key: String, searchFlags: AVOption.SearchFlag = .children
+  ) throws -> AVPixelFormat {
+    try withUnsafeObjectPointer { ptr in
+      var value = AVPixelFormat.none
+      try throwIfFail(av_opt_get_pixel_fmt(ptr, key, searchFlags.rawValue, &value))
+      return value
+    }
+  }
+
+  /// Returns the sample format associated with the specified key.
+  ///
+  /// - Parameters:
+  ///   - key: The name of the option to get.
+  ///   - searchFlags: The flags passed to av_opt_find2.
+  /// - Returns: The sample format associated with the specified key.
+  /// - Throws: AVError
+  public func sampleFormat(
+    forKey key: String, searchFlags: AVOption.SearchFlag = .children
+  ) throws -> AVSampleFormat {
+    try withUnsafeObjectPointer { ptr in
+      var value = AV_SAMPLE_FMT_NONE
+      try throwIfFail(av_opt_get_sample_fmt(ptr, key, searchFlags.rawValue, &value))
+      return AVSampleFormat(native: value)
+    }
+  }
+
+  /// Returns the video rate associated with the specified key.
+  ///
+  /// - Parameters:
+  ///   - key: The name of the option to get.
+  ///   - searchFlags: The flags passed to av_opt_find2.
+  /// - Returns: The video rate associated with the specified key.
+  /// - Throws: AVError
+  public func videoRate(
+    forKey key: String, searchFlags: AVOption.SearchFlag = .children
+  ) throws -> AVRational {
+    try withUnsafeObjectPointer { ptr in
+      var value = AVRational(num: 0, den: 0)
+      try throwIfFail(av_opt_get_video_rate(ptr, key, searchFlags.rawValue, &value))
+      return value
+    }
+  }
+
+  /// Returns the channel layout associated with the specified key.
+  ///
+  /// - Parameters:
+  ///   - key: The name of the option to get.
+  ///   - searchFlags: The flags passed to av_opt_find2.
+  /// - Returns: The channel layout associated with the specified key.
+  /// - Throws: AVError
+  public func channelLayout(
+    forKey key: String, searchFlags: AVOption.SearchFlag = .children
+  ) throws -> Int64 {
+    try withUnsafeObjectPointer { ptr in
+      var value: Int64 = 0
+      try throwIfFail(av_opt_get_channel_layout(ptr, key, searchFlags.rawValue, &value))
+      return value
+    }
+  }
+}
+
+// MARK: - Option Setter
+
+extension AVOptionSupport {
+  /// Sets the value of the specified key.
+  ///
+  /// If the field is not of a string type, then the given string is parsed.
+  /// SI postfixes and some named scalars are supported.
+  /// If the field is of a numeric type, it has to be a numeric or named
+  /// scalar. Behavior with more than one scalar and +- infix operators
+  /// is undefined.
+  /// If the field is of a flags type, it has to be a sequence of numeric
+  /// scalars or named flags separated by '+' or '-'. Prefixing a flag
+  /// with '+' causes it to be set without affecting the other flags;
+  /// similarly, '-' unsets a flag.
+  /// If the field is of a dictionary type, it has to be a ':' separated list of
+  /// key=value parameters. Values containing ':' special characters must be
+  /// escaped.
   ///
   /// - Parameters:
   ///   - value: The value to set.
-  ///   - key: The name of the field to set.
+  ///   - key: The key with which to associate the value.
   ///   - searchFlags: The flags passed to `av_opt_find2`.
   /// - Throws: AVError
   public func set(
-    _ value: String, forKey key: String, searchFlags: AVOptionSearchFlag = .children
+    _ value: String, forKey key: String, searchFlags: AVOption.SearchFlag = .children
   ) throws {
-    try withUnsafeObjectPointer { objPtr in
-      try throwIfFail(av_opt_set(objPtr, key, value, searchFlags.rawValue))
+    try withUnsafeObjectPointer { ptr in
+      try throwIfFail(av_opt_set(ptr, key, value, searchFlags.rawValue))
     }
   }
 
-  /// `av_opt_set_int`
+  /// Sets the value of the specified key to the integer value.
+  ///
+  /// - Parameters:
+  ///   - value: The integer value.
+  ///   - key: The key with which to associate the value.
+  ///   - searchFlags: The flags passed to `av_opt_find2`.
+  /// - Throws: AVError
   public func set<T: FixedWidthInteger>(
-    _ value: T, forKey key: String, searchFlags: AVOptionSearchFlag = .children
+    _ value: T, forKey key: String, searchFlags: AVOption.SearchFlag = .children
   ) throws {
-    try withUnsafeObjectPointer { objPtr in
-      try throwIfFail(av_opt_set_int(objPtr, key, Int64(value), searchFlags.rawValue))
+    try withUnsafeObjectPointer { ptr in
+      try throwIfFail(av_opt_set_int(ptr, key, Int64(value), searchFlags.rawValue))
     }
   }
 
-  /// `av_opt_set_double`
+  /// Sets the value of the specified key to the double value.
+  ///
+  /// - Parameters:
+  ///   - value: The double value.
+  ///   - key: The key with which to associate the value.
+  ///   - searchFlags: The flags passed to `av_opt_find2`.
+  /// - Throws: AVError
   public func set(
-    _ value: Double, forKey key: String, searchFlags: AVOptionSearchFlag = .children
+    _ value: Double, forKey key: String, searchFlags: AVOption.SearchFlag = .children
   ) throws {
-    try withUnsafeObjectPointer { objPtr in
-      try throwIfFail(av_opt_set_double(objPtr, key, value, searchFlags.rawValue))
+    try withUnsafeObjectPointer { ptr in
+      try throwIfFail(av_opt_set_double(ptr, key, value, searchFlags.rawValue))
     }
   }
 
-  /// `av_opt_set_q`
+  /// Sets the value of the specified key to the rational value.
+  ///
+  /// - Parameters:
+  ///   - value: The rational value.
+  ///   - key: The key with which to associate the value.
+  ///   - searchFlags: The flags passed to `av_opt_find2`.
+  /// - Throws: AVError
   public func set(
-    _ value: AVRational, forKey key: String, searchFlags: AVOptionSearchFlag = .children
+    _ value: AVRational, forKey key: String, searchFlags: AVOption.SearchFlag = .children
   ) throws {
-    try withUnsafeObjectPointer { objPtr in
-      try throwIfFail(av_opt_set_q(objPtr, key, value, searchFlags.rawValue))
+    try withUnsafeObjectPointer { ptr in
+      try throwIfFail(av_opt_set_q(ptr, key, value, searchFlags.rawValue))
     }
   }
 
-  /// `av_opt_set_bin`
+  /// Sets the value of the specified key to the binary value.
+  ///
+  /// - Parameters:
+  ///   - value: The binary value.
+  ///   - key: The key with which to associate the value.
+  ///   - searchFlags: The flags passed to `av_opt_find2`.
+  /// - Throws: AVError
   public func set(
     _ value: UnsafeBufferPointer<UInt8>, forKey key: String,
-    searchFlags: AVOptionSearchFlag = .children
+    searchFlags: AVOption.SearchFlag = .children
   ) throws {
-    try withUnsafeObjectPointer { objPtr in
+    try withUnsafeObjectPointer { ptr in
       try throwIfFail(
-        av_opt_set_bin(objPtr, key, value.baseAddress, Int32(value.count), searchFlags.rawValue))
+        av_opt_set_bin(ptr, key, value.baseAddress, Int32(value.count), searchFlags.rawValue))
     }
   }
 
-  /// `av_opt_set_image_size`
+  /// Sets the value of the specified key to the image size.
+  ///
+  /// - Parameters:
+  ///   - value: The image size.
+  ///   - key: The key with which to associate the value.
+  ///   - searchFlags: The flags passed to `av_opt_find2`.
+  /// - Throws: AVError
   public func set(
     _ size: (width: Int, height: Int), forKey key: String,
-    searchFlags: AVOptionSearchFlag = .children
+    searchFlags: AVOption.SearchFlag = .children
   ) throws {
-    try withUnsafeObjectPointer { objPtr in
+    try withUnsafeObjectPointer { ptr in
       try throwIfFail(
         av_opt_set_image_size(
-          objPtr, key, Int32(size.width), Int32(size.height), searchFlags.rawValue
+          ptr, key, Int32(size.width), Int32(size.height), searchFlags.rawValue
         )
       )
     }
   }
 
-  /// `av_opt_set_pixel_fmt`
-  public func set(
-    _ value: AVPixelFormat, forKey key: String, searchFlags: AVOptionSearchFlag = .children
-  ) throws {
-    try withUnsafeObjectPointer { objPtr in
-      try throwIfFail(av_opt_set_pixel_fmt(objPtr, key, value, searchFlags.rawValue))
-    }
-  }
-
-  /// `av_opt_set_sample_fmt`
-  public func set(
-    _ value: AVSampleFormat, forKey key: String, searchFlags: AVOptionSearchFlag = .children
-  ) throws {
-    try withUnsafeObjectPointer { objPtr in
-      try throwIfFail(av_opt_set_sample_fmt(objPtr, key, value.native, searchFlags.rawValue))
-    }
-  }
-
-  /// `av_opt_set_video_rate`
-  public func setVideoRate(
-    _ value: AVRational, forKey key: String, searchFlags: AVOptionSearchFlag = .children
-  ) throws {
-    try withUnsafeObjectPointer { objPtr in
-      try throwIfFail(av_opt_set_video_rate(objPtr, key, value, searchFlags.rawValue))
-    }
-  }
-
-  /// `av_opt_set_channel_layout`
-  public func set(
-    _ value: AVChannelLayout, forKey key: String, searchFlags: AVOptionSearchFlag = .children
-  ) throws {
-    try withUnsafeObjectPointer { objPtr in
-      try throwIfFail(
-        av_opt_set_channel_layout(objPtr, key, Int64(value.rawValue), searchFlags.rawValue))
-    }
-  }
-
-  /// Set a binary option to an integer list.
-  ///
-  /// `av_opt_set_int_list`
-  public func set<T: FixedWidthInteger>(
-    _ value: [T], forKey key: String, searchFlags: AVOptionSearchFlag = .children
-  ) throws {
-    precondition(value.last == 0 || value.last == -1, "The list must be terminated by 0 or -1.")
-    try value.withUnsafeBytes { ptr in
-      let ptr = ptr.bindMemory(to: UInt8.self).baseAddress
-      let count = MemoryLayout<T>.size * (value.count - 1)
-      try set(UnsafeBufferPointer(start: ptr, count: count), forKey: key)
-    }
-  }
-}
-
-// MARK: - Option getting functions
-
-extension AVOptionSupport {
-
-  /// Get a value of the option with the given name from an object.
-  ///
-  /// `av_opt_get`
+  /// Sets the value of the specified key to the pixel format.
   ///
   /// - Parameters:
-  ///   - key: The name of the option to get.
-  ///   - searchFlags: The flags passed to av_opt_find2.
-  /// - Returns: value of the option
+  ///   - value: The pixel format.
+  ///   - key: The key with which to associate the value.
+  ///   - searchFlags: The flags passed to `av_opt_find2`.
   /// - Throws: AVError
-  public func string(
-    forKey key: String, searchFlags: AVOptionSearchFlag = .children
-  ) throws -> String {
-    try withUnsafeObjectPointer { objPtr in
-      var outVal: UnsafeMutablePointer<UInt8>?
-      try throwIfFail(av_opt_get(objPtr, key, searchFlags.rawValue, &outVal))
-      return String(cString: outVal!)
+  public func set(
+    _ value: AVPixelFormat, forKey key: String, searchFlags: AVOption.SearchFlag = .children
+  ) throws {
+    try withUnsafeObjectPointer { ptr in
+      try throwIfFail(av_opt_set_pixel_fmt(ptr, key, value, searchFlags.rawValue))
     }
   }
 
-  /// `av_opt_get_int`
-  public func integer<T: FixedWidthInteger>(
-    forKey key: String, searchFlags: AVOptionSearchFlag = .children
-  ) throws -> T {
-    try withUnsafeObjectPointer { objPtr in
-      var outVal: Int64 = 0
-      try throwIfFail(av_opt_get_int(objPtr, key, searchFlags.rawValue, &outVal))
-      return T(outVal)
+  /// Sets the value of the specified key to the sample format.
+  ///
+  /// - Parameters:
+  ///   - value: The sample format.
+  ///   - key: The key with which to associate the value.
+  ///   - searchFlags: The flags passed to `av_opt_find2`.
+  /// - Throws: AVError
+  public func set(
+    _ value: AVSampleFormat, forKey key: String, searchFlags: AVOption.SearchFlag = .children
+  ) throws {
+    try withUnsafeObjectPointer { ptr in
+      try throwIfFail(av_opt_set_sample_fmt(ptr, key, value.native, searchFlags.rawValue))
     }
   }
 
-  /// `av_opt_get_double`
-  public func double(
-    forKey key: String, searchFlags: AVOptionSearchFlag = .children
-  ) throws -> Double {
-    try withUnsafeObjectPointer { objPtr in
-      var outVal: Double = 0
-      try throwIfFail(av_opt_get_double(objPtr, key, searchFlags.rawValue, &outVal))
-      return outVal
+  /// Sets the value of the specified key to the video rate.
+  ///
+  /// - Parameters:
+  ///   - value: The video rate.
+  ///   - key: The key with which to associate the value.
+  ///   - searchFlags: The flags passed to `av_opt_find2`.
+  /// - Throws: AVError
+  public func setVideoRate(
+    _ value: AVRational, forKey key: String, searchFlags: AVOption.SearchFlag = .children
+  ) throws {
+    try withUnsafeObjectPointer { ptr in
+      try throwIfFail(av_opt_set_video_rate(ptr, key, value, searchFlags.rawValue))
     }
   }
 
-  /// `av_opt_get_q`
-  public func rational(
-    forKey key: String, searchFlags: AVOptionSearchFlag = .children
-  ) throws -> AVRational {
-    try withUnsafeObjectPointer { objPtr in
-      var outVal = AVRational(num: 0, den: 0)
-      try throwIfFail(av_opt_get_q(objPtr, key, searchFlags.rawValue, &outVal))
-      return outVal
+  /// Sets the value of the specified key to the channel layout.
+  ///
+  /// - Parameters:
+  ///   - value: The channel layout.
+  ///   - key: The key with which to associate the value.
+  ///   - searchFlags: The flags passed to `av_opt_find2`.
+  /// - Throws: AVError
+  public func set(
+    _ value: AVChannelLayout, forKey key: String, searchFlags: AVOption.SearchFlag = .children
+  ) throws {
+    try withUnsafeObjectPointer { ptr in
+      try throwIfFail(
+        av_opt_set_channel_layout(ptr, key, Int64(value.rawValue), searchFlags.rawValue))
     }
   }
 
-  /// `av_opt_get_image_size`
-  public func size(
-    forKey key: String, searchFlags: AVOptionSearchFlag = .children
-  ) throws -> (Int, Int) {
-    try withUnsafeObjectPointer { objPtr in
-      var wOutVal: Int32 = 0
-      var hOutVal: Int32 = 0
-      try throwIfFail(av_opt_get_image_size(objPtr, key, searchFlags.rawValue, &wOutVal, &hOutVal))
-      return (Int(wOutVal), Int(hOutVal))
-    }
-  }
-
-  /// `av_opt_get_pixel_fmt`
-  public func pixelFormat(
-    forKey key: String, searchFlags: AVOptionSearchFlag = .children
-  ) throws -> AVPixelFormat {
-    try withUnsafeObjectPointer { objPtr in
-      var outVal = AVPixelFormat.none
-      try throwIfFail(av_opt_get_pixel_fmt(objPtr, key, searchFlags.rawValue, &outVal))
-      return outVal
-    }
-  }
-
-  /// `av_opt_get_sample_fmt`
-  public func sampleFormat(
-    forKey key: String, searchFlags: AVOptionSearchFlag = .children
-  ) throws -> AVSampleFormat {
-    try withUnsafeObjectPointer { objPtr in
-      var out = AV_SAMPLE_FMT_NONE
-      try throwIfFail(av_opt_get_sample_fmt(objPtr, key, searchFlags.rawValue, &out))
-      return AVSampleFormat(native: out)
-    }
-  }
-
-  /// `av_opt_get_video_rate`
-  public func videoRate(
-    forKey key: String, searchFlags: AVOptionSearchFlag = .children
-  ) throws -> AVRational {
-    try withUnsafeObjectPointer { objPtr in
-      var outVal = AVRational(num: 0, den: 0)
-      try throwIfFail(av_opt_get_video_rate(objPtr, key, searchFlags.rawValue, &outVal))
-      return outVal
-    }
-  }
-
-  /// `av_opt_get_channel_layout`
-  public func channelLayout(
-    forKey key: String, searchFlags: AVOptionSearchFlag = .children
-  ) throws -> Int64 {
-    try withUnsafeObjectPointer { objPtr in
-      var outVal: Int64 = 0
-      try throwIfFail(av_opt_get_channel_layout(objPtr, key, searchFlags.rawValue, &outVal))
-      return outVal
-    }
-  }
-
-  /// Returns an array of the options supported by the type.
-  public var supportedOptions: [AVOption] {
-    withUnsafeObjectPointer { objPtr in
-      var list = [AVOption]()
-      var prev: UnsafePointer<CAVOption>?
-      while let option = av_opt_next(objPtr, prev) {
-        list.append(AVOption(cOption: option.pointee))
-        prev = option
-      }
-      return list
+  /// Sets the value of the specified key to the integer array.
+  ///
+  /// - Parameters:
+  ///   - value: The integer array.
+  ///   - key: The key with which to associate the value.
+  ///   - searchFlags: The flags passed to `av_opt_find2`.
+  /// - Throws: AVError
+  public func set<T: FixedWidthInteger>(
+    _ value: [T], forKey key: String, searchFlags: AVOption.SearchFlag = .children
+  ) throws {
+    try value.withUnsafeBytes { ptr in
+      let ptr = ptr.bindMemory(to: UInt8.self).baseAddress
+      let count = MemoryLayout<T>.size * value.count
+      try set(UnsafeBufferPointer(start: ptr, count: count), forKey: key)
     }
   }
 }

@@ -109,7 +109,6 @@ extension AVCodecID {
 }
 
 extension AVCodecID: CustomStringConvertible {
-
   public var description: String {
     name
   }
@@ -120,18 +119,17 @@ extension AVCodecID: CustomStringConvertible {
 typealias CAVCodec = CFFmpeg.AVCodec
 
 public struct AVCodec {
-  let cCodecPtr: UnsafeMutablePointer<CAVCodec>
-  var cCodec: CAVCodec { cCodecPtr.pointee }
+  var native: UnsafePointer<CAVCodec>
 
   /// Find a registered decoder with a matching codec ID.
   ///
   /// - Parameter codecId: id of the requested decoder
   /// - Returns: A decoder if one was found, `nil` otherwise.
   public static func findDecoderById(_ codecId: AVCodecID) -> AVCodec? {
-    guard let codecPtr = avcodec_find_decoder(codecId) else {
+    guard let ptr = avcodec_find_decoder(codecId) else {
       return nil
     }
-    return AVCodec(cCodecPtr: codecPtr)
+    return AVCodec(native: ptr)
   }
 
   /// Find a registered decoder with the specified name.
@@ -139,10 +137,10 @@ public struct AVCodec {
   /// - Parameter name: name of the requested decoder
   /// - Returns: A decoder if one was found, `nil` otherwise.
   public static func findDecoderByName(_ name: String) -> AVCodec? {
-    guard let codecPtr = avcodec_find_decoder_by_name(name) else {
+    guard let ptr = avcodec_find_decoder_by_name(name) else {
       return nil
     }
-    return AVCodec(cCodecPtr: codecPtr)
+    return AVCodec(native: ptr)
   }
 
   /// Find a registered encoder with a matching codec ID.
@@ -150,10 +148,10 @@ public struct AVCodec {
   /// - Parameter codecId: id of the requested encoder
   /// - Returns: An encoder if one was found, `nil` otherwise.
   public static func findEncoderById(_ codecId: AVCodecID) -> AVCodec? {
-    guard let codecPtr = avcodec_find_encoder(codecId) else {
+    guard let ptr = avcodec_find_encoder(codecId) else {
       return nil
     }
-    return AVCodec(cCodecPtr: codecPtr)
+    return AVCodec(native: ptr)
   }
 
   /// Find a registered encoder with the specified name.
@@ -161,10 +159,10 @@ public struct AVCodec {
   /// - Parameter name: name of the requested encoder
   /// - Returns: An encoder if one was found, `nil` otherwise.
   public static func findEncoderByName(_ name: String) -> AVCodec? {
-    guard let codecPtr = avcodec_find_encoder_by_name(name) else {
+    guard let native = avcodec_find_encoder_by_name(name) else {
       return nil
     }
-    return AVCodec(cCodecPtr: codecPtr)
+    return AVCodec(native: native)
   }
 
   /// Returns a name for the specified profile, if available.
@@ -174,73 +172,73 @@ public struct AVCodec {
     String(cString: avcodec_profile_name(codecID, profile))
   }
 
-  init(cCodecPtr: UnsafeMutablePointer<CAVCodec>) {
-    self.cCodecPtr = cCodecPtr
+  init(native: UnsafePointer<CAVCodec>) {
+    self.native = native
   }
 
   /// The codec's name.
   public var name: String {
-    String(cString: cCodec.name)
+    String(cString: native.pointee.name)
   }
 
   /// The codec's descriptive name, meant to be more human readable than name.
   public var longName: String {
-    String(cString: cCodec.long_name)
+    String(cString: native.pointee.long_name)
   }
 
   /// The codec's media type.
   public var mediaType: AVMediaType {
-    AVMediaType(native: cCodec.type)
+    AVMediaType(native: native.pointee.type)
   }
 
   /// The codec's id.
   public var id: AVCodecID {
-    cCodec.id
+    native.pointee.id
   }
 
   /// The codec's capabilities.
   public var capabilities: AVCodec.Cap {
-    Cap(rawValue: UInt32(cCodec.capabilities))
+    Cap(rawValue: UInt32(native.pointee.capabilities))
   }
 
   /// Returns an array of the framerates supported by the codec.
   public var supportedFramerates: [AVRational]? {
-    values(cCodec.supported_framerates, until: AVRational(num: 0, den: 0))
+    values(native.pointee.supported_framerates, until: AVRational(num: 0, den: 0))
   }
 
   /// Returns an array of the pixel formats supported by the codec.
   public var supportedPixelFormats: [AVPixelFormat]? {
-    values(cCodec.pix_fmts, until: .none)
+    values(native.pointee.pix_fmts, until: .none)
   }
 
   /// Returns an array of the audio samplerates supported by the codec.
   public var supportedSampleRates: [Int]? {
-    values(cCodec.supported_samplerates, until: 0)?.map { Int($0) }
+    values(native.pointee.supported_samplerates, until: 0)?.map { Int($0) }
   }
 
   /// Returns an array of the sample formats supported by the codec.
   public var supportedSampleFormats: [AVSampleFormat]? {
-    values(cCodec.sample_fmts, until: AV_SAMPLE_FMT_NONE)?.map(AVSampleFormat.init(native:))
+    values(native.pointee.sample_fmts, until: AV_SAMPLE_FMT_NONE)?.map(AVSampleFormat.init(native:))
   }
 
   /// Returns an array of the channel layouts supported by the codec.
   public var supportedChannelLayouts: [AVChannelLayout]? {
-    values(cCodec.channel_layouts, until: 0)?.map { AVChannelLayout(rawValue: $0) }
+    values(native.pointee.channel_layouts, until: 0)?.map { AVChannelLayout(rawValue: $0) }
   }
 
   /// Maximum value for lowres supported by the decoder.
   public var maxLowres: UInt8 {
-    cCodec.max_lowres
+    native.pointee.max_lowres
   }
 
   /// A Boolean value indicating whether the codec is decoder.
   public var isDecoder: Bool {
-    av_codec_is_decoder(cCodecPtr) != 0
+    av_codec_is_decoder(native) != 0
   }
 
   /// A Boolean value indicating whether the codec is encoder.
   public var isEncoder: Bool {
-    av_codec_is_encoder(cCodecPtr) != 0
+    av_codec_is_encoder(native) != 0
   }
 
   /// Retrieve supported hardware configurations for a codec.
@@ -249,23 +247,20 @@ public struct AVCodec {
   /// all other values return `nil`.
   /// If the codec does not support any hardware configurations then it will always return `nil`.
   public func hwConfig(at index: Int) -> AVCodecHWConfig? {
-    if let ptr = avcodec_get_hw_config(cCodecPtr, Int32(index)) {
-      return AVCodecHWConfig(cConfigPtr: ptr)
-    }
-    return nil
+    avcodec_get_hw_config(native, Int32(index)).map(AVCodecHWConfig.init(native:))
   }
 
   /// Returns a name for the specified profile, if available.
   public func profileName(profile: Int32) -> String? {
-    String(cString: av_get_profile_name(cCodecPtr, profile))
+    String(cString: av_get_profile_name(native, profile))
   }
 
   /// Get all registered codecs.
   public static var supportedCodecs: [AVCodec] {
     var list = [AVCodec]()
     var state: UnsafeMutableRawPointer?
-    while let codecPtr = av_codec_iterate(&state) {
-      list.append(AVCodec(cCodecPtr: codecPtr.mutable))
+    while let ptr = av_codec_iterate(&state) {
+      list.append(AVCodec(native: ptr.mutable))
     }
     return list
   }
@@ -274,7 +269,6 @@ public struct AVCodec {
 // MARK: - AVCodec.Cap
 
 extension AVCodec {
-
   /// Codec capabilities
   public struct Cap: OptionSet {
     /// Decoder can use draw_horiz_band callback.
@@ -362,7 +356,6 @@ extension AVCodec {
 }
 
 extension AVCodec.Cap: CustomStringConvertible {
-
   public var description: String {
     var str = "["
     if contains(.drawHorizBand) { str += "drawHorizBand, " }
@@ -397,7 +390,7 @@ extension AVCodec: AVOptionSupport {
   public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows
     -> T
   {
-    var tmp = cCodec.priv_class
+    var tmp = native.pointee.priv_class
     return try withUnsafeMutablePointer(to: &tmp) { ptr in
       try body(ptr)
     }

@@ -68,3 +68,5 @@ fastlane/screenshots/**/*.png
 fastlane/test_output
 SwiftFFmpeg.xcodeproj/
 docs/
+scripts/*
+!scripts/*.sh

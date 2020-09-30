@@ -14,8 +14,7 @@ public final class AVImage {
   public let width: Int
   public let height: Int
   public let pixelFormat: AVPixelFormat
-
-  private var freeWhenDone = false
+  var owned = false
 
   /// Allocate an image with size and pixel format.
   ///
@@ -43,7 +42,7 @@ public final class AVImage {
     self.width = width
     self.height = height
     self.pixelFormat = pixelFormat
-    self.freeWhenDone = true
+    self.owned = true
   }
 
   /// Create an image from the given frame.
@@ -64,11 +63,11 @@ public final class AVImage {
     self.width = frame.width
     self.height = frame.height
     self.pixelFormat = frame.pixelFormat
-    self.freeWhenDone = false
+    self.owned = false
   }
 
   deinit {
-    if freeWhenDone {
+    if owned {
       av_freep(data.baseAddress)
     }
     data.deallocate()

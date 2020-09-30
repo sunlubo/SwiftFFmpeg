@@ -12,17 +12,17 @@ import CFFmpeg
 typealias CAVCodecParser = CFFmpeg.AVCodecParser
 
 public struct AVCodecParser {
-  let cParserPtr: UnsafeMutablePointer<CAVCodecParser>
-  var cParser: CAVCodecParser { cParserPtr.pointee }
+  var native: UnsafeMutablePointer<CAVCodecParser>
 
-  init(cParserPtr: UnsafeMutablePointer<CAVCodecParser>) {
-    self.cParserPtr = cParserPtr
+  init(native: UnsafeMutablePointer<CAVCodecParser>) {
+    self.native = native
   }
 
   /// several codec IDs are permitted
   public var codecIds: [AVCodecID] {
     let list = [
-      cParser.codec_ids.0, cParser.codec_ids.1, cParser.codec_ids.2, cParser.codec_ids.3,
+      native.pointee.codec_ids.0, native.pointee.codec_ids.1, native.pointee.codec_ids.2,
+      native.pointee.codec_ids.3,
     ]
     return list.map({ AVCodecID(UInt32($0)) }).filter({ $0 != .none })
   }
@@ -31,8 +31,8 @@ public struct AVCodecParser {
   public static var supportedParsers: [AVCodecParser] {
     var list = [AVCodecParser]()
     var state: UnsafeMutableRawPointer?
-    while let fmtPtr = av_parser_iterate(&state) {
-      list.append(AVCodecParser(cParserPtr: fmtPtr.mutable))
+    while let ptr = av_parser_iterate(&state) {
+      list.append(AVCodecParser(native: ptr.mutable))
     }
     return list
   }
@@ -49,18 +49,21 @@ public typealias AVCodecParserResult = (
 typealias CAVCodecParserContext = CFFmpeg.AVCodecParserContext
 
 public final class AVCodecParserContext {
-  private let codecContext: AVCodecContext
-  private let cContextPtr: UnsafeMutablePointer<CAVCodecParserContext>
-  private var cContext: CAVCodecParserContext { cContextPtr.pointee }
+  let native: UnsafeMutablePointer<CAVCodecParserContext>
+  let codecContext: AVCodecContext
 
   public init?(codecContext: AVCodecContext) {
     precondition(codecContext.codec != nil, "'AVCodecContext.codec' must not be nil.")
 
-    guard let ctxPtr = av_parser_init(Int32(codecContext.codec!.id.rawValue)) else {
+    guard let ptr = av_parser_init(Int32(codecContext.codec!.id.rawValue)) else {
       return nil
     }
+    self.native = ptr
     self.codecContext = codecContext
-    self.cContextPtr = ctxPtr
+  }
+
+  deinit {
+    av_parser_close(native)
   }
 
   /// Parse a packet.
@@ -85,8 +88,8 @@ public final class AVCodecParserContext {
     var buf: UnsafeMutablePointer<UInt8>?
     var bufSize: Int32 = 0
     let ret = av_parser_parse2(
-      cContextPtr,
-      codecContext.cContextPtr,
+      native,
+      codecContext.native,
       &buf,
       &bufSize,
       data,
@@ -98,9 +101,5 @@ public final class AVCodecParserContext {
     try throwIfFail(ret)
 
     return (buf, Int(bufSize), Int(ret))
-  }
-
-  deinit {
-    av_parser_close(cContextPtr)
   }
 }

@@ -27,11 +27,11 @@ public enum AVPictureType: UInt32 {
   /// BI type
   case BI
 
-  internal var native: CFFmpeg.AVPictureType {
+  var native: CFFmpeg.AVPictureType {
     CFFmpeg.AVPictureType(rawValue)
   }
 
-  internal init(native: CFFmpeg.AVPictureType) {
+  init(native: CFFmpeg.AVPictureType) {
     guard let type = AVPictureType(rawValue: native.rawValue) else {
       fatalError("Unknown picture type: \(native)")
     }
@@ -53,21 +53,20 @@ extension AVPictureType: CustomStringConvertible {
 public typealias AVComponentDescriptor = CFFmpeg.AVComponentDescriptor
 
 public struct AVPixelFormatDescriptor {
-  let cDescriptorPtr: UnsafePointer<AVPixFmtDescriptor>
-  var cDescriptor: AVPixFmtDescriptor { return cDescriptorPtr.pointee }
+  let native: UnsafePointer<AVPixFmtDescriptor>
 
-  init(cDescriptorPtr: UnsafePointer<AVPixFmtDescriptor>) {
-    self.cDescriptorPtr = cDescriptorPtr
+  init(native: UnsafePointer<AVPixFmtDescriptor>) {
+    self.native = native
   }
 
   /// The name of the pixel format descriptor.
   public var name: String {
-    String(cString: cDescriptor.name) ?? "unknown"
+    String(cString: native.pointee.name) ?? "unknown"
   }
 
   /// The number of components each pixel has, (1-4)
   public var numberOfComponents: Int {
-    Int(cDescriptor.nb_components)
+    Int(native.pointee.nb_components)
   }
 
   /// Amount to shift the luma width right to find the chroma width.
@@ -76,7 +75,7 @@ public struct AVPixelFormatDescriptor {
   /// The note above is needed to ensure rounding up.
   /// This value only refers to the chroma components.
   public var log2ChromaW: Int {
-    Int(cDescriptor.log2_chroma_w)
+    Int(native.pointee.log2_chroma_w)
   }
 
   /// Amount to shift the luma height right to find the chroma height.
@@ -85,7 +84,7 @@ public struct AVPixelFormatDescriptor {
   /// The note above is needed to ensure rounding up.
   /// This value only refers to the chroma components.
   public var log2ChromaH: Int {
-    Int(cDescriptor.log2_chroma_h)
+    Int(native.pointee.log2_chroma_h)
   }
 
   /// Parameters that describe how pixels are packed.
@@ -96,17 +95,17 @@ public struct AVPixelFormatDescriptor {
   ///
   /// If present, the Alpha channel is always the last component.
   public var componentDescriptors: [SwiftFFmpeg.AVComponentDescriptor] {
-    [cDescriptor.comp.0, cDescriptor.comp.1, cDescriptor.comp.2, cDescriptor.comp.3]
+    [native.pointee.comp.0, native.pointee.comp.1, native.pointee.comp.2, native.pointee.comp.3]
   }
 
   /// A wrapper around the C property for flags, containing AV_PIX_FMT_FLAG constants in a option set.
   public var flags: AVPixelFormatFlags {
-    AVPixelFormatFlags(rawValue: cDescriptor.flags)
+    AVPixelFormatFlags(rawValue: native.pointee.flags)
   }
 
   /// Alternative comma-separated names.
   public var alias: String? {
-    String(cString: cDescriptor.alias)
+    String(cString: native.pointee.alias)
   }
 
   /// Return the number of bits per pixel used by the pixel format
@@ -116,18 +115,18 @@ public struct AVPixelFormatDescriptor {
   /// used for storing the pixel information, that is padding bits are
   /// not counted.
   public var bitsPerPixel: Int {
-    Int(av_get_bits_per_pixel(cDescriptorPtr))
+    Int(av_get_bits_per_pixel(native))
   }
 
   /// Return the number of bits per pixel for the pixel format described by pixdesc, including any padding or unused bits.
   public var bitsPerPixelPadded: Int {
-    Int(av_get_padded_bits_per_pixel(cDescriptorPtr))
+    Int(av_get_padded_bits_per_pixel(native))
   }
 
   /// @return an AVPixelFormat id described by desc, or AV_PIX_FMT_NONE if desc
   /// is not a valid pointer to a pixel format descriptor.
   public var id: AVPixelFormat {
-    av_pix_fmt_desc_get_id(cDescriptorPtr)
+    av_pix_fmt_desc_get_id(native)
   }
 }
 

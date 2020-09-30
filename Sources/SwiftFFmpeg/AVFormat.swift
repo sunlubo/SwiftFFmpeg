@@ -12,63 +12,59 @@ import CFFmpeg
 typealias CAVInputFormat = CFFmpeg.AVInputFormat
 
 public struct AVInputFormat {
-  let cFormatPtr: UnsafeMutablePointer<CAVInputFormat>
-  var cFormat: CAVInputFormat { cFormatPtr.pointee }
+  var native: UnsafeMutablePointer<CAVInputFormat>
 
-  init(cFormatPtr: UnsafeMutablePointer<CAVInputFormat>) {
-    self.cFormatPtr = cFormatPtr
+  init(native: UnsafeMutablePointer<CAVInputFormat>) {
+    self.native = native
   }
 
   /// Find `AVInputFormat` based on the short name of the input format.
   ///
   /// - Parameter name: name of the input format
   public init?(name: String) {
-    guard let fmtPtr = av_find_input_format(name) else {
+    guard let ptr = av_find_input_format(name) else {
       return nil
     }
-    self.init(cFormatPtr: fmtPtr)
+    self.init(native: ptr)
   }
 
   /// A comma separated list of short names for the format.
   public var name: String {
-    String(cString: cFormat.name)
+    String(cString: native.pointee.name)
   }
 
   /// Descriptive name for the format, meant to be more human-readable than name.
   public var longName: String {
-    String(cString: cFormat.long_name)
+    String(cString: native.pointee.long_name)
   }
 
   public var flags: Flag {
-    get { Flag(rawValue: cFormat.flags) }
-    set { cFormatPtr.pointee.flags = newValue.rawValue }
+    get { Flag(rawValue: native.pointee.flags) }
+    set { native.pointee.flags = newValue.rawValue }
   }
 
   /// If extensions are defined, then no probe is done.
   /// You should usually not use extension format guessing because it is not reliable enough.
   public var extensions: String? {
-    String(cString: cFormat.extensions)
+    String(cString: native.pointee.extensions)
   }
 
   /// Comma-separated list of mime types.
   public var mimeType: String? {
-    String(cString: cFormat.mime_type)
+    String(cString: native.pointee.mime_type)
   }
 
   /// `AVClass` for the private context.
   public var privClass: AVClass? {
-    if let classPtr = cFormat.priv_class {
-      return AVClass(cClassPtr: classPtr)
-    }
-    return nil
+    native.pointee.priv_class.map(AVClass.init(native:))
   }
 
   /// Get all registered demuxers.
   public static var supportedFormats: [AVInputFormat] {
     var list = [AVInputFormat]()
     var state: UnsafeMutableRawPointer?
-    while let fmtPtr = av_demuxer_iterate(&state) {
-      list.append(AVInputFormat(cFormatPtr: fmtPtr.mutable))
+    while let ptr = av_demuxer_iterate(&state) {
+      list.append(AVInputFormat(native: ptr.mutable))
     }
     return list
   }
@@ -77,7 +73,6 @@ public struct AVInputFormat {
 // MARK: - AVInputFormat.Flag
 
 extension AVInputFormat {
-
   /// Flags used by `flags`.
   public struct Flag: OptionSet {
     /// Demuxer will use avio_open, no opened file should be provided by the caller.
@@ -105,8 +100,9 @@ extension AVInputFormat {
   }
 }
 
-extension AVInputFormat.Flag: CustomStringConvertible {
+// MARK: - AVInputFormat.Flag + CustomStringConvertible
 
+extension AVInputFormat.Flag: CustomStringConvertible {
   public var description: String {
     var str = "["
     if contains(.noFile) { str += "noFile, " }
@@ -126,13 +122,14 @@ extension AVInputFormat.Flag: CustomStringConvertible {
   }
 }
 
+// MARK: - AVInputFormat + AVOptionSupport
+
 extension AVInputFormat: AVOptionSupport {
 
   public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows
     -> T
   {
-    var tmp = cFormat.priv_class
-    return try withUnsafeMutablePointer(to: &tmp) { ptr in
+    try withUnsafeMutablePointer(to: &native.pointee.priv_class) { ptr in
       try body(ptr)
     }
   }
@@ -143,78 +140,74 @@ extension AVInputFormat: AVOptionSupport {
 typealias CAVOutputFormat = CFFmpeg.AVOutputFormat
 
 public struct AVOutputFormat {
-  let cFormatPtr: UnsafeMutablePointer<CAVOutputFormat>
-  var cFormat: CAVOutputFormat { cFormatPtr.pointee }
+  var native: UnsafeMutablePointer<CAVOutputFormat>
 
-  init(cFormatPtr: UnsafeMutablePointer<CAVOutputFormat>) {
-    self.cFormatPtr = cFormatPtr
+  init(native: UnsafeMutablePointer<CAVOutputFormat>) {
+    self.native = native
   }
 
   /// Find `AVOutputFormat` based on the short name of the output format.
   ///
   /// - Parameter name: name of the input format
   public init?(name: String) {
-    guard let fmtPtr = av_guess_format(name, nil, nil) else {
+    guard let ptr = av_guess_format(name, nil, nil) else {
       return nil
     }
-    self.init(cFormatPtr: fmtPtr)
+    self.init(native: ptr)
   }
 
   /// A comma separated list of short names for the format.
   public var name: String {
-    String(cString: cFormat.name)
+    String(cString: native.pointee.name)
   }
 
   /// Descriptive name for the format, meant to be more human-readable than name.
   public var longName: String {
-    String(cString: cFormat.long_name)
+    String(cString: native.pointee.long_name)
   }
 
   /// If extensions are defined, then no probe is done. You should usually not use extension format guessing
   /// because it is not reliable enough.
   public var extensions: String? {
-    String(cString: cFormat.extensions)
+    String(cString: native.pointee.extensions)
   }
 
   /// Comma-separated list of mime types.
   public var mimeType: String? {
-    String(cString: cFormat.mime_type)
+    String(cString: native.pointee.mime_type)
   }
 
   /// The default audio codec of the muxer.
   public var audioCodec: AVCodecID {
-    cFormat.audio_codec
+    native.pointee.audio_codec
   }
 
   /// The default video codec of the muxer.
   public var videoCodec: AVCodecID {
-    cFormat.video_codec
+    native.pointee.video_codec
   }
 
   /// The default subtitle codec of the muxer.
   public var subtitleCodec: AVCodecID {
-    cFormat.subtitle_codec
+    native.pointee.subtitle_codec
   }
 
   public var flags: Flag {
-    get { Flag(rawValue: cFormat.flags) }
-    set { cFormatPtr.pointee.flags = newValue.rawValue }
+    get { Flag(rawValue: native.pointee.flags) }
+    set { native.pointee.flags = newValue.rawValue }
   }
 
   /// `AVClass` for the private context.
   public var privClass: AVClass? {
-    if let classPtr = cFormat.priv_class {
-      return AVClass(cClassPtr: classPtr)
-    }
-    return nil
+    native.pointee.priv_class.map(AVClass.init(native:))
   }
 
   /// Get all registered muxers.
   public static var supportedFormats: [AVOutputFormat] {
     var list = [AVOutputFormat]()
     var state: UnsafeMutableRawPointer?
-    while let fmtPtr = av_muxer_iterate(&state) {
-      list.append(AVOutputFormat(cFormatPtr: fmtPtr.mutable))
+    while let ptr = av_muxer_iterate(&state) {
+      list.append(AVOutputFormat(native: ptr.mutable))
     }
     return list
   }
@@ -223,7 +216,6 @@ public struct AVOutputFormat {
 // MARK: - AVOutputFormat.Flag
 
 extension AVOutputFormat {
-
   /// Flags used by `flags`.
   public struct Flag: OptionSet {
     /// Muxer will use avio_open, no opened file should be provided by the caller.
@@ -255,8 +247,9 @@ extension AVOutputFormat {
   }
 }
 
-extension AVOutputFormat.Flag: CustomStringConvertible {
+// MARK: - AVOutputFormat.Flag + CustomStringConvertible
 
+extension AVOutputFormat.Flag: CustomStringConvertible {
   public var description: String {
     var str = "["
     if contains(.noFile) { str += "noFile, " }
@@ -277,13 +270,14 @@ extension AVOutputFormat.Flag: CustomStringConvertible {
   }
 }
 
+// MARK: - AVOutputFormat + AVOptionSupport
+
 extension AVOutputFormat: AVOptionSupport {
 
   public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows
     -> T
   {
-    var tmp = cFormat.priv_class
-    return try withUnsafeMutablePointer(to: &tmp) { ptr in
+    try withUnsafeMutablePointer(to: &native.pointee.priv_class) { ptr in
       try body(ptr)
     }
   }

@@ -48,14 +48,8 @@ private func process_output(frame: AVFrame) throws {
   let bps = frame.sampleFormat.bytesPerSample
   let planeSize = bps * frame.sampleCount * (frame.sampleFormat.isPlanar ? 1 : channels)
   for i in 0..<planes {
-    let checksum = AVHash.calculateMD5(
-      for: UnsafeBufferPointer(start: frame.extendedData[i], count: planeSize))
-    var str = ""
-    for i in 0..<16 {
-      str += String(format: "%02X", checksum[i])
-    }
-    print("plane \(i): 0x\(str)")
-    checksum.deallocate()
+    let checksum = UnsafeBufferPointer(start: frame.extendedData[i], count: planeSize).md5
+    print("plane \(i): 0x\(checksum)")
   }
 }
 

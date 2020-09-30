@@ -51,11 +51,11 @@ public enum AVSampleFormat: Int32 {
   /// signed 64 bits, planar
   case int64Planar  // AV_SAMPLE_FMT_S64P
 
-  internal var native: CFFmpeg.AVSampleFormat {
+  var native: CFFmpeg.AVSampleFormat {
     CFFmpeg.AVSampleFormat(rawValue)
   }
 
-  internal init(native: CFFmpeg.AVSampleFormat) {
+  init(native: CFFmpeg.AVSampleFormat) {
     guard let format = AVSampleFormat(rawValue: native.rawValue) else {
       fatalError("Unknown sample format: \(native)")
     }
@@ -112,7 +112,6 @@ public enum AVSampleFormat: Int32 {
 }
 
 extension AVSampleFormat: CustomStringConvertible {
-
   public var description: String {
     name ?? "unknown"
   }

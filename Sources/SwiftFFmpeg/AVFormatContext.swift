@@ -13,21 +13,52 @@ typealias CAVFormatContext = CFFmpeg.AVFormatContext
 
 /// Format I/O context.
 public final class AVFormatContext {
-  var cContextPtr: UnsafeMutablePointer<CAVFormatContext>!
-  var cContext: CAVFormatContext { cContextPtr.pointee }
-
-  private var ioContext: AVIOContext?
-
-  init(cContextPtr: UnsafeMutablePointer<CAVFormatContext>) {
-    self.cContextPtr = cContextPtr
-  }
+  var native: UnsafeMutablePointer<CAVFormatContext>!
+  var ioContext: AVIOContext?
 
   /// Create an `AVFormatContext`.
   public init() {
-    guard let ctxPtr = avformat_alloc_context() else {
-      abort("avformat_alloc_context")
-    }
-    self.cContextPtr = ctxPtr
+    self.native = avformat_alloc_context()
+  }
+
+  /// Open an input stream and read the header. The codecs are not opened.
+  ///
+  /// - Parameters:
+  ///   - url: URL of the stream to open.
+  ///   - format: If non-nil, this parameter forces a specific input format. Otherwise the format is autodetected.
+  ///   - options: A dictionary filled with `AVFormatContext` and demuxer-private options.
+  /// - Throws: AVError
+  public init(
+    url: String,
+    format: AVInputFormat? = nil,
+    options: [String: String]? = nil
+  ) throws {
+    var pm: OpaquePointer? = options?.avDict
+    defer { av_dict_free(&pm) }
+
+    try throwIfFail(avformat_open_input(&native, url, format?.native, &pm))
+
+    dumpUnrecognizedOptions(pm)
+  }
+
+  /// Allocate an `AVFormatContext` for an output format.
+  ///
+  /// - Parameters:
+  ///   - format: the format to use for allocating the context, if `nil` formatName and filename are used instead
+  ///   - formatName: the name of output format to use for allocating the context, if `nil` filename is used instead
+  ///   - filename: the name of the filename to use for allocating the context, may be `nil`
+  /// - Throws: AVError
+  public init(
+    format: AVOutputFormat?,
+    formatName: String? = nil,
+    filename: String? = nil
+  ) throws {
+    try throwIfFail(
+      avformat_alloc_output_context2(&native, format?.native, formatName, filename))
+  }
+
+  deinit {
+    avformat_close_input(&native)
   }
 
   /// Input or output URL.
@@ -37,8 +68,8 @@ public final class AVFormatContext {
   /// - muxing: May be set by the caller before calling `writeHeader(options:)` to a string.
   ///   Set to an empty string if it was `nil` in `writeHeader(options:)`.
   public var url: String? {
-    get { String(cString: cContext.url) }
-    set { cContextPtr.pointee.url = av_strdup(newValue) }
+    get { String(cString: native.pointee.url) }
+    set { native.pointee.url = av_strdup(newValue) }
   }
 
   /// I/O context.
@@ -47,21 +78,16 @@ public final class AVFormatContext {
   ///   or set by `openInput(_ url:format:options:)`.
   /// - muxing: Set by the user before `writeHeader(options:)`. The caller must take care of closing the IO context.
   public var pb: AVIOContext? {
-    get {
-      if let ctxPtr = cContext.pb {
-        return AVIOContext(cContextPtr: ctxPtr)
-      }
-      return nil
-    }
+    get { native.pointee.pb.map(AVIOContext.init(native:)) }
     set {
       ioContext = newValue
-      return cContextPtr.pointee.pb = newValue?.cContextPtr
+      return native.pointee.pb = newValue?.native
     }
   }
 
   /// The number of streams in the file.
   public var streamCount: Int {
-    Int(cContext.nb_streams)
+    Int(native.pointee.nb_streams)
   }
 
   /// The duration field can be estimated through various ways, and this field can be used
@@ -70,7 +96,7 @@ public final class AVFormatContext {
   /// - encoding: unused
   /// - decoding: Read by user
   public var durationEstimationMethod: AVDurationEstimationMethod {
-    AVDurationEstimationMethod(rawValue: cContext.duration_estimation_method)
+    AVDurationEstimationMethod(rawValue: native.pointee.duration_estimation_method)
   }
 
   /// A list of all streams in the file. New streams are created with `addStream(codec:)`.
@@ -81,23 +107,32 @@ public final class AVFormatContext {
   public var streams: [AVStream] {
     var list = [AVStream]()
     for i in 0..<streamCount {
-      let stream = cContext.streams.advanced(by: i).pointee!
-      list.append(AVStream(cStreamPtr: stream))
+      let stream = native.pointee.streams.advanced(by: i).pointee!
+      list.append(AVStream(native: stream))
     }
     return list
   }
 
   /// The first video stream in the file.
+  @available(
+    *, deprecated, message: "Use AVStream.streams"
+  )
   public var videoStream: AVStream? {
     streams.first { $0.mediaType == .video }
   }
 
   /// The first audio stream in the file.
+  @available(
+    *, deprecated, message: "Use AVStream.streams"
+  )
   public var audioStream: AVStream? {
     streams.first { $0.mediaType == .audio }
   }
 
   /// The first subtitle stream in the file.
+  @available(
+    *, deprecated, message: "Use AVStream.streams"
+  )
   public var subtitleStream: AVStream? {
     streams.first { $0.mediaType == .subtitle }
   }
@@ -107,16 +142,48 @@ public final class AVFormatContext {
   /// - demuxing: Set by the caller before `openInput(_ url:format:options:)`.
   /// - muxing: Set by the caller before `writeHeader(options:)`.
   public var flags: Flag {
-    get { Flag(rawValue: cContext.flags) }
-    set { cContextPtr.pointee.flags = newValue.rawValue }
+    get { Flag(rawValue: native.pointee.flags) }
+    set { native.pointee.flags = newValue.rawValue }
   }
 
   /// Maximum size of the data read from input for determining the input container format.
   ///
   /// Demuxing only, set by the caller before avformat_open_input().
   public var probeSize: Int64 {
-    get { cContext.probesize }
-    set { cContextPtr.pointee.probesize = newValue }
+    get { native.pointee.probesize }
+    set { native.pointee.probesize = newValue }
+  }
+
+  /// When muxing, chapters are normally written in the file header,
+  /// so nb_chapters should normally be initialized before `writeHeader`
+  /// is called. Some muxers (e.g. mov and mkv) can also write chapters
+  /// in the trailer. To write chapters in the trailer, nb_chapters
+  /// must be zero when `writeHeader` is called and non-zero when
+  /// `writeTrailer` is called.
+  ///
+  /// - muxing: set by user
+  /// - demuxing: set by libavformat
+  public var chapters: [AVChapter] {
+    get {
+      var list = [AVChapter]()
+      for i in 0..<native.pointee.nb_chapters {
+        let chapter = native.pointee.chapters.advanced(by: Int(i)).pointee!
+        list.append(AVChapter(native: chapter))
+      }
+      return list
+    }
+    set {
+      let cchapters = UnsafeMutablePointer<UnsafeMutablePointer<CAVChapter>?>.allocate(
+        capacity: newValue.count
+      )
+      for (index, chapter) in newValue.enumerated() {
+        let cchapter = UnsafeMutablePointer<CAVChapter>.allocate(capacity: 1)
+        cchapter.initialize(to: chapter.native)
+        cchapters.advanced(by: index).pointee = cchapter
+      }
+      native.pointee.chapters = cchapters
+      native.pointee.nb_chapters = UInt32(newValue.count)
+    }
   }
 
   /// Metadata that applies to the whole file.
@@ -127,13 +194,13 @@ public final class AVFormatContext {
     get {
       var dict = [String: String]()
       var prev: UnsafeMutablePointer<AVDictionaryEntry>?
-      while let tag = av_dict_get(cContext.metadata, "", prev, AV_DICT_IGNORE_SUFFIX) {
+      while let tag = av_dict_get(native.pointee.metadata, "", prev, AV_DICT_IGNORE_SUFFIX) {
         dict[String(cString: tag.pointee.key)] = String(cString: tag.pointee.value)
         prev = tag
       }
       return dict
     }
-    set { cContextPtr.pointee.metadata = newValue.toAVDict() }
+    set { native.pointee.metadata = newValue.avDict }
   }
 
   /// Custom interrupt callbacks for the I/O layer.
@@ -142,14 +209,17 @@ public final class AVFormatContext {
   /// - muxing: Set by the user before `writeHeader(options:)` (mainly useful for `AVOutputFormat.Flag.noFile` formats).
   ///   The callback should also be passed to `avio_open2()` if it's used to open the file.
   public var interruptCallback: AVIOInterruptCallback {
-    get { cContext.interrupt_callback }
-    set { cContextPtr.pointee.interrupt_callback = newValue }
+    get { native.pointee.interrupt_callback }
+    set { native.pointee.interrupt_callback = newValue }
   }
 
   /// The first stream index for the specified media type.
   ///
   /// - Parameter mediaType: media type
   /// - Returns: stream index if it exists
+  @available(
+    *, deprecated, message: "Use AVStream.streams"
+  )
   public func streamIndex(for mediaType: AVMediaType) -> Int? {
     if let index = streams.firstIndex(where: { $0.codecParameters.mediaType == mediaType }) {
       return index
@@ -164,11 +234,7 @@ public final class AVFormatContext {
   ///   - url: the URL to print, such as source or destination file
   ///   - isOutput: Select whether the specified context is an input(false) or output(true).
   public func dumpFormat(url: String? = nil, isOutput: Bool = false) {
-    av_dump_format(cContextPtr, 0, url ?? self.url, isOutput ? 1 : 0)
-  }
-
-  deinit {
-    avformat_close_input(&cContextPtr)
+    av_dump_format(native, 0, url ?? self.url, isOutput ? 1 : 0)
   }
 }
 
@@ -191,7 +257,6 @@ public struct AVDurationEstimationMethod: Equatable {
 // MARK: - AVFormatContext.Flag
 
 extension AVFormatContext {
-
   /// Flags used to modify the (de)muxer behaviour.
   public struct Flag: OptionSet {
     /// Generate missing pts even if it requires parsing future frames.
@@ -239,7 +304,6 @@ extension AVFormatContext {
 }
 
 extension AVFormatContext.Flag: CustomStringConvertible {
-
   public var description: String {
     var str = "["
     if contains(.genPTS) { str += "genPTS, " }
@@ -269,61 +333,30 @@ extension AVFormatContext.Flag: CustomStringConvertible {
 // MARK: - Demuxing
 
 extension AVFormatContext {
-
-  /// Open an input stream and read the header. The codecs are not opened.
-  ///
-  /// - Parameters:
-  ///   - url: URL of the stream to open.
-  ///   - format: If non-nil, this parameter forces a specific input format. Otherwise the format is autodetected.
-  ///   - options: A dictionary filled with `AVFormatContext` and demuxer-private options.
-  /// - Throws: AVError
-  public convenience init(
-    url: String,
-    format: AVInputFormat? = nil,
-    options: [String: String]? = nil
-  ) throws {
-    var pm: OpaquePointer? = options?.toAVDict()
-    defer { av_dict_free(&pm) }
-
-    var ctxPtr: UnsafeMutablePointer<CAVFormatContext>?
-    try throwIfFail(avformat_open_input(&ctxPtr, url, format?.cFormatPtr, &pm))
-    self.init(cContextPtr: ctxPtr!)
-
-    dumpUnrecognizedOptions(pm)
-  }
-
   /// The input container format.
   public var inputFormat: AVInputFormat? {
-    get {
-      if let fmtPtr = cContext.iformat {
-        return AVInputFormat(cFormatPtr: fmtPtr)
-      }
-      return nil
-    }
-    set { cContextPtr.pointee.iformat = newValue?.cFormatPtr }
+    get { native.pointee.iformat.map(AVInputFormat.init(native:)) }
+    set { native.pointee.iformat = newValue?.native }
   }
 
   /// Position of the first frame of the component, in `AVTimestamp.timebase` fractional seconds.
   public var startTime: Int64 {
-    cContext.start_time
+    native.pointee.start_time
   }
 
   /// Duration of the stream, in `AVTimestamp.timebase` fractional seconds.
   public var duration: Int64 {
-    cContext.duration
+    native.pointee.duration
   }
 
   /// Total stream bitrate in bit/s, 0 if not available.
   public var bitRate: Int64 {
-    cContext.bit_rate
+    native.pointee.bit_rate
   }
 
   /// The size of the file.
   public var size: Int64 {
-    if let pb = pb {
-      return (try? pb.size()) ?? 0
-    }
-    return 0
+    (try? pb?.size()) ?? 0
   }
 
   /// Open an input stream and read the header.
@@ -338,10 +371,10 @@ extension AVFormatContext {
     format: AVInputFormat? = nil,
     options: [String: String]? = nil
   ) throws {
-    var pm: OpaquePointer? = options?.toAVDict()
+    var pm: OpaquePointer? = options?.avDict
     defer { av_dict_free(&pm) }
 
-    try throwIfFail(avformat_open_input(&cContextPtr, url, format?.cFormatPtr, &pm))
+    try throwIfFail(avformat_open_input(&native, url, format?.native, &pm))
 
     dumpUnrecognizedOptions(pm)
   }
@@ -364,16 +397,16 @@ extension AVFormatContext {
     if let options = options, !options.isEmpty {
       var pms = [OpaquePointer?](repeating: nil, count: streamCount)
       for (i, opt) in options.enumerated() where i < streamCount {
-        pms[i] = opt.toAVDict()
+        pms[i] = opt.avDict
       }
-      try throwIfFail(avformat_find_stream_info(cContextPtr, &pms))
+      try throwIfFail(avformat_find_stream_info(native, &pms))
       pms.forEach { pm in
         var pm = pm
         dumpUnrecognizedOptions(pm)
         av_dict_free(&pm)
       }
     } else {
-      try throwIfFail(avformat_find_stream_info(cContextPtr, nil))
+      try throwIfFail(avformat_find_stream_info(native, nil))
     }
   }
 
@@ -390,7 +423,7 @@ extension AVFormatContext {
     relatedStreamIndex: Int = -1
   ) -> Int? {
     let ret = av_find_best_stream(
-      cContextPtr, type.native, Int32(wantedStreamIndex), Int32(relatedStreamIndex), nil, 0)
+      native, type.native, Int32(wantedStreamIndex), Int32(relatedStreamIndex), nil, 0)
     return ret >= 0 ? Int(ret) : nil
   }
 
@@ -409,7 +442,7 @@ extension AVFormatContext {
   ///   - frame: the frame with the aspect ratio to be determined
   /// - Returns: the guessed (valid) sample aspect ratio, 0/1 if no idea
   public func guessSampleAspectRatio(stream: AVStream?, frame: AVFrame? = nil) -> AVRational {
-    av_guess_sample_aspect_ratio(cContextPtr, stream?.cStreamPtr, frame?.cFramePtr)
+    av_guess_sample_aspect_ratio(native, stream?.native, frame?.native)
   }
 
   /// Guess the frame rate, based on both the container and codec information.
@@ -419,7 +452,7 @@ extension AVFormatContext {
   ///   - frame: the frame for which the frame rate should be determined
   /// - Returns: the guessed (valid) frame rate, 0/1 if no idea
   public func guessFrameRate(stream: AVStream, frame: AVFrame? = nil) -> AVRational {
-    av_guess_frame_rate(cContextPtr, stream.cStreamPtr, frame?.cFramePtr)
+    av_guess_frame_rate(native, stream.native, frame?.native)
   }
 
   /// Return the next frame of a stream.
@@ -432,7 +465,7 @@ extension AVFormatContext {
   /// - Parameter packet: the packet used to store data
   /// - Throws: AVError
   public func readFrame(into packet: AVPacket) throws {
-    try throwIfFail(av_read_frame(cContextPtr, packet.cPacketPtr))
+    try throwIfFail(av_read_frame(native, packet.native))
   }
 
   /// Seek to the keyframe at timestamp.
@@ -445,7 +478,7 @@ extension AVFormatContext {
   ///   - flags: flags which select direction and seeking mode
   /// - Throws: AVError
   public func seekFrame(to timestamp: Int64, streamIndex: Int, flags: SeekFlag) throws {
-    try throwIfFail(av_seek_frame(cContextPtr, Int32(streamIndex), timestamp, flags.rawValue))
+    try throwIfFail(av_seek_frame(native, Int32(streamIndex), timestamp, flags.rawValue))
   }
 
   /// Discard all internally buffered data. This can be useful when dealing with
@@ -460,14 +493,14 @@ extension AVFormatContext {
   /// This does not flush the `AVIOContext` (`pb`). If necessary, call `pb.flush`
   /// before calling this function.
   public func flush() {
-    avformat_flush(cContextPtr)
+    avformat_flush(native)
   }
 
   /// Start playing a network-based stream (e.g. RTSP stream) at the current position.
   ///
   /// - Throws: AVError
   public func play() throws {
-    try throwIfFail(av_read_play(cContextPtr))
+    try throwIfFail(av_read_play(native))
   }
 
   /// Pause a network-based stream (e.g. RTSP stream).
@@ -476,14 +509,13 @@ extension AVFormatContext {
   ///
   /// - Throws: AVError
   public func pause() throws {
-    try throwIfFail(av_read_pause(cContextPtr))
+    try throwIfFail(av_read_pause(native))
   }
 }
 
 // MARK: - AVFormatContext.SeekFlag
 
 extension AVFormatContext {
-
   public struct SeekFlag: OptionSet {
     /// seek backward
     public static let backward = SeekFlag(rawValue: AVSEEK_FLAG_BACKWARD)
@@ -503,34 +535,10 @@ extension AVFormatContext {
 // MARK: - Muxing
 
 extension AVFormatContext {
-
-  /// Allocate an `AVFormatContext` for an output format.
-  ///
-  /// - Parameters:
-  ///   - format: the format to use for allocating the context, if `nil` formatName and filename are used instead
-  ///   - formatName: the name of output format to use for allocating the context, if `nil` filename is used instead
-  ///   - filename: the name of the filename to use for allocating the context, may be `nil`
-  /// - Throws: AVError
-  public convenience init(
-    format: AVOutputFormat?,
-    formatName: String? = nil,
-    filename: String? = nil
-  ) throws {
-    var ctxPtr: UnsafeMutablePointer<CAVFormatContext>?
-    try throwIfFail(
-      avformat_alloc_output_context2(&ctxPtr, format?.cFormatPtr, formatName, filename))
-    self.init(cContextPtr: ctxPtr!)
-  }
-
   /// The output container format.
   public var outputFormat: AVOutputFormat? {
-    get {
-      if let fmtPtr = cContext.oformat {
-        return AVOutputFormat(cFormatPtr: fmtPtr)
-      }
-      return nil
-    }
-    set { cContextPtr.pointee.oformat = newValue?.cFormatPtr }
+    get { native.pointee.oformat.map(AVOutputFormat.init(native:)) }
+    set { native.pointee.oformat = newValue?.native }
   }
 
   /// Create and initialize a `AVIOContext` for accessing the resource indicated by url.
@@ -550,10 +558,7 @@ extension AVFormatContext {
   ///   so codec should be provided if it is known.
   /// - Returns: newly created stream or `nil` on error.
   public func addStream(codec: AVCodec? = nil) -> AVStream? {
-    if let streamPtr = avformat_new_stream(cContextPtr, codec?.cCodecPtr) {
-      return AVStream(cStreamPtr: streamPtr)
-    }
-    return nil
+    avformat_new_stream(native, codec?.native).map(AVStream.init(native:))
   }
 
   /// Allocate the stream private data and write the stream header to an output media file.
@@ -564,10 +569,10 @@ extension AVFormatContext {
   /// - Parameter options: the `AVFormatContext` and muxer-private options
   /// - Throws: AVError
   public func writeHeader(options: [String: String]? = nil) throws {
-    var pm: OpaquePointer? = options?.toAVDict()
+    var pm = options?.avDict
     defer { av_dict_free(&pm) }
 
-    try throwIfFail(avformat_write_header(cContextPtr, &pm))
+    try throwIfFail(avformat_write_header(native, &pm))
 
     dumpUnrecognizedOptions(pm)
   }
@@ -599,7 +604,7 @@ extension AVFormatContext {
   ///   `AVPacket.duration` should also be set if known.
   /// - Throws: AVError
   public func writeFrame(_ pkt: AVPacket?) throws {
-    try throwIfFail(av_write_frame(cContextPtr, pkt?.cPacketPtr))
+    try throwIfFail(av_write_frame(native, pkt?.native))
   }
 
   /// Write a packet to an output media file ensuring correct interleaving.
@@ -631,7 +636,7 @@ extension AVFormatContext {
   /// - Throws: AVError
   /// - SeeAlso: writeFrame
   public func interleavedWriteFrame(_ pkt: AVPacket?) throws {
-    try throwIfFail(av_interleaved_write_frame(cContextPtr, pkt?.cPacketPtr))
+    try throwIfFail(av_interleaved_write_frame(native, pkt?.native))
   }
 
   /// Write the stream trailer to an output media file and free the file private data.
@@ -640,16 +645,16 @@ extension AVFormatContext {
   ///
   /// - Throws: AVError
   public func writeTrailer() throws {
-    try throwIfFail(av_write_trailer(cContextPtr))
+    try throwIfFail(av_write_trailer(native))
   }
 }
 
 extension AVFormatContext: AVClassSupport, AVOptionSupport {
-  public static let `class` = AVClass(cClassPtr: avformat_get_class())
+  public static let `class` = AVClass(native: avformat_get_class())
 
   public func withUnsafeObjectPointer<T>(
     _ body: (UnsafeMutableRawPointer) throws -> T
   ) rethrows -> T {
-    try body(cContextPtr)
+    try body(native)
   }
 }

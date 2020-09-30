@@ -55,9 +55,9 @@ func filtering_audio() throws {
   let buffersink = AVFilter(name: "abuffersink")!
   let inputs = AVFilterInOut()
   let outputs = AVFilterInOut()
-  let sampleFmts = [AVSampleFormat.int16, AVSampleFormat.none]
-  let channelLayouts = [AVChannelLayout.CHL_MONO, AVChannelLayout.none]
-  let sampleRates = [8000, -1] as [CInt]
+  let sampleFmts = [AVSampleFormat.int16]
+  let channelLayouts = [AVChannelLayout.CHL_MONO]
+  let sampleRates = [8000] as [CInt]
   let filterGraph = AVFilterGraph()
 
   // buffer audio source: the decoded frames from the decoder will be inserted here.

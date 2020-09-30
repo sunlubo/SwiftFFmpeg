@@ -10,14 +10,35 @@ import CFFmpeg
 // MARK: - SwsContext
 
 public final class SwsContext {
-  let cContextPtr: OpaquePointer
+  /// Returns a Boolean value indicating whether the pixel format is a supported input format.
+  ///
+  /// - Parameter pixelFormat: pixel format
+  /// - Returns: `true` if it is supported, or `false` otherwise.
+  public static func isSupportedInput(_ pixelFormat: AVPixelFormat) -> Bool {
+    sws_isSupportedInput(pixelFormat) > 0
+  }
 
-  /// Create an empty `SwsContext`.
+  /// Returns a Boolean value indicating whether the pixel format is a supported output format.
+  ///
+  /// - Parameter pixelFormat: pixel format
+  /// - Returns: `true` if it is supported, or `false` otherwise.
+  public static func isSupportedOutput(_ pixelFormat: AVPixelFormat) -> Bool {
+    sws_isSupportedOutput(pixelFormat) > 0
+  }
+
+  /// Returns a Boolean value indicating whether an endianness conversion for pixel format is supported.
+  ///
+  /// - Parameter pixelFormat: pixel format
+  /// - Returns: `true` if it is supported, or `false` otherwise.
+  public static func isSupportedEndiannessConversion(_ pixelFormat: AVPixelFormat) -> Bool {
+    sws_isSupportedEndiannessConversion(pixelFormat) > 0
+  }
+
+  let native: OpaquePointer
+
+  /// Creates an empty context.
   public init() {
-    guard let ctxPtr = sws_alloc_context() else {
-      abort("sws_alloc_context")
-    }
-    self.cContextPtr = ctxPtr
+    self.native = sws_alloc_context()
   }
 
   /// Create an `SwsContext` use the given parameters.
@@ -46,7 +67,11 @@ public final class SwsContext {
     else {
       return nil
     }
-    cContextPtr = ptr
+    native = ptr
+  }
+
+  deinit {
+    sws_freeContext(native)
   }
 
   public func setColorspaceDetails(
@@ -54,7 +79,7 @@ public final class SwsContext {
     destinationColorspace: SWSColorspace, destinationRange: SWSColorRange
   ) {
     sws_setColorspaceDetails(
-      cContextPtr,
+      native,
       sourceColorspace.coefficients,
       sourceRange.rawValue,
       destinationColorspace.coefficients,
@@ -91,42 +116,14 @@ public final class SwsContext {
     dstStride: UnsafePointer<Int32>
   ) throws -> Int {
     let ret = sws_scale(
-      cContextPtr, src, srcStride, Int32(srcSliceY), Int32(srcSliceHeight), dst, dstStride)
+      native, src, srcStride, Int32(srcSliceY), Int32(srcSliceHeight), dst, dstStride)
     try throwIfFail(ret)
     return Int(ret)
-  }
-
-  /// Returns a Boolean value indicating whether the pixel format is a supported input format.
-  ///
-  /// - Parameter pixFmt: pixel format
-  /// - Returns: `true` if it is supported; otherwise `false`.
-  public static func supportsInput(_ pixFmt: AVPixelFormat) -> Bool {
-    sws_isSupportedInput(pixFmt) > 0
-  }
-
-  /// Returns a Boolean value indicating whether the pixel format is a supported output format.
-  ///
-  /// - Parameter pixFmt: pixel format
-  /// - Returns: `true` if it is supported; otherwise `false`.
-  public static func supportsOutput(_ pixFmt: AVPixelFormat) -> Bool {
-    sws_isSupportedOutput(pixFmt) > 0
-  }
-
-  /// Returns a Boolean value indicating whether an endianness conversion is supported.
-  ///
-  /// - Parameter pixFmt: pixel format
-  /// - Returns: `true` if it is supported; otherwise `false`.
-  public static func supportsEndiannessConversion(_ pixFmt: AVPixelFormat) -> Bool {
-    sws_isSupportedEndiannessConversion(pixFmt) > 0
-  }
-
-  deinit {
-    sws_freeContext(cContextPtr)
   }
 }
 
 extension SwsContext {
-
+  ///
   public struct Flag: OptionSet {
     /// Select fast bilinear scaling algorithm.
     public static let fastBilinear = Flag(rawValue: SWS_FAST_BILINEAR)
@@ -197,12 +194,12 @@ extension SwsContext.Flag: CustomStringConvertible {
 }
 
 extension SwsContext: AVClassSupport, AVOptionSupport {
-  public static let `class` = AVClass(cClassPtr: sws_get_class())
+  public static let `class` = AVClass(native: sws_get_class())
 
   public func withUnsafeObjectPointer<T>(
     _ body: (UnsafeMutableRawPointer) throws -> T
   ) rethrows -> T {
-    try body(UnsafeMutableRawPointer(cContextPtr))
+    try body(UnsafeMutableRawPointer(native))
   }
 }
 

@@ -161,9 +161,9 @@ public enum AVDevice {
   public static var supportedAudioInputDevices: [AVInputFormat] {
     var list = [AVInputFormat]()
     var prev: UnsafeMutablePointer<CAVInputFormat>?
-    while let fmtPtr = av_input_audio_device_next(prev) {
-      list.append(AVInputFormat(cFormatPtr: fmtPtr))
-      prev = fmtPtr
+    while let ptr = av_input_audio_device_next(prev) {
+      list.append(AVInputFormat(native: ptr))
+      prev = ptr
     }
     return list
   }
@@ -172,9 +172,9 @@ public enum AVDevice {
   public static var supportedVideoInputDevices: [AVInputFormat] {
     var list = [AVInputFormat]()
     var prev: UnsafeMutablePointer<CAVInputFormat>?
-    while let fmtPtr = av_input_video_device_next(prev) {
-      list.append(AVInputFormat(cFormatPtr: fmtPtr))
-      prev = fmtPtr
+    while let ptr = av_input_video_device_next(prev) {
+      list.append(AVInputFormat(native: ptr))
+      prev = ptr
     }
     return list
   }
@@ -183,9 +183,9 @@ public enum AVDevice {
   public static var supportedAudioOutputDevices: [AVOutputFormat] {
     var list = [AVOutputFormat]()
     var prev: UnsafeMutablePointer<CAVOutputFormat>?
-    while let fmtPtr = av_output_audio_device_next(prev) {
-      list.append(AVOutputFormat(cFormatPtr: fmtPtr))
-      prev = fmtPtr
+    while let ptr = av_output_audio_device_next(prev) {
+      list.append(AVOutputFormat(native: ptr))
+      prev = ptr
     }
     return list
   }
@@ -194,9 +194,9 @@ public enum AVDevice {
   public static var supportedVideoOutputDevices: [AVOutputFormat] {
     var list = [AVOutputFormat]()
     var prev: UnsafeMutablePointer<CAVOutputFormat>?
-    while let fmtPtr = av_output_video_device_next(prev) {
-      list.append(AVOutputFormat(cFormatPtr: fmtPtr))
-      prev = fmtPtr
+    while let ptr = av_output_video_device_next(prev) {
+      list.append(AVOutputFormat(native: ptr))
+      prev = ptr
     }
     return list
   }
@@ -217,7 +217,7 @@ extension AVFormatContext {
     data: UnsafeMutableRawBufferPointer?
   ) throws {
     try throwIfFail(
-      avdevice_app_to_dev_control_message(cContextPtr, type, data?.baseAddress, data?.count ?? 0)
+      avdevice_app_to_dev_control_message(native, type, data?.baseAddress, data?.count ?? 0)
     )
   }
 
@@ -234,7 +234,7 @@ extension AVFormatContext {
     data: UnsafeMutableRawBufferPointer?
   ) throws {
     try throwIfFail(
-      avdevice_dev_to_app_control_message(cContextPtr, type, data?.baseAddress, data?.count ?? 0)
+      avdevice_dev_to_app_control_message(native, type, data?.baseAddress, data?.count ?? 0)
     )
   }
 }
@@ -248,9 +248,8 @@ typealias CAVDeviceCapabilitiesQuery = CFFmpeg.AVDeviceCapabilitiesQuery
 /// It is used by devices in conjunction with `av_device_capabilities` `AVOption` table
 /// to implement capabilities probing API based on `AVOption` API. Should not be used directly.
 public final class AVDeviceCapabilitiesQuery {
-  private let formatContext: AVFormatContext
-  private let cQueryPtr: UnsafeMutablePointer<CAVDeviceCapabilitiesQuery>
-  private var cQuery: CAVDeviceCapabilitiesQuery { cQueryPtr.pointee }
+  var native: UnsafeMutablePointer<CAVDeviceCapabilitiesQuery>!
+  let formatContext: AVFormatContext
 
   /// Initialize capabilities probing API based on `AVOption` API.
   ///
@@ -262,63 +261,60 @@ public final class AVDeviceCapabilitiesQuery {
   ///     or at any other place that affects device-private options.
   /// - Throws: AVError
   public init(formatContext: AVFormatContext, options: [String: String]? = nil) throws {
-    var pm: OpaquePointer? = options?.toAVDict()
+    var pm: OpaquePointer? = options?.avDict
     defer { av_dict_free(&pm) }
 
-    var queryPtr: UnsafeMutablePointer<CAVDeviceCapabilitiesQuery>?
-    let ret = avdevice_capabilities_create(&queryPtr, formatContext.cContextPtr, &pm)
+    let ret = avdevice_capabilities_create(&native, formatContext.native, &pm)
     try throwIfFail(ret)
     self.formatContext = formatContext
-    self.cQueryPtr = queryPtr!
-  }
-
-  public var codec: AVCodecID {
-    cQuery.codec
-  }
-
-  public var sampleFormat: AVCodecID {
-    cQuery.codec
-  }
-
-  public var sampleRate: Int {
-    Int(cQuery.sample_rate)
-  }
-
-  public var channelCount: Int {
-    Int(cQuery.channels)
-  }
-
-  public var channelLayout: AVChannelLayout {
-    AVChannelLayout(rawValue: UInt64(cQuery.channel_layout))
-  }
-
-  public var pixelFormat: AVCodecID {
-    cQuery.codec
-  }
-
-  public var windowWidth: Int {
-    Int(cQuery.window_width)
-  }
-
-  public var windowHeight: Int {
-    Int(cQuery.window_height)
-  }
-
-  public var frameWidth: Int {
-    Int(cQuery.frame_width)
-  }
-
-  public var frameHeight: Int {
-    Int(cQuery.frame_height)
-  }
-
-  public var fps: AVRational {
-    cQuery.fps
   }
 
   deinit {
-    var pb: UnsafeMutablePointer<CAVDeviceCapabilitiesQuery>? = cQueryPtr
-    avdevice_capabilities_free(&pb, formatContext.cContextPtr)
+    avdevice_capabilities_free(&native, formatContext.native)
+  }
+
+  public var codec: AVCodecID {
+    native.pointee.codec
+  }
+
+  public var sampleFormat: AVCodecID {
+    native.pointee.codec
+  }
+
+  public var sampleRate: Int {
+    Int(native.pointee.sample_rate)
+  }
+
+  public var channelCount: Int {
+    Int(native.pointee.channels)
+  }
+
+  public var channelLayout: AVChannelLayout {
+    AVChannelLayout(rawValue: UInt64(native.pointee.channel_layout))
+  }
+
+  public var pixelFormat: AVCodecID {
+    native.pointee.codec
+  }
+
+  public var windowWidth: Int {
+    Int(native.pointee.window_width)
+  }
+
+  public var windowHeight: Int {
+    Int(native.pointee.window_height)
+  }
+
+  public var frameWidth: Int {
+    Int(native.pointee.frame_width)
+  }
+
+  public var frameHeight: Int {
+    Int(native.pointee.frame_height)
+  }
+
+  public var fps: AVRational {
+    native.pointee.fps
   }
 }
 
@@ -328,21 +324,20 @@ typealias CAVDeviceInfo = CFFmpeg.AVDeviceInfo
 
 /// Structure describes basic parameters of the device.
 public struct AVDeviceInfo {
-  private let cDeviceInfoPtr: UnsafeMutablePointer<CAVDeviceInfo>
-  private var cDeviceInfo: CAVDeviceInfo { cDeviceInfoPtr.pointee }
+  var native: UnsafeMutablePointer<CAVDeviceInfo>
 
-  init(cDeviceInfoPtr: UnsafeMutablePointer<CAVDeviceInfo>) {
-    self.cDeviceInfoPtr = cDeviceInfoPtr
+  init(native: UnsafeMutablePointer<CAVDeviceInfo>) {
+    self.native = native
   }
 
   /// The name of the device.
   public var name: String {
-    String(cString: cDeviceInfo.device_name)
+    String(cString: native.pointee.device_name)
   }
 
   /// The human friendly name of the device.
   public var description: String {
-    String(cString: cDeviceInfo.device_description)
+    String(cString: native.pointee.device_description)
   }
 }
 
@@ -352,13 +347,11 @@ typealias CAVDeviceInfoList = CFFmpeg.AVDeviceInfoList
 
 /// List of devices.
 public final class AVDeviceInfoList {
-  private let cDeviceInfoListPtr: UnsafeMutablePointer<CAVDeviceInfoList>
-  private var cDeviceInfoList: CAVDeviceInfoList { cDeviceInfoListPtr.pointee }
+  var native: UnsafeMutablePointer<CAVDeviceInfoList>!
+  var owned = false
 
-  private var freeWhenDone: Bool = false
-
-  init(cDeviceInfoListPtr: UnsafeMutablePointer<CAVDeviceInfoList>) {
-    self.cDeviceInfoListPtr = cDeviceInfoListPtr
+  init(native: UnsafeMutablePointer<CAVDeviceInfoList>) {
+    self.native = native
   }
 
   /// List devices.
@@ -371,37 +364,34 @@ public final class AVDeviceInfoList {
   /// - Parameter formatContext: device context
   /// - Throws: AVError
   public init(formatContext: AVFormatContext) throws {
-    var listPtr: UnsafeMutablePointer<CAVDeviceInfoList>!
-    let ret = avdevice_list_devices(formatContext.cContextPtr, &listPtr)
+    let ret = avdevice_list_devices(formatContext.native, &native)
     try throwIfFail(ret)
-    self.cDeviceInfoListPtr = listPtr
-    self.freeWhenDone = true
+    self.owned = true
+  }
+
+  deinit {
+    if owned {
+      avdevice_free_list_devices(&native)
+    }
   }
 
   /// list of autodetected devices
   public var devices: [AVDeviceInfo] {
     var list = [AVDeviceInfo]()
     for i in 0..<deviceCount {
-      list.append(AVDeviceInfo(cDeviceInfoPtr: cDeviceInfoList.devices[i]!))
+      list.append(AVDeviceInfo(native: native.pointee.devices[i]!))
     }
     return list
   }
 
   /// number of autodetected devices
   public var deviceCount: Int {
-    Int(cDeviceInfoList.nb_devices)
+    Int(native.pointee.nb_devices)
   }
 
   /// index of default device or -1 if no default
   public var defaultDeviceIndex: Int {
-    Int(cDeviceInfoList.default_device)
-  }
-
-  deinit {
-    if freeWhenDone {
-      var pb: UnsafeMutablePointer<CAVDeviceInfoList>?
-      avdevice_free_list_devices(&pb)
-    }
+    Int(native.pointee.default_device)
   }
 
   /// List devices.
@@ -426,13 +416,13 @@ public final class AVDeviceInfoList {
     deviceName: String?,
     options: [String: String]? = nil
   ) throws -> AVDeviceInfoList {
-    var pm: OpaquePointer? = options?.toAVDict()
+    var pm = options?.avDict
     defer { av_dict_free(&pm) }
 
-    var listPtr: UnsafeMutablePointer<CAVDeviceInfoList>!
-    let ret = avdevice_list_input_sources(device?.cFormatPtr, deviceName, pm, &listPtr)
+    var ptr: UnsafeMutablePointer<CAVDeviceInfoList>!
+    let ret = avdevice_list_input_sources(device?.native, deviceName, pm, &ptr)
     try throwIfFail(ret)
-    return AVDeviceInfoList(cDeviceInfoListPtr: listPtr)
+    return AVDeviceInfoList(native: ptr)
   }
 
   public static func listInputSinks(
@@ -440,12 +430,12 @@ public final class AVDeviceInfoList {
     deviceName: String? = nil,
     options: [String: String]? = nil
   ) throws -> AVDeviceInfoList {
-    var pm: OpaquePointer? = options?.toAVDict()
+    var pm = options?.avDict
     defer { av_dict_free(&pm) }
 
-    var listPtr: UnsafeMutablePointer<CAVDeviceInfoList>!
-    let ret = avdevice_list_output_sinks(device?.cFormatPtr, deviceName, pm, &listPtr)
+    var ptr: UnsafeMutablePointer<CAVDeviceInfoList>!
+    let ret = avdevice_list_output_sinks(device?.native, deviceName, pm, &ptr)
     try throwIfFail(ret)
-    return AVDeviceInfoList(cDeviceInfoListPtr: listPtr)
+    return AVDeviceInfoList(native: ptr)
   }
 }

@@ -14,6 +14,16 @@ import Glibc
 #endif
 
 public struct AVError: Error, Equatable {
+  public var code: Int32
+  public var message: String
+
+  init(code: Int32) {
+    self.code = code
+    self.message = String(avErrorCode: code)
+  }
+}
+
+extension AVError {
   /// Resource temporarily unavailable
   public static let tryAgain = AVError(code: swift_AVERROR(EAGAIN))
   /// Invalid argument
@@ -28,7 +38,7 @@ public struct AVError: Error, Equatable {
   public static let noSystem = AVError(code: swift_AVERROR(ENOSYS))
 
   /// Bitstream filter not found
-  public static let bsfNotFound = AVError(code: swift_AVERROR_BSF_NOT_FOUND)
+  public static let bitstreamFilterNotFound = AVError(code: swift_AVERROR_BSF_NOT_FOUND)
   /// Internal bug, also see `bug2`
   public static let bug = AVError(code: swift_AVERROR_BUG)
   /// Buffer too small
@@ -78,21 +88,15 @@ public struct AVError: Error, Equatable {
   public static let httpNotFound = AVError(code: swift_AVERROR_HTTP_NOT_FOUND)
   public static let httpOther4xx = AVError(code: swift_AVERROR_HTTP_OTHER_4XX)
   public static let httpServerError = AVError(code: swift_AVERROR_HTTP_SERVER_ERROR)
-
-  public let code: Int32
-
-  public init(code: Int32) {
-    self.code = code
-  }
 }
 
-extension AVError: CustomStringConvertible {
+extension String {
 
-  public var description: String {
+  init(avErrorCode code: Int32) {
     let buf = UnsafeMutablePointer<Int8>.allocate(capacity: Int(AV_ERROR_MAX_STRING_SIZE))
-    buf.initialize(to: 0)
+    buf.initialize(repeating: 0, count: Int(AV_ERROR_MAX_STRING_SIZE))
     defer { buf.deallocate() }
-    return String(cString: av_make_error_string(buf, Int(AV_ERROR_MAX_STRING_SIZE), code))
+    self = String(cString: av_make_error_string(buf, Int(AV_ERROR_MAX_STRING_SIZE), code))
   }
 }
 

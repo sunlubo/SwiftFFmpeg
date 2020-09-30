@@ -26,61 +26,50 @@ typealias CodecContextBox = Box<CodecContextBoxValue>
 typealias CAVCodecContext = CFFmpeg.AVCodecContext
 
 public final class AVCodecContext {
-  let cContextPtr: UnsafeMutablePointer<CAVCodecContext>
-  var cContext: CAVCodecContext { cContextPtr.pointee }
-
-  fileprivate var opaqueBox: CodecContextBox? {
+  var native: UnsafeMutablePointer<CAVCodecContext>!
+  var opaqueBox: CodecContextBox? {
     didSet {
       if let box = opaqueBox {
-        cContextPtr.pointee.opaque = Unmanaged.passUnretained(box).toOpaque()
+        native.pointee.opaque = Unmanaged.passUnretained(box).toOpaque()
       } else {
-        cContextPtr.pointee.opaque = nil
+        native.pointee.opaque = nil
       }
     }
   }
-  private var freeWhenDone: Bool = false
+  var owned = false
 
-  init(cContextPtr: UnsafeMutablePointer<CAVCodecContext>) {
-    self.cContextPtr = cContextPtr
+  init(native: UnsafeMutablePointer<CAVCodecContext>) {
+    self.native = native
   }
 
   /// Creates an `AVCodecContext` and set its fields to default values.
   ///
   /// - Parameter codec: codec
   public init(codec: AVCodec? = nil) {
-    guard let ctxPtr = avcodec_alloc_context3(codec?.cCodecPtr) else {
-      abort("avcodec_alloc_context3")
-    }
-    self.cContextPtr = ctxPtr
-    self.freeWhenDone = true
+    self.native = avcodec_alloc_context3(codec?.native)
+    self.owned = true
   }
 
   deinit {
-    if freeWhenDone {
-      var ps: UnsafeMutablePointer<CAVCodecContext>? = cContextPtr
-      avcodec_free_context(&ps)
+    if owned {
+      avcodec_free_context(&native)
     }
   }
 
   /// The codec's media type.
   public var mediaType: AVMediaType {
-    AVMediaType(native: cContext.codec_type)
+    AVMediaType(native: native.pointee.codec_type)
   }
 
   public var codec: AVCodec? {
-    get {
-      if let ptr = cContext.codec {
-        return AVCodec(cCodecPtr: ptr.mutable)
-      }
-      return nil
-    }
-    set { cContextPtr.pointee.codec = UnsafePointer(newValue?.cCodecPtr) }
+    get { native.pointee.codec.map(AVCodec.init(native:)) }
+    set { native.pointee.codec = UnsafePointer(newValue?.native) }
   }
 
   /// The codec's id.
   public var codecId: AVCodecID {
-    get { cContext.codec_id }
-    set { cContextPtr.pointee.codec_id = newValue }
+    get { native.pointee.codec_id }
+    set { native.pointee.codec_id = newValue }
   }
 
   /// fourcc (LSB first, so "ABCD" -> ('D'<<24) + ('C'<<16) + ('B'<<8) + 'A').
@@ -97,8 +86,8 @@ public final class AVCodecContext {
   /// - encoding: Set by user, if not then the default based on `codecId` will be used.
   /// - decoding: Set by user, will be converted to uppercase by libavcodec during init.
   public var codecTag: UInt32 {
-    get { cContext.codec_tag }
-    set { cContextPtr.pointee.codec_tag = newValue }
+    get { native.pointee.codec_tag }
+    set { native.pointee.codec_tag = newValue }
   }
 
   /// Private data of the user, can be used to carry app specific stuff.
@@ -115,8 +104,8 @@ public final class AVCodecContext {
   /// - encoding: Set by user, unused for constant quantizer encoding.
   /// - decoding: Set by user, may be overwritten by libavcodec if this info is available in the stream.
   public var bitRate: Int64 {
-    get { cContext.bit_rate }
-    set { cContextPtr.pointee.bit_rate = newValue }
+    get { native.pointee.bit_rate }
+    set { native.pointee.bit_rate = newValue }
   }
 
   /// Number of bits the bitstream is allowed to diverge from the reference.
@@ -125,8 +114,8 @@ public final class AVCodecContext {
   /// - encoding: Set by user, unused for constant quantizer encoding.
   /// - decoding: Unused.
   public var bitRateTolerance: Int {
-    get { Int(cContext.bit_rate_tolerance) }
-    set { cContextPtr.pointee.bit_rate_tolerance = Int32(newValue) }
+    get { Int(native.pointee.bit_rate_tolerance) }
+    set { native.pointee.bit_rate_tolerance = Int32(newValue) }
   }
 
   /// `AVCodecContext.Flag`
@@ -134,8 +123,8 @@ public final class AVCodecContext {
   /// - encoding: Set by user.
   /// - decoding: Set by user.
   public var flags: Flag {
-    get { Flag(rawValue: UInt32(cContext.flags)) }
-    set { cContextPtr.pointee.flags = Int32(newValue.rawValue) }
+    get { Flag(rawValue: UInt32(native.pointee.flags)) }
+    set { native.pointee.flags = Int32(newValue.rawValue) }
   }
 
   /// `AVCodecContext.Flag2`
@@ -143,8 +132,8 @@ public final class AVCodecContext {
   /// - encoding: Set by user.
   /// - decoding: Set by user.
   public var flags2: Flag2 {
-    get { Flag2(rawValue: cContext.flags2) }
-    set { cContextPtr.pointee.flags2 = newValue.rawValue }
+    get { Flag2(rawValue: native.pointee.flags2) }
+    set { native.pointee.flags2 = newValue.rawValue }
   }
 
   /// Some codecs need / can use extradata like Huffman tables.
@@ -161,14 +150,14 @@ public final class AVCodecContext {
   /// - encoding: Set/allocated/freed by libavcodec.
   /// - decoding: Set/allocated/freed by user.
   public var extradata: UnsafeMutablePointer<UInt8>? {
-    get { cContext.extradata }
-    set { cContextPtr.pointee.extradata = newValue }
+    get { native.pointee.extradata }
+    set { native.pointee.extradata = newValue }
   }
 
   /// The size of the extradata content in bytes.
   public var extradataSize: Int {
-    get { Int(cContext.extradata_size) }
-    set { cContextPtr.pointee.extradata_size = Int32(newValue) }
+    get { Int(native.pointee.extradata_size) }
+    set { native.pointee.extradata_size = Int32(newValue) }
   }
 
   /// This is the fundamental unit of time (in seconds) in terms of which frame timestamps
@@ -186,8 +175,8 @@ public final class AVCodecContext {
   /// - encoding: Must be set by user.
   /// - decoding: The use of this field for decoding is deprecated. Use framerate instead.
   public var timebase: AVRational {
-    get { cContext.time_base }
-    set { cContextPtr.pointee.time_base = newValue }
+    get { native.pointee.time_base }
+    set { native.pointee.time_base = newValue }
   }
 
   /// Frame counter.
@@ -195,7 +184,7 @@ public final class AVCodecContext {
   /// - encoding: Total number of frames passed to the encoder so far.
   /// - decoding: Total number of frames returned from the decoder so far.
   public var frameNumber: Int {
-    Int(cContext.frame_number)
+    Int(native.pointee.frame_number)
   }
 
   /// A reference to the `AVHWFramesContext` describing the input (for encoding)
@@ -217,13 +206,8 @@ public final class AVCodecContext {
   ///   If the default `get_buffer2()` is used with a hwaccel pixel format,
   ///   then this `AVHWFramesContext` will be used for allocating the frame buffers.
   public var hwFramesContext: AVHWFramesContext? {
-    get {
-      if let ctxPtr = cContext.hw_frames_ctx {
-        return AVHWFramesContext(cBufferPtr: ctxPtr)
-      }
-      return nil
-    }
-    set { cContextPtr.pointee.hw_frames_ctx = av_buffer_ref(newValue?.cBufferPtr) }
+    get { native.pointee.hw_frames_ctx.map(AVHWFramesContext.init(nativeBuffer:)) }
+    set { native.pointee.hw_frames_ctx = av_buffer_ref(newValue?.nativeBuffer) }
   }
 
   /// A reference to the `AVHWDeviceContext` describing the device which will
@@ -245,25 +229,20 @@ public final class AVCodecContext {
   /// order to support `hwFramesContext` at all - in that case, all frames
   /// contexts used must be created on the same device.
   public var hwDeviceContext: AVHWDeviceContext? {
-    get {
-      if let ctxPtr = cContext.hw_device_ctx {
-        return AVHWDeviceContext(cBufferPtr: ctxPtr)
-      }
-      return nil
-    }
-    set { cContextPtr.pointee.hw_device_ctx = av_buffer_ref(newValue?.cBufferPtr) }
+    get { native.pointee.hw_device_ctx.map(AVHWDeviceContext.init(native:)) }
+    set { native.pointee.hw_device_ctx = av_buffer_ref(newValue?.native) }
   }
 
   /// A Boolean value indicating whether the codec is open.
   public var isOpen: Bool {
-    avcodec_is_open(cContextPtr) > 0
+    avcodec_is_open(native) > 0
   }
 
   /// Fill the codec context based on the values from the supplied codec parameters.
   ///
   /// - Parameter params: codec parameters
   public func setParameters(_ params: AVCodecParameters) {
-    abortIfFail(avcodec_parameters_to_context(cContextPtr, params.cParametersPtr))
+    abortIfFail(avcodec_parameters_to_context(native, params.native))
   }
 
   /// Initialize the `AVCodecContext`.
@@ -275,10 +254,10 @@ public final class AVCodecContext {
   ///   - options: A dictionary filled with `AVCodecContext` and codec-private options.
   /// - Throws: AVError
   public func openCodec(_ codec: AVCodec? = nil, options: [String: String]? = nil) throws {
-    var pm: OpaquePointer? = options?.toAVDict()
+    var pm = options?.avDict
     defer { av_dict_free(&pm) }
 
-    try throwIfFail(avcodec_open2(cContextPtr, codec?.cCodecPtr ?? self.codec?.cCodecPtr, &pm))
+    try throwIfFail(avcodec_open2(native, codec?.native ?? self.codec?.native, &pm))
 
     dumpUnrecognizedOptions(pm)
   }
@@ -302,7 +281,7 @@ public final class AVCodecContext {
   ///     - `AVError.outOfMemory` if failed to add packet to internal queue, or similar.
   ///     - legitimate decoding errors
   public func sendPacket(_ packet: AVPacket?) throws {
-    try throwIfFail(avcodec_send_packet(cContextPtr, packet?.cPacketPtr))
+    try throwIfFail(avcodec_send_packet(native, packet?.native))
   }
 
   /// Return decoded output data from a decoder.
@@ -315,7 +294,7 @@ public final class AVCodecContext {
   ///     - `AVError.invalidArgument` if codec not opened, or it is an encoder.
   ///     - legitimate decoding errors
   public func receiveFrame(_ frame: AVFrame) throws {
-    try throwIfFail(avcodec_receive_frame(cContextPtr, frame.cFramePtr))
+    try throwIfFail(avcodec_receive_frame(native, frame.native))
   }
 
   /// Supply a raw video or audio frame to the encoder.
@@ -335,7 +314,7 @@ public final class AVCodecContext {
   ///     - `AVError.outOfMemory` if failed to add packet to internal queue, or similar.
   ///     - legitimate decoding errors
   public func sendFrame(_ frame: AVFrame?) throws {
-    try throwIfFail(avcodec_send_frame(cContextPtr, frame?.cFramePtr))
+    try throwIfFail(avcodec_send_frame(native, frame?.native))
   }
 
   /// Read encoded data from the encoder.
@@ -347,7 +326,7 @@ public final class AVCodecContext {
   ///     - `AVError.invalidArgument` if codec not opened, or it is an encoder.
   ///     - legitimate decoding errors
   public func receivePacket(_ packet: AVPacket) throws {
-    try throwIfFail(avcodec_receive_packet(cContextPtr, packet.cPacketPtr))
+    try throwIfFail(avcodec_receive_packet(native, packet.native))
   }
 
   /// Reset the internal decoder state / flush internal buffers. Should be called
@@ -358,14 +337,13 @@ public final class AVCodecContext {
   ///   refcounted frames are used, the decoder just releases any references it might
   ///   keep internally, but the caller's reference remains valid.
   public func flush() {
-    avcodec_flush_buffers(cContextPtr)
+    avcodec_flush_buffers(native)
   }
 }
 
 // MARK: - AVCodecContext.Flag
 
 extension AVCodecContext {
-
   /// Encoding support
   ///
   /// These flags can be passed in `AVCodecContext.flags` before initialization.
@@ -414,7 +392,6 @@ extension AVCodecContext {
 }
 
 extension AVCodecContext.Flag: CustomStringConvertible {
-
   public var description: String {
     var str = "["
     if contains(.unaligned) { str += "unaligned, " }
@@ -446,7 +423,6 @@ extension AVCodecContext.Flag: CustomStringConvertible {
 // MARK: - AVCodecContext.Flag2
 
 extension AVCodecContext {
-
   /// Encoding support
   ///
   /// These flags can be passed in `AVCodecContext.flags2` before initialization.
@@ -477,7 +453,6 @@ extension AVCodecContext {
 }
 
 extension AVCodecContext.Flag2: CustomStringConvertible {
-
   public var description: String {
     var str = "["
     if contains(.fast) { str += "fast, " }
@@ -500,7 +475,6 @@ extension AVCodecContext.Flag2: CustomStringConvertible {
 // MARK: - Video
 
 extension AVCodecContext {
-
   /// The width of the picture.
   ///
   /// - encoding: Must be set by user.
@@ -508,8 +482,8 @@ extension AVCodecContext {
   ///   Some decoders will require the dimensions to be set by the caller. During decoding, the decoder may
   ///   overwrite those values as required while parsing the data.
   public var width: Int {
-    get { Int(cContext.width) }
-    set { cContextPtr.pointee.width = Int32(newValue) }
+    get { Int(native.pointee.width) }
+    set { native.pointee.width = Int32(newValue) }
   }
 
   /// The height of the picture.
@@ -519,8 +493,8 @@ extension AVCodecContext {
   ///   Some decoders will require the dimensions to be set by the caller. During decoding, the decoder may
   ///   overwrite those values as required while parsing the data.
   public var height: Int {
-    get { Int(cContext.height) }
-    set { cContextPtr.pointee.height = Int32(newValue) }
+    get { Int(native.pointee.height) }
+    set { native.pointee.height = Int32(newValue) }
   }
 
   /// Bitstream width, may be different from `width` e.g. when the decoded frame is cropped before
@@ -530,8 +504,8 @@ extension AVCodecContext {
   /// - decoding: May be set by the user before opening the decoder if known e.g. from the container.
   ///   During decoding, the decoder may overwrite those values as required while parsing the data.
   public var codedWidth: Int {
-    get { Int(cContext.coded_width) }
-    set { cContextPtr.pointee.coded_width = Int32(newValue) }
+    get { Int(native.pointee.coded_width) }
+    set { native.pointee.coded_width = Int32(newValue) }
   }
 
   /// Bitstream height, may be different from `height` e.g. when the decoded frame is cropped before
@@ -541,8 +515,8 @@ extension AVCodecContext {
   /// - decoding: May be set by the user before opening the decoder if known e.g. from the container.
   ///   During decoding, the decoder may overwrite those values as required while parsing the data.
   public var codedHeight: Int {
-    get { Int(cContext.coded_height) }
-    set { cContextPtr.pointee.coded_height = Int32(newValue) }
+    get { Int(native.pointee.coded_height) }
+    set { native.pointee.coded_height = Int32(newValue) }
   }
 
   /// The number of pictures in a group of pictures, or 0 for intra_only.
@@ -550,8 +524,8 @@ extension AVCodecContext {
   /// - encoding: Set by user.
   /// - decoding: Unused.
   public var gopSize: Int {
-    get { Int(cContext.gop_size) }
-    set { cContextPtr.pointee.gop_size = Int32(newValue) }
+    get { Int(native.pointee.gop_size) }
+    set { native.pointee.gop_size = Int32(newValue) }
   }
 
   /// The pixel format of the picture.
@@ -559,8 +533,8 @@ extension AVCodecContext {
   /// - encoding: Set by user.
   /// - decoding: Set by user if known, overridden by codec while parsing the data.
   public var pixelFormat: AVPixelFormat {
-    get { cContext.pix_fmt }
-    set { cContextPtr.pointee.pix_fmt = newValue }
+    get { native.pointee.pix_fmt }
+    set { native.pointee.pix_fmt = newValue }
   }
 
   /// The callback used to negotiate the pixel format.
@@ -593,10 +567,10 @@ extension AVCodecContext {
           .value
           .getFormat!
           let list = values(fmts, until: AVPixelFormat.none) ?? []
-          return handler(AVCodecContext(cContextPtr: ctx!), list)
+          return handler(AVCodecContext(native: ctx!), list)
         }
       }
-      cContextPtr.pointee.get_format = handler
+      native.pointee.get_format = handler
     }
   }
 
@@ -607,8 +581,8 @@ extension AVCodecContext {
   /// - encoding: Set by user.
   /// - decoding: Unused.
   public var maxBFrames: Int {
-    get { Int(cContext.max_b_frames) }
-    set { cContextPtr.pointee.max_b_frames = Int32(newValue) }
+    get { Int(native.pointee.max_b_frames) }
+    set { native.pointee.max_b_frames = Int32(newValue) }
   }
 
   /// Macroblock decision mode.
@@ -616,8 +590,8 @@ extension AVCodecContext {
   /// - encoding: Set by user.
   /// - decoding: Unused.
   public var mbDecision: Int {
-    get { Int(cContext.mb_decision) }
-    set { cContextPtr.pointee.mb_decision = Int32(newValue) }
+    get { Int(native.pointee.mb_decision) }
+    set { native.pointee.mb_decision = Int32(newValue) }
   }
 
   /// Sample aspect ratio (0/0 if unknown).
@@ -628,8 +602,8 @@ extension AVCodecContext {
   /// - encoding: Set by user.
   /// - decoding: Set by codec.
   public var sampleAspectRatio: AVRational {
-    get { cContext.sample_aspect_ratio }
-    set { cContextPtr.pointee.sample_aspect_ratio = newValue }
+    get { native.pointee.sample_aspect_ratio }
+    set { native.pointee.sample_aspect_ratio = newValue }
   }
 
   /// low resolution decoding, 1->1/2 size, 2->1/4 size
@@ -637,7 +611,7 @@ extension AVCodecContext {
   /// - encoding: Unused.
   /// - decoding: Set by user.
   public var lowres: Int {
-    Int(cContext.lowres)
+    Int(native.pointee.lowres)
   }
 
   /// The framerate of the video.
@@ -646,25 +620,24 @@ extension AVCodecContext {
   /// - decoding: For codecs that store a framerate value in the compressed bitstream,
   ///   the decoder may export it here. 0/1 when unknown.
   public var framerate: AVRational {
-    get { cContext.framerate }
-    set { cContextPtr.pointee.framerate = newValue }
+    get { native.pointee.framerate }
+    set { native.pointee.framerate = newValue }
   }
 }
 
 // MARK: - Audio
 
 extension AVCodecContext {
-
   /// Samples per second.
   public var sampleRate: Int {
-    get { Int(cContext.sample_rate) }
-    set { cContextPtr.pointee.sample_rate = Int32(newValue) }
+    get { Int(native.pointee.sample_rate) }
+    set { native.pointee.sample_rate = Int32(newValue) }
   }
 
   /// Number of audio channels.
   public var channelCount: Int {
-    get { Int(cContext.channels) }
-    set { cContextPtr.pointee.channels = Int32(newValue) }
+    get { Int(native.pointee.channels) }
+    set { native.pointee.channels = Int32(newValue) }
   }
 
   /// Audio sample format.
@@ -672,14 +645,14 @@ extension AVCodecContext {
   /// - encoding: Set by user.
   /// - decoding: Set by libavcodec.
   public var sampleFormat: AVSampleFormat {
-    get { AVSampleFormat(native: cContext.sample_fmt) }
-    set { cContextPtr.pointee.sample_fmt = newValue.native }
+    get { AVSampleFormat(native: native.pointee.sample_fmt) }
+    set { native.pointee.sample_fmt = newValue.native }
   }
 
   /// Number of samples per channel in an audio frame.
   public var frameSize: Int {
-    get { Int(cContext.frame_size) }
-    set { cContextPtr.pointee.frame_size = Int32(newValue) }
+    get { Int(native.pointee.frame_size) }
+    set { native.pointee.frame_size = Int32(newValue) }
   }
 
   /// Audio channel layout.
@@ -687,15 +660,14 @@ extension AVCodecContext {
   /// - encoding: Set by user.
   /// - decoding: Set by user, may be overwritten by codec.
   public var channelLayout: AVChannelLayout {
-    get { AVChannelLayout(rawValue: cContext.channel_layout) }
-    set { cContextPtr.pointee.channel_layout = newValue.rawValue }
+    get { AVChannelLayout(rawValue: native.pointee.channel_layout) }
+    set { native.pointee.channel_layout = newValue.rawValue }
   }
 }
 
 // MARK: - Multithreading
 
 extension AVCodecContext {
-
   /// Which multithreading methods to use.
   /// Use of FF_THREAD_FRAME will increase decoding delay by one frame per thread,
   /// so clients which cannot provide future frames should not use it.
@@ -703,8 +675,8 @@ extension AVCodecContext {
   /// - encoding: Set by user, otherwise the default is used.
   /// - decoding: Set by user, otherwise the default is used.
   public var threadType: FFThreadType {
-    get { FFThreadType(rawValue: cContext.thread_type) }
-    set { cContextPtr.pointee.thread_type = newValue.rawValue }
+    get { FFThreadType(rawValue: native.pointee.thread_type) }
+    set { native.pointee.thread_type = newValue.rawValue }
   }
 
   /// thread count
@@ -712,32 +684,31 @@ extension AVCodecContext {
   /// - encoding: Set by user.
   /// - decoding: Set by user.
   public var threadCount: Int32 {
-    get { cContext.thread_count }
-    set { cContextPtr.pointee.thread_count = newValue }
+    get { native.pointee.thread_count }
+    set { native.pointee.thread_count = newValue }
   }
 
   /// Which multithreading methods are in use by the codec.
   /// - encoding: Set by libavcodec.
   /// - decoding: Set by libavcodec.
   public var activeThreadType: FFThreadType {
-    FFThreadType(rawValue: cContext.active_thread_type)
+    FFThreadType(rawValue: native.pointee.active_thread_type)
   }
 }
 
 extension AVCodecContext: AVClassSupport, AVOptionSupport {
-  public static let `class` = AVClass(cClassPtr: avcodec_get_class())
+  public static let `class` = AVClass(native: avcodec_get_class())
 
   public func withUnsafeObjectPointer<T>(
     _ body: (UnsafeMutableRawPointer) throws -> T
   ) rethrows -> T {
-    try body(cContextPtr)
+    try body(native)
   }
 }
 
 public struct FFThreadType: Equatable, OptionSet {
   /// Decode more than one frame at once
   public static let frame = FFThreadType(rawValue: FF_THREAD_FRAME)
-
   /// Decode more than one part of a single frame at once
   public static let slice = FFThreadType(rawValue: FF_THREAD_SLICE)
 

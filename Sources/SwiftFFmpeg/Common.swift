@@ -20,11 +20,11 @@ public enum AVMediaType: Int32 {
   /// Opaque data information usually sparse
   case attachment
 
-  internal var native: CFFmpeg.AVMediaType {
+  var native: CFFmpeg.AVMediaType {
     CFFmpeg.AVMediaType(rawValue)
   }
 
-  internal init(native: CFFmpeg.AVMediaType) {
+  init(native: CFFmpeg.AVMediaType) {
     guard let type = AVMediaType(rawValue: native.rawValue) else {
       fatalError("Unknown media type: \(native)")
     }

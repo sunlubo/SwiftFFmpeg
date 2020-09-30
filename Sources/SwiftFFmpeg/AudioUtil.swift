@@ -173,7 +173,9 @@ public struct AVChannelLayout: Equatable {
   ///     Example: "stereo+FC" = "2c+FC" = "2c+1c" = "0x7"
   public init?(name: String) {
     let layout = av_get_channel_layout(name)
-    if layout == .none { return nil }
+    guard layout != 0 else {
+      return nil
+    }
     self.init(rawValue: layout)
   }
 

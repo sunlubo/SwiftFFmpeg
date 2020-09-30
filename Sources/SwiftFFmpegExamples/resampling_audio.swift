@@ -79,7 +79,7 @@ func resampling_audio() throws {
   // ensuring that the output buffer will contain at least all the
   // converted input samples
   var maxDstSampleCount = Int(
-    AVMath.rescale(Int64(srcSampleCount), dstSampleRate, srcSampleRate, .up))
+    AVMath.rescale(Int64(srcSampleCount), dstSampleRate, srcSampleRate, rounding: .up))
   dstSampleCount = maxDstSampleCount
   // buffer is going to be directly written to a rawaudio file, no alignment
   var dstSamples = AVSamples(
@@ -94,7 +94,8 @@ func resampling_audio() throws {
     // compute destination number of samples
     dstSampleCount = Int(
       AVMath.rescale(
-        Int64(swrCtx.getDelay(srcSampleRate) + srcSampleCount), dstSampleRate, srcSampleRate, .up))
+        Int64(swrCtx.getDelay(srcSampleRate) + srcSampleCount), dstSampleRate, srcSampleRate,
+        rounding: .up))
 
     if dstSampleCount > maxDstSampleCount {
       dstSamples = AVSamples(

@@ -33,11 +33,11 @@ public enum AVHWDeviceType: UInt32 {
   /// Use MediaCodec (Android) hardware acceleration.
   case mediaCodec
 
-  internal var native: CFFmpeg.AVHWDeviceType {
+  var native: CFFmpeg.AVHWDeviceType {
     CFFmpeg.AVHWDeviceType(rawValue)
   }
 
-  internal init(native: CFFmpeg.AVHWDeviceType) {
+  init(native: CFFmpeg.AVHWDeviceType) {
     guard let type = AVHWDeviceType(rawValue: native.rawValue) else {
       fatalError("Unknown device type: \(native)")
     }
@@ -75,7 +75,6 @@ public enum AVHWDeviceType: UInt32 {
 // MARK: - AVHWDeviceType + CustomStringConvertible
 
 extension AVHWDeviceType: CustomStringConvertible {
-
   public var description: String {
     name ?? "unknown"
   }
@@ -86,22 +85,21 @@ extension AVHWDeviceType: CustomStringConvertible {
 typealias CAVCodecHWConfig = CFFmpeg.AVCodecHWConfig
 
 public struct AVCodecHWConfig {
-  let cConfigPtr: UnsafePointer<CAVCodecHWConfig>
-  var cConfig: CAVCodecHWConfig { cConfigPtr.pointee }
+  var native: UnsafePointer<CAVCodecHWConfig>
 
-  init(cConfigPtr: UnsafePointer<CAVCodecHWConfig>) {
-    self.cConfigPtr = cConfigPtr
+  init(native: UnsafePointer<CAVCodecHWConfig>) {
+    self.native = native
   }
 
   /// A hardware pixel format which the codec can use.
   public var pixelFormat: AVPixelFormat {
-    cConfig.pix_fmt
+    native.pointee.pix_fmt
   }
 
   /// Bit set of `AVCodecHWConfig.Method` flags, describing the possible setup methods
   /// which can be used with this configuration.
   public var methods: Method {
-    Method(rawValue: cConfig.methods)
+    Method(rawValue: native.pointee.methods)
   }
 
   /// The device type associated with the configuration.
@@ -109,14 +107,13 @@ public struct AVCodecHWConfig {
   /// Must be set for `AVCodecHWConfig.Method.hwDeviceContext` and `AVCodecHWConfig.Method.hwFramesContext`,
   /// otherwise unused.
   public var deviceType: AVHWDeviceType {
-    AVHWDeviceType(native: cConfig.device_type)
+    AVHWDeviceType(native: native.pointee.device_type)
   }
 }
 
 // MARK: - AVCodecHWConfig.Method
 
 extension AVCodecHWConfig {
-
   /// Flags used by `methods`.
   public struct Method: OptionSet {
     /// The codec supports this format via the `AVCodecContext.hwDeviceContext` interface.
@@ -173,12 +170,11 @@ extension AVCodecHWConfig.Method: CustomStringConvertible {
 // MARK: - AVHWDeviceContext
 
 public final class AVHWDeviceContext {
-  let cBufferPtr: UnsafeMutablePointer<CAVBuffer>
+  var native: UnsafeMutablePointer<CAVBuffer>!
+  var owned = false
 
-  private var freeWhenDone: Bool = false
-
-  init(cBufferPtr: UnsafeMutablePointer<CAVBuffer>) {
-    self.cBufferPtr = cBufferPtr
+  init(native: UnsafeMutablePointer<CAVBuffer>) {
+    self.native = native
   }
 
   /// Open a device of the specified type and create an `AVHWDeviceContext` for it.
@@ -192,13 +188,11 @@ public final class AVHWDeviceContext {
     device: String? = nil,
     options: [String: String]? = nil
   ) throws {
-    var pm: OpaquePointer? = options?.toAVDict()
+    var pm = options?.avDict
     defer { av_dict_free(&pm) }
 
-    var ptr: UnsafeMutablePointer<AVBufferRef>!
-    try throwIfFail(av_hwdevice_ctx_create(&ptr, deviceType.native, device, pm, 0))
-    self.cBufferPtr = ptr
-    self.freeWhenDone = true
+    try throwIfFail(av_hwdevice_ctx_create(&native, deviceType.native, device, pm, 0))
+    self.owned = true
   }
 
   /// Create a new device of the specified type from an existing device.
@@ -218,17 +212,14 @@ public final class AVHWDeviceContext {
   ///   - deviceContext: An existing `AVHWDeviceContext` which will be used to create the new device.
   /// - Throws: AVError
   public init(deviceType: AVHWDeviceType, deviceContext: AVHWDeviceContext) throws {
-    var ptr: UnsafeMutablePointer<AVBufferRef>!
     try throwIfFail(
-      av_hwdevice_ctx_create_derived(&ptr, deviceType.native, deviceContext.cBufferPtr, 0))
-    self.cBufferPtr = ptr
-    self.freeWhenDone = true
+      av_hwdevice_ctx_create_derived(&native, deviceType.native, deviceContext.native, 0))
+    self.owned = true
   }
 
   deinit {
-    if freeWhenDone {
-      var ptr: UnsafeMutablePointer<AVBufferRef>? = cBufferPtr
-      av_buffer_unref(&ptr)
+    if owned {
+      av_buffer_unref(&native)
     }
   }
 }
@@ -241,11 +232,11 @@ public enum AVHWFrameTransferDirection: UInt32 {
   /// Transfer the data to the queried hw frame.
   case to
 
-  internal var native: CFFmpeg.AVHWFrameTransferDirection {
+  var native: CFFmpeg.AVHWFrameTransferDirection {
     CFFmpeg.AVHWFrameTransferDirection(rawValue)
   }
 
-  internal init(native: CFFmpeg.AVHWFrameTransferDirection) {
+  init(native: CFFmpeg.AVHWFrameTransferDirection) {
     guard let direction = AVHWFrameTransferDirection(rawValue: native.rawValue) else {
       fatalError("Unknown frame transfer direction: \(native)")
     }
@@ -266,15 +257,13 @@ typealias CAVHWFramesContext = CFFmpeg.AVHWFramesContext
 /// yields a reference, whose data field points to the actual `AVHWFramesContext`
 /// struct.
 public final class AVHWFramesContext {
-  let cBufferPtr: UnsafeMutablePointer<CAVBuffer>
-  let cContextPtr: UnsafeMutablePointer<CAVHWFramesContext>
-  var cContext: CAVHWFramesContext { cContextPtr.pointee }
+  var nativeBuffer: UnsafeMutablePointer<CAVBuffer>!
+  let native: UnsafeMutablePointer<CAVHWFramesContext>
+  var owned = false
 
-  private var freeWhenDone: Bool = false
-
-  init(cBufferPtr: UnsafeMutablePointer<CAVBuffer>) {
-    self.cBufferPtr = cBufferPtr
-    self.cContextPtr = UnsafeMutableRawPointer(cBufferPtr.pointee.data)!
+  init(nativeBuffer: UnsafeMutablePointer<CAVBuffer>) {
+    self.nativeBuffer = nativeBuffer
+    self.native = UnsafeMutableRawPointer(nativeBuffer.pointee.data)!
       .bindMemory(to: CAVHWFramesContext.self, capacity: 1)
   }
 
@@ -282,18 +271,21 @@ public final class AVHWFramesContext {
   ///
   /// - Parameter deviceContext: a `AVHWDeviceContext` instance.
   public init(deviceContext: AVHWDeviceContext) {
-    guard let ptr = av_hwframe_ctx_alloc(deviceContext.cBufferPtr) else {
-      abort("av_hwframe_ctx_alloc")
-    }
-    self.cBufferPtr = ptr
-    self.cContextPtr = UnsafeMutableRawPointer(ptr.pointee.data)!
+    self.nativeBuffer = av_hwframe_ctx_alloc(deviceContext.native)
+    self.native = UnsafeMutableRawPointer(nativeBuffer.pointee.data)!
       .bindMemory(to: CAVHWFramesContext.self, capacity: 1)
-    self.freeWhenDone = true
+    self.owned = true
+  }
+
+  deinit {
+    if owned {
+      av_buffer_unref(&nativeBuffer)
+    }
   }
 
   /// A reference to the parent `AVHWDeviceContext`.
   public var deviceContext: AVHWDeviceContext {
-    AVHWDeviceContext(cBufferPtr: cContext.device_ref)
+    AVHWDeviceContext(native: native.pointee.device_ref)
   }
 
   /// The pixel format identifying the underlying HW surface type.
@@ -302,8 +294,8 @@ public final class AVHWFramesContext {
   ///
   /// Must be set by the user before calling `initialize()`.
   public var pixelFormat: AVPixelFormat {
-    get { cContext.format }
-    set { cContextPtr.pointee.format = newValue }
+    get { native.pointee.format }
+    set { native.pointee.format = newValue }
   }
 
   /// The pixel format identifying the actual data layout of the hardware
@@ -316,24 +308,24 @@ public final class AVHWFramesContext {
   /// planar version of that format (e.g. for 8-bit 420 YUV it should be
   /// `AVPixelFormat.YUV420P`, not `AVPixelFormat.NV12` or anything else).
   public var swPixelFormat: AVPixelFormat {
-    get { cContext.sw_format }
-    set { cContextPtr.pointee.sw_format = newValue }
+    get { native.pointee.sw_format }
+    set { native.pointee.sw_format = newValue }
   }
 
   /// The width of the frames in this pool.
   ///
   /// Must be set by the user before calling `initialize()`.
   public var width: Int {
-    get { Int(cContext.width) }
-    set { cContextPtr.pointee.width = Int32(newValue) }
+    get { Int(native.pointee.width) }
+    set { native.pointee.width = Int32(newValue) }
   }
 
   /// The height of the frames in this pool.
   ///
   /// Must be set by the user before calling `initialize()`.
   public var height: Int {
-    get { Int(cContext.height) }
-    set { cContextPtr.pointee.height = Int32(newValue) }
+    get { Int(native.pointee.height) }
+    set { native.pointee.height = Int32(newValue) }
   }
 
   /// Initial size of the frame pool. If a device type does not support
@@ -342,8 +334,8 @@ public final class AVHWFramesContext {
   /// May be set by the caller before calling `initialize()`.
   /// Must be set if pool is `nil` and the device type does not support dynamic pools.
   public var initialPoolSize: Int {
-    get { Int(cContext.initial_pool_size) }
-    set { cContextPtr.pointee.initial_pool_size = Int32(newValue) }
+    get { Int(native.pointee.initial_pool_size) }
+    set { native.pointee.initial_pool_size = Int32(newValue) }
   }
 
   /// Finalize the context before use. This function must be called after the
@@ -352,7 +344,7 @@ public final class AVHWFramesContext {
   ///
   /// - Throws: AVError
   public func initialize() throws {
-    try throwIfFail(av_hwframe_ctx_init(cBufferPtr))
+    try throwIfFail(av_hwframe_ctx_init(nativeBuffer))
   }
 
   /// Allocate a new frame attached to the given `AVHWFramesContext`.
@@ -361,7 +353,7 @@ public final class AVHWFramesContext {
   ///   newly allocated buffers.
   /// - Throws: AVError
   public func allocBuffer(frame: AVFrame) throws {
-    try throwIfFail(av_hwframe_get_buffer(cBufferPtr, frame.cFramePtr, 0))
+    try throwIfFail(av_hwframe_get_buffer(nativeBuffer, frame.native, 0))
   }
 
   /// Get a list of possible source or target formats usable in `AVFrame.transferData(from:)`.
@@ -371,29 +363,18 @@ public final class AVHWFramesContext {
   public func getPixelFormats(_ direction: AVHWFrameTransferDirection) -> [AVPixelFormat]? {
     var ptr: UnsafeMutablePointer<AVPixelFormat>?
     defer { av_free(ptr) }
-    if av_hwframe_transfer_get_formats(cBufferPtr, direction.native, &ptr, 0) != 0 {
+    if av_hwframe_transfer_get_formats(nativeBuffer, direction.native, &ptr, 0) != 0 {
       return nil
     }
     return values(ptr, until: .none)
   }
-
-  deinit {
-    if freeWhenDone {
-      var ptr: UnsafeMutablePointer<AVBufferRef>? = cBufferPtr
-      av_buffer_unref(&ptr)
-    }
-  }
 }
 
 extension AVFrame {
-
   /// For hwaccel-format frames, this should be a reference to the `AVHWFramesContext`
   /// describing the frame.
   public var hwFramesContext: AVHWFramesContext? {
-    if let ptr = cFrame.hw_frames_ctx {
-      return AVHWFramesContext(cBufferPtr: ptr)
-    }
-    return nil
+    native.pointee.hw_frames_ctx.map(AVHWFramesContext.init(nativeBuffer:))
   }
 
   /// Copy data from a hw surface.
@@ -419,6 +400,6 @@ extension AVFrame {
   /// - Parameter frame: the source frame
   /// - Throws: AVError
   public func transferData(from frame: AVFrame) throws {
-    try throwIfFail(av_hwframe_transfer_data(cFramePtr, frame.cFramePtr, 0))
+    try throwIfFail(av_hwframe_transfer_data(native, frame.native, 0))
   }
 }
