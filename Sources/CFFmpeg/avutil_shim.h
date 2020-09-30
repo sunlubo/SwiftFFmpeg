@@ -14,6 +14,7 @@
 #include <libavutil/imgutils.h>
 #include <libavutil/channel_layout.h>
 #include <libavutil/md5.h>
+#include <libavutil/mastering_display_metadata.h>
 
 static const int64_t swift_AV_NOPTS_VALUE = AV_NOPTS_VALUE;
 

@@ -162,6 +162,19 @@ public final class AVFrame {
   public var extendedBufferCount: Int {
     Int(native.pointee.nb_extended_buf)
   }
+    
+  public var sideData: [AVFrameSideData] {
+    var list = [AVFrameSideData]()
+    for i in 0 ..< sideDataCount {
+        list.append(AVFrameSideData(native: native.pointee.side_data[i]!))
+    }
+    return list
+  }
+
+  /// The number of elements in `sideData`.
+  public var sideDataCount: Int {
+    Int(native.pointee.nb_side_data)
+  }
 
   /// The frame timestamp estimated using various heuristics, in stream timebase.
   ///
