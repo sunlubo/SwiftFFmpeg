@@ -1,6 +1,6 @@
 #!/bin/bash
 
-FFMPEG_VERSION=4.3.1
+FFMPEG_VERSION=5.0
 FFMPEG_SOURCE_DIR=FFmpeg-n$FFMPEG_VERSION
 FFMPEG_LIBS="libavcodec libavdevice libavfilter libavformat libavutil libpostproc libswresample libswscale"
 PREFIX=`pwd`/output
