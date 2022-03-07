@@ -34,7 +34,8 @@ public struct AVClass {
 extension AVClass {
   // https://github.com/FFmpeg/FFmpeg/blob/master/libavutil/log.h#L48
   public enum Category: UInt32 {
-    case input = 1
+    case na
+    case input
     case output
     case muxer
     case demuxer
@@ -68,6 +69,8 @@ extension AVClass {
 extension AVClass.Category: CustomStringConvertible {
   public var description: String {
     switch self {
+    case .na:
+      return "na"
     case .input:
       return "input"
     case .output:

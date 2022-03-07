@@ -41,8 +41,7 @@ public struct AVOption {
     self.unit = String(cString: cOption.unit)
 
     switch type {
-    case .flags, .int, .int64, .uint64, .const, .pixelFormat, .sampleFormat, .duration,
-      .channelLayout:
+    case .flags, .int, .int64, .uint64, .const, .pixelFormat, .sampleFormat, .duration, .channelLayout:
       self.defaultValue = cOption.default_val.i64
     case .double, .float, .rational:
       self.defaultValue = cOption.default_val.dbl

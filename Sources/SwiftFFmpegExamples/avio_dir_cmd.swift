@@ -33,37 +33,14 @@ private func list_op() throws {
   }
 }
 
-private func move_op() throws {
-  if CommandLine.argc < 5 {
-    print("Missing argument for move operation.")
-    return
-  }
-
-  let src = CommandLine.arguments[3]
-  let dst = CommandLine.arguments[4]
-  try AVIO.move(src, dst)
-}
-
-private func del_op() throws {
-  if CommandLine.argc < 4 {
-    print("Missing argument for del operation.")
-    return
-  }
-
-  let input = CommandLine.arguments[3]
-  try AVIO.delete(input)
-}
-
 func avio_dir_cmd() throws {
   if CommandLine.argc < 3 {
     print(
       """
       Usage: \(CommandLine.arguments[0]) \(CommandLine.arguments[1]) OPERATION entry1 [entry2]
-          
+
       OPERATIONS:
         list      list content of the directory
-        move      rename content in directory
-        del       delete content in directory
       """)
     return
   }
@@ -72,10 +49,6 @@ func avio_dir_cmd() throws {
   switch op {
   case "list":
     try list_op()
-  case "move":
-    try move_op()
-  case "del":
-    try del_op()
   default:
     print("Invalid operation \(op)")
   }

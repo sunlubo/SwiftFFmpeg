@@ -17,34 +17,31 @@ public final class SwrContext {
     self.native = swr_alloc()
   }
 
-  /// Create `SwrContext` if needed and set/reset common parameters.
-  ///
-  /// - Parameters:
-  ///   - dstChannelLayout: output channel layout
-  ///   - dstSampleFormat: output sample format
-  ///   - dstSampleRate: output sample rate (frequency in Hz)
-  ///   - srcChannelLayout: input channel layout
-  ///   - srcSampleFormat: input sample format
-  ///   - srcSampleRate: input sample rate (frequency in Hz)
-  public init(
-    dstChannelLayout: AVChannelLayout,
-    dstSampleFormat: AVSampleFormat,
-    dstSampleRate: Int,
-    srcChannelLayout: AVChannelLayout,
-    srcSampleFormat: AVSampleFormat,
-    srcSampleRate: Int
+  /// Creates a resample context from the given parameters.
+  public init?(
+    inputChannelLayout: AVChannelLayout,
+    inputSampleFormat: AVSampleFormat,
+    inputSampleRate: Int,
+    outputChannelLayout: AVChannelLayout,
+    outputSampleFormat: AVSampleFormat,
+    outputSampleRate: Int
   ) {
-    native = swr_alloc_set_opts(
-      nil,
-      Int64(dstChannelLayout.rawValue),
-      dstSampleFormat.native,
-      Int32(dstSampleRate),
-      Int64(srcChannelLayout.rawValue),
-      srcSampleFormat.native,
-      Int32(srcSampleRate),
-      0,
-      nil
-    )
+    guard
+      let ptr = swr_alloc_set_opts(
+        nil,
+        Int64(outputChannelLayout.rawValue),
+        outputSampleFormat.native,
+        Int32(outputSampleRate),
+        Int64(inputChannelLayout.rawValue),
+        inputSampleFormat.native,
+        Int32(inputSampleRate),
+        0,
+        nil
+      )
+    else {
+      return nil
+    }
+    self.native = ptr
   }
 
   deinit {
@@ -176,9 +173,7 @@ public final class SwrContext {
 extension SwrContext: AVClassSupport, AVOptionSupport {
   public static let `class` = AVClass(native: swr_get_class())
 
-  public func withUnsafeObjectPointer<T>(
-    _ body: (UnsafeMutableRawPointer) throws -> T
-  ) rethrows -> T {
+  public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T {
     try body(UnsafeMutableRawPointer(native))
   }
 }

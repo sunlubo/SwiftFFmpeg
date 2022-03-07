@@ -20,8 +20,7 @@ public struct AVChapter {
   public var metadata: [String: String]
 
   var native: CAVChapter {
-    CAVChapter(
-      id: Int32(id), time_base: timeBase, start: start, end: end, metadata: metadata.avDict)
+    CAVChapter(id: Int64(id), time_base: timeBase, start: start, end: end, metadata: metadata.avDict)
   }
 
   init(native: UnsafeMutablePointer<CAVChapter>) {
@@ -32,9 +31,7 @@ public struct AVChapter {
     self.metadata = toDictionary(native.pointee.metadata)
   }
 
-  public init(
-    id: Int, timeBase: AVRational, start: Int64, end: Int64, metadata: [String: String] = [:]
-  ) {
+  public init(id: Int, timeBase: AVRational, start: Int64, end: Int64, metadata: [String: String] = [:]) {
     self.id = id
     self.timeBase = timeBase
     self.start = start

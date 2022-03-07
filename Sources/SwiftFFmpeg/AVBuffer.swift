@@ -20,7 +20,7 @@ public final class AVBuffer {
   ///
   /// - Parameter size: size of the buffer
   init(size: Int) {
-    self.native = av_buffer_alloc(Int32(size))
+    self.native = av_buffer_alloc(size)
   }
 
   /// The data buffer.
@@ -53,7 +53,7 @@ public final class AVBuffer {
   /// - Parameter size: required new buffer size
   public func realloc(size: Int) {
     precondition(native != nil, "Buffer has been freed.")
-    abortIfFail(av_buffer_realloc(&native, Int32(size)))
+    abortIfFail(av_buffer_realloc(&native, size))
   }
 
   /// Create a writable reference from a given buffer reference, avoiding data copy if possible.

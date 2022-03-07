@@ -106,7 +106,7 @@ public final class AVFormatContext {
   /// - muxing: Streams are created by the user before `writeHeader(options:)`.
   public var streams: [AVStream] {
     var list = [AVStream]()
-    for i in 0..<streamCount {
+    for i in 0 ..< streamCount {
       let stream = native.pointee.streams.advanced(by: i).pointee!
       list.append(AVStream(native: stream))
     }
@@ -166,7 +166,7 @@ public final class AVFormatContext {
   public var chapters: [AVChapter] {
     get {
       var list = [AVChapter]()
-      for i in 0..<native.pointee.nb_chapters {
+      for i in 0 ..< native.pointee.nb_chapters {
         let chapter = native.pointee.chapters.advanced(by: Int(i)).pointee!
         list.append(AVChapter(native: chapter))
       }
@@ -423,7 +423,8 @@ extension AVFormatContext {
     relatedStreamIndex: Int = -1
   ) -> Int? {
     let ret = av_find_best_stream(
-      native, type.native, Int32(wantedStreamIndex), Int32(relatedStreamIndex), nil, 0)
+      native, type.native, Int32(wantedStreamIndex), Int32(relatedStreamIndex), nil, 0
+    )
     return ret >= 0 ? Int(ret) : nil
   }
 
@@ -652,9 +653,7 @@ extension AVFormatContext {
 extension AVFormatContext: AVClassSupport, AVOptionSupport {
   public static let `class` = AVClass(native: avformat_get_class())
 
-  public func withUnsafeObjectPointer<T>(
-    _ body: (UnsafeMutableRawPointer) throws -> T
-  ) rethrows -> T {
+  public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T {
     try body(native)
   }
 }

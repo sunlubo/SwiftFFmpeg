@@ -152,7 +152,7 @@ public final class AVFrame {
   /// This array only contains the extra pointers, which cannot fit into `buffer`.
   public var extendedBuffer: [AVBuffer] {
     var list = [AVBuffer]()
-    for i in 0..<extendedBufferCount {
+    for i in 0 ..< extendedBufferCount {
       list.append(AVBuffer(native: native.pointee.extended_buf[i]!))
     }
     return list
@@ -162,11 +162,11 @@ public final class AVFrame {
   public var extendedBufferCount: Int {
     Int(native.pointee.nb_extended_buf)
   }
-    
+
   public var sideData: [AVFrameSideData] {
     var list = [AVFrameSideData]()
     for i in 0 ..< sideDataCount {
-        list.append(AVFrameSideData(native: native.pointee.side_data[i]!))
+      list.append(AVFrameSideData(native: native.pointee.side_data[i]!))
     }
     return list
   }
@@ -462,15 +462,5 @@ extension AVFrame {
   public var channelCount: Int {
     get { Int(native.pointee.channels) }
     set { native.pointee.channels = Int32(newValue) }
-  }
-}
-
-extension AVFrame: AVClassSupport {
-  public static let `class` = AVClass(native: avcodec_get_frame_class())
-
-  public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows
-    -> T
-  {
-    fatalError("unsupported")
   }
 }

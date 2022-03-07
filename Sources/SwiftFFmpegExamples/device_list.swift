@@ -14,21 +14,15 @@ func device_list() throws {
   print(AVDevice.supportedAudioOutputDevices)
   print(AVDevice.supportedVideoOutputDevices)
 
-  let fmtCtx = try AVFormatContext(format: nil, formatName: "opengl")
-  let capabilities = try AVDeviceCapabilitiesQuery(formatContext: fmtCtx)
-  print(capabilities)
-
-  for fmt in AVInputFormat.supportedFormats
-  where fmt.privClass?.category == .deviceAudioInput || fmt.privClass?.category == .deviceVideoInput
-    || fmt.privClass?.category == .deviceInput
-  {
+  for fmt in AVInputFormat.supportedFormats where fmt.privClass?.category == .deviceAudioInput
+    || fmt.privClass?.category == .deviceVideoInput
+    || fmt.privClass?.category == .deviceInput {
     print(fmt)
   }
 
-  for fmt in AVOutputFormat.supportedFormats
-  where fmt.privClass?.category == .deviceAudioOutput
-    || fmt.privClass?.category == .deviceVideoOutput || fmt.privClass?.category == .deviceOutput
-  {
+  for fmt in AVOutputFormat.supportedFormats where fmt.privClass?.category == .deviceAudioOutput
+    || fmt.privClass?.category == .deviceVideoOutput
+    || fmt.privClass?.category == .deviceOutput {
     print(fmt)
   }
 

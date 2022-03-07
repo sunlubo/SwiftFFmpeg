@@ -161,9 +161,7 @@ public final class AVBitStreamFilterContext {
 extension AVBitStreamFilterContext: AVClassSupport, AVOptionSupport {
   public static let `class` = AVClass(native: av_bsf_get_class())
 
-  public func withUnsafeObjectPointer<T>(
-    _ body: (UnsafeMutableRawPointer) throws -> T
-  ) rethrows -> T {
+  public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T {
     try body(native)
   }
 }

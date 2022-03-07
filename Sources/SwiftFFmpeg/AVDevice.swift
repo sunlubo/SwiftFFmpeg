@@ -160,7 +160,7 @@ public enum AVDevice {
   /// Get all registered audio input devices.
   public static var supportedAudioInputDevices: [AVInputFormat] {
     var list = [AVInputFormat]()
-    var prev: UnsafeMutablePointer<CAVInputFormat>?
+    var prev: UnsafePointer<CAVInputFormat>?
     while let ptr = av_input_audio_device_next(prev) {
       list.append(AVInputFormat(native: ptr))
       prev = ptr
@@ -171,7 +171,7 @@ public enum AVDevice {
   /// Get all registered video input devices.
   public static var supportedVideoInputDevices: [AVInputFormat] {
     var list = [AVInputFormat]()
-    var prev: UnsafeMutablePointer<CAVInputFormat>?
+    var prev: UnsafePointer<CAVInputFormat>?
     while let ptr = av_input_video_device_next(prev) {
       list.append(AVInputFormat(native: ptr))
       prev = ptr
@@ -182,7 +182,7 @@ public enum AVDevice {
   /// Get all registered audio output devices.
   public static var supportedAudioOutputDevices: [AVOutputFormat] {
     var list = [AVOutputFormat]()
-    var prev: UnsafeMutablePointer<CAVOutputFormat>?
+    var prev: UnsafePointer<CAVOutputFormat>?
     while let ptr = av_output_audio_device_next(prev) {
       list.append(AVOutputFormat(native: ptr))
       prev = ptr
@@ -193,7 +193,7 @@ public enum AVDevice {
   /// Get all registered video output devices.
   public static var supportedVideoOutputDevices: [AVOutputFormat] {
     var list = [AVOutputFormat]()
-    var prev: UnsafeMutablePointer<CAVOutputFormat>?
+    var prev: UnsafePointer<CAVOutputFormat>?
     while let ptr = av_output_video_device_next(prev) {
       list.append(AVOutputFormat(native: ptr))
       prev = ptr
@@ -249,29 +249,6 @@ typealias CAVDeviceCapabilitiesQuery = CFFmpeg.AVDeviceCapabilitiesQuery
 /// to implement capabilities probing API based on `AVOption` API. Should not be used directly.
 public final class AVDeviceCapabilitiesQuery {
   var native: UnsafeMutablePointer<CAVDeviceCapabilitiesQuery>!
-  let formatContext: AVFormatContext
-
-  /// Initialize capabilities probing API based on `AVOption` API.
-  ///
-  /// - Parameters:
-  ///   - formatContext: Context of the device.
-  ///   - options: An dictionary filled with device-private options.
-  ///     The same options must be passed later to `AVFormatContext.writeHeader(options:)`
-  ///     for output devices or `AVFormatContext.openInput(_:format:options:)` for input devices,
-  ///     or at any other place that affects device-private options.
-  /// - Throws: AVError
-  public init(formatContext: AVFormatContext, options: [String: String]? = nil) throws {
-    var pm: OpaquePointer? = options?.avDict
-    defer { av_dict_free(&pm) }
-
-    let ret = avdevice_capabilities_create(&native, formatContext.native, &pm)
-    try throwIfFail(ret)
-    self.formatContext = formatContext
-  }
-
-  deinit {
-    avdevice_capabilities_free(&native, formatContext.native)
-  }
 
   public var codec: AVCodecID {
     native.pointee.codec
@@ -378,7 +355,7 @@ public final class AVDeviceInfoList {
   /// list of autodetected devices
   public var devices: [AVDeviceInfo] {
     var list = [AVDeviceInfo]()
-    for i in 0..<deviceCount {
+    for i in 0 ..< deviceCount {
       list.append(AVDeviceInfo(native: native.pointee.devices[i]!))
     }
     return list

@@ -387,9 +387,7 @@ extension AVCodec.Cap: CustomStringConvertible {
 
 extension AVCodec: AVOptionSupport {
 
-  public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows
-    -> T
-  {
+  public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T {
     var tmp = native.pointee.priv_class
     return try withUnsafeMutablePointer(to: &tmp) { ptr in
       try body(ptr)

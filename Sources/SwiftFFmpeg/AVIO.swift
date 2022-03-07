@@ -41,8 +41,7 @@ public enum AVIO {
   ///   - size: Size in bytes of the memory block to be allocated or reallocated
   /// - Returns: Pointer to a newly-reallocated block or `nil` if the block cannot be reallocated
   ///   or the function is used to free the memory block
-  public static func realloc(_ ptr: UnsafeMutableRawPointer?, size: Int) -> UnsafeMutableRawPointer?
-  {
+  public static func realloc(_ ptr: UnsafeMutableRawPointer?, size: Int) -> UnsafeMutableRawPointer? {
     av_realloc(ptr, size)
   }
 
@@ -84,26 +83,6 @@ public enum AVIO {
   /// Unmap or free the buffer bufptr created by `fileMap(filename:buffer:size)`.
   public static func fileUnmap(buffer: UnsafeMutablePointer<UInt8>, size: Int) {
     av_file_unmap(buffer, size)
-  }
-
-  /// Move or rename a resource.
-  ///
-  /// - Note: `src` and `dst` should share the same protocol and authority.
-  ///
-  /// - Parameters:
-  ///   - src: url to resource to be moved
-  ///   - dst: new url to resource if the operation succeeded
-  /// - Throws: AVError
-  public static func move(_ src: String, _ dst: String) throws {
-    try throwIfFail(avpriv_io_move(src, dst))
-  }
-
-  /// Delete a resource.
-  ///
-  /// - Parameter url: resource to be deleted.
-  /// - Throws: AVError
-  public static func delete(_ url: String) throws {
-    try throwIfFail(avpriv_io_delete(url))
   }
 }
 
@@ -331,7 +310,7 @@ public final class AVIOContext {
     var read:
       (@convention(c) (UnsafeMutableRawPointer?, UnsafeMutablePointer<UInt8>?, Int32) -> Int32)?
     if readHandler != nil {
-      read = { (opaque, buffer, size) -> Int32 in
+      read = { opaque, buffer, size -> Int32 in
         let value = Unmanaged<IOBox>.fromOpaque(opaque!).takeUnretainedValue().value
         let ret = value.read!(value.opaque, buffer, Int(size))
         return Int32(ret)
@@ -340,7 +319,7 @@ public final class AVIOContext {
     var write:
       (@convention(c) (UnsafeMutableRawPointer?, UnsafeMutablePointer<UInt8>?, Int32) -> Int32)?
     if writeHandler != nil {
-      write = { (opaque, buffer, size) -> Int32 in
+      write = { opaque, buffer, size -> Int32 in
         let value = Unmanaged<IOBox>.fromOpaque(opaque!).takeUnretainedValue().value
         let ret = value.write!(value.opaque, buffer, Int(size))
         return Int32(ret)
@@ -348,7 +327,7 @@ public final class AVIOContext {
     }
     var seek: (@convention(c) (UnsafeMutableRawPointer?, Int64, Int32) -> Int64)?
     if seekHandler != nil {
-      seek = { (opaque, offset, size) -> Int64 in
+      seek = { opaque, offset, size -> Int64 in
         let value = Unmanaged<IOBox>.fromOpaque(opaque!).takeUnretainedValue().value
         return value.seek!(value.opaque, offset, Int(size))
       }
@@ -530,9 +509,7 @@ public final class AVIOContext {
   ///     The protocol may silently ignore `SeekFlag.backward` and `SeekFlag.any`, but `SeekFlag.byte`
   ///     will fail if used and not supported.
   /// - Throws: AVError
-  public func seek(to timestamp: Int64, streamIndex: Int64, flags: AVFormatContext.SeekFlag) throws
-    -> Int
-  {
+  public func seek(to timestamp: Int64, streamIndex: Int64, flags: AVFormatContext.SeekFlag) throws -> Int {
     let ret = avio_seek_time(native, Int32(streamIndex), timestamp, flags.rawValue)
     try throwIfFail(Int32(ret))
     return Int(ret)
@@ -604,9 +581,7 @@ public final class AVIOContext {
 
 extension AVIOContext: AVOptionSupport {
 
-  public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows
-    -> T
-  {
+  public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T {
     try body(native)
   }
 }

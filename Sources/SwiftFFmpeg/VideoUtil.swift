@@ -155,21 +155,6 @@ public struct AVPixelFormatFlags: OptionSet {
   /// The pixel format contains RGB-like data (as opposed to YUV/grayscale).
   public static let RGB = AVPixelFormatFlags(rawValue: UInt64(AV_PIX_FMT_FLAG_RGB))
 
-  /// The pixel format is "pseudo-paletted". This means that it contains a
-  /// fixed palette in the 2nd plane but the palette is fixed/constant for each
-  /// PIX_FMT. This allows interpreting the data as if it was PAL8, which can
-  /// in some cases be simpler. Or the data can be interpreted purely based on
-  /// the pixel format without using the palette.
-  /// An example of a pseudo-paletted format is AV_PIX_FMT_GRAY8
-  /// @deprecated This flag is deprecated, and will be removed. When it is removed,
-  /// the extra palette allocation in AVFrame.data[1] is removed as well. Only
-  /// actual paletted formats (as indicated by AV_PIX_FMT_FLAG_PAL) will have a
-  /// palette. Starting with FFmpeg versions which have this flag deprecated, the
-  /// extra "pseudo" palette is already ignored, and API users are not required to
-  /// allocate a palette for AV_PIX_FMT_FLAG_PSEUDOPAL formats (it was required
-  /// before the deprecation, though).
-  public static let PSEUDOPAL = AVPixelFormatFlags(rawValue: UInt64(AV_PIX_FMT_FLAG_PSEUDOPAL))
-
   /// The pixel format has an alpha channel. This is set on all formats that
   /// support alpha in some way, including AV_PIX_FMT_PAL8. The alpha is always
   /// straight, never pre-multiplied.
@@ -196,19 +181,19 @@ extension AVPixelFormat: CustomStringConvertible {
 public typealias AVFieldOrder = CFFmpeg.AVFieldOrder
 
 extension CFFmpeg.AVFieldOrder {
-    public static let UNKNOWN = AV_FIELD_UNKNOWN
-    
-    public static let PROGRESSIVE = AV_FIELD_PROGRESSIVE
-    
-    /// Top coded_first, top displayed first
-    public static let TT = AV_FIELD_TT
-    
-    /// Bottom coded first, bottom displayed first
-    public static let BB = AV_FIELD_BB
-    
-    /// Top coded first, bottom displayed first
-    public static let TB = AV_FIELD_TB
-    
-    /// Bottom coded first, top displayed first
-    public static let BT = AV_FIELD_BT
+  public static let UNKNOWN = AV_FIELD_UNKNOWN
+
+  public static let PROGRESSIVE = AV_FIELD_PROGRESSIVE
+
+  /// Top coded_first, top displayed first
+  public static let TT = AV_FIELD_TT
+
+  /// Bottom coded first, bottom displayed first
+  public static let BB = AV_FIELD_BB
+
+  /// Top coded first, bottom displayed first
+  public static let TB = AV_FIELD_TB
+
+  /// Bottom coded first, top displayed first
+  public static let BT = AV_FIELD_BT
 }

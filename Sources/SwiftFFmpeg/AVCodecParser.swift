@@ -41,9 +41,9 @@ public struct AVCodecParser {
 // MARK: - AVCodecParserContext
 
 public typealias AVCodecParserResult = (
-  UnsafeMutablePointer<UInt8>?,  // The parsed buffer or nil if not yet finished.
-  Int,  // The number of bytes of the parsed buffer or zero if not yet finished.
-  Int  // The number of bytes of the input bitstream used.
+  UnsafeMutablePointer<UInt8>?, // The parsed buffer or nil if not yet finished.
+  Int, // The number of bytes of the parsed buffer or zero if not yet finished.
+  Int // The number of bytes of the input bitstream used.
 )
 
 typealias CAVCodecParserContext = CFFmpeg.AVCodecParserContext

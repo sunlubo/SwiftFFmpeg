@@ -25,31 +25,31 @@ import CFFmpeg
 /// plane is used, and samples for each channel are interleaved. In this case,
 /// linesize is the buffer size, in bytes, for the 1 plane.
 public enum AVSampleFormat: Int32 {
-  case none = -1  // AV_SAMPLE_FMT_NONE
+  case none = -1 // AV_SAMPLE_FMT_NONE
   /// unsigned 8 bits
-  case uint8 = 0  // AV_SAMPLE_FMT_U8
+  case uint8 = 0 // AV_SAMPLE_FMT_U8
   /// signed 16 bits
-  case int16  // AV_SAMPLE_FMT_S16
+  case int16 // AV_SAMPLE_FMT_S16
   /// signed 32 bits
-  case int32  // AV_SAMPLE_FMT_S32
+  case int32 // AV_SAMPLE_FMT_S32
   /// float
-  case float  // AV_SAMPLE_FMT_FLT
+  case float // AV_SAMPLE_FMT_FLT
   /// double
-  case double  // AV_SAMPLE_FMT_DBL
+  case double // AV_SAMPLE_FMT_DBL
   /// unsigned 8 bits, planar
-  case uint8Planar  // AV_SAMPLE_FMT_U8P
+  case uint8Planar // AV_SAMPLE_FMT_U8P
   /// signed 16 bits, planar
-  case int16Planar  // AV_SAMPLE_FMT_S16P
+  case int16Planar // AV_SAMPLE_FMT_S16P
   /// signed 32 bits, planar
-  case int32Planar  // AV_SAMPLE_FMT_S32P
+  case int32Planar // AV_SAMPLE_FMT_S32P
   /// float, planar
-  case floatPlanar  // AV_SAMPLE_FMT_FLTP
+  case floatPlanar // AV_SAMPLE_FMT_FLTP
   /// double, planar
-  case doublePlanar  // AV_SAMPLE_FMT_DBLP
+  case doublePlanar // AV_SAMPLE_FMT_DBLP
   /// signed 64 bits
-  case int64  // AV_SAMPLE_FMT_S64
+  case int64 // AV_SAMPLE_FMT_S64
   /// signed 64 bits, planar
-  case int64Planar  // AV_SAMPLE_FMT_S64P
+  case int64Planar // AV_SAMPLE_FMT_S64P
 
   var native: CFFmpeg.AVSampleFormat {
     CFFmpeg.AVSampleFormat(rawValue)

@@ -159,9 +159,7 @@ extension AVStream {
   /// - Pararmeter data: the side data array.
   /// - Pararmeter size: side information size
   /// - Throws: AVError
-  public func addSideData(type: AVPacketSideDataType, data: UnsafeMutablePointer<UInt8>, size: Int)
-    throws
-  {
+  public func addSideData(type: AVPacketSideDataType, data: UnsafeMutablePointer<UInt8>, size: Int) throws {
     try throwIfFail(av_stream_add_side_data(native, type.native, data, size))
   }
 
@@ -171,7 +169,7 @@ extension AVStream {
   /// - Parameter size side information size
   ///
   /// - Returns: pointer to fresh allocated data or NULL otherwise
-  public func newSideData(type: AVPacketSideDataType, size: Int32) -> UnsafeMutablePointer<UInt8> {
+  public func newSideData(type: AVPacketSideDataType, size: Int) -> UnsafeMutablePointer<UInt8> {
     return av_stream_new_side_data(native, type.native, size)
   }
 
@@ -181,9 +179,7 @@ extension AVStream {
   /// - Parameter size pointer for side information size to store
   ///
   /// - Returns: pointer to data if present or NULL otherwise
-  public func getSideData(type: AVPacketSideDataType, size: UnsafeMutablePointer<Int32>)
-    -> UnsafeMutablePointer<UInt8>
-  {
+  public func getSideData(type: AVPacketSideDataType, size: UnsafeMutablePointer<Int>) -> UnsafeMutablePointer<UInt8> {
     return av_stream_get_side_data(native, type.native, size)
   }
 }

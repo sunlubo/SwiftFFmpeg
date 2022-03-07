@@ -12,9 +12,9 @@ import CFFmpeg
 typealias CAVInputFormat = CFFmpeg.AVInputFormat
 
 public struct AVInputFormat {
-  var native: UnsafeMutablePointer<CAVInputFormat>
+  var native: UnsafePointer<CAVInputFormat>
 
-  init(native: UnsafeMutablePointer<CAVInputFormat>) {
+  init(native: UnsafePointer<CAVInputFormat>) {
     self.native = native
   }
 
@@ -38,11 +38,6 @@ public struct AVInputFormat {
     String(cString: native.pointee.long_name)
   }
 
-  public var flags: Flag {
-    get { Flag(rawValue: native.pointee.flags) }
-    set { native.pointee.flags = newValue.rawValue }
-  }
-
   /// If extensions are defined, then no probe is done.
   /// You should usually not use extension format guessing because it is not reliable enough.
   public var extensions: String? {
@@ -52,6 +47,10 @@ public struct AVInputFormat {
   /// Comma-separated list of mime types.
   public var mimeType: String? {
     String(cString: native.pointee.mime_type)
+  }
+
+  public var flags: Flag {
+    Flag(rawValue: native.pointee.flags)
   }
 
   /// `AVClass` for the private context.
@@ -73,7 +72,6 @@ public struct AVInputFormat {
 // MARK: - AVInputFormat.Flag
 
 extension AVInputFormat {
-  /// Flags used by `flags`.
   public struct Flag: OptionSet {
     /// Demuxer will use avio_open, no opened file should be provided by the caller.
     public static let noFile = Flag(rawValue: AVFMT_NOFILE)
@@ -126,10 +124,9 @@ extension AVInputFormat.Flag: CustomStringConvertible {
 
 extension AVInputFormat: AVOptionSupport {
 
-  public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows
-    -> T
-  {
-    try withUnsafeMutablePointer(to: &native.pointee.priv_class) { ptr in
+  public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T {
+    var tmp = native.pointee.priv_class
+    return try withUnsafeMutablePointer(to: &tmp) { ptr in
       try body(ptr)
     }
   }
@@ -140,9 +137,9 @@ extension AVInputFormat: AVOptionSupport {
 typealias CAVOutputFormat = CFFmpeg.AVOutputFormat
 
 public struct AVOutputFormat {
-  var native: UnsafeMutablePointer<CAVOutputFormat>
+  var native: UnsafePointer<CAVOutputFormat>
 
-  init(native: UnsafeMutablePointer<CAVOutputFormat>) {
+  init(native: UnsafePointer<CAVOutputFormat>) {
     self.native = native
   }
 
@@ -193,8 +190,7 @@ public struct AVOutputFormat {
   }
 
   public var flags: Flag {
-    get { Flag(rawValue: native.pointee.flags) }
-    set { native.pointee.flags = newValue.rawValue }
+    Flag(rawValue: native.pointee.flags)
   }
 
   /// `AVClass` for the private context.
@@ -274,10 +270,9 @@ extension AVOutputFormat.Flag: CustomStringConvertible {
 
 extension AVOutputFormat: AVOptionSupport {
 
-  public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows
-    -> T
-  {
-    try withUnsafeMutablePointer(to: &native.pointee.priv_class) { ptr in
+  public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T {
+    var tmp = native.pointee.priv_class
+    return try withUnsafeMutablePointer(to: &tmp) { ptr in
       try body(ptr)
     }
   }

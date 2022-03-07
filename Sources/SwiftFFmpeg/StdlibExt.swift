@@ -29,8 +29,8 @@ extension UnsafeBufferPointer where Element == UInt8 {
       buffer.deinitialize(count: 16)
     }
     buffer.initialize(repeating: 0, count: 16)
-    av_md5_sum(buffer, baseAddress, Int32(count))
-    return (0..<16).reduce("") { result, index in
+    av_md5_sum(buffer, baseAddress, count)
+    return (0 ..< 16).reduce("") { result, index in
       let hex = String(buffer[index], radix: 16, uppercase: true)
       return result + (hex.count > 1 ? hex : ("0" + hex))
     }

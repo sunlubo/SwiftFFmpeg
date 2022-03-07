@@ -86,7 +86,8 @@ public final class SwsContext {
       destinationRange.rawValue,
       0,
       65536,
-      65536)
+      65536
+    )
   }
 
   /// Scale the image slice in `src` and put the resulting scaled slice in the image in `dst`.
@@ -116,7 +117,8 @@ public final class SwsContext {
     dstStride: UnsafePointer<Int32>
   ) throws -> Int {
     let ret = sws_scale(
-      native, src, srcStride, Int32(srcSliceY), Int32(srcSliceHeight), dst, dstStride)
+      native, src, srcStride, Int32(srcSliceY), Int32(srcSliceHeight), dst, dstStride
+    )
     try throwIfFail(ret)
     return Int(ret)
   }
@@ -196,9 +198,7 @@ extension SwsContext.Flag: CustomStringConvertible {
 extension SwsContext: AVClassSupport, AVOptionSupport {
   public static let `class` = AVClass(native: sws_get_class())
 
-  public func withUnsafeObjectPointer<T>(
-    _ body: (UnsafeMutableRawPointer) throws -> T
-  ) rethrows -> T {
+  public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T {
     try body(UnsafeMutableRawPointer(native))
   }
 }

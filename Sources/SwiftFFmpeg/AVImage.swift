@@ -31,7 +31,8 @@ public final class AVImage {
     linesizes.initialize(to: 0)
 
     let ret = av_image_alloc(
-      data, linesizes, Int32(width), Int32(height), pixelFormat, Int32(align))
+      data, linesizes, Int32(width), Int32(height), pixelFormat, Int32(align)
+    )
     guard ret >= 0 else {
       abort("av_image_alloc: \(AVError(code: ret))")
     }

@@ -5,29 +5,27 @@
 //  Created by sunlubo on 2018/7/18.
 //
 
-#if swift(>=4.2)
-
 import CFFmpeg
 
 // MARK: - AVFilterPad
 
 public struct AVFilterPad {
   let native: OpaquePointer
-  let index: Int32
+  let index: UInt32
 
-  init(native: OpaquePointer, index: Int32) {
+  init(native: OpaquePointer, index: UInt32) {
     self.native = native
     self.index = index
   }
 
   /// The name of the filter pad.
   public var name: String {
-    String(cString: avfilter_pad_get_name(native, index))
+    String(cString: avfilter_pad_get_name(native, Int32(index)))
   }
 
   /// The media type of the filter pad.
   public var mediaType: AVMediaType {
-    AVMediaType(native: avfilter_pad_get_type(native, index))
+    AVMediaType(native: avfilter_pad_get_type(native, Int32(index)))
   }
 }
 
@@ -74,8 +72,8 @@ public struct AVFilter {
     guard let start = native.pointee.inputs else {
       return nil
     }
-    let count = avfilter_pad_count(native.pointee.inputs)
-    let list = (0..<count).map({ AVFilterPad(native: start, index: $0) })
+    let count = avfilter_filter_pad_count(native, 0)
+    let list = (0 ..< count).map({ AVFilterPad(native: start, index: $0) })
     return list
   }
 
@@ -88,8 +86,8 @@ public struct AVFilter {
     guard let start = native.pointee.outputs else {
       return nil
     }
-    let count = avfilter_pad_count(native.pointee.outputs)
-    let list = (0..<count).map({ AVFilterPad(native: start, index: $0) })
+    let count = avfilter_filter_pad_count(native, 1)
+    let list = (0 ..< count).map({ AVFilterPad(native: start, index: $0) })
     return list
   }
 
@@ -175,9 +173,7 @@ extension AVFilter.Flag: CustomStringConvertible {
 
 extension AVFilter: AVOptionSupport {
 
-  public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows
-    -> T
-  {
+  public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T {
     var tmp = native.pointee.priv_class
     return try withUnsafeMutablePointer(to: &tmp) { ptr in
       try body(ptr)
@@ -225,7 +221,7 @@ public final class AVFilterContext {
   /// The input links of this filter instance.
   public var inputs: [AVFilterLink] {
     var list = [AVFilterLink]()
-    for i in 0..<inputCount {
+    for i in 0 ..< inputCount {
       list.append(AVFilterLink(native: native.pointee.inputs[i]!))
     }
     return list
@@ -239,7 +235,7 @@ public final class AVFilterContext {
   /// The output links of this filter instance.
   public var outputs: [AVFilterLink] {
     var list = [AVFilterLink]()
-    for i in 0..<outputCount {
+    for i in 0 ..< outputCount {
       list.append(AVFilterLink(native: native.pointee.outputs[i]!))
     }
     return list
@@ -308,9 +304,7 @@ public final class AVFilterContext {
 extension AVFilterContext: AVClassSupport, AVOptionSupport {
   public static let `class` = AVClass(native: avfilter_get_class())
 
-  public func withUnsafeObjectPointer<T>(
-    _ body: (UnsafeMutableRawPointer) throws -> T
-  ) rethrows -> T {
+  public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T {
     try body(native)
   }
 }
@@ -580,7 +574,7 @@ public final class AVFilterGraph {
   /// The filter list in the graph.
   public var filters: [AVFilterContext] {
     var list = [AVFilterContext]()
-    for i in 0..<filterCount {
+    for i in 0 ..< filterCount {
       let filter = native.pointee.filters.advanced(by: i).pointee!
       list.append(AVFilterContext(native: filter))
     }
@@ -604,9 +598,7 @@ public final class AVFilterGraph {
   ///     AVOptions API or there are no options that need to be set.
   /// - Returns: newly created filter instance
   /// - Throws: AVError
-  public func addFilter(_ filter: AVFilter, name: String, args: String? = nil) throws
-    -> AVFilterContext
-  {
+  public func addFilter(_ filter: AVFilter, name: String, args: String? = nil) throws -> AVFilterContext {
     var ptr: UnsafeMutablePointer<CAVFilterContext>!
     let ret = avfilter_graph_create_filter(&ptr, filter.native, name, args, nil, native)
     try throwIfFail(ret)
@@ -655,9 +647,7 @@ extension AVFilterGraph: CustomStringConvertible {
 
 extension AVFilterGraph: AVOptionSupport {
 
-  public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows
-    -> T
-  {
+  public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T {
     try body(native)
   }
 }
@@ -717,4 +707,3 @@ public final class AVFilterInOut {
     set { native.pointee.next = newValue?.native }
   }
 }
-#endif

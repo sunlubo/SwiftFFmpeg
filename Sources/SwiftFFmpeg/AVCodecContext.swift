@@ -699,9 +699,7 @@ extension AVCodecContext {
 extension AVCodecContext: AVClassSupport, AVOptionSupport {
   public static let `class` = AVClass(native: avcodec_get_class())
 
-  public func withUnsafeObjectPointer<T>(
-    _ body: (UnsafeMutableRawPointer) throws -> T
-  ) rethrows -> T {
+  public func withUnsafeObjectPointer<T>(_ body: (UnsafeMutableRawPointer) throws -> T) rethrows -> T {
     try body(native)
   }
 }

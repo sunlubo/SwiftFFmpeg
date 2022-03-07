@@ -102,21 +102,8 @@ extension AVPixelFormat {
   /// packed BGR 5:5:5, 16bpp, (msb)1X 5B 5G 5R(lsb), little-endian, X=unused/undefined
   public static let BGR555LE = AV_PIX_FMT_BGR555LE
 
-  /** @name Deprecated pixel formats */
-  /** @{ */
-  /// HW acceleration through VA API at motion compensation entry-point, Picture.data[3] contains a vaapi_render_state struct which contains macroblocks as well as various fields extracted from headers
-  public static let VAAPI_MOCO = AV_PIX_FMT_VAAPI_MOCO
-  /// HW acceleration through VA API at IDCT entry-point, Picture.data[3] contains a vaapi_render_state struct which contains fields extracted from headers
-  public static let VAAPI_IDCT = AV_PIX_FMT_VAAPI_IDCT
-  /// HW decoding through VA API, Picture.data[3] contains a VASurfaceID
-  public static let VAAPI_VLD = AV_PIX_FMT_VAAPI_VLD
-  /** @} */
+  /// Hardware acceleration through VA-API, data[3] contains a VASurfaceID.
   public static let VAAPI = AV_PIX_FMT_VAAPI
-
-  /**
-     *  Hardware acceleration through VA-API, data[3] contains a
-     *  VASurfaceID.
-     */
 
   /// planar YUV 4:2:0, 24bpp, (1 Cr & Cb sample per 2x2 Y samples), little-endian
   public static let YUV420P16LE = AV_PIX_FMT_YUV420P16LE
@@ -155,10 +142,10 @@ extension AVPixelFormat {
   public static let BGR48LE = AV_PIX_FMT_BGR48LE
 
   /**
-     * The following 12 formats have the disadvantage of needing 1 format for each bit depth.
-     * Notice that each 9/10 bits sample is stored in 16 bits with extra padding.
-     * If you want to support multiple bit depths, then using AV_PIX_FMT_YUV420P16* with the bpp stored separately is better.
-     */
+   * The following 12 formats have the disadvantage of needing 1 format for each bit depth.
+   * Notice that each 9/10 bits sample is stored in 16 bits with extra padding.
+   * If you want to support multiple bit depths, then using AV_PIX_FMT_YUV420P16* with the bpp stored separately is better.
+   */
   /// planar YUV 4:2:0, 13.5bpp, (1 Cr & Cb sample per 2x2 Y samples), big-endian
   public static let YUV420P9BE = AV_PIX_FMT_YUV420P9BE
   /// planar YUV 4:2:0, 13.5bpp, (1 Cr & Cb sample per 2x2 Y samples), little-endian
@@ -277,23 +264,23 @@ extension AVPixelFormat {
   /// planar GBRA 4:4:4:4 64bpp, little-endian
   public static let GBRAP16LE = AV_PIX_FMT_GBRAP16LE
   /**
-     *  HW acceleration through QSV, data[3] contains a pointer to the
-     *  mfxFrameSurface1 structure.
-     */
+   *  HW acceleration through QSV, data[3] contains a pointer to the
+   *  mfxFrameSurface1 structure.
+   */
   public static let QSV = AV_PIX_FMT_QSV
   /**
-     * HW acceleration though MMAL, data[3] contains a pointer to the
-     * MMAL_BUFFER_HEADER_T structure.
-     */
+   * HW acceleration though MMAL, data[3] contains a pointer to the
+   * MMAL_BUFFER_HEADER_T structure.
+   */
   public static let MMAL = AV_PIX_FMT_MMAL
 
   /// HW decoding through Direct3D11 via old API, Picture.data[3] contains a ID3D11VideoDecoderOutputView pointer
   public static let D3D11VA_VLD = AV_PIX_FMT_D3D11VA_VLD
 
   /**
-     * HW acceleration through CUDA. data[i] contain CUdeviceptr pointers
-     * exactly as for system memory frames.
-     */
+   * HW acceleration through CUDA. data[i] contain CUdeviceptr pointers
+   * exactly as for system memory frames.
+   */
   public static let CUDA = AV_PIX_FMT_CUDA
 
   /// packed RGB 8:8:8, 32bpp, XRGBXRGB...   X=unused/undefined
@@ -417,15 +404,15 @@ extension AVPixelFormat {
   public static let P016BE = AV_PIX_FMT_P016BE
 
   /**
-     * Hardware surfaces for Direct3D11.
-     *
-     * This is preferred over the legacy AV_PIX_FMT_D3D11VA_VLD. The new D3D11
-     * hwaccel API and filtering support AV_PIX_FMT_D3D11 only.
-     *
-     * data[0] contains a ID3D11Texture2D pointer, and data[1] contains the
-     * texture array index of the frame as intptr_t if the ID3D11Texture2D is
-     * an array texture (or always 0 if it's a normal texture).
-     */
+   * Hardware surfaces for Direct3D11.
+   *
+   * This is preferred over the legacy AV_PIX_FMT_D3D11VA_VLD. The new D3D11
+   * hwaccel API and filtering support AV_PIX_FMT_D3D11 only.
+   *
+   * data[0] contains a ID3D11Texture2D pointer, and data[1] contains the
+   * texture array index of the frame as intptr_t if the ID3D11Texture2D is
+   * an array texture (or always 0 if it's a normal texture).
+   */
   public static let D3D11 = AV_PIX_FMT_D3D11
 
   ///        Y        , 9bpp, big-endian
@@ -443,17 +430,17 @@ extension AVPixelFormat {
   public static let GBRAPF32LE = AV_PIX_FMT_GBRAPF32LE
 
   /**
-     * DRM-managed buffers exposed through PRIME buffer sharing.
-     *
-     * data[0] points to an AVDRMFrameDescriptor.
-     */
+   * DRM-managed buffers exposed through PRIME buffer sharing.
+   *
+   * data[0] points to an AVDRMFrameDescriptor.
+   */
   public static let DRM_PRIME = AV_PIX_FMT_DRM_PRIME
   /**
-     * Hardware surfaces for OpenCL.
-     *
-     * data[i] contain 2D image objects (typed in C as cl_mem, used
-     * in OpenCL as image2d_t) for each plane of the surface.
-     */
+   * Hardware surfaces for OpenCL.
+   *
+   * data[i] contain 2D image objects (typed in C as cl_mem, used
+   * in OpenCL as image2d_t) for each plane of the surface.
+   */
   public static let OPENCL = AV_PIX_FMT_OPENCL
 
   ///        Y        , 14bpp, big-endian
@@ -534,13 +521,13 @@ public enum AVColorPrimaries: UInt32 {
   /// ITU-R BT2020
   case BT2020
   /// SMPTE ST 428-1 (CIE 1931 XYZ)
-  case SMPTEST428_1  // SMPTE428
+  case SMPTEST428_1 // SMPTE428
   /// SMPTE ST 431-2 (2011) / DCI P3
   case SMPTE431
   /// SMPTE ST 432-1 (2010) / P3 D65 / Display P3
   case SMPTE432
   /// EBU Tech. 3213-E / JEDEC P22 phosphors
-  case JEDEC_P22  // EBU3213
+  case JEDEC_P22 // EBU3213
 
   var native: CFFmpeg.AVColorPrimaries {
     CFFmpeg.AVColorPrimaries(rawValue)
@@ -604,9 +591,9 @@ public enum AVColorTransferCharacteristic: UInt32 {
   /// ITU-R BT2020 for 12-bit system
   case BT2020_12
   /// SMPTE ST 2084 for 10-, 12-, 14- and 16-bit systems
-  case SMPTEST2084  // SMPTE2084
+  case SMPTEST2084 // SMPTE2084
   /// SMPTE ST 428-1
-  case SMPTEST428_1  // SMPTE428
+  case SMPTEST428_1 // SMPTE428
   /// ARIB STD-B67, known as "Hybrid log-gamma"
   case ARIB_STD_B67
 
@@ -658,7 +645,7 @@ public enum AVColorSpace: UInt32 {
   /// functionally identical to above
   case SMPTE240M
   /// Used by Dirac / VC-2 and H.264 FRext, see ITU-T SG16
-  case YCOCG  // YCGCO
+  case YCOCG // YCGCO
   /// ITU-R BT2020 non-constant luminance system
   case BT2020_NCL
   /// ITU-R BT2020 constant luminance system

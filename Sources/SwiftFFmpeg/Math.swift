@@ -85,7 +85,8 @@ public enum AVMath {
       Int64(a), Int64(b), Int64(c),
       CFFmpeg.AVRounding(
         rawValue: passMinMax ? rounding.rawValue | AV_ROUND_PASS_MINMAX.rawValue : rounding.rawValue
-      ))
+      )
+    )
   }
 
   /// Rescale a integer by 2 rational numbers with specified rounding.
@@ -100,6 +101,7 @@ public enum AVMath {
       Int64(a), b, c,
       CFFmpeg.AVRounding(
         rawValue: passMinMax ? rounding.rawValue | AV_ROUND_PASS_MINMAX.rawValue : rounding.rawValue
-      ))
+      )
+    )
   }
 }
