@@ -138,7 +138,7 @@ public final class SwrContext {
   public func getOutSamples(_ sampleCount: Int64) throws -> Int {
     let ret = swr_get_out_samples(native, Int32(sampleCount))
     try throwIfFail(ret)
-    return Int()
+    return Int(ret)
   }
 
   /// Convert audio.
