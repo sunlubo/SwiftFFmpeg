@@ -27,7 +27,7 @@ private func read_packet(
   )
 
   // copy internal buffer data to buf
-  buffer!.assign(from: bdPtr.pointee.ptr, count: bufSize)
+  buffer!.update(from: bdPtr.pointee.ptr, count: bufSize)
   bdPtr.pointee.ptr = bdPtr.pointee.ptr.advanced(by: bufSize)
   bdPtr.pointee.size = bdPtr.pointee.size - bufSize
 

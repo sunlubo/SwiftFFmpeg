@@ -33,8 +33,8 @@ private func display_frame(frame: AVFrame, timebase: AVRational) throws {
   let data = frame.data[0]!
   let linesize = Int(frame.linesize[0])
   puts("\033c")
-  for y in 0..<frame.height {
-    for x in 0..<frame.width {
+  for y in 0 ..< frame.height {
+    for x in 0 ..< frame.width {
       putchar(Int32(Array(" .-+#".utf8)[Int(data[y * linesize + x]) / 52]))
     }
     putchar(Int32(Array("\n".utf8)[0]))
@@ -72,11 +72,11 @@ func filtering_video() throws {
 
   // buffer video source: the decoded frames from the decoder will be inserted here.
   let args = """
-    video_size=\(decoderCtx.width)x\(decoderCtx.height):\
-    pix_fmt=\(decoderCtx.pixelFormat.rawValue):\
-    time_base=\(stram.timebase.num)/\(stram.timebase.den):\
-    pixel_aspect=\(decoderCtx.sampleAspectRatio.num)/\(decoderCtx.sampleAspectRatio.den)
-    """
+  video_size=\(decoderCtx.width)x\(decoderCtx.height):\
+  pix_fmt=\(decoderCtx.pixelFormat.rawValue):\
+  time_base=\(stram.timebase.num)/\(stram.timebase.den):\
+  pixel_aspect=\(decoderCtx.sampleAspectRatio.num)/\(decoderCtx.sampleAspectRatio.den)
+  """
   let buffersrcCtx = try filterGraph.addFilter(buffersrc, name: "in", args: args)
 
   // buffer video sink: to terminate the filter chain.

@@ -52,11 +52,11 @@ public final class AVImage {
 
     let data = UnsafeMutablePointer<UnsafeMutablePointer<UInt8>?>.allocate(capacity: 4)
     data.initialize(to: nil)
-    data.assign(from: frame.data.baseAddress!, count: 4)
+    data.update(from: frame.data.baseAddress!, count: 4)
 
     let linesizes = UnsafeMutablePointer<Int32>.allocate(capacity: 4)
     linesizes.initialize(to: 0)
-    linesizes.assign(from: frame.linesize.baseAddress!, count: 4)
+    linesizes.update(from: frame.linesize.baseAddress!, count: 4)
 
     self.data = UnsafeMutableBufferPointer(start: data, count: 4)
     self.size = frame.buffer.reduce(0) { $0 + ($1?.size ?? 0) }
