@@ -39,7 +39,6 @@ if CommandLine.argc < 2 {
       resampling_audio    API example program to show how to resample an audio stream with libswresample.
                           This program generates a series of audio frames, resamples them to a specified
                           output format and rate and saves them to an output file named output_file.
-     device_list          API example for libavdevice.
      bsf                  API example about how to use bitstream filter.
      split_stream         API example about how to split stream from a container format.
     """)
@@ -80,8 +79,6 @@ case "scaling_video":
   try scaling_video()
 case "resampling_audio":
   try resampling_audio()
-case "device_list":
-  try device_list()
 case "bsf":
   try bsf()
 case "split_stream":
