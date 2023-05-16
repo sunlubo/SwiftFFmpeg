@@ -182,12 +182,9 @@ public final class AVFrame {
     native.pointee.pkt_pos
   }
 
-  /// Duration of the corresponding packet, expressed in `AVStream.timebase` units, 0 if unknown.
-  ///
-  /// - encoding: Unused.
-  /// - decoding: Set by libavcodec, read by user.
-  public var pktDuration: Int64 {
-    native.pointee.pkt_duration
+  /// Duration of the frame, in the same units as pts. 0 if unknown.
+  public var duration: Int64 {
+    native.pointee.duration
   }
 
   /// Size of the corresponding packet containing the compressed frame.

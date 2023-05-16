@@ -179,12 +179,12 @@ public final class AVCodecContext {
     set { native.pointee.time_base = newValue }
   }
 
-  /// Frame counter.
+  /// Frame counter, set by libavcodec.
   ///
   /// - encoding: Total number of frames passed to the encoder so far.
   /// - decoding: Total number of frames returned from the decoder so far.
   public var frameNumber: Int {
-    Int(native.pointee.frame_number)
+    Int(native.pointee.frame_num)
   }
 
   /// A reference to the `AVHWFramesContext` describing the input (for encoding)
