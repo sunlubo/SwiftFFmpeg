@@ -98,7 +98,7 @@ public final class AVFrame {
   ///   `extendedData` must be used in order to access all channels.
   public var extendedData: UnsafeMutableBufferPointer<UnsafeMutablePointer<UInt8>?> {
     get {
-      let count = pixelFormat != .none ? 4 : channelCount
+      let count = pixelFormat != .none ? 4 : channelLayout.channelCount
       return UnsafeMutableBufferPointer(start: native.pointee.extended_data, count: count)
     }
     set { native.pointee.extended_data = newValue.baseAddress }
@@ -115,16 +115,6 @@ public final class AVFrame {
   /// without pts values.
   public var dts: Int64 {
     native.pointee.pkt_dts
-  }
-
-  /// Picture number in bitstream order.
-  public var codedPictureNumber: Int {
-    Int(native.pointee.coded_picture_number)
-  }
-
-  /// Picture number in display order.
-  public var displayPictureNumber: Int {
-    Int(native.pointee.display_picture_number)
   }
 
   /// `AVBuffer` references backing the data for this frame.
@@ -445,22 +435,13 @@ extension AVFrame {
 
   /// The channel layout of the audio data.
   public var channelLayout: AVChannelLayout {
-    get { AVChannelLayout(rawValue: native.pointee.channel_layout) }
-    set { native.pointee.channel_layout = newValue.rawValue }
+    get { native.pointee.ch_layout }
+    set { native.pointee.ch_layout = newValue }
   }
 
   /// The number of audio samples (per channel) described by this frame.
   public var sampleCount: Int {
     get { Int(native.pointee.nb_samples) }
     set { native.pointee.nb_samples = Int32(newValue) }
-  }
-
-  /// The number of audio channels.
-  ///
-  /// - encoding: Unused.
-  /// - decoding: Read by user.
-  public var channelCount: Int {
-    get { Int(native.pointee.channels) }
-    set { native.pointee.channels = Int32(newValue) }
   }
 }

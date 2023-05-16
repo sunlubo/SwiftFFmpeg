@@ -395,10 +395,10 @@ extension AVOptionSupport {
   /// - Throws: AVError
   public func channelLayout(
     forKey key: String, searchFlags: AVOption.SearchFlag = .children
-  ) throws -> Int64 {
+  ) throws -> AVChannelLayout {
     try withUnsafeObjectPointer { ptr in
-      var value: Int64 = 0
-      try throwIfFail(av_opt_get_channel_layout(ptr, key, searchFlags.rawValue, &value))
+      var value = AVChannelLayout()
+      try throwIfFail(av_opt_get_chlayout(ptr, key, searchFlags.rawValue, &value))
       return value
     }
   }
@@ -573,8 +573,9 @@ extension AVOptionSupport {
     _ value: AVChannelLayout, forKey key: String, searchFlags: AVOption.SearchFlag = .children
   ) throws {
     try withUnsafeObjectPointer { ptr in
-      try throwIfFail(
-        av_opt_set_channel_layout(ptr, key, Int64(value.rawValue), searchFlags.rawValue))
+      try withUnsafePointer(to: value) { chl in
+        try throwIfFail(av_opt_set_chlayout(ptr, key, chl, searchFlags.rawValue))
+      }
     }
   }
 

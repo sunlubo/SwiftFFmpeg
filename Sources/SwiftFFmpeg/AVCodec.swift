@@ -223,7 +223,7 @@ public struct AVCodec {
 
   /// Returns an array of the channel layouts supported by the codec.
   public var supportedChannelLayouts: [AVChannelLayout]? {
-    values(native.pointee.channel_layouts, until: 0)?.map { AVChannelLayout(rawValue: $0) }
+    values(native.pointee.ch_layouts, until: AVChannelLayout())
   }
 
   /// Maximum value for lowres supported by the decoder.
@@ -277,7 +277,6 @@ extension AVCodec {
     /// If not set, it might not use get_buffer() at all or use operations that
     /// assume the buffer was allocated by avcodec_default_get_buffer.
     public static let dr1 = Cap(rawValue: UInt32(AV_CODEC_CAP_DR1))
-    public static let truncated = Cap(rawValue: UInt32(AV_CODEC_CAP_TRUNCATED))
     /// Encoder or decoder requires flushing with NULL input at the end in order to
     /// give the complete and correct output.
     ///
@@ -324,7 +323,7 @@ extension AVCodec {
     /// Codec supports changed parameters at any point.
     public static let paramChange = Cap(rawValue: UInt32(AV_CODEC_CAP_PARAM_CHANGE))
     /// Codec supports avctx->thread_count == 0 (auto).
-    public static let autoThreads = Cap(rawValue: UInt32(AV_CODEC_CAP_AUTO_THREADS))
+    public static let otherThreads = Cap(rawValue: UInt32(AV_CODEC_CAP_OTHER_THREADS))
     /// Audio encoder supports receiving a different number of samples in each call.
     public static let variableFrameSize = Cap(rawValue: UInt32(AV_CODEC_CAP_VARIABLE_FRAME_SIZE))
     /// Decoder is not a preferred choice for probing.
@@ -335,10 +334,6 @@ extension AVCodec {
     /// A decoder marked with this flag should only be used as last resort
     /// choice for probing.
     public static let avoidProbing = Cap(rawValue: UInt32(AV_CODEC_CAP_AVOID_PROBING))
-    /// Codec is intra only.
-    public static let intraOnly = Cap(rawValue: UInt32(AV_CODEC_CAP_INTRA_ONLY))
-    /// Codec is lossless.
-    public static let lossless = Cap(rawValue: AV_CODEC_CAP_LOSSLESS)
     /// Codec is backed by a hardware implementation. Typically used to identify a non-hwaccel hardware decoder.
     /// For information about hwaccels, use `hwConfig(at:)` instead.
     public static let hardware = Cap(rawValue: UInt32(AV_CODEC_CAP_HARDWARE))
@@ -360,7 +355,6 @@ extension AVCodec.Cap: CustomStringConvertible {
     var str = "["
     if contains(.drawHorizBand) { str += "drawHorizBand, " }
     if contains(.dr1) { str += "dr1, " }
-    if contains(.truncated) { str += "truncated, " }
     if contains(.delay) { str += "delay, " }
     if contains(.smallLastFrame) { str += "smallLastFrame, " }
     if contains(.subframes) { str += "subframes, " }
@@ -369,11 +363,9 @@ extension AVCodec.Cap: CustomStringConvertible {
     if contains(.frameThreads) { str += "frameThreads, " }
     if contains(.sliceThreads) { str += "sliceThreads, " }
     if contains(.paramChange) { str += "paramChange, " }
-    if contains(.autoThreads) { str += "autoThreads, " }
+    if contains(.otherThreads) { str += "otherThreads, " }
     if contains(.variableFrameSize) { str += "variableFrameSize, " }
     if contains(.avoidProbing) { str += "avoidProbing, " }
-    if contains(.intraOnly) { str += "intraOnly, " }
-    if contains(.lossless) { str += "lossless, " }
     if contains(.hardware) { str += "hardware, " }
     if contains(.hybrid) { str += "hybrid, " }
     if contains(.encoderReorderedOpaque) { str += "encoderReorderedOpaque, " }

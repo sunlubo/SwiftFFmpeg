@@ -20,7 +20,7 @@ private func log_packet(_ pkt: AVPacket, fmtCtx: AVFormatContext, tag: String) {
     """)
 }
 
-/// Remux streams from one container format to another.
+/// Remux tracks from one container format to another.
 func remuxing() throws {
   if CommandLine.argc < 4 {
     print("Usage: \(CommandLine.arguments[0]) \(CommandLine.arguments[1]) input_file output_file")

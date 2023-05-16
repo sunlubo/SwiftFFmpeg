@@ -21,10 +21,11 @@ private func fill_samples(_ samples: AVSamples, _ sampleRate: Int64, _ t: Double
   // generate sin tone with 440Hz frequency and duplicated channels
   let capacity = samples.sampleCount * samples.channelCount
   let ptr = UnsafeMutableRawPointer(samples.data[0]!).bindMemory(
-    to: Double.self, capacity: capacity)
-  for i in 0..<samples.sampleCount {
+    to: Double.self, capacity: capacity
+  )
+  for i in 0 ..< samples.sampleCount {
     let sample = sin(c * t)
-    for j in 0..<samples.channelCount {
+    for j in 0 ..< samples.channelCount {
       ptr[i * samples.channelCount + j] = sample
     }
     t += tincr
@@ -46,14 +47,14 @@ func resampling_audio() throws {
   defer { fclose(file) }
 
   // source
-  let srcChannelLayout = AVChannelLayout.CHL_STEREO
+  let srcChannelLayout = AVChannelLayoutStereo
   let srcChannelCount = srcChannelLayout.channelCount
   let srcSampleRate = 48000 as Int64
   let srcSampleFmt = AVSampleFormat.double
   let srcSampleCount = 1024
 
   // destination
-  let dstChannelLayout = AVChannelLayout.CHL_SURROUND
+  let dstChannelLayout = AVChannelLayoutStereo
   let dstChannelCount = dstChannelLayout.channelCount
   let dstSampleRate = 44100 as Int64
   let dstSampleFmt = AVSampleFormat.int16
@@ -61,10 +62,10 @@ func resampling_audio() throws {
 
   let swrCtx = SwrContext()
   // set options
-  try swrCtx.set(srcChannelLayout.rawValue, forKey: "in_channel_layout")
+  try swrCtx.set(srcChannelLayout, forKey: "in_channel_layout")
   try swrCtx.set(srcSampleRate, forKey: "in_sample_rate")
   try swrCtx.set(srcSampleFmt, forKey: "in_sample_fmt")
-  try swrCtx.set(dstChannelLayout.rawValue, forKey: "out_channel_layout")
+  try swrCtx.set(dstChannelLayout, forKey: "out_channel_layout")
   try swrCtx.set(dstSampleRate, forKey: "out_sample_rate")
   try swrCtx.set(dstSampleFmt, forKey: "out_sample_fmt")
 
@@ -73,7 +74,8 @@ func resampling_audio() throws {
 
   // allocate source and destination samples buffers
   let srcSamples = AVSamples(
-    channelCount: srcChannelCount, sampleCount: srcSampleCount, sampleFormat: srcSampleFmt)
+    channelCount: srcChannelCount, sampleCount: srcSampleCount, sampleFormat: srcSampleFmt
+  )
 
   // compute the number of converted samples: buffering is avoided
   // ensuring that the output buffer will contain at least all the
@@ -95,12 +97,14 @@ func resampling_audio() throws {
     dstSampleCount = Int(
       AVMath.rescale(
         Int64(swrCtx.getDelay(srcSampleRate) + srcSampleCount), dstSampleRate, srcSampleRate,
-        rounding: .up))
+        rounding: .up
+      ))
 
     if dstSampleCount > maxDstSampleCount {
       dstSamples = AVSamples(
         channelCount: dstChannelCount, sampleCount: dstSampleCount, sampleFormat: dstSampleFmt,
-        align: 1)
+        align: 1
+      )
       maxDstSampleCount = dstSampleCount
     }
 
@@ -108,15 +112,16 @@ func resampling_audio() throws {
     let sampleCount = try srcSamples.reformat(using: swrCtx, to: dstSamples)
 
     let (size, _) = try AVSamples.getBufferSize(
-      channelCount: dstChannelCount, sampleCount: sampleCount, sampleFormat: dstSampleFmt, align: 1)
+      channelCount: dstChannelCount, sampleCount: sampleCount, sampleFormat: dstSampleFmt, align: 1
+    )
     fwrite(dstSamples.data[0], 1, size, file)
 
     print("t:\(t) in:\(srcSampleCount) out:\(sampleCount)")
   } while t < 10
 
-  // todo: audio format
+  // TODO: audio format
   print("Resampling succeeded. Play the output file with the command:")
   print(
-    "ffplay -f s16le -channel_layout \(dstChannelLayout.rawValue) -channels \(dstChannelCount) -ar \(dstSampleRate) \(output)"
+    "ffplay -f s16le -channel_layout \(dstChannelLayout) -channels \(dstChannelCount) -ar \(dstSampleRate) \(output)"
   )
 }

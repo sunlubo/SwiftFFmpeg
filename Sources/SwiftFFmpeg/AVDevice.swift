@@ -239,62 +239,6 @@ extension AVFormatContext {
   }
 }
 
-// MARK: - AVDeviceCapabilitiesQuery
-
-typealias CAVDeviceCapabilitiesQuery = CFFmpeg.AVDeviceCapabilitiesQuery
-
-/// Structure describes device capabilities.
-///
-/// It is used by devices in conjunction with `av_device_capabilities` `AVOption` table
-/// to implement capabilities probing API based on `AVOption` API. Should not be used directly.
-public final class AVDeviceCapabilitiesQuery {
-  var native: UnsafeMutablePointer<CAVDeviceCapabilitiesQuery>!
-
-  public var codec: AVCodecID {
-    native.pointee.codec
-  }
-
-  public var sampleFormat: AVCodecID {
-    native.pointee.codec
-  }
-
-  public var sampleRate: Int {
-    Int(native.pointee.sample_rate)
-  }
-
-  public var channelCount: Int {
-    Int(native.pointee.channels)
-  }
-
-  public var channelLayout: AVChannelLayout {
-    AVChannelLayout(rawValue: UInt64(native.pointee.channel_layout))
-  }
-
-  public var pixelFormat: AVCodecID {
-    native.pointee.codec
-  }
-
-  public var windowWidth: Int {
-    Int(native.pointee.window_width)
-  }
-
-  public var windowHeight: Int {
-    Int(native.pointee.window_height)
-  }
-
-  public var frameWidth: Int {
-    Int(native.pointee.frame_width)
-  }
-
-  public var frameHeight: Int {
-    Int(native.pointee.frame_height)
-  }
-
-  public var fps: AVRational {
-    native.pointee.fps
-  }
-}
-
 // MARK: - AVDeviceInfo
 
 typealias CAVDeviceInfo = CFFmpeg.AVDeviceInfo

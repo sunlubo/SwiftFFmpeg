@@ -16,7 +16,7 @@ import Glibc
 
 private let sampleRate = 48000
 private let sampleFormat = AVSampleFormat.floatPlanar
-private let channelLayout = AVChannelLayout.CHL_5POINT0
+private let channelLayout = AVChannelLayout5Point0
 private let frameSize = 1024
 
 /// Construct a frame of audio data to be filtered; this simple example just synthesizes a sine wave.
@@ -105,7 +105,7 @@ func filter_audio() throws {
   let aformatCtx = AVFilterContext(graph: filterGraph, filter: aformat, name: "aformat")
   // A third way of passing the options is in a string of the form key1=value1:key2=value2...
   let args =
-    "sample_fmts=\(AVSampleFormat.int16.name!):sample_rates=44100:channel_layouts=0x\(AVChannelLayout.CHL_STEREO.rawValue)"
+    "sample_fmts=\(AVSampleFormat.int16.name!):sample_rates=44100:channel_layouts=\(AVChannelLayoutStereo)"
   try aformatCtx.initialize(args: args)
 
   // Finally create the abuffersink filter;

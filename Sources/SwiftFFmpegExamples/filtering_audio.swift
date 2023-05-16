@@ -16,7 +16,7 @@ import Glibc
 private func print_frame(frame: AVFrame, file: UnsafeMutablePointer<FILE>) throws {
   let n = frame.sampleCount * frame.channelLayout.channelCount
   let data = UnsafeRawPointer(frame.data[0]!).bindMemory(to: UInt16.self, capacity: n)
-  for i in 0..<n {
+  for i in 0 ..< n {
     fputc(Int32(data[i] & 0xff), file)
     fputc(Int32(data[i] >> 8 & 0xff), file)
   }
@@ -56,23 +56,23 @@ func filtering_audio() throws {
   let inputs = AVFilterInOut()
   let outputs = AVFilterInOut()
   let sampleFmts = [AVSampleFormat.int16]
-  let channelLayouts = [AVChannelLayout.CHL_MONO]
+  let channelLayout = AVChannelLayoutMono
   let sampleRates = [8000] as [CInt]
   let filterGraph = AVFilterGraph()
 
   // buffer audio source: the decoded frames from the decoder will be inserted here.
   let args = """
-    time_base=\(stram.timebase.num)/\(stram.timebase.den):\
-    sample_rate=\(decoderCtx.sampleRate):\
-    sample_fmt=\(decoderCtx.sampleFormat.name!):\
-    channel_layout=0x\(decoderCtx.channelLayout.rawValue)
-    """
+  time_base=\(stram.timebase.num)/\(stram.timebase.den):\
+  sample_rate=\(decoderCtx.sampleRate):\
+  sample_fmt=\(decoderCtx.sampleFormat.name!):\
+  channel_layout=\(decoderCtx.channelLayout)
+  """
   let buffersrcCtx = try filterGraph.addFilter(buffersrc, name: "in", args: args)
 
   // buffer audio sink: to terminate the filter chain.
   let buffersinkCtx = try filterGraph.addFilter(buffersink, name: "out", args: nil)
   try buffersinkCtx.set(sampleFmts.map({ $0.rawValue }), forKey: "sample_fmts")
-  try buffersinkCtx.set(channelLayouts.map({ $0.rawValue }), forKey: "channel_layouts")
+  try buffersinkCtx.set(channelLayout.description, forKey: "ch_layouts")
   try buffersinkCtx.set(sampleRates, forKey: "sample_rates")
 
   // Set the endpoints for the filter graph.
@@ -96,7 +96,8 @@ func filtering_audio() throws {
 
   try filterGraph.parse(
     filters: "aresample=8000,aformat=sample_fmts=s16:channel_layouts=mono", inputs: inputs,
-    outputs: outputs)
+    outputs: outputs
+  )
   try filterGraph.configure()
 
   // Print summary of the sink buffer

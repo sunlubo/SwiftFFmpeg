@@ -446,8 +446,10 @@ extension AVFilterContext {
   }
 
   /// The channel layout of the audio buffer sink.
-  public var channelLayout: AVChannelLayout {
-    AVChannelLayout(rawValue: av_buffersink_get_channel_layout(native))
+  public var channelLayout: AVChannelLayout? {
+    var chl = AVChannelLayout()
+    let r = av_buffersink_get_ch_layout(native, &chl)
+    return r >= 0 ? chl : nil
   }
 
   /// Get a frame with filtered data from sink and put it in frame.
@@ -538,7 +540,7 @@ extension AVFilterLink {
 
   /// channel layout of current buffer
   public var channelLayout: AVChannelLayout {
-    AVChannelLayout(rawValue: native.pointee.channel_layout)
+    native.pointee.ch_layout
   }
 
   /// samples per second

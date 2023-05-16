@@ -173,14 +173,8 @@ extension AVCodecParameters {
   /// The channel layout bitmask. May be 0 if the channel layout is unknown or unspecified,
   /// otherwise the number of bits set must be equal to the channels field.
   public var channelLayout: AVChannelLayout {
-    get { AVChannelLayout(rawValue: native.pointee.channel_layout) }
-    set { native.pointee.channel_layout = newValue.rawValue }
-  }
-
-  /// The number of audio channels.
-  public var channelCount: Int {
-    get { Int(native.pointee.channels) }
-    set { native.pointee.channels = Int32(newValue) }
+    get { native.pointee.ch_layout }
+    set { native.pointee.ch_layout = newValue }
   }
 
   /// The number of audio samples per second.

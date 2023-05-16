@@ -19,35 +19,35 @@
 static const int64_t swift_AV_NOPTS_VALUE = AV_NOPTS_VALUE;
 
 /* Audio channel layout */
-static const uint64_t swift_AV_CH_LAYOUT_NATIVE            = AV_CH_LAYOUT_NATIVE;
-static const uint64_t swift_AV_CH_LAYOUT_MONO              = AV_CH_LAYOUT_MONO;
-static const uint64_t swift_AV_CH_LAYOUT_STEREO            = AV_CH_LAYOUT_STEREO;
-static const uint64_t swift_AV_CH_LAYOUT_2POINT1           = AV_CH_LAYOUT_2POINT1;
-static const uint64_t swift_AV_CH_LAYOUT_2_1               = AV_CH_LAYOUT_2_1;
-static const uint64_t swift_AV_CH_LAYOUT_SURROUND          = AV_CH_LAYOUT_SURROUND;
-static const uint64_t swift_AV_CH_LAYOUT_3POINT1           = AV_CH_LAYOUT_3POINT1;
-static const uint64_t swift_AV_CH_LAYOUT_4POINT0           = AV_CH_LAYOUT_4POINT0;
-static const uint64_t swift_AV_CH_LAYOUT_4POINT1           = AV_CH_LAYOUT_4POINT1;
-static const uint64_t swift_AV_CH_LAYOUT_2_2               = AV_CH_LAYOUT_2_2;
-static const uint64_t swift_AV_CH_LAYOUT_QUAD              = AV_CH_LAYOUT_QUAD;
-static const uint64_t swift_AV_CH_LAYOUT_5POINT0           = AV_CH_LAYOUT_5POINT0;
-static const uint64_t swift_AV_CH_LAYOUT_5POINT1           = AV_CH_LAYOUT_5POINT1;
-static const uint64_t swift_AV_CH_LAYOUT_5POINT0_BACK      = AV_CH_LAYOUT_5POINT0_BACK;
-static const uint64_t swift_AV_CH_LAYOUT_5POINT1_BACK      = AV_CH_LAYOUT_5POINT1_BACK;
-static const uint64_t swift_AV_CH_LAYOUT_6POINT0           = AV_CH_LAYOUT_6POINT0;
-static const uint64_t swift_AV_CH_LAYOUT_6POINT0_FRONT     = AV_CH_LAYOUT_6POINT0_FRONT;
-static const uint64_t swift_AV_CH_LAYOUT_HEXAGONAL         = AV_CH_LAYOUT_HEXAGONAL;
-static const uint64_t swift_AV_CH_LAYOUT_6POINT1           = AV_CH_LAYOUT_6POINT1;
-static const uint64_t swift_AV_CH_LAYOUT_6POINT1_BACK      = AV_CH_LAYOUT_6POINT1_BACK;
-static const uint64_t swift_AV_CH_LAYOUT_6POINT1_FRONT     = AV_CH_LAYOUT_6POINT1_FRONT;
-static const uint64_t swift_AV_CH_LAYOUT_7POINT0           = AV_CH_LAYOUT_7POINT0;
-static const uint64_t swift_AV_CH_LAYOUT_7POINT0_FRONT     = AV_CH_LAYOUT_7POINT0_FRONT;
-static const uint64_t swift_AV_CH_LAYOUT_7POINT1           = AV_CH_LAYOUT_7POINT1;
-static const uint64_t swift_AV_CH_LAYOUT_7POINT1_WIDE      = AV_CH_LAYOUT_7POINT1_WIDE;
-static const uint64_t swift_AV_CH_LAYOUT_7POINT1_WIDE_BACK = AV_CH_LAYOUT_7POINT1_WIDE_BACK;
-static const uint64_t swift_AV_CH_LAYOUT_OCTAGONAL         = AV_CH_LAYOUT_OCTAGONAL;
-static const uint64_t swift_AV_CH_LAYOUT_HEXADECAGONAL     = AV_CH_LAYOUT_HEXADECAGONAL;
-static const uint64_t swift_AV_CH_LAYOUT_STEREO_DOWNMIX    = AV_CH_LAYOUT_STEREO_DOWNMIX;
+static const AVChannelLayout AVChannelLayoutMono            = (AVChannelLayout)AV_CHANNEL_LAYOUT_MONO;
+static const AVChannelLayout AVChannelLayoutStereo          = (AVChannelLayout)AV_CHANNEL_LAYOUT_STEREO;
+static const AVChannelLayout AVChannelLayout2Point1         = (AVChannelLayout)AV_CHANNEL_LAYOUT_2POINT1;
+static const AVChannelLayout AVChannelLayout2_1             = (AVChannelLayout)AV_CHANNEL_LAYOUT_2_1;
+static const AVChannelLayout AVChannelLayoutSurround        = (AVChannelLayout)AV_CHANNEL_LAYOUT_SURROUND;
+static const AVChannelLayout AVChannelLayout3Point1         = (AVChannelLayout)AV_CHANNEL_LAYOUT_3POINT1;
+static const AVChannelLayout AVChannelLayout4Point0         = (AVChannelLayout)AV_CHANNEL_LAYOUT_4POINT0;
+static const AVChannelLayout AVChannelLayout4Point1         = (AVChannelLayout)AV_CHANNEL_LAYOUT_4POINT1;
+static const AVChannelLayout AVChannelLayout2_2             = (AVChannelLayout)AV_CHANNEL_LAYOUT_2_2;
+static const AVChannelLayout AVChannelLayoutQuad            = (AVChannelLayout)AV_CHANNEL_LAYOUT_QUAD;
+static const AVChannelLayout AVChannelLayout5Point0         = (AVChannelLayout)AV_CHANNEL_LAYOUT_5POINT0;
+static const AVChannelLayout AVChannelLayout5Point1         = (AVChannelLayout)AV_CHANNEL_LAYOUT_5POINT1;
+static const AVChannelLayout AVChannelLayout5Point0Back     = (AVChannelLayout)AV_CHANNEL_LAYOUT_5POINT0_BACK;
+static const AVChannelLayout AVChannelLayout5Point1Back     = (AVChannelLayout)AV_CHANNEL_LAYOUT_5POINT1_BACK;
+static const AVChannelLayout AVChannelLayout6Point0         = (AVChannelLayout)AV_CHANNEL_LAYOUT_6POINT0;
+static const AVChannelLayout AVChannelLayout6Point0Front    = (AVChannelLayout)AV_CHANNEL_LAYOUT_6POINT0_FRONT;
+static const AVChannelLayout AVChannelLayoutHexagonal       = (AVChannelLayout)AV_CHANNEL_LAYOUT_HEXAGONAL;
+static const AVChannelLayout AVChannelLayout6Point1         = (AVChannelLayout)AV_CHANNEL_LAYOUT_6POINT1;
+static const AVChannelLayout AVChannelLayout6Point1Back     = (AVChannelLayout)AV_CHANNEL_LAYOUT_6POINT1_BACK;
+static const AVChannelLayout AVChannelLayout6Point1Front    = (AVChannelLayout)AV_CHANNEL_LAYOUT_6POINT1_FRONT;
+static const AVChannelLayout AVChannelLayout7Point0         = (AVChannelLayout)AV_CHANNEL_LAYOUT_7POINT0;
+static const AVChannelLayout AVChannelLayout7Point0Front    = (AVChannelLayout)AV_CHANNEL_LAYOUT_7POINT0_FRONT;
+static const AVChannelLayout AVChannelLayout7Point1         = (AVChannelLayout)AV_CHANNEL_LAYOUT_7POINT1;
+static const AVChannelLayout AVChannelLayout7Point1Wide     = (AVChannelLayout)AV_CHANNEL_LAYOUT_7POINT1_WIDE;
+static const AVChannelLayout AVChannelLayout7Point1WideBack = (AVChannelLayout)AV_CHANNEL_LAYOUT_7POINT1_WIDE_BACK;
+static const AVChannelLayout AVChannelLayoutOctagonal       = (AVChannelLayout)AV_CHANNEL_LAYOUT_OCTAGONAL;
+static const AVChannelLayout AVChannelLayoutHexadecagonal   = (AVChannelLayout)AV_CHANNEL_LAYOUT_HEXADECAGONAL;
+static const AVChannelLayout AVChannelLayoutStereoDownmix   = (AVChannelLayout)AV_CHANNEL_LAYOUT_STEREO_DOWNMIX;
+static const AVChannelLayout AVChannelLayout22Point2        = (AVChannelLayout)AV_CHANNEL_LAYOUT_22POINT2;
 
 /* error handling */
 static inline int swift_AVERROR(int errnum) {
@@ -94,6 +94,10 @@ static const int swift_AVERROR_HTTP_SERVER_ERROR  = AVERROR_HTTP_SERVER_ERROR;
 
 static inline void swift_log(void *avcl, int level, const char *msg) {
   av_log(avcl, level, msg);
+}
+
+static inline uint32_t swift_FOURCC(char a, char b, char c, char d) {
+ return MKTAG(a, b, c, d);
 }
 
 #endif /* AVUTIL_SHIM_H */

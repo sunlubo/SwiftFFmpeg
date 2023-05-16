@@ -18,29 +18,28 @@ public final class SwrContext {
   }
 
   /// Creates a resample context from the given parameters.
-  public init?(
+  public init(
     inputChannelLayout: AVChannelLayout,
     inputSampleFormat: AVSampleFormat,
     inputSampleRate: Int,
     outputChannelLayout: AVChannelLayout,
     outputSampleFormat: AVSampleFormat,
     outputSampleRate: Int
-  ) {
-    guard
-      let ptr = swr_alloc_set_opts(
-        nil,
-        Int64(outputChannelLayout.rawValue),
-        outputSampleFormat.native,
-        Int32(outputSampleRate),
-        Int64(inputChannelLayout.rawValue),
-        inputSampleFormat.native,
-        Int32(inputSampleRate),
-        0,
-        nil
-      )
-    else {
-      return nil
-    }
+  ) throws {
+    var ptr: OpaquePointer?
+    var icl = inputChannelLayout
+    var ocl = outputChannelLayout
+    try throwIfFail(swr_alloc_set_opts2(
+      &ptr,
+      &ocl,
+      outputSampleFormat.native,
+      Int32(outputSampleRate),
+      &icl,
+      inputSampleFormat.native,
+      Int32(inputSampleRate),
+      0,
+      nil
+    ))
     self.native = ptr
   }
 
@@ -72,20 +71,19 @@ public final class SwrContext {
     srcSampleFormat: AVSampleFormat,
     srcSampleRate: Int
   ) throws {
-    let ptr = swr_alloc_set_opts(
-      native,
-      Int64(dstChannelLayout.rawValue),
+    var icl = srcChannelLayout
+    var ocl = dstChannelLayout
+    try throwIfFail(swr_alloc_set_opts2(
+      &native,
+      &ocl,
       dstSampleFormat.native,
       Int32(dstSampleRate),
-      Int64(srcChannelLayout.rawValue),
+      &icl,
       srcSampleFormat.native,
       Int32(srcSampleRate),
       0,
       nil
-    )
-    if ptr == nil {
-      throw AVError.invalidArgument
-    }
+    ))
   }
 
   /// Initialize context after user parameters have been set.

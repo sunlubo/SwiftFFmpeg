@@ -51,8 +51,7 @@ func encode_audio() throws {
   codecCtx.bitRate = 64000
   codecCtx.sampleFormat = .int16
   codecCtx.sampleRate = 44100
-  codecCtx.channelLayout = .CHL_STEREO
-  codecCtx.channelCount = codecCtx.channelLayout.channelCount
+  codecCtx.channelLayout = AVChannelLayoutStereo
 
   try codecCtx.openCodec()
 
@@ -75,16 +74,17 @@ func encode_audio() throws {
   // encode a single tone sound
   var t = 0 as Float
   let tincr = Float(2 * Double.pi * 440 / Double(codecCtx.sampleRate))
-  for _ in 0..<200 {
+  for _ in 0 ..< 200 {
     // make sure the frame is writable -- makes a copy if the encoder kept a reference internally
     try frame.makeWritable()
 
-    let capacity = frame.sampleCount * frame.channelCount
+    let capacity = frame.sampleCount * frame.channelLayout.channelCount
     let samples = UnsafeMutableRawPointer(frame.data[0]!).bindMemory(
-      to: UInt16.self, capacity: capacity)
-    for i in 0..<frame.sampleCount {
+      to: UInt16.self, capacity: capacity
+    )
+    for i in 0 ..< frame.sampleCount {
       let sample = UInt16(truncatingIfNeeded: Int32((sin(Double(t)) * 10000).rounded(.towardZero)))
-      for j in 0..<frame.channelCount {
+      for j in 0 ..< frame.channelLayout.channelCount {
         samples[i * 2 + j] = sample
       }
       t += tincr

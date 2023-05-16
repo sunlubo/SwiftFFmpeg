@@ -227,7 +227,7 @@ public final class AVFormatContext {
     return nil
   }
 
-  /// Print detailed information about the input or output format, such as duration, bitrate, streams,
+  /// Print detailed information about the input or output format, such as duration, bitrate, tracks,
   /// container, programs, metadata, side data, codec and timebase.
   ///
   /// - Parameters:
@@ -288,8 +288,6 @@ extension AVFormatContext {
     public static let bitexact = Flag(rawValue: AVFMT_FLAG_BITEXACT)
     /// Try to interleave outputted packets by dts (using this flag can slow demuxing down).
     public static let sortDTS = Flag(rawValue: AVFMT_FLAG_SORT_DTS)
-    /// Enable use of private Flag by delaying codec open (this could be made default once all code is converted).
-    public static let privOpt = Flag(rawValue: AVFMT_FLAG_PRIV_OPT)
     /// Enable fast, but inaccurate seeks for some formats.
     public static let fastSeek = Flag(rawValue: AVFMT_FLAG_FAST_SEEK)
     /// Stop muxing when the shortest stream stops.
@@ -318,7 +316,6 @@ extension AVFormatContext.Flag: CustomStringConvertible {
     if contains(.flushPackets) { str += "flushPackets, " }
     if contains(.bitexact) { str += "bitexact, " }
     if contains(.sortDTS) { str += "sortDTS, " }
-    if contains(.privOpt) { str += "privOpt, " }
     if contains(.fastSeek) { str += "fastSeek, " }
     if contains(.shortest) { str += "shortest, " }
     if contains(.autoBSF) { str += "autoBSF, " }
@@ -474,7 +471,7 @@ extension AVFormatContext {
   /// - Parameters:
   ///   - timestamp: Timestamp in `AVStream.timebase` units or, if no stream is specified,
   ///     in `AVTimestamp.timebase` units.
-  ///   - streamIndex: If `streamIndex` is -1, a default stream is selected, and timestamp
+  ///   - trackIndex: If `trackIndex` is -1, a default stream is selected, and timestamp
   ///     is automatically converted from `AVTimestamp.timebase` units to the stream specific timebase.
   ///   - flags: flags which select direction and seeking mode
   /// - Throws: AVError
@@ -487,7 +484,7 @@ extension AVFormatContext {
   /// can resync. This includes headerless formats like MPEG-TS/TS but should also
   /// work with NUT, Ogg and in a limited way AVI for example.
   ///
-  /// The set of streams, the detected duration, stream parameters and codecs do
+  /// The set of tracks, the detected duration, stream parameters and codecs do
   /// not change when calling this function. If you want a complete reset, it's
   /// better to open a new `AVFormatContext`.
   ///
@@ -593,8 +590,8 @@ extension AVFormatContext {
   ///   data buffered within the muxer, for muxers that buffer up data internally before writing it
   ///   to the output.
   ///
-  ///   Packet's `AVPacket.streamIndex` field must be set to the index of the corresponding stream in
-  ///   `streams`.
+  ///   Packet's `AVPacket.trackIndex` field must be set to the index of the corresponding stream in
+  ///   `tracks`.
   ///
   ///   The timestamps (`AVPacket.pts`, `AVPacket.dts`) must be set to correct values in the stream's
   ///   timebase (unless the output format is flagged with the `AVOutputFormat.Flag.noTimestamps` flag,
@@ -626,7 +623,7 @@ extension AVFormatContext {
   ///
   ///   This parameter can be `nil` (at any time, not just at the end), to flush the interleaving queues.
   ///
-  ///   Packet's `AVPacket.streamIndex` field must be set to the index of the corresponding stream in `streams`.
+  ///   Packet's `AVPacket.trackIndex` field must be set to the index of the corresponding stream in `tracks`.
   ///
   ///   The timestamps (`AVPacket.pts`, `AVPacket.dts`) must be set to correct values in the stream's timebase
   ///   (unless the output format is flagged with the `AVOutputFormat.Flag.noTimestamps` flag, then they can be

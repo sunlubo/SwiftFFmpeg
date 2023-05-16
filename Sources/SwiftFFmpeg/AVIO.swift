@@ -436,10 +436,10 @@ public final class AVIOContext {
 
   /// Force flushing of buffered data.
   ///
-  /// For write streams, force the buffered data to be immediately written to the output,
+  /// For write tracks, force the buffered data to be immediately written to the output,
   /// without to wait to fill the internal buffer.
   ///
-  /// For read streams, discard all currently buffered data, and advance the reported file
+  /// For read tracks, discard all currently buffered data, and advance the reported file
   /// position to that of the underlying stream. This does not read new data, and does not
   /// perform any seeks.
   public func flush() {
@@ -500,11 +500,11 @@ public final class AVIOContext {
   /// - Parameters:
   ///   - timestamp: timestamp in `AVStream.timebase` units or if there is no stream specified
   ///     then in `AVTimestamp.timebase` units.
-  ///   - streamIndex: The stream index that the timestamp is relative to.
-  ///     If `streamIndex` is -1 the timestamp should be in `AVTimestamp.timebase` units from
+  ///   - trackIndex: The stream index that the timestamp is relative to.
+  ///     If `trackIndex` is -1 the timestamp should be in `AVTimestamp.timebase` units from
   ///     the beginning of the presentation.
-  ///     If a `streamIndex` >= 0 is used and the protocol does not support seeking based on
-  ///     component streams, the call will fail.
+  ///     If a `trackIndex` >= 0 is used and the protocol does not support seeking based on
+  ///     component tracks, the call will fail.
   ///   - flags: Optional combination of `SeekFlag.backward`, `SeekFlag.byte` and `SeekFlag.any`.
   ///     The protocol may silently ignore `SeekFlag.backward` and `SeekFlag.any`, but `SeekFlag.byte`
   ///     will fail if used and not supported.
