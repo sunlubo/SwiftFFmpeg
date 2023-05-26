@@ -136,7 +136,7 @@ public struct AVCodec {
         guard let codecPtr = avcodec_find_decoder(codecId) else {
             return nil
         }
-        return AVCodec(codecPtr: codecPtr)
+        return AVCodec(codecPtr: codecPtr.mutable)
     }
 
     /// Find a registered decoder with the specified name.
@@ -147,7 +147,7 @@ public struct AVCodec {
         guard let codecPtr = avcodec_find_decoder_by_name(name) else {
             return nil
         }
-        return AVCodec(codecPtr: codecPtr)
+        return AVCodec(codecPtr: codecPtr.mutable)
     }
 
     /// Find a registered encoder with a matching codec ID.
@@ -158,7 +158,7 @@ public struct AVCodec {
         guard let codecPtr = avcodec_find_encoder(codecId) else {
             return nil
         }
-        return AVCodec(codecPtr: codecPtr)
+        return AVCodec(codecPtr: codecPtr.mutable)
     }
 
     /// Find a registered encoder with the specified name.
@@ -169,7 +169,7 @@ public struct AVCodec {
         guard let codecPtr = avcodec_find_encoder_by_name(name) else {
             return nil
         }
-        return AVCodec(codecPtr: codecPtr)
+        return AVCodec(codecPtr: codecPtr.mutable)
     }
 
     internal init(codecPtr: UnsafeMutablePointer<CAVCodec>) {

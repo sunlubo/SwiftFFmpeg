@@ -22,7 +22,7 @@ public final class AVBuffer {
 
     /// Create an `AVBuffer` of the given size.
     public init?(size: Int) {
-        guard let bufPtr = av_buffer_alloc(Int32(size)) else {
+        guard let bufPtr = av_buffer_alloc(size) else {
             return nil
         }
         self.bufPtr = bufPtr
@@ -49,7 +49,7 @@ public final class AVBuffer {
     /// - Throws: AVError
     public func realloc(size: Int) throws {
         precondition(bufPtr != nil, "buffer has been freed")
-        try throwIfFail(av_buffer_realloc(&bufPtr, Int32(size)))
+        try throwIfFail(av_buffer_realloc(&bufPtr, size))
     }
 
     /// Check if the buffer is writable.

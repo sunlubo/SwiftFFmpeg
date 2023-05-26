@@ -54,7 +54,7 @@ public struct AVInputFormat {
         guard let fmtPtr = av_find_input_format(name) else {
             return nil
         }
-        self.init(fmtPtr: fmtPtr)
+        self.init(fmtPtr: fmtPtr.mutable)
     }
 
     /// A comma separated list of short names for the format.
@@ -233,8 +233,6 @@ public final class AVFormatContext {
         public static let bitExact = Flag(rawValue: AVFMT_FLAG_BITEXACT)
         /// Try to interleave outputted packets by dts (using this flag can slow demuxing down).
         public static let sortDTS = Flag(rawValue: AVFMT_FLAG_SORT_DTS)
-        /// Enable use of private Flag by delaying codec open (this could be made default once all code is converted).
-        public static let privOpt = Flag(rawValue: AVFMT_FLAG_PRIV_OPT)
         /// Enable fast, but inaccurate seeks for some formats.
         public static let fastSeek = Flag(rawValue: AVFMT_FLAG_FAST_SEEK)
         /// Stop muxing when the shortest stream stops.
@@ -409,7 +407,7 @@ extension AVFormatContext {
     public var iformat: AVInputFormat? {
         get {
             if let fmtPtr = ctx.iformat {
-                return AVInputFormat(fmtPtr: fmtPtr)
+                return AVInputFormat(fmtPtr: fmtPtr.mutable)
             }
             return nil
         }
@@ -557,7 +555,7 @@ extension AVFormatContext {
     public var oformat: AVOutputFormat? {
         get {
             if let fmtPtr = ctx.oformat {
-                return AVOutputFormat(fmtPtr: fmtPtr)
+                return AVOutputFormat(fmtPtr: fmtPtr.mutable)
             }
             return nil
         }
