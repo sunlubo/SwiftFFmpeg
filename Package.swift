@@ -6,27 +6,13 @@ import PackageDescription
 let package = Package(
   name: "SwiftFFmpeg",
   products: [
-    .library(
-      name: "SwiftFFmpeg",
-      targets: ["SwiftFFmpeg"]
-    )
+    .library(name: "SwiftFFmpeg", targets: ["SwiftFFmpeg"])
   ],
+  
   targets: [
-    .systemLibrary(
-      name: "CFFmpeg",
-      pkgConfig: "libavformat"
-    ),
-    .target(
-      name: "SwiftFFmpeg",
-      dependencies: ["CFFmpeg"]
-    ),
-    .target(
-      name: "SwiftFFmpegExamples",
-      dependencies: ["SwiftFFmpeg"]
-    ),
-    .testTarget(
-      name: "SwiftFFmpegTests",
-      dependencies: ["SwiftFFmpeg"]
-    ),
+    .systemLibrary(name: "CFFmpeg", pkgConfig: "libavcodec"),
+    .target(name: "SwiftFFmpeg", dependencies: ["CFFmpeg"]),
+    .target(name: "SwiftFFmpegExamples", dependencies: ["SwiftFFmpeg"]),
+    .testTarget(name: "SwiftFFmpegTests", dependencies: ["SwiftFFmpeg"]),
   ]
 )
