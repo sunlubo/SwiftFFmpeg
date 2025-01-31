@@ -27,6 +27,7 @@ typealias CAVCodecContext = CFFmpeg.AVCodecContext
 
 public final class AVCodecContext {
   var native: UnsafeMutablePointer<CAVCodecContext>!
+  var owned: Bool = false
   var opaqueBox: CodecContextBox? {
     didSet {
       if let box = opaqueBox {
@@ -36,7 +37,6 @@ public final class AVCodecContext {
       }
     }
   }
-  var owned = false
 
   init(native: UnsafeMutablePointer<CAVCodecContext>) {
     self.native = native

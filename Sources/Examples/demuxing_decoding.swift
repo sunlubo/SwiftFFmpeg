@@ -1,6 +1,6 @@
 //
 //  demuxing_decoding.swift
-//  SwiftFFmpegExamples
+//  Examples
 //
 //  Created by sunlubo on 2018/7/5.
 //

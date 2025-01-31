@@ -20,12 +20,12 @@ let package = Package(
       name: "SwiftFFmpeg",
       dependencies: ["CFFmpeg"]
     ),
-    .target(
-      name: "SwiftFFmpegExamples",
+    .executableTarget(
+      name: "Examples",
       dependencies: ["SwiftFFmpeg"]
     ),
     .testTarget(
-      name: "SwiftFFmpegTests",
+      name: "Tests",
       dependencies: ["SwiftFFmpeg"]
     ),
   ]

@@ -1,6 +1,6 @@
 //
 //  split_stream.swift
-//  SwiftFFmpegExamples
+//  Examples
 //
 //  Created by sunlubo on 2019/1/19.
 //

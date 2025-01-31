@@ -12,7 +12,7 @@ typealias CAVCodecParameters = CFFmpeg.AVCodecParameters
 /// This class describes the properties of an encoded stream.
 public final class AVCodecParameters {
   var native: UnsafeMutablePointer<CAVCodecParameters>!
-  var owned = false
+  var owned: Bool = false
 
   init(native: UnsafeMutablePointer<CAVCodecParameters>) {
     self.native = native
@@ -42,12 +42,6 @@ public final class AVCodecParameters {
     set { native.pointee.codec_id = newValue }
   }
 
-  /// Codec-specific bitstream restrictions that the stream conforms to.
-  public var profile: Int32 {
-    get { native.pointee.profile }
-    set { native.pointee.profile = newValue }
-  }
-
   /// Additional information about the codec (corresponds to the AVI FOURCC).
   public var codecTag: UInt32 {
     get { native.pointee.codec_tag }
@@ -75,6 +69,45 @@ public final class AVCodecParameters {
   public var bitRate: Int64 {
     get { native.pointee.bit_rate }
     set { native.pointee.bit_rate = newValue }
+  }
+
+  /// The number of bits per sample in the codedwords.
+  ///
+  /// This is basically the bitrate per sample. It is mandatory for a bunch of
+  /// formats to actually decode them. It's the number of bits for one sample in
+  /// the actual coded bitstream.
+  ///
+  /// This could be for example 4 for ADPCM
+  /// For PCM formats this matches bits_per_raw_sample
+  /// Can be 0
+  public var bitsPerCodedSample: Int32 {
+    get { native.pointee.bits_per_coded_sample }
+    set { native.pointee.bits_per_coded_sample = newValue }
+  }
+
+  /// This is the number of valid bits in each output sample. If the
+  /// sample format has more bits, the least significant bits are additional
+  /// padding bits, which are always 0. Use right shifts to reduce the sample
+  /// to its actual size. For example, audio formats with 24 bit samples will
+  /// have bits_per_raw_sample set to 24, and format set to AV_SAMPLE_FMT_S32.
+  /// To get the original sample use "(int32_t)sample >> 8"."
+  ///
+  /// For ADPCM this might be 12 or 16 or similar
+  /// Can be 0
+  public var bitsPerRawSample: Int32 {
+    get { native.pointee.bits_per_raw_sample }
+    set { native.pointee.bits_per_raw_sample = newValue }
+  }
+
+  /// Codec-specific bitstream restrictions that the stream conforms to.
+  public var profile: Int32 {
+    get { native.pointee.profile }
+    set { native.pointee.profile = newValue }
+  }
+
+  public var level: Int32 {
+    get { native.pointee.level }
+    set { native.pointee.level = newValue }
   }
 
   /// Copy the contents from the supplied codec parameters.
@@ -118,10 +151,17 @@ extension AVCodecParameters {
     set { native.pointee.sample_aspect_ratio = newValue }
   }
 
-  /// Number of delayed frames.
-  public var videoDelay: Int {
-    get { Int(native.pointee.video_delay) }
-    set { native.pointee.video_delay = Int32(newValue) }
+  /// Video only. Number of frames per second, for streams with constant frame
+  /// durations. Should be set to { 0, 1 } when some frames have differing
+  /// durations or if the value is not known.
+  ///
+  /// @note This field correponds to values that are stored in codec-level
+  /// headers and is typically overridden by container/transport-layer
+  /// timestamps, when available. It should thus be used only as a last resort,
+  /// when no higher-level timing information is available.
+  public var framerate: AVRational {
+    get { native.pointee.framerate }
+    set { native.pointee.framerate = newValue }
   }
 
   /// The field order of the video frame.
@@ -158,6 +198,12 @@ extension AVCodecParameters {
   public var chromaLocation: AVChromaLocation {
     get { AVChromaLocation(native: native.pointee.chroma_location) }
     set { native.pointee.chroma_location = newValue.native }
+  }
+
+  /// Number of delayed frames.
+  public var videoDelay: Int {
+    get { Int(native.pointee.video_delay) }
+    set { native.pointee.video_delay = Int32(newValue) }
   }
 }
 

@@ -113,30 +113,6 @@ public final class AVFormatContext {
     return list
   }
 
-  /// The first video stream in the file.
-  @available(
-    *, deprecated, message: "Use AVStream.streams"
-  )
-  public var videoStream: AVStream? {
-    streams.first { $0.mediaType == .video }
-  }
-
-  /// The first audio stream in the file.
-  @available(
-    *, deprecated, message: "Use AVStream.streams"
-  )
-  public var audioStream: AVStream? {
-    streams.first { $0.mediaType == .audio }
-  }
-
-  /// The first subtitle stream in the file.
-  @available(
-    *, deprecated, message: "Use AVStream.streams"
-  )
-  public var subtitleStream: AVStream? {
-    streams.first { $0.mediaType == .subtitle }
-  }
-
   /// The flags used to modify the (de)muxer behaviour.
   ///
   /// - demuxing: Set by the caller before `openInput(_ url:format:options:)`.
@@ -211,20 +187,6 @@ public final class AVFormatContext {
   public var interruptCallback: AVIOInterruptCallback {
     get { native.pointee.interrupt_callback }
     set { native.pointee.interrupt_callback = newValue }
-  }
-
-  /// The first stream index for the specified media type.
-  ///
-  /// - Parameter mediaType: media type
-  /// - Returns: stream index if it exists
-  @available(
-    *, deprecated, message: "Use AVStream.streams"
-  )
-  public func streamIndex(for mediaType: AVMediaType) -> Int? {
-    if let index = streams.firstIndex(where: { $0.codecParameters.mediaType == mediaType }) {
-      return index
-    }
-    return nil
   }
 
   /// Print detailed information about the input or output format, such as duration, bitrate, tracks,

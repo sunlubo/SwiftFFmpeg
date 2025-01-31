@@ -14,7 +14,7 @@ public final class AVImage {
   public let width: Int
   public let height: Int
   public let pixelFormat: AVPixelFormat
-  var owned = false
+  var owned: Bool = false
 
   /// Allocate an image with size and pixel format.
   ///

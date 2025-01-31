@@ -171,7 +171,7 @@ extension AVCodecHWConfig.Method: CustomStringConvertible {
 
 public final class AVHWDeviceContext {
   var native: UnsafeMutablePointer<CAVBuffer>!
-  var owned = false
+  var owned: Bool = false
 
   init(native: UnsafeMutablePointer<CAVBuffer>) {
     self.native = native
@@ -259,7 +259,7 @@ typealias CAVHWFramesContext = CFFmpeg.AVHWFramesContext
 public final class AVHWFramesContext {
   var nativeBuffer: UnsafeMutablePointer<CAVBuffer>!
   let native: UnsafeMutablePointer<CAVHWFramesContext>
-  var owned = false
+  var owned: Bool = false
 
   init(nativeBuffer: UnsafeMutablePointer<CAVBuffer>) {
     self.nativeBuffer = nativeBuffer

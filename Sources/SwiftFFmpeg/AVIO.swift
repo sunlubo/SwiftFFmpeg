@@ -19,7 +19,7 @@ typealias CAVIOContext = CFFmpeg.AVIOContext
 
 public typealias AVIOReadHandler = (UnsafeMutableRawPointer?, UnsafeMutablePointer<UInt8>?, Int) ->
   Int
-public typealias AVIOWriteHandler = (UnsafeMutableRawPointer?, UnsafeMutablePointer<UInt8>?, Int) ->
+public typealias AVIOWriteHandler = (UnsafeMutableRawPointer?, UnsafePointer<UInt8>?, Int) ->
   Int
 public typealias AVIOSeekHandler = (UnsafeMutableRawPointer?, Int64, Int) -> Int64
 
@@ -35,8 +35,8 @@ typealias IOBox = Box<IOBoxValue>
 public final class AVIOContext {
   var native: UnsafeMutablePointer<CAVIOContext>!
   var opaque: IOBox?
-  var owned = false
-  var isOpen = false
+  var owned: Bool = false
+  var isOpen: Bool = false
 
   init(native: UnsafeMutablePointer<CAVIOContext>) {
     self.native = native
@@ -76,7 +76,7 @@ public final class AVIOContext {
       }
     }
     var write:
-      (@convention(c) (UnsafeMutableRawPointer?, UnsafeMutablePointer<UInt8>?, Int32) -> Int32)?
+      (@convention(c) (UnsafeMutableRawPointer?, UnsafePointer<UInt8>?, Int32) -> Int32)?
     if writeHandler != nil {
       write = { opaque, buffer, size -> Int32 in
         let value = Unmanaged<IOBox>.fromOpaque(opaque!).takeUnretainedValue().value

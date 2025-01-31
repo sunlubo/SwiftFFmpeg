@@ -174,26 +174,9 @@ public final class AVFrame {
     native.pointee.best_effort_timestamp
   }
 
-  /// Reordered pos from the last `AVPacket` that has been input into the decoder.
-  ///
-  /// - encoding: Unused.
-  /// - decoding: Set by libavcodec, read by user.
-  public var pktPosition: Int64 {
-    native.pointee.pkt_pos
-  }
-
   /// Duration of the frame, in the same units as pts. 0 if unknown.
   public var duration: Int64 {
     native.pointee.duration
-  }
-
-  /// Size of the corresponding packet containing the compressed frame.
-  /// It is set to a negative value if unknown.
-  ///
-  /// - encoding: Unused.
-  /// - decoding: Set by libavcodec, read by user.
-  public var pktSize: Int {
-    Int(native.pointee.pkt_size)
   }
 
   /// The metadata of the frame.
@@ -355,15 +338,10 @@ extension AVFrame {
     set { native.pointee.height = Int32(newValue) }
   }
 
-  /// A Boolean value indicating whether this frame is key frame.
-  public var isKeyFrame: Bool {
-    get { native.pointee.key_frame == 1 }
-    set { native.pointee.key_frame = newValue ? 1 : 0 }
-  }
-
-  /// A Boolean value indicating whether this frame is interlaced or progressive frame.
-  public var isInterlacedFrame: Bool {
-    native.pointee.interlaced_frame == 1
+  /// Frame flags,
+  public var flags: Flag {
+    get { Flag(rawValue: native.pointee.flags) }
+    set { native.pointee.flags = newValue.rawValue }
   }
 
   /// The picture type of the frame.
@@ -440,5 +418,42 @@ extension AVFrame {
   public var sampleCount: Int {
     get { Int(native.pointee.nb_samples) }
     set { native.pointee.nb_samples = Int32(newValue) }
+  }
+}
+
+// MARK: - AVFrame.Flag
+
+extension AVFrame {
+  public struct Flag: OptionSet {
+    /// The frame data may be corrupted, e.g. due to decoding errors.
+    public static let corrupt = Flag(rawValue: AV_FRAME_FLAG_CORRUPT)
+    /// A flag to mark frames that are keyframes.
+    public static let key = Flag(rawValue: AV_FRAME_FLAG_KEY)
+    /// A flag to mark the frames which need to be decoded, but shouldn't be output.
+    public static let discard = Flag(rawValue: AV_FRAME_FLAG_DISCARD)
+    /// A flag to mark frames whose content is interlaced.
+    public static let interlaced = Flag(rawValue: AV_FRAME_FLAG_INTERLACED)
+    /// A flag to mark frames where the top field is displayed first if the content is interlaced.
+    public static let topFieldFirst = Flag(rawValue: AV_FRAME_FLAG_TOP_FIELD_FIRST)
+
+    public let rawValue: Int32
+
+    public init(rawValue: Int32) { self.rawValue = rawValue }
+  }
+}
+
+extension AVFrame.Flag: CustomStringConvertible {
+  public var description: String {
+    var str = "["
+    if contains(.corrupt) { str += "corrupt, " }
+    if contains(.key) { str += "key, " }
+    if contains(.discard) { str += "discard, " }
+    if contains(.interlaced) { str += "interlaced, " }
+    if contains(.topFieldFirst) { str += "topFieldFirst, " }
+    if str.suffix(2) == ", " {
+      str.removeLast(2)
+    }
+    str += "]"
+    return str
   }
 }

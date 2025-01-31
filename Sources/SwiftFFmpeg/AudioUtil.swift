@@ -121,14 +121,14 @@ extension AVChannelLayout {
   }
 }
 
-extension AVChannelLayout: Equatable {
+extension AVChannelLayout: @retroactive Equatable {
 
   public static func == (lhs: Self, rhs: Self) -> Bool {
     lhs.u.mask == rhs.u.mask
   }
 }
 
-extension AVChannelLayout: CustomStringConvertible {
+extension AVChannelLayout: @retroactive CustomStringConvertible {
 
   public var description: String {
     let buf = UnsafeMutablePointer<Int8>.allocate(capacity: 256)

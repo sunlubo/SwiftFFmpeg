@@ -25,7 +25,7 @@ extension AVRational {
   }
 }
 
-extension AVRational: Equatable {
+extension AVRational: @retroactive Equatable {
 
   public static func == (lhs: AVRational, rhs: AVRational) -> Bool {
     av_cmp_q(lhs, rhs) == 0

@@ -94,7 +94,9 @@ extension AVInputFormat {
 
     public let rawValue: Int32
 
-    public init(rawValue: Int32) { self.rawValue = rawValue }
+    public init(rawValue: Int32) {
+      self.rawValue = rawValue
+    }
   }
 }
 
@@ -239,7 +241,9 @@ extension AVOutputFormat {
 
     public let rawValue: Int32
 
-    public init(rawValue: Int32) { self.rawValue = rawValue }
+    public init(rawValue: Int32) {
+      self.rawValue = rawValue
+    }
   }
 }
 

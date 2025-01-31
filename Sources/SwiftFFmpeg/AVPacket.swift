@@ -328,6 +328,72 @@ public enum AVPacketSideDataType: UInt32 {
   /// in ETSI TS 101 154 using AVActiveFormatDescription enum.
   case afd
 
+  /// Producer Reference Time data corresponding to the AVProducerReferenceTime struct,
+  /// usually exported by some encoders (on demand through the prft flag set in the
+  /// AVCodecContext export_side_data field).
+  case prft
+
+  /// ICC profile data consisting of an opaque octet buffer following the
+  /// format described by ISO 15076-1.
+  case iccProfile
+
+  /// DOVI configuration
+  /// ref:
+  /// dolby-vision-bitstreams-within-the-iso-base-media-file-format-v2.1.2, section 2.2
+  /// dolby-vision-bitstreams-in-mpeg-2-transport-stream-multiplex-v1.2, section 3.3
+  /// Tags are stored in struct AVDOVIDecoderConfigurationRecord.
+  case doviConfig
+
+  /// Timecode which conforms to SMPTE ST 12-1:2014. The data is an array of 4 uint32_t
+  /// where the first uint32_t describes how many (1-3) of the other timecodes are used.
+  /// The timecode format is described in the documentation of av_timecode_get_smpte_from_framenum()
+  /// function in libavutil/timecode.h.
+  case s12mTimecode
+
+  /// HDR10+ dynamic metadata associated with a video frame. The metadata is in
+  /// the form of the AVDynamicHDRPlus struct and contains
+  /// information for color volume transform - application 4 of
+  /// SMPTE 2094-40:2016 standard.
+  case dynamicHDR10Plus
+
+  /// IAMF Mix Gain Parameter Data associated with the audio frame. This metadata
+  /// is in the form of the AVIAMFParamDefinition struct and contains information
+  /// defined in sections 3.6.1 and 3.8.1 of the Immersive Audio Model and
+  /// Formats standard.
+  case iamfMixGainParam
+
+  /// IAMF Demixing Info Parameter Data associated with the audio frame. This
+  /// metadata is in the form of the AVIAMFParamDefinition struct and contains
+  /// information defined in sections 3.6.1 and 3.8.2 of the Immersive Audio Model
+  /// and Formats standard.
+  case iamfDemixingInfoParam
+
+  /// IAMF Recon Gain Info Parameter Data associated with the audio frame. This
+  /// metadata is in the form of the AVIAMFParamDefinition struct and contains
+  /// information defined in sections 3.6.1 and 3.8.3 of the Immersive Audio Model
+  /// and Formats standard.
+  case iamfReconGainInfoParam
+
+  /// Ambient viewing environment metadata, as defined by H.274. This metadata
+  /// should be associated with a video stream and contains data in the form
+  /// of the AVAmbientViewingEnvironment struct.
+  case ambientViewingEnvironment
+
+  /// The number of pixels to discard from the top/bottom/left/right border of the
+  /// decoded frame to obtain the sub-rectangle intended for presentation.
+  ///
+  /// @code
+  /// u32le crop_top
+  /// u32le crop_bottom
+  /// u32le crop_left
+  /// u32le crop_right
+  /// @endcode
+  case frameCropping
+
+  /// Raw LCEVC payload data, as a uint8_t array, with NAL emulation
+  /// bytes intact.
+  case lcevc
+
   var native: CFFmpeg.AVPacketSideDataType {
     CFFmpeg.AVPacketSideDataType(rawValue)
   }

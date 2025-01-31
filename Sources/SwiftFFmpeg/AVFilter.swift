@@ -555,7 +555,7 @@ typealias CAVFilterGraph = CFFmpeg.AVFilterGraph
 
 public final class AVFilterGraph {
   var native: UnsafeMutablePointer<CAVFilterGraph>!
-  var owned = false
+  var owned: Bool = false
 
   init(native: UnsafeMutablePointer<CAVFilterGraph>) {
     self.native = native
@@ -667,7 +667,7 @@ typealias CAVFilterInOut = CFFmpeg.AVFilterInOut
 /// filter context and the pad index required for establishing a link.
 public final class AVFilterInOut {
   var native: UnsafeMutablePointer<CAVFilterInOut>!
-  var owned = false
+  var owned: Bool = false
 
   init(native: UnsafeMutablePointer<CAVFilterInOut>) {
     self.native = native
