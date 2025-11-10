@@ -1,6 +1,6 @@
 //
 //  main.swift
-//  SwiftFFmpegExamples
+//  Examples
 //
 //  Created by sunlubo on 2019/1/9.
 //

@@ -6,7 +6,7 @@ A Swift wrapper for the FFmpeg API.
 
 ## Installation
 
-You should install [FFmpeg](http://ffmpeg.org/) (Requires FFmpeg 4.0 or higher) before use this library, on macOS, you can:
+You should install [FFmpeg](http://ffmpeg.org/) (Requires FFmpeg 7.1 or higher) before use this library, on macOS, you can:
 
 ```bash
 brew install ffmpeg

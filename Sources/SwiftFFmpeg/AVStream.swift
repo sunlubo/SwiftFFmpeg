@@ -149,37 +149,3 @@ public final class AVStream {
     codecParameters.mediaType
   }
 }
-
-// MARK: - AVStream + SideData
-
-extension AVStream {
-  /// Wrap an existing array as stream side data.
-  ///
-  /// - Parameter type: type side information type
-  /// - Pararmeter data: the side data array.
-  /// - Pararmeter size: side information size
-  /// - Throws: AVError
-  public func addSideData(type: AVPacketSideDataType, data: UnsafeMutablePointer<UInt8>, size: Int) throws {
-    try throwIfFail(av_stream_add_side_data(native, type.native, data, size))
-  }
-
-  /// Allocate new information from stream.
-  ///
-  /// - Parameter type desired side information type
-  /// - Parameter size side information size
-  ///
-  /// - Returns: pointer to fresh allocated data or NULL otherwise
-  public func newSideData(type: AVPacketSideDataType, size: Int) -> UnsafeMutablePointer<UInt8> {
-    return av_stream_new_side_data(native, type.native, size)
-  }
-
-  /// Get side information from stream.
-  ///
-  /// - Parameter type desired side information type
-  /// - Parameter size pointer for side information size to store
-  ///
-  /// - Returns: pointer to data if present or NULL otherwise
-  public func getSideData(type: AVPacketSideDataType, size: UnsafeMutablePointer<Int>) -> UnsafeMutablePointer<UInt8> {
-    return av_stream_get_side_data(native, type.native, size)
-  }
-}

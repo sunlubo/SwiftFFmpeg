@@ -1,6 +1,6 @@
 //
 //  AVImageTests.swift
-//  SwiftFFmpegTests
+//  Tests
 //
 //  Created by sunlubo on 2018/8/5.
 //

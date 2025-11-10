@@ -1,6 +1,6 @@
 //
 //  resampling_audio.swift
-//  SwiftFFmpegExamples
+//  Examples
 //
 //  Created by sunlubo on 2018/7/12.
 //
@@ -62,10 +62,10 @@ func resampling_audio() throws {
 
   let swrCtx = SwrContext()
   // set options
-  try swrCtx.set(srcChannelLayout, forKey: "in_channel_layout")
+  try swrCtx.set(srcChannelLayout, forKey: "in_chlayout")
   try swrCtx.set(srcSampleRate, forKey: "in_sample_rate")
   try swrCtx.set(srcSampleFmt, forKey: "in_sample_fmt")
-  try swrCtx.set(dstChannelLayout, forKey: "out_channel_layout")
+  try swrCtx.set(dstChannelLayout, forKey: "out_chlayout")
   try swrCtx.set(dstSampleRate, forKey: "out_sample_rate")
   try swrCtx.set(dstSampleFmt, forKey: "out_sample_fmt")
 

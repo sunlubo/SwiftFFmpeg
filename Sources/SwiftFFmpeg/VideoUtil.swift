@@ -171,7 +171,7 @@ public struct AVPixelFormatFlags: OptionSet {
   public static let FLOAT = AVPixelFormatFlags(rawValue: UInt64(AV_PIX_FMT_FLAG_FLOAT))
 }
 
-extension AVPixelFormat: CustomStringConvertible {
+extension AVPixelFormat: @retroactive CustomStringConvertible {
 
   public var description: String {
     name

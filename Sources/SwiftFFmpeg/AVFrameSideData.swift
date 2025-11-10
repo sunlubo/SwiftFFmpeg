@@ -116,6 +116,64 @@ extension AVFrameSideDataType {
   /// array element is implied by AVFrameSideData.size / AVRegionOfInterest.self_size.
   public static let regionsOfInterest = AV_FRAME_DATA_REGIONS_OF_INTEREST
 
+  /// Encoding parameters for a video frame, as described by AVVideoEncParams.
+  public static let videoEncodingParams = AV_FRAME_DATA_VIDEO_ENC_PARAMS
+
+  /// User data unregistered metadata associated with a video frame.
+  /// This is the H.26[45] UDU SEI message, and shouldn't be used for any other purpose
+  /// The data is stored as uint8_t in AVFrameSideData.data which is 16 bytes of
+  /// uuid_iso_iec_11578 followed by AVFrameSideData.size - 16 bytes of user_data_payload_byte.
+  public static let seiUnregistered = AV_FRAME_DATA_SEI_UNREGISTERED
+
+  /// Film grain parameters for a frame, described by AVFilmGrainParams.
+  /// Must be present for every frame which should have film grain applied.
+  ///
+  /// May be present multiple times, for example when there are multiple
+  /// alternative parameter sets for different video signal characteristics.
+  /// The user should select the most appropriate set for the application.
+  public static let filmGrainParams = AV_FRAME_DATA_FILM_GRAIN_PARAMS
+
+  /// Bounding boxes for object detection and classification,
+  /// as described by AVDetectionBBoxHeader.
+  public static let detectionBBoxes = AV_FRAME_DATA_DETECTION_BBOXES
+
+  /// Dolby Vision RPU raw data, suitable for passing to x265
+  /// or other libraries. Array of uint8_t, with NAL emulation
+  /// bytes intact.
+  public static let dolbyVisionRPU = AV_FRAME_DATA_DOVI_RPU_BUFFER
+
+  /// Parsed Dolby Vision metadata, suitable for passing to a software
+  /// implementation. The payload is the AVDOVIMetadata struct defined in
+  /// libavutil/dovi_meta.h.
+  public static let dolbyVisionMetadata = AV_FRAME_DATA_DOVI_METADATA
+
+  /// HDR Vivid dynamic metadata associated with a video frame. The payload is
+  /// an AVDynamicHDRVivid type and contains information for color
+  /// volume transform - CUVA 005.1-2021.
+  public static let dynamicHDRVivid = AV_FRAME_DATA_DYNAMIC_HDR_VIVID
+
+  /// Ambient viewing environment metadata, as defined by H.274.
+  public static let ambientViewingEnvironment = AV_FRAME_DATA_AMBIENT_VIEWING_ENVIRONMENT
+
+  /// Provide encoder-specific hinting information about changed/unchanged
+  /// portions of a frame.  It can be used to pass information about which
+  /// macroblocks can be skipped because they didn't change from the
+  /// corresponding ones in the previous frame. This could be useful for
+  /// applications which know this information in advance to speed up
+  /// encoding.
+  public static let videoHint = AV_FRAME_DATA_VIDEO_HINT
+
+  /// Raw LCEVC payload data, as a uint8_t array, with NAL emulation
+  /// bytes intact.
+  public static let lcevc = AV_FRAME_DATA_LCEVC
+
+  /// This side data must be associated with a video frame.
+  /// The presence of this side data indicates that the video stream is
+  /// composed of multiple views (e.g. stereoscopic 3D content,
+  /// cf. H.264 Annex H or H.265 Annex G).
+  /// The data is an int storing the view ID.
+  public static let viewId = AV_FRAME_DATA_VIEW_ID
+
   /// The name of the type.
   public var name: String {
     String(cString: av_frame_side_data_name(self))
