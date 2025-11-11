@@ -34,7 +34,7 @@ public final class SwsContext {
     sws_isSupportedEndiannessConversion(pixelFormat) > 0
   }
 
-  let native: OpaquePointer
+  let native: UnsafeMutablePointer<CFFmpeg.SwsContext>
 
   /// Creates an empty context.
   public init() {
@@ -128,38 +128,38 @@ extension SwsContext {
   ///
   public struct Flag: OptionSet {
     /// Select fast bilinear scaling algorithm.
-    public static let fastBilinear = Flag(rawValue: SWS_FAST_BILINEAR)
+      public static let fastBilinear = Flag(rawValue: Int32(SWS_FAST_BILINEAR.rawValue))
     /// Select bilinear scaling algorithm.
-    public static let bilinear = Flag(rawValue: SWS_BILINEAR)
+    public static let bilinear = Flag(rawValue: Int32(SWS_BILINEAR.rawValue))
     /// Select bicubic scaling algorithm.
-    public static let bicubic = Flag(rawValue: SWS_BICUBIC)
+    public static let bicubic = Flag(rawValue: Int32(SWS_BICUBIC.rawValue))
     /// Select experimental scaling algorithm.
-    public static let x = Flag(rawValue: SWS_X)
+    public static let x = Flag(rawValue: Int32(SWS_X.rawValue))
     /// Select nearest neighbor rescaling algorithm.
-    public static let point = Flag(rawValue: SWS_POINT)
+    public static let point = Flag(rawValue: Int32(SWS_POINT.rawValue))
     /// Select averaging area rescaling algorithm.
-    public static let area = Flag(rawValue: SWS_AREA)
+    public static let area = Flag(rawValue: Int32(SWS_AREA.rawValue))
     /// Select bicubic scaling algorithm for the luma component, bilinear for chroma components.
-    public static let bicublin = Flag(rawValue: SWS_BICUBLIN)
+    public static let bicublin = Flag(rawValue: Int32(SWS_BICUBLIN.rawValue))
     /// Select Gaussian rescaling algorithm.
-    public static let gauss = Flag(rawValue: SWS_GAUSS)
+    public static let gauss = Flag(rawValue: Int32(SWS_GAUSS.rawValue))
     /// Select sinc rescaling algorithm.
-    public static let sinc = Flag(rawValue: SWS_SINC)
+    public static let sinc = Flag(rawValue: Int32(SWS_SINC.rawValue))
     /// Select Lanczos rescaling algorithm.
-    public static let lanczos = Flag(rawValue: SWS_LANCZOS)
+    public static let lanczos = Flag(rawValue: Int32(SWS_LANCZOS.rawValue))
     /// Select natural bicubic spline rescaling algorithm.
-    public static let spline = Flag(rawValue: SWS_SPLINE)
+    public static let spline = Flag(rawValue: Int32(SWS_SPLINE.rawValue))
 
     /// Enable printing/debug logging.
-    public static let printInfo = Flag(rawValue: SWS_PRINT_INFO)
+    public static let printInfo = Flag(rawValue: Int32(SWS_PRINT_INFO.rawValue))
     /// Enable full chroma interpolation.
-    public static let fullChromaInt = Flag(rawValue: SWS_FULL_CHR_H_INT)
+    public static let fullChromaInt = Flag(rawValue: Int32(SWS_FULL_CHR_H_INT.rawValue))
     /// Select full chroma input.
-    public static let fullChromaInp = Flag(rawValue: SWS_FULL_CHR_H_INP)
+    public static let fullChromaInp = Flag(rawValue: Int32(SWS_FULL_CHR_H_INP.rawValue))
     /// Enable accurate rounding.
-    public static let accurateRnd = Flag(rawValue: SWS_ACCURATE_RND)
+    public static let accurateRnd = Flag(rawValue: Int32(SWS_ACCURATE_RND.rawValue))
     /// Enable bitexact output.
-    public static let bitexact = Flag(rawValue: SWS_BITEXACT)
+    public static let bitexact = Flag(rawValue: Int32(SWS_BITEXACT.rawValue))
 
     public let rawValue: Int32
 
