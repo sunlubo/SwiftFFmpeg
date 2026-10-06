@@ -1,8 +1,8 @@
 #!/bin/bash
 
-FFMPEG_VERSION=7.1
+FFMPEG_VERSION=8.0.1
 FFMPEG_SOURCE_DIR=FFmpeg-n$FFMPEG_VERSION
-FFMPEG_LIBS="libavcodec libavdevice libavfilter libavformat libavutil libpostproc libswresample libswscale"
+FFMPEG_LIBS="libavcodec libavdevice libavfilter libavformat libavutil libswresample libswscale"
 PREFIX=`pwd`/output
 ARCH="x86_64"
 
