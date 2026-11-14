@@ -70,3 +70,6 @@ SwiftFFmpeg.xcodeproj/
 docs/
 scripts/*
 !scripts/*.sh
+
+# Prevent ffmpeg zip files to come with the repo. The script should recreate the the files locally.
+xcframework

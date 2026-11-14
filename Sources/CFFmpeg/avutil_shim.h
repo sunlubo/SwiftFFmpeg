@@ -16,6 +16,12 @@
 #include <libavutil/md5.h>
 #include <libavutil/mastering_display_metadata.h>
 
+
+#if LIBAVCODEC_VERSION_MAJOR < 62
+#error "SwiftFFmpeg requires FFmpeg 8.0+"
+#endif
+
+
 static const int64_t swift_AV_NOPTS_VALUE = AV_NOPTS_VALUE;
 
 /* Audio channel layout */
